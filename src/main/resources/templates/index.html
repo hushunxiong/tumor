@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+>
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>首页</title>
+    <link>
+    <script></script>
+</head>
+<body>
+<div id="menu" th:replace="/common/menus :: menus('首页','')"></div>
+
+<div class="container" style="padding: 0px;overflow-x: hidden;text-align: center;background-color: white;">
+    <img th:src="@{main/images/index_bg.png}">
+</div>
+</body>
+</html>
