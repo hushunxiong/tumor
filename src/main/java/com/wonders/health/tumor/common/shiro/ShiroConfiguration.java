@@ -199,10 +199,16 @@ public class ShiroConfiguration {
      * @return
      */
     @Bean(name = "casFilter")
-    public CasFilter getCasFilter() {
-        CasFilter casFilter = new CasFilter();
+    public MyCasFilter getCasFilter(AuthServiceI authService,
+                                    @Value("${default.casServerUrl}") String defaultCasServerUrl,
+                                    @Value("${default.sysServerUrl}") String defaultSysServerUrl) {
+        MyCasFilter casFilter = new MyCasFilter();
         casFilter.setName("casFilter");
         casFilter.setEnabled(true);
+        casFilter.setAuthService(authService);
+        casFilter.setDefaultSysServerUrl(defaultCasServerUrl);
+        casFilter.setDefaultCasServerUrl(defaultSysServerUrl);
+        casFilter.setShiroServerSuccessUrl("/tumor/index");
         casFilter.setFailureUrl("/authFail");// 我们选择认证失败后再打开登录页面
         return casFilter;
     }
@@ -218,8 +224,9 @@ public class ShiroConfiguration {
                                                             AuthServiceI authService,
                                                             @Value("${default.casServerUrl}") String defaultCasServerUrl,
                                                             @Value("${default.sysServerUrl}") String defaultSysServerUrl,
+                                                            @Value("${casServerUrlPrefix}") String casServerUrlPrefix,
+                                                            @Value("${shiroServerUrlPrefix}") String shiroServerUrlPrefix,
                                                             @Value("${shiroServerUrlSuffix}") String shiroServerUrlSuffix,
-                                                            @Value("${shiro.loginUrl}") String loginUrl,
                                                             @Value("${shiro.successUrl}") String successUrl,
                                                             @Value("${shiro.unauthorizedUrl}") String unauthorizedUrl,
                                                             @Value("${shiro.anonUrl}") String anonUrl,
@@ -229,7 +236,8 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         // 登录地址
-        shiroFilterFactoryBean.setLoginUrl(defaultCasServerUrl + "/login" + "?service=" + defaultSysServerUrl + loginUrl);
+        String loginUrl = casServerUrlPrefix + "/login" + "?service=" + shiroServerUrlPrefix + shiroServerUrlSuffix;
+        shiroFilterFactoryBean.setLoginUrl(logoutUrl);
         // 登录成功后要跳转的连接
         shiroFilterFactoryBean.setSuccessUrl(successUrl);
         shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);

@@ -1,16 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
     <title>首页</title>
     <link>
     <script></script>
 </head>
 <body>
-<div id="menu" th:replace="/common/menus :: menus('首页','')"></div>
+<!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+<div class="mini-layout" style="width:100%;height:100%; overflow: hidden;">
+    <div class="header" region="north" minWidth="600" Height="80" showSplit="false" allowResize="false" splitSize="0" showHeader="false">
+        <div class="head">
+            <div class="head_left">
+                <span class="title fl">肿瘤早发现</span>
+            </div>
+            <div class="head_right">
+                <div class="shortCut">
+                    <div class="shortCut_main">
+                        <!--<a> <i class="fa fa-home" aria-hidden="true"></i></a>|
+                        <a><i class="fa fa-cog" aria-hidden="true"></i></a>|-->
+                        <a href="javascript:void(0);" th:text="${#auth.currUser().name}"></a>|
+                        <a href="javascript:void(0);" onclick="logout();">退出</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div region="west" showSplit="false" showHeader="false" splitSize="0" width="181">
+        <div class="sidebar">
+            <ul class="navList">
+                <li th:each="menu,statu : ${#auth.menus()}">
+                    <a href="javascript:void(0);" th:if="${menu.getDisplay() == '1'}" th:text="${menu.name}"></a>
+                    <ul class="children" th:if="${menu.getChildren() != null && menu.getChildren().size()>0}">
+                        <li class="clickLi" th:each="child : ${menu.getChildren()}" th:if="${child.getDisplay() == '1'}">
+                            <a class="data-href" href="javascript:void(0);" th:attr="data-href='/tumor' + ${child.href}" th:text="${child.name}"></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div region="center" minWidth="600">
 
-<div class="container" style="padding: 0px;overflow-x: hidden;text-align: center;background-color: white;">
-    <img th:src="@{main/images/index_bg.png}">
+        <iframe scrolling="yes" id="mainframe" frameborder="0" name="main"
+                style="width:100%; overflow-x:auto;overflow-y:auto;height:calc(100vh - 84px)" border="0"
+                src=""></iframe>
+
+    </div>
+    <!--  <div class="footer text-c">Copy&nbsp;&nbsp;right&nbsp;&nbsp;@上海市卫生和计划生育委员会</div>-->
 </div>
 </body>
 </html>

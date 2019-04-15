@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>controller</name>
+	<fileName>${ClassName}Controller.java</fileName>
+	<content><![CDATA[
+/**
+ * 
+ */
+package ${packageName}.${moduleName}.web;
+
+import ${packageName}.common.controller.BaseController;
+import ${packageName}.${moduleName}.entity.${ClassName};
+
+import ${packageName}.${moduleName}.vo.${ClassName}SearchVo;
+import ${packageName}.${moduleName}.service.${ClassName}Service;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import ${packageName}.common.model.AjaxReturn;
+<#if entityType == "tree">
+import java.util.List;
+<#else>
+import ${packageName}.common.model.DataGrid;
+import ${packageName}.common.model.DataGridSearch;
+</#if>
+
+import javax.validation.Valid;
+import java.util.Map;
+/**
+ * ${functionName}Controller
+ * @author ${functionAuthor}
+ */
+@Controller
+@RequestMapping("${ClassName?uncap_first}")
+public class ${ClassName}Controller extends BaseController {
+
+    private static Logger logger = LoggerFactory.getLogger(${ClassName}Controller.class);
+
+    @Autowired
+    private ${ClassName}Service ${ClassName?uncap_first}Service;
+
+	<#if entityType == "tree">
+    @RequiresPermissions("${moduleName}:${ClassName?uncap_first}:list")
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+    public String list(Model model,${ClassName}SearchVo search) {
+        //List<${ClassName}> list = ${ClassName?uncap_first}Service.find${ClassName}sByTree();
+        //model.addAttribute("list", list);
+        return "${moduleName}/${ClassName?uncap_first}List";
+    }
+
+    @ResponseBody
+    @RequestMapping("data")
+    @RequiresPermissions("${moduleName}:${ClassName?uncap_first}:list")
+    public List<${ClassName}> data() {
+        return ${ClassName?uncap_first}Service.find${ClassName}sByTree();
+    }
+	<#else>
+	@RequiresPermissions("${moduleName}:${ClassName?uncap_first}:list")
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+    public String list(Model model) {
+        return "${moduleName}/${ClassName?uncap_first}List";
+    }
+
+    @ResponseBody
+    @RequiresPermissions("${moduleName}:${ClassName?uncap_first}:list")
+    @RequestMapping(value = "data", produces = "application/json; charset=utf-8")
+    public DataGrid<${ClassName}> data(${ClassName}SearchVo search) {
+        DataGrid<${ClassName}> grid = ${ClassName?uncap_first}Service.findPage(search);
+        return grid;
+    }
+	</#if>
+
+    @RequiresPermissions("${moduleName}:${ClassName?uncap_first}:save")
+    @RequestMapping(value = "form", method = RequestMethod.GET)
+    public String form(Model model <#list table.columnPks as p>, ${p.javaType} ${p.javaField}</#list>) {
+        if (<#list table.columnPks as p><#if (p_index > 0)> && </#if>StringUtils.isNotBlank(${p.javaField})</#list>) {
+            ${ClassName} ${ClassName?uncap_first} = ${ClassName?uncap_first}Service.findById(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaField}</#list>);
+            model.addAttribute("${ClassName?uncap_first}", ${ClassName?uncap_first});
+        }
+        return "${moduleName}/${ClassName?uncap_first}Form";
+    }
+
+    @ResponseBody
+    @RequiresPermissions("${moduleName}:${ClassName?uncap_first}:save")
+    @RequestMapping(value = "save", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public AjaxReturn<Map<String, String>> save(@Valid ${ClassName} ${ClassName?uncap_first}, BindingResult result) {
+        if (result.hasErrors()) {
+            return new AjaxReturn<Map<String, String>>(false, "校验失败");
+        }
+        try {
+            return ${ClassName?uncap_first}Service.saveOrUpdate(${ClassName?uncap_first}, getSessionUser().getId());
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<Map<String, String>>(false, "保存异常");
+        }
+    }
+
+    @ResponseBody
+    @RequiresPermissions("${moduleName}:${ClassName?uncap_first}:del")
+    @RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public AjaxReturn<String> delete(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaType} ${p.javaField}</#list>) {
+        if (<#list table.columnPks as p><#if (p_index > 0)> && </#if>StringUtils.isNotBlank(${p.javaField})</#list>) {
+            try {
+                ${ClassName?uncap_first}Service.deleteById(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaField}</#list>);
+                return new AjaxReturn<String>(true, "删除成功");
+            } catch (Exception e) {
+            	logger.error("", e);
+                return new AjaxReturn<String>(false, "删除异常");
+            }
+        } else {
+            return new AjaxReturn<String>(false, "传入id不能为空");
+        }
+    }
+
+}]]>
+	</content>
+</template>

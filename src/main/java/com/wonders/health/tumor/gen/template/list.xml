@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>list</name>
+	<fileName>${ClassName?uncap_first}List.jsp</fileName>
+	<content><![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/include/taglib.jsp" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${functionName}列表</title>
+    <jsp:include page="/WEB-INF/include/head.jsp"/>
+</head>
+<body>
+<div id="listDiv" class="mini-tabs" activeIndex="0" style="width:100%;height:100%;" bodyStyle="padding:0;border:0;">
+    <div name="list" title="${functionName}列表" bodyStyle="padding:0px 10px 0px 20px;">
+		<div id="queryPanel" class="search-div-box">
+            <table class="search-table" cellspacing="5" cellpadding="0">
+			<#list table.searchCols as t>
+				<tr>
+				<#list t as c>
+                    <td class="td-text"><label><#if c.comments??>${c.comments}</#if>:</label></td>
+					<td<#if c.cols gt 1> colspan="<#if c.cols??>${c.cols}</#if>"</#if>>
+					<#if c.showType == "input" || c.showType == "textarea">
+						<input id="${c.javaField}" class="mini-textbox"/>
+					<#elseif c.showType == "select">
+						<input id="${c.javaField}" valueFromSelect="true" pinyinField="pinyin" showNullItem="true" allowInput="true" class="mini-combobox"
+							data='${"$"}{fns:toJson(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))}' />
+					<#elseif c.showType == "checkbox">
+						<span id="${c.javaField}" class="mini-checkboxlist fl mt-6"
+							data='${"$"}{fns:toJson(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))}' ></span>
+					<#elseif c.showType == "radio">
+						<span id="${c.javaField}" class="mini-radiobuttonlist fl mt-6"
+							data='${"$"}{fns:toJson(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))}' ></span>
+					<#elseif c.showType == "date">
+						<input id="begin${c.javaField?cap_first}" ondrawdate="onDrawBegin${c.javaField?cap_first}" class="mini-datepicker" style="width: 110px;"/> -
+						<input id="end${c.javaField?cap_first}" ondrawdate="onDrawEnd${c.javaField?cap_first}" class="mini-datepicker" style="width: 110px;"/>
+					<#elseif c.showType == "datetime">
+						<input id="begin${c.javaField?cap_first}" ondrawdate="onDrawBegin${c.javaField?cap_first}" style="width: 180px;" class="mini-datepicker" format="yyyy-MM-dd HH:mm:ss" timeFormat="H:mm:ss" showTime="true" showOkButton="true" showClearButton="false"/> -
+						<input id="end${c.javaField?cap_first}" ondrawdate="onDrawEnd${c.javaField?cap_first}" style="width: 180px;" class="mini-datepicker" format="yyyy-MM-dd HH:mm:ss" timeFormat="H:mm:ss" showTime="true" showOkButton="true" showClearButton="false"/>
+					<#elseif c.showType == "user">
+						<input id="${c.javaField}" valueFromSelect="true" pinyinField="pinyin" showNullItem="true" allowInput="true" class="mini-combobox"
+							data='${"$"}{fns:toJson(fns:getOfficeUser())}'/>
+					<#elseif c.showType == "organ">
+						<tags:listOffice name="${c.javaField}"/>
+					</#if>
+					</td>
+				</#list>
+				</tr>
+			</#list>
+			</table>
+        </div>
+        <table class="mini-toolbar">
+        	<tr>
+        		<td></td>
+        		<td align="right">
+        			<input type="button" onclick="search();" class="my-btn green" value="查询" />
+					<!--
+					<input type="button" onclick="" class="bt1 bg2 ml-20" value="导出" />
+					-->
+        		</td>
+        	</tr>
+        </table>
+		<div id="datagrid" class="mini-datagrid" style="width: 100%;"
+			 url="${"$"}{ctx}/${ClassName?uncap_first}/data" idField="id" sizeList="[10,20,50]" pageSize="20">
+			<div property="columns">
+				<div type="indexcolumn"></div>
+				<#list table.columns as c>
+				<#if c.list == "1">
+				<#if c.showType == "select" || c.showType == "radio" || c.showType == "checkbox" || c.showType == "user" || c.showType == "organ">
+				<div field="${c.javaField}" sortField="${c.name}" renderer="${c.javaField}Renderer" headerAlign="center" allowSort="true"><#if c.comments??>${c.comments}</#if></div>
+				<#elseif c.showType == "date">
+				<div field="${c.javaField}" sortField="${c.name}" dateFormat="yyyy-MM-dd" headerAlign="center" allowSort="true"><#if c.comments??>${c.comments}</#if></div>
+				<#elseif c.showType == "datetime">
+				<div field="${c.javaField}" sortField="${c.name}" dateFormat="yyyy-MM-dd HH:mm:ss" headerAlign="center" allowSort="true"><#if c.comments??>${c.comments}</#if></div>
+				<#else>
+				<div field="${c.javaField}" sortField="${c.name}" headerAlign="center" allowSort="true"><#if c.comments??>${c.comments}</#if></div>
+				</#if>
+				</#if>
+				</#list>
+				<div field="action" renderer="actionRenderer" headerAlign="center">操作</div>
+			</div>
+		</div>
+    </div>
+</div>
+<script type="text/javascript">
+    mini.parse();
+    var grid = mini.get("datagrid");
+    var tabs = mini.get("listDiv");
+    search();
+
+<#list table.searchCols as t>
+	<#list t as c>
+		<#if c.showType == "date">
+	function onDrawBegin${c.javaField?cap_first}(e){
+        var begin = e.date;
+        var end = mini.get("end${c.javaField?cap_first}").getValue();
+        if (end != "" && begin > end){
+            e.allowSelect = false;
+        }
+	}
+    function onDrawEnd${c.javaField?cap_first}(e){
+        var begin = mini.get("begin${c.javaField?cap_first}").getValue();
+        var end = e.date;
+        if (begin != "" && begin > end){
+            e.allowSelect = false;
+        }
+    }
+		<#elseif c.showType == "datetime">
+	function onDrawBegin${c.javaField?cap_first}(e){
+        var begin = e.date;
+        var end = mini.get("end${c.javaField?cap_first}").getValue();
+        if (end != "" && begin > end){
+            e.allowSelect = false;
+        }
+	}
+    function onDrawEnd${c.javaField?cap_first}(e){
+        var begin = mini.get("begin${c.javaField?cap_first}").getValue();
+        if(begin != ""){
+            begin = mini.parseDate(mini.formatDate(begin,"yyyy-MM-dd"));
+        }
+        var end = e.date;
+        if (begin != "" && begin > end){
+            e.allowSelect = false;
+        }
+    }
+		</#if>
+	</#list>
+</#list>
+
+    function search() {
+		var data = {};
+		<#list table.searchCols as t>
+			<#list t as c>
+				<#if c.showType == "date">
+		var begin${c.javaField?cap_first} = mini.get("begin${c.javaField?cap_first}").getValue();
+		if (begin${c.javaField?cap_first} != ""){
+            data['begin${c.javaField?cap_first}'] = mini.formatDate(begin${c.javaField?cap_first},'yyyy-MM-dd');
+        }
+		var end${c.javaField?cap_first} = mini.get("end${c.javaField?cap_first}").getValue();
+		if (end${c.javaField?cap_first} != ""){
+			data['end${c.javaField?cap_first}'] = mini.formatDate(end${c.javaField?cap_first},'yyyy-MM-dd');
+		}
+				<#elseif c.showType == "datetime">
+		var begin${c.javaField?cap_first} = mini.get("begin${c.javaField?cap_first}").getValue();
+		if (begin${c.javaField?cap_first} != ""){
+            data['begin${c.javaField?cap_first}'] = mini.formatDate(begin${c.javaField?cap_first},'yyyy-MM-dd HH:mm:ss');
+        }
+		var end${c.javaField?cap_first} = mini.get("end${c.javaField?cap_first}").getValue();
+		if (end${c.javaField?cap_first} != ""){
+			data['end${c.javaField?cap_first}'] = mini.formatDate(end${c.javaField?cap_first},'yyyy-MM-dd HH:mm:ss');
+		}
+				<#else>
+				<#if c.javaField??>
+		data['${c.javaField}'] = mini.get("${c.javaField}").getValue();
+				</#if>
+				</#if>
+			</#list>
+		</#list>
+        grid.load(data,gridLoadSuccess,gridLoadError);
+    }
+    function actionRenderer(e) {
+        var r = e.record;
+        var h = '';
+		<shiro:hasPermission name="${moduleName}:${ClassName?uncap_first}:save">
+		h += '<a onclick="editRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>\'' + r.${p.javaField} + '\'</#list>)" class="grid-button">修改</a> '
+		</shiro:hasPermission>
+		<shiro:hasPermission name="${moduleName}:${ClassName?uncap_first}:del">
+        h += '<a onclick="deleteRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>\'' + r.${p.javaField} + '\'</#list>)" class="grid-button">删除</a> ';
+		</shiro:hasPermission>
+        return h;
+    }
+
+<#list table.columns as c>
+<#if c.list == "1">
+<#if c.showType == "select" || c.showType == "radio">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))};
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        return ${c.javaField}Data[r.${c.javaField}];
+    }
+
+<#elseif c.showType == "checkbox">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))};
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        var arr = r.${c.javaField}.split(',');
+        var rs = "";
+        for(var i = 0;i<arr.length;i++){
+        	if (${c.javaField}Data[arr[i]] != undefined){
+				if(rs.length > 0){
+					rs +=",";
+				}
+				rs += ${c.javaField}Data[arr[i]];
+        	}
+        }
+        return rs;
+    }
+
+<#elseif c.showType == "user">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:getOfficeUser())};
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        return ${c.javaField}Data[r.${c.javaField}];
+    }
+
+<#elseif c.showType == "organ">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:getOffices())}
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        return ${c.javaField}Data[r.${c.javaField}];
+    }
+
+</#if>
+</#if>
+</#list>
+
+    function loadList(){
+        var tab = tabs.getActiveTab();
+        if (tab) {
+            tabs.removeTab(tab);
+        }
+        search();
+    }
+
+	function editRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaField}</#list>){
+    	var param = "";
+        <#list table.columnPks as p>
+    	if (${p.javaField} != undefined) {
+			if (param.length > 0){
+				param += "&";
+			}
+        	param += "${p.javaField}="+${p.javaField};
+        }
+    	</#list>
+        var tab = {title: "${functionName}表单",url:'${"$"}{ctx}/${ClassName?uncap_first}/form?'+param};
+        tab = tabs.addTab(tab);
+        tabs.activeTab(tab);
+    }
+
+    function deleteRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaField}</#list>) {
+    	var data = {};
+    	<#list table.columnPks as p>
+    	if (${p.javaField} == undefined) {
+            data['${p.javaField}'] = "";
+        } else {
+        	data['${p.javaField}'] = ${p.javaField};
+        }
+    	</#list>
+        mini.confirm("确定删除记录？", "确定？",
+                function (action) {
+                    if (action == "ok") {
+                        $.ajax({
+							url: "${"$"}{ctx}/${ClassName?uncap_first}/del",
+                            data: data,
+                            dataType: "json",
+                            success: function (res) {
+                                if (res.ok) {
+                                    search();
+                                    mini.showTips({
+                                        content: res.msg,
+                                        state: "success",
+                                        x: "center",
+                                        y: "top",
+                                        timeout: 3000
+                                    });
+                                } else {
+                                    mini.showTips({
+                                        content: res.msg,
+                                        state: "warning",
+                                        x: "center",
+                                        y: "top",
+                                        timeout: 3000
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+        );
+    }
+
+</script>
+</body>
+</html>
+
+]]>
+	</content>
+</template>
