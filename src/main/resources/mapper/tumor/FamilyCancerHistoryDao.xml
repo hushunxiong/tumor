@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.FamilyCancerHistoryDao">
+    
+	<sql id="FamilyCancerHistoryColumns">
+		a.id AS "id",a.check_id AS "checkId",a.relation AS "relation",a.cancer_type AS "cancerType",a.icd10 AS "icd10",a.cancer_name AS "cancerName",a.age AS "age",a.lived AS "lived",a.del_flag AS "delFlag",a.ischange AS "ischange",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.FamilyCancerHistory">
+		SELECT 
+			<include refid="FamilyCancerHistoryColumns"/>
+		FROM family_cancer_history a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.FamilyCancerHistory">
+		SELECT 
+			<include refid="FamilyCancerHistoryColumns"/>
+		FROM family_cancer_history a
+		<where>
+			a.del_flag = '0'
+		</where>		
+			ORDER BY a.update_date DESC
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM family_cancer_history a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.FamilyCancerHistory"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="FamilyCancerHistoryColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO family_cancer_history(
+		id,check_id,relation,cancer_type,icd10,cancer_name,age,lived,del_flag,ischange,create_by,create_date,update_by,update_date
+		) VALUES (
+		#{id},#{checkId},#{relation},#{cancerType},#{icd10},#{cancerName},#{age},#{lived},#{delFlag},#{ischange},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE family_cancer_history SET
+		id = #{id},check_id = #{checkId},relation = #{relation},cancer_type = #{cancerType},icd10 = #{icd10},cancer_name = #{cancerName},age = #{age},lived = #{lived},del_flag = #{delFlag},ischange = #{ischange},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE family_cancer_history SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>

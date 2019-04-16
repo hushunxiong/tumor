@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CrcFobtDao">
+    
+	<sql id="CrcFobtColumns">
+		a.id AS "id",a.crc_check_id AS "crcCheckId",a.first_fobt_result AS "firstFobtResult",a.second_fobt_result AS "secondFobtResult",a.first_fobt_date AS "firstFobtDate",a.second_fobt_date AS "secondFobtDate",a.fobt_result AS "fobtResult",a.fobt_doc AS "fobtDoc",a.fobt_doc_name AS "fobtDocName",a.upload_time AS "uploadTime",a.ischange AS "ischange",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CrcFobt">
+		SELECT 
+			<include refid="CrcFobtColumns"/>
+		FROM crc_fobt a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcFobt">
+		SELECT 
+			<include refid="CrcFobtColumns"/>
+		FROM crc_fobt a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM crc_fobt a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CrcFobt"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CrcFobtColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO crc_fobt(
+		id,crc_check_id,first_fobt_result,second_fobt_result,first_fobt_date,second_fobt_date,fobt_result,fobt_doc,fobt_doc_name,upload_time,ischange,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{crcCheckId},#{firstFobtResult},#{secondFobtResult},#{firstFobtDate},#{secondFobtDate},#{fobtResult},#{fobtDoc},#{fobtDocName},#{uploadTime},#{ischange},#{delFlag},#{createBy},#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE crc_fobt SET
+		id = #{id},crc_check_id = #{crcCheckId},first_fobt_result = #{firstFobtResult},second_fobt_result = #{secondFobtResult},first_fobt_date = #{firstFobtDate},second_fobt_date = #{secondFobtDate},fobt_result = #{fobtResult},fobt_doc = #{fobtDoc},fobt_doc_name = #{fobtDocName},upload_time = #{uploadTime},ischange = #{ischange},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE crc_fobt SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.LucRiskAssessmentDao">
+    
+	<sql id="LucRiskAssessmentColumns">
+		a.id AS "id",a.luc_check_id AS "lucCheckId",a.chufangyouyan AS "chufangyouyan",a.youyanjiechupinlv AS "youyanjiechupinlv",a.youyanjiechunianshu AS "youyanjiechunianshu",a.chouyouyanji AS "chouyouyanji",a.chouyouyanjinianshu AS "chouyouyanjinianshu",a.xiyan AS "xiyan",a.zuihouyicxiyan AS "zuihouyicxiyan",a.kaishixiyannianling AS "kaishixiyannianling",a.meitianxiyanliang AS "meitianxiyanliang",a.beidongxiyan AS "beidongxiyan",a.beidongxiyanduixiang AS "beidongxiyanduixiang",a.beidongxiyannianshu AS "beidongxiyannianshu",a.zhiyezhiaiwuzhi AS "zhiyezhiaiwuzhi",a.zhiaiwuzhileixing AS "zhiaiwuzhileixing",a.zhiaiwuzhi_nianshu AS "zhiaiwuzhiNianshu",a.xiaochuan AS "xiaochuan",a.xiaochuan_nianshu AS "xiaochuanNianshu",a.zhiqiguanyan AS "zhiqiguanyan",a.zhiqiguanyan_nianshu AS "zhiqiguanyanNianshu",a.feiqizhong AS "feiqizhong",a.feiqizhong_nianshu AS "feiqizhongNianshu",a.feijiehe AS "feijiehe",a.feijiehe_nianshu AS "feijieheNianshu",a.guichenzhuo AS "guichenzhuo",a.guichenzhuo_nianshu AS "guichenzhuoNianshu",a.xianweihua AS "xianweihua",a.xianweihua_nianshu AS "xianweihuaNianshu",a.manzufei AS "manzufei",a.manzufei_nianshu AS "manzufeiNianshu",a.qitafeibing AS "qitafeibing",a.qitafeibing_nianshu AS "qitafeibingNianshu",a.ganke AS "ganke",a.ganke_tianshu AS "gankeTianshu",a.tanzhongdaixue AS "tanzhongdaixue",a.tanzhongdaix_tianshu AS "tanzhongdaixTianshu",a.qiji AS "qiji",a.qiji_tianshu AS "qijiTianshu",a.xiongmen AS "xiongmen",a.xiongmen_tianshu AS "xiongmenTianshu",a.xiongtong AS "xiongtong",a.xiongtong_tianshu AS "xiongtongTianshu",a.shengyinsiya AS "shengyinsiya",a.tongbuweifeiyan AS "tongbuweifeiyan",a.feijiejie AS "feijiejie",a.jiejiedaxiao AS "jiejiedaxiao",a.jiejiexingtai AS "jiejiexingtai",a.maoboli AS "maoboli",a.shixingjiejie AS "shixingjiejie",a.aizhengshi AS "aizhengshi",a.qinshu_aizhengshi AS "qinshuAizhengshi",a.assessment_result AS "assessmentResult",a.assessment_doc AS "assessmentDoc",a.assessment_doc_name AS "assessmentDocName",a.assessment_date AS "assessmentDate",a.risk_quality_flag AS "riskQualityFlag",a.upload_time AS "uploadTime",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.LucRiskAssessment">
+		SELECT 
+			<include refid="LucRiskAssessmentColumns"/>
+		FROM luc_risk_assessment a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LucRiskAssessment">
+		SELECT 
+			<include refid="LucRiskAssessmentColumns"/>
+		FROM luc_risk_assessment a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM luc_risk_assessment a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.LucRiskAssessment"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="LucRiskAssessmentColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO luc_risk_assessment(
+		id,luc_check_id,chufangyouyan,youyanjiechupinlv,youyanjiechunianshu,chouyouyanji,chouyouyanjinianshu,xiyan,zuihouyicxiyan,kaishixiyannianling,meitianxiyanliang,beidongxiyan,beidongxiyanduixiang,beidongxiyannianshu,zhiyezhiaiwuzhi,zhiaiwuzhileixing,zhiaiwuzhi_nianshu,xiaochuan,xiaochuan_nianshu,zhiqiguanyan,zhiqiguanyan_nianshu,feiqizhong,feiqizhong_nianshu,feijiehe,feijiehe_nianshu,guichenzhuo,guichenzhuo_nianshu,xianweihua,xianweihua_nianshu,manzufei,manzufei_nianshu,qitafeibing,qitafeibing_nianshu,ganke,ganke_tianshu,tanzhongdaixue,tanzhongdaix_tianshu,qiji,qiji_tianshu,xiongmen,xiongmen_tianshu,xiongtong,xiongtong_tianshu,shengyinsiya,tongbuweifeiyan,feijiejie,jiejiedaxiao,jiejiexingtai,maoboli,shixingjiejie,aizhengshi,qinshu_aizhengshi,assessment_result,assessment_doc,assessment_doc_name,assessment_date,risk_quality_flag,upload_time,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{lucCheckId},#{chufangyouyan},#{youyanjiechupinlv},#{youyanjiechunianshu},#{chouyouyanji},#{chouyouyanjinianshu},#{xiyan},#{zuihouyicxiyan},#{kaishixiyannianling},#{meitianxiyanliang},#{beidongxiyan},#{beidongxiyanduixiang},#{beidongxiyannianshu},#{zhiyezhiaiwuzhi},#{zhiaiwuzhileixing},#{zhiaiwuzhiNianshu},#{xiaochuan},#{xiaochuanNianshu},#{zhiqiguanyan},#{zhiqiguanyanNianshu},#{feiqizhong},#{feiqizhongNianshu},#{feijiehe},#{feijieheNianshu},#{guichenzhuo},#{guichenzhuoNianshu},#{xianweihua},#{xianweihuaNianshu},#{manzufei},#{manzufeiNianshu},#{qitafeibing},#{qitafeibingNianshu},#{ganke},#{gankeTianshu},#{tanzhongdaixue},#{tanzhongdaixTianshu},#{qiji},#{qijiTianshu},#{xiongmen},#{xiongmenTianshu},#{xiongtong},#{xiongtongTianshu},#{shengyinsiya},#{tongbuweifeiyan},#{feijiejie},#{jiejiedaxiao},#{jiejiexingtai},#{maoboli},#{shixingjiejie},#{aizhengshi},#{qinshuAizhengshi},#{assessmentResult},#{assessmentDoc},#{assessmentDocName},#{assessmentDate},#{riskQualityFlag},#{uploadTime},#{delFlag},#{createBy},#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE luc_risk_assessment SET
+		id = #{id},luc_check_id = #{lucCheckId},chufangyouyan = #{chufangyouyan},youyanjiechupinlv = #{youyanjiechupinlv},youyanjiechunianshu = #{youyanjiechunianshu},chouyouyanji = #{chouyouyanji},chouyouyanjinianshu = #{chouyouyanjinianshu},xiyan = #{xiyan},zuihouyicxiyan = #{zuihouyicxiyan},kaishixiyannianling = #{kaishixiyannianling},meitianxiyanliang = #{meitianxiyanliang},beidongxiyan = #{beidongxiyan},beidongxiyanduixiang = #{beidongxiyanduixiang},beidongxiyannianshu = #{beidongxiyannianshu},zhiyezhiaiwuzhi = #{zhiyezhiaiwuzhi},zhiaiwuzhileixing = #{zhiaiwuzhileixing},zhiaiwuzhi_nianshu = #{zhiaiwuzhiNianshu},xiaochuan = #{xiaochuan},xiaochuan_nianshu = #{xiaochuanNianshu},zhiqiguanyan = #{zhiqiguanyan},zhiqiguanyan_nianshu = #{zhiqiguanyanNianshu},feiqizhong = #{feiqizhong},feiqizhong_nianshu = #{feiqizhongNianshu},feijiehe = #{feijiehe},feijiehe_nianshu = #{feijieheNianshu},guichenzhuo = #{guichenzhuo},guichenzhuo_nianshu = #{guichenzhuoNianshu},xianweihua = #{xianweihua},xianweihua_nianshu = #{xianweihuaNianshu},manzufei = #{manzufei},manzufei_nianshu = #{manzufeiNianshu},qitafeibing = #{qitafeibing},qitafeibing_nianshu = #{qitafeibingNianshu},ganke = #{ganke},ganke_tianshu = #{gankeTianshu},tanzhongdaixue = #{tanzhongdaixue},tanzhongdaix_tianshu = #{tanzhongdaixTianshu},qiji = #{qiji},qiji_tianshu = #{qijiTianshu},xiongmen = #{xiongmen},xiongmen_tianshu = #{xiongmenTianshu},xiongtong = #{xiongtong},xiongtong_tianshu = #{xiongtongTianshu},shengyinsiya = #{shengyinsiya},tongbuweifeiyan = #{tongbuweifeiyan},feijiejie = #{feijiejie},jiejiedaxiao = #{jiejiedaxiao},jiejiexingtai = #{jiejiexingtai},maoboli = #{maoboli},shixingjiejie = #{shixingjiejie},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE luc_risk_assessment SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>

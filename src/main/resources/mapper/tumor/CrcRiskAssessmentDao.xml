@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CrcRiskAssessmentDao">
+    
+	<sql id="CrcRiskAssessmentColumns">
+		a.id AS "id",a.crc_check_id AS "crcCheckId",a.manxingfuxie AS "manxingfuxie",a.manxingbianmi AS "manxingbianmi",a.nianyexuebian AS "nianyexuebian",a.lanweiyan AS "lanweiyan",a.dannangyan AS "dannangyan",a.jingshenchuangshang AS "jingshenchuangshang",a.aizhengshi AS "aizhengshi",a.qinshu_aizhengshi AS "qinshuAizhengshi",a.changxirou AS "changxirou",a.xiyan AS "xiyan",a.xuexichong AS "xuexichong",a.ganrannian AS "ganrannian",a.assessment_result AS "assessmentResult",a.assessment_doc AS "assessmentDoc",a.assessment_doc_name AS "assessmentDocName",a.assessment_date AS "assessmentDate",a.risk_quality_flag AS "riskQualityFlag",a.upload_time AS "uploadTime",a.ischange AS "ischange",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CrcRiskAssessment">
+		SELECT 
+			<include refid="CrcRiskAssessmentColumns"/>
+		FROM crc_risk_assessment a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRiskAssessment">
+		SELECT 
+			<include refid="CrcRiskAssessmentColumns"/>
+		FROM crc_risk_assessment a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM crc_risk_assessment a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CrcRiskAssessment"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CrcRiskAssessmentColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO crc_risk_assessment(
+		id,crc_check_id,manxingfuxie,manxingbianmi,nianyexuebian,lanweiyan,dannangyan,jingshenchuangshang,aizhengshi,qinshu_aizhengshi,changxirou,xiyan,xuexichong,ganrannian,assessment_result,assessment_doc,assessment_doc_name,assessment_date,risk_quality_flag,upload_time,ischange,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{crcCheckId},#{manxingfuxie},#{manxingbianmi},#{nianyexuebian},#{lanweiyan},#{dannangyan},#{jingshenchuangshang},#{aizhengshi},#{qinshuAizhengshi},#{changxirou},#{xiyan},#{xuexichong},#{ganrannian},#{assessmentResult},#{assessmentDoc},#{assessmentDocName},#{assessmentDate},#{riskQualityFlag},#{uploadTime},#{ischange},#{delFlag},#{createBy},#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE crc_risk_assessment SET
+		id = #{id},crc_check_id = #{crcCheckId},manxingfuxie = #{manxingfuxie},manxingbianmi = #{manxingbianmi},nianyexuebian = #{nianyexuebian},lanweiyan = #{lanweiyan},dannangyan = #{dannangyan},jingshenchuangshang = #{jingshenchuangshang},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},changxirou = #{changxirou},xiyan = #{xiyan},xuexichong = #{xuexichong},ganrannian = #{ganrannian},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},ischange = #{ischange},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE crc_risk_assessment SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>
