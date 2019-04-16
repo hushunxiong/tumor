@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao">
+    
+	<sql id="CancerPersonInfoColumns">
+		a.id AS "id",a.personcard_type AS "personcardType",a.personcard AS "personcard",a.name AS "name",a.gender AS "gender",a.birth AS "birth",a.telephone AS "telephone",a.mobile AS "mobile",a.nation AS "nation",a.nation_other AS "nationOther",a.marriage AS "marriage",a.education AS "education",a.payment_situation AS "paymentSituation",a.profession AS "profession",a.other_profession AS "otherProfession",a.paddress_province AS "paddressProvince",a.paddress_city AS "paddressCity",a.paddress_county AS "paddressCounty",a.paddress_town AS "paddressTown",a.paddress_committee AS "paddressCommittee",a.paddress_detail AS "paddressDetail",a.address_province AS "addressProvince",a.address_city AS "addressCity",a.address_county AS "addressCounty",a.address_town AS "addressTown",a.address_committee AS "addressCommittee",a.address_detail AS "addressDetail",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.del_flag AS "delFlag",a.ischange AS "ischange",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
+		SELECT 
+			<include refid="CancerPersonInfoColumns"/>
+		FROM cancer_person_info a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
+		SELECT 
+			<include refid="CancerPersonInfoColumns"/>
+		FROM cancer_person_info a
+		<where>
+			a.del_flag = '0'
+		</where>		
+			ORDER BY a.update_date DESC
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM cancer_person_info a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CancerPersonInfoColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO cancer_person_info(
+		id,personcard_type,personcard,name,gender,birth,telephone,mobile,nation,nation_other,marriage,education,payment_situation,profession,other_profession,paddress_province,paddress_city,paddress_county,paddress_town,paddress_committee,paddress_detail,address_province,address_city,address_county,address_town,address_committee,address_detail,regorg,regdoc,regdate,del_flag,ischange,create_by,create_date,update_by,update_date
+		) VALUES (
+		#{id},#{personcardType},#{personcard},#{name},#{gender},#{birth},#{telephone},#{mobile},#{nation},#{nationOther},#{marriage},#{education},#{paymentSituation},#{profession},#{otherProfession},#{paddressProvince},#{paddressCity},#{paddressCounty},#{paddressTown},#{paddressCommittee},#{paddressDetail},#{addressProvince},#{addressCity},#{addressCounty},#{addressTown},#{addressCommittee},#{addressDetail},#{regorg},#{regdoc},#{regdate},#{delFlag},#{ischange},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cancer_person_info SET
+		id = #{id},personcard_type = #{personcardType},personcard = #{personcard},name = #{name},gender = #{gender},birth = #{birth},telephone = #{telephone},mobile = #{mobile},nation = #{nation},nation_other = #{nationOther},marriage = #{marriage},education = #{education},payment_situation = #{paymentSituation},profession = #{profession},other_profession = #{otherProfession},paddress_province = #{paddressProvince},paddress_city = #{paddressCity},paddress_county = #{paddressCounty},paddress_town = #{paddressTown},paddress_committee = #{paddressCommittee},paddress_detail = #{paddressDetail},address_province = #{addressProvince},address_city = #{addressCity},address_county = #{addressCounty},address_town = #{addressTown},address_committee = #{addressCommittee},address_detail = #{addressDetail},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},del_flag = #{delFlag},ischange = #{ischange},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE cancer_person_info SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>
