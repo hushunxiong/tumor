@@ -49,6 +49,10 @@ server:
   port: 7001
   servlet:
     context-path: /tumor
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+  configuration:
+    jdbc-type-for-null: 'null'
 
 shiro:
   expireIn: 1800
