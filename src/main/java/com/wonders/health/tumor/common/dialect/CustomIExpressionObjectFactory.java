@@ -2,6 +2,7 @@ package com.wonders.health.tumor.common.dialect;
 
 import com.google.common.collect.Sets;
 import com.wonders.health.tumor.common.tags.AuthData;
+import com.wonders.health.tumor.common.tags.DictData;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.IExpressionContext;
 import org.thymeleaf.expression.IExpressionObjectFactory;
@@ -28,7 +29,7 @@ public class CustomIExpressionObjectFactory implements IExpressionObjectFactory 
     @Override
     public Object buildObject(IExpressionContext context, String expressionObjectName) {
         if (DIC.equals(expressionObjectName)) {
-//            return new DictData();
+            return new DictData();
         } else if (AUTH.equals(expressionObjectName)) {
             return new AuthData();
         }
