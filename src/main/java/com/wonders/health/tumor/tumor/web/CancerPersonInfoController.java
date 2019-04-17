@@ -39,21 +39,20 @@ public class CancerPersonInfoController extends BaseController {
     @Autowired
     private CancerPersonInfoService cancerPersonInfoService;
 
-	@RequiresPermissions("tumor:cancerPersonInfo:list")
+
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
-        return "tumor/cancerPersonInfoList";
+        return "/tumor/cancerPersonInfoList";
     }
 
     @ResponseBody
-    @RequiresPermissions("tumor:cancerPersonInfo:list")
     @RequestMapping(value = "data", produces = "application/json; charset=utf-8")
     public DataGrid<CancerPersonInfo> data(CancerPersonInfoSearchVo search) {
         DataGrid<CancerPersonInfo> grid = cancerPersonInfoService.findPage(search);
         return grid;
     }
 
-    @RequiresPermissions("tumor:cancerPersonInfo:save")
+
     @RequestMapping(value = "form", method = RequestMethod.GET)
     public String form(Model model , String id) {
         if (StringUtils.isNotBlank(id)) {
@@ -64,7 +63,6 @@ public class CancerPersonInfoController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions("tumor:cancerPersonInfo:save")
     @RequestMapping(value = "save", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     public AjaxReturn<Map<String, String>> save(@Valid CancerPersonInfo cancerPersonInfo, BindingResult result) {
         if (result.hasErrors()) {
@@ -79,7 +77,6 @@ public class CancerPersonInfoController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions("tumor:cancerPersonInfo:del")
     @RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public AjaxReturn<String> delete(String id) {
         if (StringUtils.isNotBlank(id)) {
