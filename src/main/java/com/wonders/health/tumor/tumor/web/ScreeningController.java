@@ -2,6 +2,7 @@ package com.wonders.health.tumor.tumor.web;
 
 
 import com.google.common.collect.Lists;
+import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.StringUtils;
@@ -43,9 +44,13 @@ public class ScreeningController {
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear) {
 
-        List<String> years = Lists.newArrayList();
+        List<DataOption> years = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
-            years.add(DateUtils.formatDate(DateUtils.addYears(new Date(),i), "yyyy"));
+            DataOption option = new DataOption();
+            String year = DateUtils.formatDate(DateUtils.addYears(new Date(),i), "yyyy");
+            option.setId(year);
+            option.setText(year);
+            years.add(option);
         }
         model.addAttribute("years", AuthUtils.toJson(years));
         model.addAttribute("checkYear", checkYear);
@@ -55,6 +60,7 @@ public class ScreeningController {
             model.addAttribute("scRisk", new ScRiskAssessment());
             model.addAttribute("crcRisk", new CrcRiskAssessment());
             model.addAttribute("licRisk", new LicRiskAssessment());
+            model.addAttribute("idNumber", "");
         }
 
         model.addAttribute("crcFlag", crcFlag);

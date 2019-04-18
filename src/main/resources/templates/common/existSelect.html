@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div th:fragment="select(id, name, value)">
+
+    <table class="table_new table_new6">
+        <tr class="diseaseTime">
+            <td width="70%" class="text-l bg-white">
+                <input th:id="${id}" th:name="${name}" class="mini-radiobuttonlist"
+                       th:data="${#dic.generals('60007')}" th:value="${value}"
+                       textField="name" valueField="code"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
