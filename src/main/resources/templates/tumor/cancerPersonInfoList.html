@@ -24,7 +24,7 @@
     <![endif]-->
     <link href="../lib/font-awesome/css/font-awesome.min.css" th:href="@{/lib/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css" />
 
-   <!-- <th:block th:replace="${links}" />
+ <!--   <th:block th:replace="${links}" />
     <th:block th:replace="${scripts}" />-->
 </head>
 <body>
@@ -44,7 +44,7 @@
                         </td>
                         <td width="100px" align="center">
                             <span  onclick="toggleVisibility(div1)"><strong style="color:#3f93d4">高级搜索&nbsp;<img
-                                    src="static/images/pp_down.png" id="pctid"></strong></span></td>
+                                    th:src="@{/images/pp_down.png}" src="../static/images/pp_down.png" id="pctid"></strong></span></td>
                         <td align="left"></td>
                         <td style="width: 200px" align="right">
 
@@ -58,24 +58,27 @@
                             <input id="id" name="id" type="text" class="mini-textbox" width="63%">
                         </div>
                         <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
-
                             <input  id="csnf" name="csnf" type="text" class="mini-textbox">
                         </div>
 
                     </div>
+                    <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+                    <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
                     <div class="mini-row">
-                        <div class="mini-col-3"><label class="mr-5">登记机构所属区：</label>
-                            <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="43%"
-                                   data='[{"id":"01","text":"徐汇区","pinyin":"xx01"},{"id":"02","text":"普陀区","pinyin":"xx02"},{"id":"03","text":"宝山区","pinyin":"xx02"}]'
-                                   textField="text" valueField="id" /> <!--th:disabled="${userType =='sfy' ? false:true}"-->
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构所属区：</label>
+                            <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="45%"
+                                   th:data="${#auth.getAreas(areaCode)}"
+                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sfy' ? '':areaCode}"  th:showNullItem="${role =='sfy' ? true:false}"  th:disabled="${role =='sfy' ? false:true}"/>
                         </div>
-                        <div class="mini-col-3"><label class="mr-5">登记机构：</label>
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构：</label>
 
-                            <input id="regorg" name="regorg" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"请选择","pinyin":"xx01"}]'
-                                   textField="text" valueField="id"/>
+                            <input id="regorg" name="regorg"  class="mini-combobox" width="55%"
+                                   textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                         </div>
-                        <div class="mini-col-4"><label class="mr-5">初筛登记日期：</label>
+                        <div class="mini-col-4">
+                            <label class="mr-5">初筛登记日期：</label>
 
                             <input id="beginDateFrom" name="beginDateFrom" class="mini-datepicker"
                                    value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
@@ -84,77 +87,77 @@
                             <input id="endDateFrom" name="endDateFrom" class="mini-datepicker"
                                    value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
                         </div>
-                        <div class="mini-col-2"><label class="mr-5">初筛状态：</label>
 
-                            <input id="status" name="status" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"请选择","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="40%"/>
+                        <div class="mini-col-2">
+                            <label class="mr-5">初筛状态：</label>
+                            <input class="mini-combobox form-control" id="status" name="status" style="width:48%"
+                                   emptyText="请选择" textField="name" valueField="code"
+                                   showNullItem="true" th:data="${#dic.generals('60003')}"/>
                         </div>
-
                     </div>
                     <div class="mini-row">
-                        <div class="mini-col-12"><label class="mr-5">大肠癌危险评估结果：</label>
-                            <input id="crcAssessmentResult" name="crcAssessmentResult" showNullItem="true" class="mini-combobox" width="8%"
-                                   data='[{"id":"01","text":"徐汇区","pinyin":"xx01"},{"id":"02","text":"普陀区","pinyin":"xx02"},{"id":"03","text":"宝山区","pinyin":"xx02"}]'
-                                   textField="text" valueField="id"/>
+                        <div class="mini-col-12">
+                            <div class="mini-col-3">
+                                <label class="mr-5">大肠癌危险评估结果：</label>
+                                <input id="crcAssessmentResult" name="crcAssessmentResult" showNullItem="true" class="mini-combobox" width="38%"
+                                       emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                            </div>
+                            <div class="mini-col-3">
+                                <label class="mr-5">第一次便隐血结果：</label>
 
-                            <label class="mr-5">第一次便隐血结果：</label>
+                                <input id="firstFobtResult" name="firstFobtResult" showNullItem="true" class="mini-combobox" width="38%"
+                                       emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                            </div>
+                            <div class="mini-col-4">
+                                <label class="mr-5">第二次便隐血结果：</label>
 
-                            <input id="firstFobtResult" name="firstFobtResult" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"请选择","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="8%"/>
+                                <input id="secondFobtResult" name="secondFobtResult" showNullItem="true" class="mini-combobox" width="35%"
+                                       emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                            </div>
 
-                            <label class="mr-5">第二次便隐血结果：</label>
+                            <div class="mini-col-2">
+                                <label class="mr-5">便隐血检查结果：</label>
 
-                            <input id="secondFobtResult" name="secondFobtResult" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"请选择","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="8%"/>
+                                <input id="fobtResult" name="fobtResult" showNullItem="true" class="mini-combobox" width="35%"
+                                       emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                            </div>
 
-                            <label class="mr-5">便隐血检查结果：</label>
-
-                            <input id="fobtResult" name="fobtResult" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"请选择","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="8%"/>
-
-                            <label class="mr-5">大肠癌判定结果：</label>
-
-                            <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"请选择","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="8%"/>
                         </div>
 
                     </div>
                     <div class="mini-row">
                         <div class="mini-col-3"><label class="mr-5">肝癌危险评估结果：</label>
-                            <input id="licAssessmentResult" name="licAssessmentResult" showNullItem="true" class="mini-combobox" width="37%"
-                                   data='[{"id":"01","text":"阳性","pinyin":"xx01"},{"id":"02","text":"阴性","pinyin":"xx02"},{"id":"03","text":"辅助检查未完成","pinyin":"xx02"}]'
-                                   textField="text" valueField="id"/>
+                            <input id="licAssessmentResult" name="licAssessmentResult" showNullItem="true" class="mini-combobox" width="42%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                         <div class="mini-col-3"><label class="mr-5">肝癌辅助检查结果：</label>
 
-                            <input id="licAssistResult"  name="licAssistResult" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"辅助检查未完成","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="43%"/>
+                            <input id="licAssistResult"  name="licAssistResult" showNullItem="true" class="mini-combobox" width="38%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                         <div class="mini-col-4">    <label class="mr-5">肝癌判定结果：</label>
 
-                            <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"辅助检查未完成","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="33%"/>
+                            <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="38%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
 
                     </div>
                     <div class="mini-row">
+                        <div class="mini-col-3">
+                            <label class="mr-5">大肠癌判定结果：</label>
+
+                            <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox" width="45%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+
                         <div class="mini-col-3"><label class="mr-5">胃癌判定结果：</label>
-                            <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="47%"
-                                   data='[{"id":"01","text":"阳性","pinyin":"xx01"},{"id":"02","text":"阴性","pinyin":"xx02"},{"id":"03","text":"辅助检查未完成","pinyin":"xx02"}]'
-                                   textField="text" valueField="id"/>
+                            <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="45%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                         <div class="mini-col-3"><label class="mr-5">肺癌判定结果：</label>
 
-                            <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox"
-                                   data='[{"id":"01","text":"辅助检查未完成","pinyin":"xx01"}]'
-                                   textField="text" valueField="id" width="43%"/>
+                            <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="45%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
 
 
@@ -217,13 +220,17 @@
     var grid = mini.get("datagrid");
     var form = new mini.Form('#div1');
 
+    $(function () {
+       getHospitals();
+    });
+
     function toggleVisibility(div1) {
         if (div1.style.display == "") {
             div1.style.display = "none";
-            document.getElementById("pctid").src = 'static/images/pp_up.png';
+            document.getElementById("pctid").src = '../static/images/pp_up.png';
         } else {
             div1.style.display = "";
-            document.getElementById("pctid").src = 'static/images/pp_down.png';
+            document.getElementById("pctid").src = '../static/images/pp_down.png';
         }
     }
 
@@ -237,8 +244,11 @@
     }
 
 
-
-
+    function getHospitals(){
+        var regarea= mini.get("regarea").getValue();
+        var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
+        mini.get("regorg").setUrl(url);
+    }
 
 </script>
 

@@ -4,6 +4,7 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
@@ -14,6 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,9 +41,14 @@ public class CancerPersonInfoController extends BaseController {
     @Autowired
     private CancerPersonInfoService cancerPersonInfoService;
 
+    @Value("${area_code}")
+    private  String areaCode;
 
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
+        model.addAttribute("role", AuthUtils.judgeRole(AuthUtils.getUser().getOrgCode()));
+        model.addAttribute("areaCode", areaCode);
+        model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         return "/tumor/cancerPersonInfoList";
     }
 
