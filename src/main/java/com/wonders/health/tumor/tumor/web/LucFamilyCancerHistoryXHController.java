@@ -4,10 +4,10 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.wonders.health.tumor.common.controller.BaseController;
-import com.wonders.health.tumor.tumor.entity.CrcRegcase;
+import com.wonders.health.tumor.tumor.entity.LucFamilyCancerHistoryXH;
 
-import com.wonders.health.tumor.tumor.vo.CrcRegcaseSearchVo;
-import com.wonders.health.tumor.tumor.service.CrcRegcaseService;
+import com.wonders.health.tumor.tumor.vo.LucFamilyCancerHistoryXHSearchVo;
+import com.wonders.health.tumor.tumor.service.LucFamilyCancerHistoryXHService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -27,51 +27,51 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
 import javax.validation.Valid;
 import java.util.Map;
 /**
- * 大肠癌初筛信息登记表Controller
- * @author menglianghai
+ * 历史Controller
+ * @author xuguobing
  */
 @Controller
-@RequestMapping("crcRegcase")
-public class CrcRegcaseController extends BaseController {
+@RequestMapping("lucFamilyCancerHistoryXH")
+public class LucFamilyCancerHistoryXHController extends BaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(CrcRegcaseController.class);
+    private static Logger logger = LoggerFactory.getLogger(LucFamilyCancerHistoryXHController.class);
 
     @Autowired
-    private CrcRegcaseService crcRegcaseService;
+    private LucFamilyCancerHistoryXHService lucFamilyCancerHistoryXHService;
 
-	@RequiresPermissions("tumor:crcRegcase:list")
+	@RequiresPermissions("tumor:lucFamilyCancerHistoryXH:list")
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
-        return "tumor/crcRegcaseList";
+        return "tumor/lucFamilyCancerHistoryXHList";
     }
 
     @ResponseBody
-    @RequiresPermissions("tumor:crcRegcase:list")
+    @RequiresPermissions("tumor:lucFamilyCancerHistoryXH:list")
     @RequestMapping(value = "data", produces = "application/json; charset=utf-8")
-    public DataGrid<CrcRegcase> data(CrcRegcaseSearchVo search) {
-        DataGrid<CrcRegcase> grid = crcRegcaseService.findPage(search);
+    public DataGrid<LucFamilyCancerHistoryXH> data(LucFamilyCancerHistoryXHSearchVo search) {
+        DataGrid<LucFamilyCancerHistoryXH> grid = lucFamilyCancerHistoryXHService.findPage(search);
         return grid;
     }
 
-    @RequiresPermissions("tumor:crcRegcase:save")
+    @RequiresPermissions("tumor:lucFamilyCancerHistoryXH:save")
     @RequestMapping(value = "form", method = RequestMethod.GET)
     public String form(Model model , String id) {
         if (StringUtils.isNotBlank(id)) {
-            CrcRegcase crcRegcase = crcRegcaseService.findById(id);
-            model.addAttribute("crcRegcase", crcRegcase);
+            LucFamilyCancerHistoryXH lucFamilyCancerHistoryXH = lucFamilyCancerHistoryXHService.findById(id);
+            model.addAttribute("lucFamilyCancerHistoryXH", lucFamilyCancerHistoryXH);
         }
-        return "tumor/crcRegcaseForm";
+        return "tumor/lucFamilyCancerHistoryXHForm";
     }
 
     @ResponseBody
-    @RequiresPermissions("tumor:crcRegcase:save")
+    @RequiresPermissions("tumor:lucFamilyCancerHistoryXH:save")
     @RequestMapping(value = "save", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-    public AjaxReturn<Map<String, String>> save(@Valid CrcRegcase crcRegcase, BindingResult result) {
+    public AjaxReturn<Map<String, String>> save(@Valid LucFamilyCancerHistoryXH lucFamilyCancerHistoryXH, BindingResult result) {
         if (result.hasErrors()) {
             return new AjaxReturn<Map<String, String>>(false, "校验失败");
         }
         try {
-            return crcRegcaseService.saveOrUpdate(crcRegcase, getSessionUser().getId());
+            return lucFamilyCancerHistoryXHService.saveOrUpdate(lucFamilyCancerHistoryXH, getSessionUser().getId());
         } catch (Exception e) {
             logger.error("", e);
             return new AjaxReturn<Map<String, String>>(false, "保存异常");
@@ -79,12 +79,12 @@ public class CrcRegcaseController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions("tumor:crcRegcase:del")
+    @RequiresPermissions("tumor:lucFamilyCancerHistoryXH:del")
     @RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public AjaxReturn<String> delete(String id) {
         if (StringUtils.isNotBlank(id)) {
             try {
-                crcRegcaseService.deleteById(id);
+                lucFamilyCancerHistoryXHService.deleteById(id);
                 return new AjaxReturn<String>(true, "删除成功");
             } catch (Exception e) {
             	logger.error("", e);

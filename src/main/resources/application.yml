@@ -91,8 +91,11 @@ crc_switch_flag: 1
 lic_switch_flag: 1
 sc_switch_flag: 1
 luc_switch_flag: 1
+
 #区域代码
 area_code: '310106000000'
+
+healthArchive: http://192.168.9.114:9071/archive
 
 
 ---

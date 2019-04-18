@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div th:fragment="selectTime(type, id, name, value, yearId, yearName, yearValue)">
+
+    <table class="table_new table_new6">
+        <tr class="diseaseTime">
+            <td width="70%" class="text-l bg-white">
+
+                <input th:id="${id}" th:name="${name}" class="mini-radiobuttonlist"
+                       th:data="${#dic.generals('60007')}" th:value="${value}"
+                       textField="name" valueField="code"
+                       th:attr="onvaluechanged='Disease.showTime(\''+${id}+'\');'"/>
+            </td>
+            <td width="10%">
+                <span th:if="${type} eq 'year'">
+                    患病年数：
+                </span>
+                <span th:if="${type} eq 'day'">
+                    患病天数：
+                </span>
+            </td>
+            <td width="10%" th:if="${value} eq '1'">
+                <span>
+                    <input th:id="${yearId}" th:name="${yearName}" th:value="${yearValue}" class="mini-textbox"
+                           width="100" vtype="int;maxLength:3"/>
+                </span>
+            </td>
+            <td width="10%" th:if="${value == null or #strings.isEmpty(value) or value == '2'}">
+                <span>
+                    <input th:id="${yearId}" th:name="${yearName}" class="mini-textbox"
+                           width="100" vtype="int;maxLength:3" />
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>
+

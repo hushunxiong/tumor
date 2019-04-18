@@ -13,6 +13,16 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase">
+		SELECT
+		<include refid="CrcRegcaseColumns"/>
+		FROM crc_regcase a
+		WHERE a.manageid = #{manageid}
+		and a.del_flag='0'
+		and a.check_year=#{checkyear}
+	</select>
+
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase">
 		SELECT 
 			<include refid="CrcRegcaseColumns"/>

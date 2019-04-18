@@ -13,6 +13,16 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getByCardnoAndYType" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
+		SELECT
+		<include refid="CancerPersonInfoColumns"/>
+		FROM cancer_person_info a
+		WHERE
+		a.personcard_type = #{type}
+		and a.personcard = #{personcardno}
+		and a.del_flag='0'
+	</select>
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
 		SELECT 
 			<include refid="CancerPersonInfoColumns"/>

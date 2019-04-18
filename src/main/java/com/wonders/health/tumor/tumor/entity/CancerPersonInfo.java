@@ -37,7 +37,7 @@ public class CancerPersonInfo extends BaseEntity {
 	@Length(max=1)
 	private String gender;	// 性别
 
-	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date birth;	// 出生日期
 
 	@Length(max=50)
@@ -109,7 +109,7 @@ public class CancerPersonInfo extends BaseEntity {
 	@Length(max=32)
 	private String regdoc;	// 登记医生代码
 
-	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date regdate;	// 登记日期
 
 	@Length(max=1)

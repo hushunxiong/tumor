@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 /**
- * 历史DAO接口
+ * 大肠癌初筛信息登记表DAO接口
  * @author menglianghai
  */
 @Mapper
@@ -18,5 +18,8 @@ public interface CrcRegcaseDao extends BaseDao<CrcRegcase> {
 	public CrcRegcase get(@Param("id") String id);
 
     public int delete(@Param("id") String id);
+
+    public CrcRegcase getByManageidAndYear(@Param("manageid") String manageid,@Param("checkyear") String checkyear);
+
 
 }

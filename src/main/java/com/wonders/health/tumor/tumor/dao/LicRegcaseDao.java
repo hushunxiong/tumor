@@ -19,4 +19,6 @@ public interface LicRegcaseDao extends BaseDao<LicRegcase> {
 
     public int delete(@Param("id") String id);
 
+    public LicRegcase getByManageidAndYear(@Param("manageid") String manageid,@Param("checkyear") String checkyear);
+
 }
