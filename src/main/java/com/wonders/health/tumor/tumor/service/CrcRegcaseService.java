@@ -20,7 +20,7 @@ import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataGridSearch;
 
 /**
- * 历史Service
+ * 大肠癌初筛信息登记表Service
  * @author menglianghai
  */
 @Service
@@ -30,7 +30,13 @@ public class CrcRegcaseService {
     @Autowired
     private CrcRegcaseDao crcRegcaseDao;
 
-	public DataGrid<CrcRegcase> findPage(DataGridSearch search) {
+    //根据年份和个人编号获取实体
+    public CrcRegcase getByManageidAndYear(String manageid,String checkyear) {
+        return crcRegcaseDao.getByManageidAndYear(manageid,checkyear);
+    }
+
+
+    public DataGrid<CrcRegcase> findPage(DataGridSearch search) {
         Integer count = crcRegcaseDao.pageCount(search);
         List<CrcRegcase> list = null;
         if (count > 0) {
@@ -42,6 +48,7 @@ public class CrcRegcaseService {
     public CrcRegcase findById(String id) {
         return crcRegcaseDao.get(id);
     }
+
 
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(CrcRegcase vo, String userId) {

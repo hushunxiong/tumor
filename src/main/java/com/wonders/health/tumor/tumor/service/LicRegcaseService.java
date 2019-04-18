@@ -30,7 +30,14 @@ public class LicRegcaseService {
     @Autowired
     private LicRegcaseDao licRegcaseDao;
 
-	public DataGrid<LicRegcase> findPage(DataGridSearch search) {
+
+    //根据年份和个人编号获取实体
+    public LicRegcase getByManageidAndYear(String manageid,String checkyear) {
+        return licRegcaseDao.getByManageidAndYear(manageid,checkyear);
+    }
+
+
+    public DataGrid<LicRegcase> findPage(DataGridSearch search) {
         Integer count = licRegcaseDao.pageCount(search);
         List<LicRegcase> list = null;
         if (count > 0) {

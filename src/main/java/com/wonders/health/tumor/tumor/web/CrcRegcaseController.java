@@ -27,7 +27,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
 import javax.validation.Valid;
 import java.util.Map;
 /**
- * 历史Controller
+ * 大肠癌初筛信息登记表Controller
  * @author menglianghai
  */
 @Controller
