@@ -19,7 +19,4 @@ public interface CrcRegcaseDao extends BaseDao<CrcRegcase> {
 
     public int delete(@Param("id") String id);
 
-    public CrcRegcase getByManageidAndYear(@Param("manageid") String manageid,@Param("checkyear") String checkyear);
-
-
 }

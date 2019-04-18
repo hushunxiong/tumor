@@ -13,6 +13,13 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getByCheckid" resultType="com.wonders.health.tumor.tumor.entity.CrcRiskAssessment">
+		SELECT
+		<include refid="CrcRiskAssessmentColumns"/>
+		FROM crc_risk_assessment a
+		WHERE a.crc_check_id = #{checkid} and a.del_flag='0'
+	</select>
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRiskAssessment">
 		SELECT 
 			<include refid="CrcRiskAssessmentColumns"/>

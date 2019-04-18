@@ -1,5 +1,7 @@
 package com.wonders.health.tumor.common.model;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -22,4 +24,8 @@ public interface BaseDao<T> {
     public int pageCount(DataGridSearch search);
 
     public List<T> pageList(DataGridSearch search);
+
+    public T getByManageidAndYear(@Param("manageid") String manageid, @Param("checkyear") String checkyear);
+
+    public T getByCheckid(@Param("checkid")String checkid);
 }

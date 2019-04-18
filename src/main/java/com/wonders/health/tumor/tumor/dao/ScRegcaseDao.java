@@ -18,5 +18,4 @@ public interface ScRegcaseDao extends BaseDao<ScRegcase> {
 	public ScRegcase get(@Param("id") String id);
 
     public int delete(@Param("id") String id);
-
 }

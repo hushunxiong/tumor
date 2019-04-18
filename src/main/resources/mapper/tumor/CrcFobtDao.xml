@@ -13,6 +13,14 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getByCheckid" resultType="com.wonders.health.tumor.tumor.entity.CrcFobt">
+		SELECT
+		<include refid="CrcFobtColumns"/>
+		FROM crc_fobt a
+		WHERE a.crc_check_id = #{checkid} and a.del_flag='0'
+	</select>
+
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcFobt">
 		SELECT 
 			<include refid="CrcFobtColumns"/>

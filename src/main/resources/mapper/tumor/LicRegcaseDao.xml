@@ -13,14 +13,13 @@
 		WHERE a.id = #{id}
 	</select>
 
-	<select id="getByCardnoAndYType" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase">
+	<select id="getByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase">
 		SELECT
-		<include refid="CancerPersonInfoColumns"/>
-		FROM lic_regcase a
-		WHERE
-		a.personcard_type = #{type}
-		and a.personcard = #{personcardno}
+		<include refid="LicRegcaseColumns"/>
+		FROM crc_regcase a
+		WHERE a.manageid = #{manageid}
 		and a.del_flag='0'
+		and a.check_year=#{checkyear}
 	</select>
 
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase">
