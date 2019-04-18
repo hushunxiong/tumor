@@ -2,6 +2,7 @@ package com.wonders.health.tumor.tumor.web;
 
 
 import com.google.common.collect.Lists;
+import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("screening")
-public class ScreeningController {
+public class ScreeningController extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(ScreeningController.class);
 
@@ -54,14 +55,31 @@ public class ScreeningController {
         }
         model.addAttribute("years", AuthUtils.toJson(years));
         model.addAttribute("checkYear", checkYear);
+
+        //个人管理编号
         if (StringUtils.isBlank(manageId)) {
-            model.addAttribute("personInfo", new CancerPersonInfo());
+            CancerPersonInfo personInfo = new CancerPersonInfo();
+            personInfo.setRegdoc(getSessionUser().getId());
+            personInfo.setRegorg(getSessionUser().getOrgCode());
+            personInfo.setRegdate(new Date());
+
+            model.addAttribute("personInfo", personInfo);
             model.addAttribute("lucRisk", new LucRiskAssessment());
             model.addAttribute("scRisk", new ScRiskAssessment());
             model.addAttribute("crcRisk", new CrcRiskAssessment());
             model.addAttribute("licRisk", new LicRiskAssessment());
             model.addAttribute("idNumber", "");
+            model.addAttribute("flag", "1"); //1：新增
+        } else {
+            model.addAttribute("flag", "2"); //2：修改
         }
+
+        //TODO
+        //各癌症数据库存在标志
+        model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
+        model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
+        model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
+        model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
 
         model.addAttribute("crcFlag", crcFlag);
         model.addAttribute("licFlag", licFlag);

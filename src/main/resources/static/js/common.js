@@ -1,3 +1,4 @@
+
 /**
  * Created by xuguobing on 2017/5/5.
  */
@@ -97,6 +98,35 @@ function miniErrorLocation(){
     }
 
 }
+
+function isNotEmpty(v) {
+    if (v) {
+        if ($.trim(v)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getBirthDayAndSex(idcard) {
+    if (IsIdCard(idcard)) {
+        try {
+            var birth = idcard.substring(6, 10) + "-" + idcard.substring(10, 12) + "-" + idcard.substring(12, 14);
+            var sex = undefined;
+            if (parseInt(idcard.substr(16, 1)) % 2 == 1) {
+                //男
+                sex = 1;
+            } else {
+                //女
+                sex = 2;
+            }
+            return {"birthday": birth, "sex": sex}
+        } catch (e) {
+        }
+    }
+    return {"birthday": "", "sex": ""}
+}
+
 function closeForm() {
     try{
         window.parent.window.loadList();
@@ -150,3 +180,4 @@ function gridLoadError(sender, xhr, errorMsg, errorCode) {
     // } catch (e) {
     // }
 }
+
