@@ -3,6 +3,7 @@ package com.wonders.health.tumor.common.utils;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.wonders.health.auth.client.AuthServiceI;
+import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.Menu;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.model.DataOption;
@@ -76,6 +77,34 @@ public class AuthUtils {
         }
     }
 
+    /**
+     * 获取指定用户
+     *
+     * @return
+     */
+    public static User getUserById(String id) {
+        try {
+            User user = authService.findUserById(id);
+            return user;
+        } catch (Exception e) {
+            return new User();
+        }
+    }
+
+    /**
+     * 获取指定医疗机构
+     *
+     * @return
+     */
+    public static Hospital getHospitalByCode(String code) {
+        try {
+            Hospital hospital = authService.findHospitalByCode(code);
+            return hospital;
+        } catch (Exception e) {
+            return new Hospital();
+        }
+    }
+
 
     public static String toJson(Object o) {
         if (o == null || (o instanceof String && StringUtils.isBlank(o.toString()))) {
@@ -95,7 +124,7 @@ public class AuthUtils {
             return null;
         }
         if ("31010502300".equals(yljgdm)) {
-            return "fjk";
+            return "sjk";
         } else {
             if (Arrays.asList(qjkCode).contains(yljgdm)) {
                 return "qjk";

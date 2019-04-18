@@ -4,6 +4,7 @@ package com.wonders.health.tumor.common.tags;
 
 import com.google.gson.Gson;
 
+import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.Menu;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.model.DataOption;
@@ -27,6 +28,13 @@ public class AuthData {
         return AuthUtils.getUser();
     }
 
+    public User getUserById(String id) {
+        return AuthUtils.getUserById(id);
+    }
+
+    public Hospital getHospitalByCode(String code) {
+        return AuthUtils.getHospitalByCode(code);
+    }
 
     public String getAreas(String areaCode){
         List<DataOption> list = AuthUtils.getAreas(areaCode);
