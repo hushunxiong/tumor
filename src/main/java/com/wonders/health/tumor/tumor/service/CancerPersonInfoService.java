@@ -3,7 +3,7 @@
  */
 package com.wonders.health.tumor.tumor.service;
 
-import com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao;
+import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
@@ -30,7 +30,38 @@ public class CancerPersonInfoService {
     @Autowired
     private CancerPersonInfoDao cancerPersonInfoDao;
 
-	public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
+    @Autowired
+    private CrcRegcaseDao crcRegcaseDao; //
+
+    @Autowired
+    private CrcRiskAssessmentDao crcRiskAssessmentDao;
+
+    @Autowired
+    private CrcFobtDao crcFobtDao;
+
+    @Autowired
+    private LicRegcaseDao licRegcaseDao;
+
+    @Autowired
+    private LicRiskAssessmentDao licRiskAssessmentDao;
+
+    @Autowired
+    private LicAssistCheckDao licAssistCheckDao;
+
+    @Autowired
+    private ScRegcaseDao scRegcaseDao;
+
+    @Autowired
+    private ScRiskAssessmentDao scRiskAssessmentDao;
+
+    @Autowired
+    private LucRegcaseDao lucRegcaseDao;
+
+    @Autowired
+    private LucRiskAssessmentDao lucRiskAssessmentDao;
+
+
+    public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
         Integer count = cancerPersonInfoDao.pageCount(search);
         List<CancerPersonInfo> list = null;
         if (count > 0) {
@@ -66,6 +97,28 @@ public class CancerPersonInfoService {
     @Transactional(readOnly = false)
     public void deleteById(String id) {
         cancerPersonInfoDao.delete(id);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteByRegcaseId(CancerPersonInfo info) {
+	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
+	        crcRegcaseDao.delete(info.getCrcCheckId());
+	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
+	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
+        }
+	    if(StringUtils.isNotBlank(info.getLicCheckId())){
+	        licRegcaseDao.delete(info.getLicCheckId());
+	        licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
+	        licRiskAssessmentDao.delete(info.getLicCheckId());
+        }
+        if(StringUtils.isNotBlank(info.getLucCheckId())){
+            lucRegcaseDao.delete(info.getLucCheckId());
+            lucRiskAssessmentDao.deleteByCheckId(info.getLucCheckId());
+        }
+        if(StringUtils.isNotBlank(info.getScCheckId())){
+            scRegcaseDao.delete(info.getScCheckId());
+            scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
+        }
     }
 
 }

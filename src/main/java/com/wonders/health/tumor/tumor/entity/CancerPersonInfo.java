@@ -116,6 +116,14 @@ public class CancerPersonInfo extends BaseEntity {
 	private String ischange;	// 更新标志cdc_dic_personinfo id=60013 code=1：是；code=2：否
 
 
+	private  String crcCheckId; //大肠癌初筛信息登记id
+
+	private  String lucCheckId; //肺癌初筛信息登记id
+
+	private  String scCheckId;  //胃癌初筛信息登记id
+
+	private  String licCheckId;  //肝癌初筛信息登记id
+
 	public CancerPersonInfo() {
 		super();
 	}
@@ -402,4 +410,35 @@ public class CancerPersonInfo extends BaseEntity {
 	}
 
 
+	public String getCrcCheckId() {
+		return crcCheckId;
+	}
+
+	public void setCrcCheckId(String crcCheckId) {
+		this.crcCheckId = crcCheckId;
+	}
+
+	public String getLucCheckId() {
+		return lucCheckId;
+	}
+
+	public void setLucCheckId(String lucCheckId) {
+		this.lucCheckId = lucCheckId;
+	}
+
+	public String getScCheckId() {
+		return scCheckId;
+	}
+
+	public void setScCheckId(String scCheckId) {
+		this.scCheckId = scCheckId;
+	}
+
+	public String getLicCheckId() {
+		return licCheckId;
+	}
+
+	public void setLicCheckId(String licCheckId) {
+		this.licCheckId = licCheckId;
+	}
 }

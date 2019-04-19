@@ -19,4 +19,6 @@ public interface CrcFobtDao extends BaseDao<CrcFobt> {
 
     public int delete(@Param("id") String id);
 
+    public int deleteByCheckId(@Param("checkId") String checkId);
+
 }

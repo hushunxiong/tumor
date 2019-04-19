@@ -93,5 +93,10 @@
 	    WHERE id = #{id}
 	</update>
 
+	<update id="deleteByCheckId">
+	    UPDATE crc_fobt SET del_flag = '1'
+	    WHERE crc_check_id = #{checkId}
+	</update>
+
 	
 </mapper>

@@ -92,5 +92,10 @@
 	    WHERE id = #{id}
 	</update>
 
+	<update id="deleteByCheckId">
+	    UPDATE sc_risk_assessment SET del_flag = '1'
+	    WHERE sc_check_id = #{checkId}
+	</update>
+
 	
 </mapper>

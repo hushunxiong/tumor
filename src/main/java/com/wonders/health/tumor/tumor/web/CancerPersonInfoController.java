@@ -66,7 +66,9 @@ public class CancerPersonInfoController extends BaseController {
             CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findById(id);
             model.addAttribute("cancerPersonInfo", cancerPersonInfo);
         }
-        return "tumor/cancerPersonInfoForm";
+        model.addAttribute("crc", 1);
+        model.addAttribute("glbh", "73766228");
+        return "/tumor/cancerPersonInfoForm";
     }
 
     @ResponseBody
@@ -98,5 +100,22 @@ public class CancerPersonInfoController extends BaseController {
             return new AjaxReturn<String>(false, "传入id不能为空");
         }
     }
+
+    @ResponseBody
+    @RequestMapping(value = "delRecords", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public AjaxReturn<String> delRecords(CancerPersonInfo info) {
+        if (info!=null) {
+            try {
+                cancerPersonInfoService.deleteByRegcaseId(info);
+                return new AjaxReturn<String>(true, "删除成功");
+            } catch (Exception e) {
+                logger.error("", e);
+                return new AjaxReturn<String>(false, "删除异常");
+            }
+        } else {
+            return new AjaxReturn<String>(false, "传入参数不能为空");
+        }
+    }
+
 
 }

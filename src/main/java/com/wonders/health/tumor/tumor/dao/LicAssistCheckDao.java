@@ -19,4 +19,6 @@ public interface LicAssistCheckDao extends BaseDao<LicAssistCheck> {
 
     public int delete(@Param("id") String id);
 
+    public int deleteByCheckId(@Param("checkId") String checkId);
+
 }

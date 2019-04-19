@@ -19,4 +19,6 @@ public interface ScRiskAssessmentDao extends BaseDao<ScRiskAssessment> {
 
     public int delete(@Param("id") String id);
 
+    public int deleteByCheckId(@Param("checkId") String checkId);
+
 }

@@ -114,17 +114,36 @@
                                 <input id="secondFobtResult" name="secondFobtResult" showNullItem="true" class="mini-combobox" width="35%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
-
                             <div class="mini-col-2">
                                 <label class="mr-5">便隐血检查结果：</label>
 
                                 <input id="fobtResult" name="fobtResult" showNullItem="true" class="mini-combobox" width="35%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
-
                         </div>
-
                     </div>
+
+                    <div class="mini-row">
+                        <div class="mini-col-3">
+                            <label class="mr-5">大肠癌判定结果：</label>
+                            <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox" width="45%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                        <div class="mini-col-3"><label class="mr-5">胃癌判定结果：</label>
+                            <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="45%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                        <div class="mini-col-4"><label class="mr-5">肺癌判定结果：</label>
+
+                            <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="45%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                        <div class="mini-col-2">    <label class="mr-5">肝癌判定结果：</label>
+                            <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="38%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                    </div>
+
                     <div class="mini-row">
                         <div class="mini-col-3"><label class="mr-5">肝癌危险评估结果：</label>
                             <input id="licAssessmentResult" name="licAssessmentResult" showNullItem="true" class="mini-combobox" width="42%"
@@ -135,38 +154,11 @@
                             <input id="licAssistResult"  name="licAssistResult" showNullItem="true" class="mini-combobox" width="38%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-4">    <label class="mr-5">肝癌判定结果：</label>
-
-                            <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="38%"
-                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
-                        </div>
-
-                    </div>
-                    <div class="mini-row">
-                        <div class="mini-col-3">
-                            <label class="mr-5">大肠癌判定结果：</label>
-
-                            <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox" width="45%"
-                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
-                        </div>
-
-                        <div class="mini-col-3"><label class="mr-5">胃癌判定结果：</label>
-                            <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="45%"
-                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
-                        </div>
-                        <div class="mini-col-3"><label class="mr-5">肺癌判定结果：</label>
-
-                            <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="45%"
-                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
-                        </div>
-
-
                     </div>
                     <div class="mini-row">
                         <div class="mini-col-4">
                             <button class="my-btn my-btn-blue" onclick="location.href='新增筛查信息.html'">新增初筛登记</button>
-                            <button class="my-btn my-btn-blue">提交数据</button>
-
+                            <button class="my-btn my-btn-blue"  onclick="deleteRecords('1')">提交数据</button>
                         </div>
                     </div>
 
@@ -249,6 +241,67 @@
         var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
         mini.get("regorg").setUrl(url);
     }
+
+    function deleteRecords(id) {
+        mini.open({
+            url: '../cancerPersonInfo/form?&id='+id,
+            showMaxButton: false,
+            title: "初筛登记信息删除",
+            height:150,
+            width: 400,
+            showCloseButton: true,
+            showModal: true,
+            ondestroy: function (action) {  //弹出页面关闭前
+                //如果点击“确定”
+                if (action == "save"){
+                    var iframe = this.getIFrameEl();
+                    //获取选中、编辑的结果
+                    var data = iframe.contentWindow.getData();
+                    data = mini.clone(data);
+                    console.log(data);
+                    if (data!=null){
+                        del(data);
+                    }
+                }
+            }
+        });
+    }
+
+    function del(data) {
+        mini.confirm("确认是否删除", "确定？",
+            function (action) {
+                if (action == "ok") {
+                    $.ajax({
+                        url: "../cancerPersonInfo/delRecords",
+                        data: data,
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.ok) {
+                                onSearch();
+                                mini.showTips({
+                                    content: res.msg,
+                                    state: "success",
+                                    x: "center",
+                                    y: "top",
+                                    timeout: 3000
+                                });
+                            } else {
+                                mini.showTips({
+                                    content: res.msg,
+                                    state: "warning",
+                                    x: "center",
+                                    y: "top",
+                                    timeout: 3000
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        );
+    }
+
+
 
 </script>
 
