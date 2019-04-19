@@ -10,6 +10,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
 import com.wonders.health.tumor.common.utils.IdGen;
 import com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.healthcloud.archive.client.entity.PersonAddress;
 import com.wonders.healthcloud.archive.client.entity.PersonInfo;
 import com.wonders.healthcloud.archive.client.util.ArchiveUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 新增筛查登记Service
@@ -39,15 +41,34 @@ public class ScreeningService {
 
     //根据证件类型和证件号码获取基本信息
     public CancerPersonInfo getBaseInfoByCardnoAndType(String personcardno,String type) {
-        CancerPersonInfo result=new CancerPersonInfo();
-
         Optional<CancerPersonInfo>cancerPersonInfo=Optional.of(cancerPersonInfoDao.getByCardnoAndYType(personcardno,type));
-        if(cancerPersonInfo.isPresent()){
-            result=cancerPersonInfo.get();
-        }else{
-            PersonInfo personInfo=ArchiveUtil.getArchive(healthArchive+ "/api/get", type, personcardno);
-            if(personInfo!=null){
-                BeanUtils.copyProperties(personInfo, result);
+        if(!cancerPersonInfo.isPresent()){
+            return cancerPersonInfo.get();
+        }
+
+        CancerPersonInfo result=new CancerPersonInfo();
+        PersonInfo personInfo=ArchiveUtil.getArchive(healthArchive+ "/api/get", type, personcardno);
+        if(personInfo!=null){
+            BeanUtils.copyProperties(personInfo, result);
+
+            result.setPersoncard(personcardno);
+            result.setTelephone(personInfo.getPhone());
+            result.setMobile(personInfo.getMobilePhone());
+            result.setPaymentSituation(personInfo.getMedicalPaymentcode());
+            result.setPaddressDetail(personInfo.getPaddressOther());
+
+            List<PersonAddress> personAddressList = personInfo.getAddresses();
+            if(personAddressList!=null && personAddressList.size() > 0 ){
+                //居住地址
+                personAddressList.stream().filter((personAddress) -> "1".equals(personAddress.getIscurrentuse()))
+                        .forEach(personAddress -> {
+                            result.setAddressProvince(personAddress.getProvince());
+                            result.setAddressCity(personAddress.getCity());
+                            result.setAddressCounty(personAddress.getCounty());
+                            result.setAddressTown(personAddress.getTown());
+                            result.setAddressCommittee(personAddress.getCommittee());
+                            result.setAddressDetail(personAddress.getOther());
+                        });
             }
         }
         return result;

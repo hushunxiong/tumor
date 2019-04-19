@@ -25,15 +25,15 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class CrcRegcaseService {
+public class CrcRegcaseService implements BaseService{
 
     @Autowired
     private CrcRegcaseDao crcRegcaseDao;
 
-    //根据年份和个人编号获取实体
-    public CrcRegcase getByManageidAndYear(String manageid,String checkyear) {
-        return crcRegcaseDao.getByManageidAndYear(manageid,checkyear);
-    }
+//    //根据年份和个人编号获取实体
+//    public CrcRegcase getByManageidAndYear(String manageid,String checkyear) {
+//        return crcRegcaseDao.getByManageidAndYear(manageid,checkyear);
+//    }
 
 
     public DataGrid<CrcRegcase> findPage(DataGridSearch search) {

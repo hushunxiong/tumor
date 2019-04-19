@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class LicRegcaseService {
+public class LicRegcaseService implements BaseService{
 
     @Autowired
     private LicRegcaseDao licRegcaseDao;
