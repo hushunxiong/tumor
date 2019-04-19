@@ -54,6 +54,9 @@ public class ScreeningController extends BaseController {
     private ScreeningService screeningService;
 
     @Autowired
+    private CancerPersonInfoService cancerPersonInfoService;
+
+    @Autowired
     private CrcRegcaseService crcRegcaseService;
     @Autowired
     private LicRegcaseService licRegcaseService;
@@ -170,16 +173,20 @@ public class ScreeningController extends BaseController {
 
     @RequestMapping(value = {"", "getDetail"}, method = RequestMethod.GET)
     @ResponseBody
-    public ScreeningVo getDetail(String manageid, String year, String checkid){
+    public ScreeningVo getDetail(String manageid, String year){
         ScreeningVo screeningVo=new ScreeningVo();
+        String crccheckid="";
+        String liccheckid="";
 
         //大肠癌
         if(isOpen(crcFlag)){
             CrcRegcase crcRegcase=(CrcRegcase)crcRegcaseService.getByManageidAndYear(crcRegcaseDao,manageid,year);
             if(crcRegcase!=null){
                 screeningVo.setCrcRegcase(crcRegcase);
+                crccheckid=crcRegcase.getIdNumber();
             }
-            CrcRiskAssessment crcRiskAssessment=(CrcRiskAssessment)crcRiskAssessmentService.getByCheckid(crcRiskAssessmentDao,checkid);
+
+            CrcRiskAssessment crcRiskAssessment=(CrcRiskAssessment)crcRiskAssessmentService.getByCheckid(crcRiskAssessmentDao,crccheckid);
             if(crcRiskAssessment!=null){
                 screeningVo.setCrcRisk(crcRiskAssessment);
             }
@@ -190,8 +197,10 @@ public class ScreeningController extends BaseController {
             LicRegcase licRegcase=(LicRegcase)licRegcaseService.getByManageidAndYear(licRegcaseDao,manageid,year);
             if(licRegcase!=null){
                 screeningVo.setLicRegcase(licRegcase);
+                liccheckid=licRegcase.getIdNumber();
             }
-            LicRiskAssessment licRiskAssessment=(LicRiskAssessment)licRiskAssessmentService.getByCheckid(licRiskAssessmentDao,checkid);
+
+            LicRiskAssessment licRiskAssessment=(LicRiskAssessment)licRiskAssessmentService.getByCheckid(licRiskAssessmentDao,liccheckid);
             if(licRiskAssessment!=null){
                 screeningVo.setLicRisk(licRiskAssessment);
             }
@@ -203,7 +212,8 @@ public class ScreeningController extends BaseController {
             if(scRegcase!=null){
                 screeningVo.setScRegcase(scRegcase);
             }
-            ScRiskAssessment scRiskAssessment=(ScRiskAssessment)scRiskAssessmentService.getByCheckid(scRiskAssessmentDao,checkid);
+
+            ScRiskAssessment scRiskAssessment=(ScRiskAssessment)scRiskAssessmentService.getByCheckid(scRiskAssessmentDao,scRegcase.getIdNumber());
             if(scRiskAssessment!=null){
                 screeningVo.setScRisk(scRiskAssessment);
             }
@@ -216,20 +226,21 @@ public class ScreeningController extends BaseController {
             if(lucRegcase!=null){
                 screeningVo.setLucRegcase(lucRegcase);
             }
-            LucRiskAssessment lucRiskAssessment=(LucRiskAssessment)lucRiskAssessmentService.getByCheckid(lucRiskAssessmentDao,checkid);
+
+            LucRiskAssessment lucRiskAssessment=(LucRiskAssessment)lucRiskAssessmentService.getByCheckid(lucRiskAssessmentDao,lucRegcase.getIdNumber());
             if(lucRiskAssessment!=null){
                 screeningVo.setLucRisk(lucRiskAssessment);
             }
         }
 
         //大肠癌便隐血检查表
-        CrcFobt crcFobt=(CrcFobt)crcFobtService.getByCheckid(crcFobtDao,checkid);
+        CrcFobt crcFobt=(CrcFobt)crcFobtService.getByCheckid(crcFobtDao,crccheckid);
         if(crcFobt!=null){
             screeningVo.setCrcFobt(crcFobt);
         }
 
         //肝癌辅助检查表
-        LicAssistCheck licAssistCheck=(LicAssistCheck)licAssistCheckService.getByCheckid(licAssistCheckDao,checkid);
+        LicAssistCheck licAssistCheck=(LicAssistCheck)licAssistCheckService.getByCheckid(licAssistCheckDao,liccheckid);
         if(licAssistCheck!=null){
             screeningVo.setLicCheck(licAssistCheck);
         }
@@ -269,11 +280,44 @@ public class ScreeningController extends BaseController {
         model.addAttribute("scFlag", scFlag);
         model.addAttribute("lucFlag", lucFlag);
 
-        ScreeningVo screeningVo=getDetail(manageId,checkYear,null);
+        CancerPersonInfo cancerPersonInfo=cancerPersonInfoService.findById(manageId);
+        ScreeningVo screeningVo=getDetail(manageId,checkYear);
+        screeningVo.setPersonInfo(cancerPersonInfo);
 
         model.addAttribute("screeningVo", screeningVo);
         return "/register/form";
     }
 
-
+    /**
+     *新增时检查idnumber是否已经占用 1-crc 2-lic 3-sc 4-luc
+     **/
+    @RequestMapping(value = {"", "checkIdnumber"}, method = RequestMethod.GET)
+    @ResponseBody
+    public AjaxReturn checkIdnumber(String manageid, String idnumber,String opFlag){
+        AjaxReturn ajaxReturn=new AjaxReturn();
+        Boolean isChecked=false;
+        String msg="该id已被占用！";
+        if(opFlag=="1"){
+            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||"".equals(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber))){
+                isChecked=true;
+            }
+        }else if(opFlag=="2"){
+            if(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber)==null||"".equals(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber))){
+                isChecked=true;
+            }
+        }else if(opFlag=="3"){
+            if(scRegcaseService.checkIdnumber(scRegcaseDao,manageid,idnumber)==null||"".equals(scRegcaseService.checkIdnumber(scRegcaseDao,manageid,idnumber))){
+                isChecked=true;
+            }
+        }else if(opFlag=="4"){
+            if(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber)==null||"".equals(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber))){
+                isChecked=true;
+            }
+        }
+        ajaxReturn.setOk(isChecked);
+        if(!isChecked){
+            ajaxReturn.setMsg(msg);
+        }
+        return ajaxReturn;
+    }
 }

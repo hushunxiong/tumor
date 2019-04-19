@@ -22,6 +22,18 @@
 		and a.check_year=#{checkyear}
 	</select>
 
+	<select id="checkIdnumber" resultType="java.lang.String">
+		SELECT
+		id_number as id
+		FROM crc_regcase a
+		WHERE
+		 a.del_flag='0'
+		<if test="${manageid} != null and ${manageid} != ''">
+			and a.manageid = #{manageid}
+		 </if>
+		and a.Id_number=#{idnumber}
+	</select>
+
 
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase">
 		SELECT 

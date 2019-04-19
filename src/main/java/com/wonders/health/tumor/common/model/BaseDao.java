@@ -30,4 +30,6 @@ public interface BaseDao<T> {
     public T getByCheckid(@Param("checkid")String checkid);
 
     public List<T> getListByManageidAndYear(@Param("manageid") String manageid, @Param("checkyear") String checkyear);
+
+    public String checkIdnumber(@Param("manageid") String manageid, @Param("idnumber") String idnumber);
 }

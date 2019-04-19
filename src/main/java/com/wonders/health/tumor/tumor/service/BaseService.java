@@ -21,4 +21,10 @@ public interface BaseService {
     default List getListByManageidAndYear(BaseDao baseDao, String manageid, String checkyear){
         return baseDao.getListByManageidAndYear(manageid, checkyear);
     }
+
+    //4个业务危险度评估表新增时查询idnumber是否已占用
+    default Object checkIdnumber(BaseDao baseDao,String manageid,String idnumber){
+        return baseDao.checkIdnumber(manageid,idnumber);
+    }
+
 }
