@@ -8,6 +8,9 @@ import com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
 /**
  * 医疗机构表DAO接口
  * @author xuguobing
@@ -18,5 +21,7 @@ public interface CancerDicHospitalInfoDao extends BaseDao<CancerDicHospitalInfo>
 	public CancerDicHospitalInfo get(@Param("hospitalId") String hospitalId);
 
     public int delete(@Param("hospitalId") String hospitalId);
+
+    public List<CancerDicHospitalInfo> queryName(@Param("name") String name);
 
 }

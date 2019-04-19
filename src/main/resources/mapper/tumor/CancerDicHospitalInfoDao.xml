@@ -85,5 +85,13 @@
 	    WHERE hospital_id = #{hospitalId}
 	</update>
 
-	
+	<select id="queryName" resultType="com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo">
+		SELECT
+		<include refid="CancerDicHospitalInfoColumns"/>
+		FROM CANCER_DIC_HOSPITAL_INFO a
+		<where>
+			a.del_flag = '0'
+			AND a.hospital_name like '%' || #{name} || '%'
+		</where>
+	</select>
 </mapper>
