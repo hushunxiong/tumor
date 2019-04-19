@@ -7,6 +7,7 @@ import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 
+import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import com.wonders.health.tumor.tumor.service.CancerPersonInfoService;
 
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +29,7 @@ import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataGridSearch;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 /**
  * 初筛对象信息Controller
@@ -42,7 +45,7 @@ public class CancerPersonInfoController extends BaseController {
     private CancerPersonInfoService cancerPersonInfoService;
 
     @Value("${area_code}")
-    private  String areaCode;
+    private String areaCode;
 
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
@@ -61,7 +64,7 @@ public class CancerPersonInfoController extends BaseController {
 
 
     @RequestMapping(value = "form", method = RequestMethod.GET)
-    public String form(Model model , String id) {
+    public String form(Model model, String id) {
         if (StringUtils.isNotBlank(id)) {
             CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findById(id);
             model.addAttribute("cancerPersonInfo", cancerPersonInfo);
@@ -93,7 +96,7 @@ public class CancerPersonInfoController extends BaseController {
                 cancerPersonInfoService.deleteById(id);
                 return new AjaxReturn<String>(true, "删除成功");
             } catch (Exception e) {
-            	logger.error("", e);
+                logger.error("", e);
                 return new AjaxReturn<String>(false, "删除异常");
             }
         } else {
@@ -104,7 +107,7 @@ public class CancerPersonInfoController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "delRecords", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public AjaxReturn<String> delRecords(CancerPersonInfo info) {
-        if (info!=null) {
+        if (info != null) {
             try {
                 cancerPersonInfoService.deleteByRegcaseId(info);
                 return new AjaxReturn<String>(true, "删除成功");
@@ -115,7 +118,15 @@ public class CancerPersonInfoController extends BaseController {
         } else {
             return new AjaxReturn<String>(false, "传入参数不能为空");
         }
+
+
     }
 
+    //初筛一览列表
 
+    @RequestMapping(value = {"SearchResultList"}, method = RequestMethod.GET)
+    @ResponseBody
+    public List<CancerPersonInfoSearchResultVo> cancerPersonInfoSearchResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
+        return   cancerPersonInfoService.cancerPersonInfoSearchResult(cancerPersonInfoSearchVo);
+    }
 }

@@ -8,6 +8,8 @@ import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
+import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
+import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,24 +103,28 @@ public class CancerPersonInfoService {
 
     @Transactional(readOnly = false)
     public void deleteByRegcaseId(CancerPersonInfo info) {
-	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
-	        crcRegcaseDao.delete(info.getCrcCheckId());
-	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
-	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
+        if (StringUtils.isNotBlank(info.getCrcCheckId())) {
+            crcRegcaseDao.delete(info.getCrcCheckId());
+            crcFobtDao.deleteByCheckId(info.getCrcCheckId());
+            crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
         }
-	    if(StringUtils.isNotBlank(info.getLicCheckId())){
-	        licRegcaseDao.delete(info.getLicCheckId());
-	        licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
-	        licRiskAssessmentDao.delete(info.getLicCheckId());
+        if (StringUtils.isNotBlank(info.getLicCheckId())) {
+            licRegcaseDao.delete(info.getLicCheckId());
+            licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
+            licRiskAssessmentDao.delete(info.getLicCheckId());
         }
-        if(StringUtils.isNotBlank(info.getLucCheckId())){
+        if (StringUtils.isNotBlank(info.getLucCheckId())) {
             lucRegcaseDao.delete(info.getLucCheckId());
             lucRiskAssessmentDao.deleteByCheckId(info.getLucCheckId());
         }
-        if(StringUtils.isNotBlank(info.getScCheckId())){
+        if (StringUtils.isNotBlank(info.getScCheckId())) {
             scRegcaseDao.delete(info.getScCheckId());
             scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
         }
-    }
 
+    }
+    //初筛一览列表
+    public List<CancerPersonInfoSearchResultVo> cancerPersonInfoSearchResult(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
+	   return cancerPersonInfoDao.cancerPersonInfoResultList(cancerPersonInfoSearchVo);
+    }
 }
