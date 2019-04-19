@@ -4,6 +4,10 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.model.BaseDao;
+import com.wonders.health.tumor.common.service.DictService;
+import com.wonders.health.tumor.common.utils.SpringContextHolder;
+import com.wonders.health.tumor.tumor.dao.CrcRegcaseDao;
 import com.wonders.health.tumor.tumor.entity.CrcRegcase;
 
 import com.wonders.health.tumor.tumor.vo.CrcRegcaseSearchVo;
@@ -25,6 +29,7 @@ import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataGridSearch;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 /**
  * 大肠癌初筛信息登记表Controller
@@ -39,9 +44,15 @@ public class CrcRegcaseController extends BaseController {
     @Autowired
     private CrcRegcaseService crcRegcaseService;
 
+    private static CrcRegcaseDao crcRegcaseDao = SpringContextHolder.getBean(CrcRegcaseDao.class);
+
+
+    private static CrcRegcaseService crcRegcaseService2 = SpringContextHolder.getBean(CrcRegcaseService.class);
+
 	@RequiresPermissions("tumor:crcRegcase:list")
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
+	    Object o= crcRegcaseService.getByManageidAndYear(crcRegcaseDao,"", "");
         return "tumor/crcRegcaseList";
     }
 
@@ -95,4 +106,7 @@ public class CrcRegcaseController extends BaseController {
         }
     }
 
+    public static void main(String[] args){
+        Object o= crcRegcaseService2.getByManageidAndYear(crcRegcaseDao,"", "");
+    }
 }
