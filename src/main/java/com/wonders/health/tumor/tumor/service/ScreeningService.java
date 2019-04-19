@@ -74,7 +74,10 @@ public class ScreeningService {
         return result;
     }
 
+    public CancerPersonInfo getBaseInfoByCheckIdAndYear(String checkId,String year){
 
+        return null;
+    }
 
 
     @Transactional(readOnly = false)

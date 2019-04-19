@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class CrcRiskAssessmentService {
+public class CrcRiskAssessmentService implements BaseService{
 
     @Autowired
     private CrcRiskAssessmentDao crcRiskAssessmentDao;

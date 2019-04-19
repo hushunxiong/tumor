@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class LicAssistCheckService {
+public class LicAssistCheckService implements BaseService{
 
     @Autowired
     private LicAssistCheckDao licAssistCheckDao;

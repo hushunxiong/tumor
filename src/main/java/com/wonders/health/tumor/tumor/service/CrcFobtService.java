@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class CrcFobtService {
+public class CrcFobtService implements BaseService{
 
     @Autowired
     private CrcFobtDao crcFobtDao;

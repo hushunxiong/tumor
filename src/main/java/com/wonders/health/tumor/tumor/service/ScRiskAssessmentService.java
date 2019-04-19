@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class ScRiskAssessmentService {
+public class ScRiskAssessmentService implements BaseService{
 
     @Autowired
     private ScRiskAssessmentDao scRiskAssessmentDao;

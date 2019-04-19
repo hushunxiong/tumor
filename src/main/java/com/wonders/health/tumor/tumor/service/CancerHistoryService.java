@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class CancerHistoryService {
+public class CancerHistoryService implements BaseService{
 
     @Autowired
     private CancerHistoryDao cancerHistoryDao;

@@ -13,7 +13,7 @@
 		WHERE a.id = #{id}
 	</select>
 
-	<select id="getByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.CancerHistory">
+	<select id="getListByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.CancerHistory">
 		SELECT
 		<include refid="CancerHistoryColumns"/>
 		FROM CANCER_HISTORY a

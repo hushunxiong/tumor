@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class LucFamilyCancerHistoryXHService {
+public class LucFamilyCancerHistoryXHService  implements BaseService{
 
     @Autowired
     private LucFamilyCancerHistoryXHDao lucFamilyCancerHistoryXHDao;

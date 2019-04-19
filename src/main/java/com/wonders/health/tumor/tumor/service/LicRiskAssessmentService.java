@@ -25,7 +25,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
  */
 @Service
 @Transactional(readOnly = true)
-public class LicRiskAssessmentService {
+public class LicRiskAssessmentService implements BaseService{
 
     @Autowired
     private LicRiskAssessmentDao licRiskAssessmentDao;
