@@ -47,4 +47,6 @@ public class ScreeningVo {
     //一级亲癌症史表（徐汇）
     private List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList;
 
+
+
 }
