@@ -34,7 +34,6 @@
 		and a.Id_number=#{idnumber}
 	</select>
 
-
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase">
 		SELECT 
 			<include refid="CrcRegcaseColumns"/>

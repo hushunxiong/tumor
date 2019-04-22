@@ -136,6 +136,19 @@ public class CancerPersonInfo extends BaseEntity {
 
 	private Integer sc;
 
+	private String idNumber;   //大肠癌初筛编号
+	private String crcAssessmentResult; //大肠癌危险评估结果
+	private String firstFobtResult; //第一次便隐血结果
+	private String secondFobtResult; //第二次便隐血结果
+	private String fobtResult; //便隐血检查结果
+	private String crcResult; //大肠癌判定结果
+	private String licAssessmentResult; //肝癌危险评估结果
+	private String licAssistResult; //肝癌辅助检查结果
+	private String licResult; //肝癌判定结果
+	private String scResult; //胃癌判定结果
+	private String lucResult; //肺癌判定结果
+
+
 
 	public CancerPersonInfo() {
 		super();
@@ -469,5 +482,93 @@ public class CancerPersonInfo extends BaseEntity {
 
 	public void setCsnf(String csnf) {
 		this.csnf = csnf;
+	}
+
+	public String getIdNumber() {
+		return idNumber;
+	}
+
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
+	}
+
+	public String getCrcAssessmentResult() {
+		return crcAssessmentResult;
+	}
+
+	public void setCrcAssessmentResult(String crcAssessmentResult) {
+		this.crcAssessmentResult = crcAssessmentResult;
+	}
+
+	public String getFirstFobtResult() {
+		return firstFobtResult;
+	}
+
+	public void setFirstFobtResult(String firstFobtResult) {
+		this.firstFobtResult = firstFobtResult;
+	}
+
+	public String getSecondFobtResult() {
+		return secondFobtResult;
+	}
+
+	public void setSecondFobtResult(String secondFobtResult) {
+		this.secondFobtResult = secondFobtResult;
+	}
+
+	public String getFobtResult() {
+		return fobtResult;
+	}
+
+	public void setFobtResult(String fobtResult) {
+		this.fobtResult = fobtResult;
+	}
+
+	public String getCrcResult() {
+		return crcResult;
+	}
+
+	public void setCrcResult(String crcResult) {
+		this.crcResult = crcResult;
+	}
+
+	public String getLicAssessmentResult() {
+		return licAssessmentResult;
+	}
+
+	public void setLicAssessmentResult(String licAssessmentResult) {
+		this.licAssessmentResult = licAssessmentResult;
+	}
+
+	public String getLicAssistResult() {
+		return licAssistResult;
+	}
+
+	public void setLicAssistResult(String licAssistResult) {
+		this.licAssistResult = licAssistResult;
+	}
+
+	public String getLicResult() {
+		return licResult;
+	}
+
+	public void setLicResult(String licResult) {
+		this.licResult = licResult;
+	}
+
+	public String getScResult() {
+		return scResult;
+	}
+
+	public void setScResult(String scResult) {
+		this.scResult = scResult;
+	}
+
+	public String getLucResult() {
+		return lucResult;
+	}
+
+	public void setLucResult(String lucResult) {
+		this.lucResult = lucResult;
 	}
 }

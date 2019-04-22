@@ -1277,11 +1277,32 @@
                 mini.get("birth").setValue(res.birthday);
             }
             //唯一性检查
-            //uniquenessCheck(zjlx.getValue(), zjhm.getValue());
+            uniquenessCheck(mini.get("checkYear").getValue(),zjlx.getValue(), zjhm.getValue());
         }
     }
 
-
+    function uniquenessCheck(checkyear,zjlx,zjhm){
+        $.ajax({
+            url: "/tumor/screening/checkHadDone?year="+checkyear+"&&type="+zjlx+"&&personcard="+zjhm,
+            type:'get',
+            dataType:'json',
+            success:function(res){
+                if(!res.ok){ //检查过
+                    mini.showTips({
+                        content: res.msg,
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                    return;
+                }else{//没检查过，返回值为个人身份信息
+                    window.location.href='/tumor/screening/reform?manageId='+res.value.id+"&&checkYear="+mini.get("checkYear").getValue()+
+                    "&&type="+zjlx+"&&personcardno="+zjhm;
+                }
+            }
+        })
+    }
 
     //同户籍地址
     function sameChange(e) {

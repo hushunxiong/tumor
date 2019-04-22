@@ -27,6 +27,6 @@ public interface CancerPersonInfoDao extends BaseDao<CancerPersonInfo> {
     public CancerPersonInfo getByCardnoAndYType(@Param("personcardno")String personcardno,@Param("type")String type);
 
     //初筛一览列表显示
-    List<CancerPersonInfoSearchResultVo> cancerPersonInfoResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo);
+    List<CancerPersonInfo> cancerPersonInfoResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo);
 
 }

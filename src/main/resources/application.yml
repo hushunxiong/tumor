@@ -101,7 +101,7 @@ lucFlag: 1
 licFlag: 1
 scFlag: 1
 
-healthArchive: http://192.168.9.114:9071/archive
+healthArchive: http://10.1.93.110/archive
 
 
 ---

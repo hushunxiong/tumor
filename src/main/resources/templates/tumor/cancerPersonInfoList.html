@@ -180,11 +180,10 @@
                 </table>
             </div>-->
 
-            <div id="datagrid" class="mini-datagrid" style=" overflow: auto;width: 1320px;height: auto">
+            <div id="datagrid" url="getData" class="mini-datagrid" style=" overflow: auto;width: 1320px;height: auto" multiSelect="true">
                 <div property="columns" >
                     <div type="checkcolumn"></div>
-                    <div type="indexcolumn" width="40px" headerAlign="center" align="center">序号</div>
-                    <div type="action" renderer="actionRenderer" width="50px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
+                    <div field="name" renderer="actionRenderer" width="50px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
                     <div field="personcard" sortField="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">身份证号</div>
                     <div field="gender" sortField="gender" width="50px" headerAlign="center" allowSort="true">性别</div>
                     <!--<div field="" sortField="" width="50px"  headerAlign="center" allowSort="true" font-size="2">评估员</div>-->

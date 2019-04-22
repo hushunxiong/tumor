@@ -3,13 +3,15 @@
  */
 package com.wonders.health.tumor.tumor.service;
 
+import com.google.common.collect.Maps;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataGridSearch;
 import com.wonders.health.tumor.common.utils.IdGen;
-import com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao;
+import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.tumor.entity.LicRegcase;
 import com.wonders.healthcloud.archive.client.entity.PersonAddress;
 import com.wonders.healthcloud.archive.client.entity.PersonInfo;
 import com.wonders.healthcloud.archive.client.util.ArchiveUtil;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,12 +41,21 @@ public class ScreeningService {
 
     @Autowired
     private CancerPersonInfoDao cancerPersonInfoDao;
+    @Autowired
+    private CrcRegcaseDao crcRegcaseDao;
+    @Autowired
+    private LicRegcaseDao licRegcaseDao;
+    @Autowired
+    private ScRegcaseDao scRegcaseDao;
+    @Autowired
+    private LucRegcaseDao lucRegcaseDao;
 
     //根据证件类型和证件号码获取基本信息
     public CancerPersonInfo getBaseInfoByCardnoAndType(String personcardno,String type) {
-        Optional<CancerPersonInfo>cancerPersonInfo=Optional.of(cancerPersonInfoDao.getByCardnoAndYType(personcardno,type));
-        if(!cancerPersonInfo.isPresent()){
-            return cancerPersonInfo.get();
+
+        CancerPersonInfo cancerPersonInfo=cancerPersonInfoDao.getByCardnoAndYType(personcardno,type);
+        if(cancerPersonInfo!=null){
+            return cancerPersonInfo;
         }
 
         CancerPersonInfo result=new CancerPersonInfo();
@@ -52,9 +64,14 @@ public class ScreeningService {
             BeanUtils.copyProperties(personInfo, result);
 
             result.setPersoncard(personcardno);
+
             result.setTelephone(personInfo.getPhone());
             result.setMobile(personInfo.getMobilePhone());
+            result.setNationOther(personInfo.getNationOther());
+            result.setMarriage(personInfo.getMarriage());
+            result.setEducation(personInfo.getEducation());
             result.setPaymentSituation(personInfo.getMedicalPaymentcode());
+
             result.setPaddressDetail(personInfo.getPaddressOther());
 
             List<PersonAddress> personAddressList = personInfo.getAddresses();
@@ -70,13 +87,58 @@ public class ScreeningService {
                             result.setAddressDetail(personAddress.getOther());
                         });
             }
+
+
         }
         return result;
     }
 
-    public CancerPersonInfo getBaseInfoByCheckIdAndYear(String checkId,String year){
+    //根据检查年、证件类型、证件号码检查有没有本年度做过登记
+    public String checkHadDone(String year, String type, String personcard,String[]cancers){
+        Boolean hadDone=false;
+        String msg="notdone";
 
-        return null;
+        Optional<CancerPersonInfo> personOp= Optional.of(getBaseInfoByCardnoAndType(personcard,type));
+
+        if(!personOp.isPresent()){
+            msg= "1";
+            return msg;
+        }else{
+            CancerPersonInfo person=personOp.get();
+            //cancers={crcFlag,licFlag,scFlag,lucFlag};
+            if(cancers[0].equals("1")){
+                if(crcRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+                    hadDone=true;
+                    msg="done";
+                }
+            }
+            if(!hadDone){   //crc没做过
+                if(cancers[1].equals("1")){//lic是否做过
+                    if(licRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+                        hadDone=true;
+                        msg="done";
+                    }
+                }
+                if(!hadDone){//lic没做过
+                    if(cancers[2].equals("1")){
+                        if(scRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+                            hadDone=true;
+                            msg="done";
+                        }
+                        if(hadDone){
+                            if(cancers[3].equals("1")){
+                                if(lucRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+                                    hadDone=true;
+                                    msg="done";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return msg;
     }
 
 
