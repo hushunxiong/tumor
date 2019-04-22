@@ -95,26 +95,26 @@
                                    showNullItem="true" th:data="${#dic.generals('60003')}"/>
                         </div>
                     </div>
-                    <div class="mini-row">
-                        <div class="mini-col-12">
-                            <div class="mini-col-3">
+                    <div class="mini-row" th:if="${crcFlag==1?true:false}">
+                        <div class="mini-col-12" >
+                            <div class="mini-col-3" >
                                 <label class="mr-5">大肠癌危险评估结果：</label>
                                 <input id="crcAssessmentResult" name="crcAssessmentResult" showNullItem="true" class="mini-combobox" width="38%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
-                            <div class="mini-col-3">
+                            <div class="mini-col-3" >
                                 <label class="mr-5">第一次便隐血结果：</label>
 
                                 <input id="firstFobtResult" name="firstFobtResult" showNullItem="true" class="mini-combobox" width="38%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
-                            <div class="mini-col-4">
+                            <div class="mini-col-4" >
                                 <label class="mr-5">第二次便隐血结果：</label>
 
                                 <input id="secondFobtResult" name="secondFobtResult" showNullItem="true" class="mini-combobox" width="35%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
-                            <div class="mini-col-2">
+                            <div class="mini-col-2" >
                                 <label class="mr-5">便隐血检查结果：</label>
 
                                 <input id="fobtResult" name="fobtResult" showNullItem="true" class="mini-combobox" width="35%"
@@ -124,32 +124,37 @@
                     </div>
 
                     <div class="mini-row">
-                        <div class="mini-col-3">
-                            <label class="mr-5">大肠癌判定结果：</label>
+                        <div class="mini-col-3"th:if="${crcFlag==1?true:false}">
+                             <label class="mr-5">大肠癌判定结果：</label>
                             <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox" width="45%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-3"><label class="mr-5">胃癌判定结果：</label>
+                        <div class="mini-col-3" th:if="${scFlag==1?true:false}">
+                            <label class="mr-5">胃癌判定结果：</label>
                             <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="45%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-4"><label class="mr-5">肺癌判定结果：</label>
+                        <div class="mini-col-4" th:if="${licFlag==1?true:false}">
+                            <label class="mr-5">肺癌判定结果：</label>
 
                             <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="45%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-2">    <label class="mr-5">肝癌判定结果：</label>
+                        <div class="mini-col-2" th:if="${lucFlag==1?true:false}">
+                            <label class="mr-5">肝癌判定结果：</label>
                             <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="38%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                     </div>
 
-                    <div class="mini-row">
-                        <div class="mini-col-3"><label class="mr-5">肝癌危险评估结果：</label>
+                    <div class="mini-row" th:if="${lucFlag==1?true:false}">
+                        <div class="mini-col-3" >
+                            <label class="mr-5">肝癌危险评估结果：</label>
                             <input id="licAssessmentResult" name="licAssessmentResult" showNullItem="true" class="mini-combobox" width="42%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-3"><label class="mr-5">肝癌辅助检查结果：</label>
+                        <div class="mini-col-3" >
+                            <label class="mr-5">肝癌辅助检查结果：</label>
 
                             <input id="licAssistResult"  name="licAssistResult" showNullItem="true" class="mini-combobox" width="38%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
@@ -183,17 +188,17 @@
                     <div field="personcard" sortField="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">身份证号</div>
                     <div field="gender" sortField="gender" width="50px" headerAlign="center" allowSort="true">性别</div>
                     <!--<div field="" sortField="" width="50px"  headerAlign="center" allowSort="true" font-size="2">评估员</div>-->
-                    <div field="idNumberr" sortField="" width="100px"  headerAlign="center" allowSort="true">大肠癌初筛ID</div>
-                    <div field="forAssessmentResult" sortField="" width="150px" headerAlign="center" allowSort="true">大肠癌危险评估结果</div>
-                    <div field="firstFobtResult" sortField="" width="150px" headerAlign="center" allowSort="true">第一次便隐血检查结果</div>
-                    <div field="secondFobtResult" sortField="" width="150px" headerAlign="center" allowSort="true">第二次便隐血检查结果</div>
-                    <div field="fobtResult" sortField="" width="150px" headerAlign="center" allowSort="true">便隐血检查结果</div>
-                    <div field="fobCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">大肠癌判定结果</div>
-                    <div field="licAssessmentResult" sortField="" width="150px" headerAlign="center" allowSort="true">肝癌危险评估结果</div>
-                    <div field="licAssistResult" sortField="" width="150px" headerAlign="center" allowSort="true">肝癌初筛辅助检查结果</div>
-                    <div field="licAheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">肝癌判定结果</div>
-                    <div field="lucCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">胃癌判定结果</div>
-                    <div field="scCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">肺癌判定结果</div>
+                    <div field="idNumberr" sortField="" width="100px"  headerAlign="center" allowSort="true" th:if="${crcFlag==1?true:false}">大肠癌初筛ID</div>
+                    <div field="forAssessmentResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${crcFlag==1?true:false}">大肠癌危险评估结果</div>
+                    <div field="firstFobtResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${crcFlag==1?true:false}">第一次便隐血检查结果</div>
+                    <div field="secondFobtResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${crcFlag==1?true:false}">第二次便隐血检查结果</div>
+                    <div field="fobtResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${crcFlag==1?true:false}">便隐血检查结果</div>
+                    <div field="fobCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${crcFlag==1?true:false}">大肠癌判定结果</div>
+                    <div field="licAssessmentResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${lucFlag==1?true:false}">肝癌危险评估结果</div>
+                    <div field="licAssistResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${lucFlag==1?true:false}">肝癌初筛辅助检查结果</div>
+                    <div field="licAheckResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${lucFlag==1?true:false}">肝癌判定结果</div>
+                    <div field="lucCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${scFlag==1?true:false}">胃癌判定结果</div>
+                    <div field="scCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true" th:if="${licFlag==1?true:false}">肺癌判定结果</div>
                     <div type="action"  width="100px" headerAlign="center" allowSort="true">操作</div>
                 </div>
                 </div>
@@ -228,22 +233,31 @@
     function actionRenderer(e) {
         var r = e.record;
         var h = '';
-        h += '<a onclick="goDj(\'' + r.mbglbh + '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
-        h += '<a onclick="goDj(\'' + r.mbglbh + '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
-        h += '<a onclick="goDj(\'' + r.mbglbh + '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
-        if(r.crc+r.luc+r.lic+r.sc>1){
-            h += '<a onclick="deleteRecords(\'' + r.id + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
-        }else{
-            var data={};
-            data.glbh=r.id;
-            data.historyDelflag=0;
-            h += '<a onclick="del(\'' +data + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+        if(r.crc+r.luc+r.lic+r.sc>=1){
+            h += '<a onclick="edit(\'' + r.id+ '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
+            h += '<a onclick="edit(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
+            h += '<a onclick="edit(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
+            if(r.crc+r.luc+r.lic+r.sc>1){
+                h += '<a onclick="deleteRecords(\'' + r.id + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+            }else{
+                var data={};
+                data.id=r.id;
+                data.crcCheckId=r.crcCheckId;
+                data.lurCheckId=r.lurCheckId;
+                data.licCheckId=r.licCheckId;
+                data.scCheckId=r.scCheckId;
+                data.historyDelflag=0;
+                h += '<a onclick="del(\'' +data + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+            }
         }
-
 
         return h;
     }
 
+    
+    function  edit(id,csnf) {
+        
+    }
 
 
 

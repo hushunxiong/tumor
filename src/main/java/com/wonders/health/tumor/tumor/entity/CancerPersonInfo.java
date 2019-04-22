@@ -128,6 +128,15 @@ public class CancerPersonInfo extends BaseEntity {
 
 	private String csnf;//初筛年份
 
+	private Integer crc;
+
+	private Integer luc;
+
+	private Integer lic;
+
+	private Integer sc;
+
+
 	public CancerPersonInfo() {
 		super();
 	}

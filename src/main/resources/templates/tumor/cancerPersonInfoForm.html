@@ -31,17 +31,17 @@
 
 <div class="content pd-10" style="width:auto; overflow: hidden;">
     <div class="mini-row" style="text-align: center">
-        <div class="mini-col-3" th:if="${crc==1&&(vo!=null&&vo.crcCheckId!=null&&vo.crcCheckId!='')?true:false}">
+        <div class="mini-col-3" th:if="${crcFlag==1&&(vo!=null&&vo.crcCheckId!=null&&vo.crcCheckId!='')?true:false}">
             <input  id="crc" name="crc" type="text" text="大肠癌"  class="mini-checkbox" >
         </div>
-        <div class="mini-col-3" th:if="${crc==1?true:false}">
-            <input  id="luc" name="luc" type="text" text="肺癌"  class="mini-checkbox" >
+        <div class="mini-col-3" th:if="${licFlag==1&&(vo!=null&&vo.licCheckId!=null&&vo.licCheckId!='')?true:false}">
+            <input  id="luc" name="luc" type="text" text="肝癌"  class="mini-checkbox" >
         </div>
-        <div class="mini-col-3"  th:if="${crc==1?true:false}">
+        <div class="mini-col-3"  th:if="${lucFlag==1&&(vo!=null&&vo.lucCheckId!=null&&vo.lucCheckId!='')?true:false}">
             <input  id="sc" name="sc" type="text" text="胃癌"  class="mini-checkbox" >
         </div>
-        <div class="mini-col-3" th:if="${crc==1?true:false}">
-            <input  id="lic" name="lic" type="text" text="肝癌"  class="mini-checkbox">
+        <div class="mini-col-3" th:if="${scFlag==1&&(vo!=null&&vo.scCheckId!=null&&vo.scCheckId!='')?true:false}">
+            <input  id="lic" name="lic" type="text" text="肺癌"  class="mini-checkbox">
         </div>
     </div>
     <div class="mini-row" style="text-align: center;margin-top: 5%;">
@@ -61,32 +61,32 @@
         var lic = mini.get("lic").getValue();
         var historyDelflag=0;
         var data ={};
-        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+        if([[${crcFlag}]]!=null&&[[${crcFlag}]]!=''){
             historyDelflag=historyDelflag+1;
         }
-        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+        if([[${lucFlag}]]!=null&&[[${lucFlag}]]!=''){
             historyDelflag=historyDelflag+1;
         }
-        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+        if([[${licFlag}]]!=null&&[[${licFlag}]]!=''){
             historyDelflag=historyDelflag+1;
         }
-        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+        if([[${scFlag}]]!=null&&[[${scFlag}]]!=''){
             historyDelflag=historyDelflag+1;
         }
         if(crc=='true'){
-            data.crcCheckId = [[${glbh}]];
+            data.crcCheckId = [[${vo.id}]];
             historyDelflag=historyDelflag-1;
         }
         if(luc=='true'){
-            data.lucCheckId = [[${glbh}]];
+            data.lucCheckId = [[${vo.id}]];
             historyDelflag=historyDelflag-1;
         }
         if(sc=='true'){
-            data.scCheckId = [[${glbh}]];
+            data.scCheckId = [[${vo.id}]];
             historyDelflag=historyDelflag-1;
         }
         if(lic=='true'){
-            data.licCheckId = [[${glbh}]];
+            data.licCheckId = [[${vo.id}]];
             historyDelflag=historyDelflag-1;
         }
         data.historyDelflag=historyDelflag;
@@ -104,7 +104,7 @@
             mini.alert("请选择删除对象！");
             return;
         }else{
-            data.glbh=[[${glbh}]];
+            data.id=[[${vo.id}]];
             CloseWindow("save");
 
         }

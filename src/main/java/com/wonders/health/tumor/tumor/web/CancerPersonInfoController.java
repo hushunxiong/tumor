@@ -85,8 +85,10 @@ public class CancerPersonInfoController extends BaseController {
             CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findById(id);
             model.addAttribute("vo", cancerPersonInfo);
         }
-        model.addAttribute("crc", 1);
-        model.addAttribute("glbh", "73766228");
+        model.addAttribute("crcFlag", crcFlag);
+        model.addAttribute("lucFlag", lucFlag);
+        model.addAttribute("licFlag", licFlag);
+        model.addAttribute("scFlag", scFlag);
         return "/tumor/cancerPersonInfoForm";
     }
 

@@ -116,7 +116,7 @@ public class CancerPersonInfoService {
     public void deleteByRegcaseId(CancerPersonInfo info) {
 
 
-	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
+	   /* if(StringUtils.isNotBlank(info.getCrcCheckId())){
 	        crcRegcaseDao.delete(info.getCrcCheckId());
 	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
 	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
@@ -134,7 +134,7 @@ public class CancerPersonInfoService {
             familyCancerHistoryDao.deleteByCheckId(info.getLucCheckId());
 
         }
-
+*/
         if(StringUtils.isNotBlank(info.getScCheckId())){
             scRegcaseDao.delete(info.getScCheckId());
             scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
@@ -143,9 +143,9 @@ public class CancerPersonInfoService {
 
         if(info.getHistoryDelflag()<=0){
             System.out.println("确定删除个数："+info.getHistoryDelflag());
-            cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());
+           /* cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());*/
         }
-        
+
     }
 
 
