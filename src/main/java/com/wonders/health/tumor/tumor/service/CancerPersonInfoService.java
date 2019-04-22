@@ -83,7 +83,7 @@ public class CancerPersonInfoService {
     }
 
     //初筛一览列表
-    public List<CancerPersonInfoSearchResultVo> cancerPersonInfoSearchResult(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
+    public List<CancerPersonInfo> cancerPersonInfoSearchResult(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
         return cancerPersonInfoDao.cancerPersonInfoResultList(cancerPersonInfoSearchVo);
     }
 

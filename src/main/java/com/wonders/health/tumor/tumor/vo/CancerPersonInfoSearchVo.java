@@ -31,42 +31,6 @@ public class CancerPersonInfoSearchVo extends DataGridSearch {
     private String licResult; //肝癌判定结果
     private String scResult; //胃癌判定结果
     private String lucResult; //肺癌判定结果
-    private String name;       //姓名
-    private String personCard; //身份证号
-    private String idNumber;   //大肠癌初筛编号
-    private String gender;     //性别
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPersonCard() {
-        return personCard;
-    }
-
-    public void setPersonCard(String personCard) {
-        this.personCard = personCard;
-    }
-
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
-    }
 
     public String getKeyword() {
         return keyword;

@@ -142,7 +142,7 @@ public class CancerPersonInfoController extends BaseController {
 
     @RequestMapping(value = {"SearchResultList"}, method = RequestMethod.GET)
     @ResponseBody
-    public List<CancerPersonInfoSearchResultVo> cancerPersonInfoSearchResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
+    public List<CancerPersonInfo> cancerPersonInfoSearchResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
         return   cancerPersonInfoService.cancerPersonInfoSearchResult(cancerPersonInfoSearchVo);
     }
 }
