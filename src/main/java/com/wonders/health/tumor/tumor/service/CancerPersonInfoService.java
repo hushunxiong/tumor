@@ -8,6 +8,8 @@ import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
+import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
+import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +82,11 @@ public class CancerPersonInfoService {
         return cancerPersonInfoDao.get(id);
     }
 
+    //初筛一览列表
+    public List<CancerPersonInfoSearchResultVo> cancerPersonInfoSearchResult(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
+        return cancerPersonInfoDao.cancerPersonInfoResultList(cancerPersonInfoSearchVo);
+    }
+
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
@@ -108,35 +115,38 @@ public class CancerPersonInfoService {
     @Transactional(readOnly = false)
     public void deleteByRegcaseId(CancerPersonInfo info) {
 
+
 	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
-	      /*  crcRegcaseDao.delete(info.getCrcCheckId());
+	        crcRegcaseDao.delete(info.getCrcCheckId());
 	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
 	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
-	        familyCancerHistoryDao.deleteByCheckId(info.getCrcCheckId());*/
+	        familyCancerHistoryDao.deleteByCheckId(info.getCrcCheckId());
         }
 	    if(StringUtils.isNotBlank(info.getLicCheckId())){
-	       /* licRegcaseDao.delete(info.getLicCheckId());
+	        licRegcaseDao.delete(info.getLicCheckId());
 	        licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
 	        licRiskAssessmentDao.delete(info.getLicCheckId());
-	        familyCancerHistoryDao.deleteByCheckId(info.getLicCheckId());*/
+	        familyCancerHistoryDao.deleteByCheckId(info.getLicCheckId());
         }
         if(StringUtils.isNotBlank(info.getLucCheckId())){
-           /* lucRegcaseDao.delete(info.getLucCheckId());
+            lucRegcaseDao.delete(info.getLucCheckId());
             lucRiskAssessmentDao.deleteByCheckId(info.getLucCheckId());
-            familyCancerHistoryDao.deleteByCheckId(info.getLucCheckId());*/
+            familyCancerHistoryDao.deleteByCheckId(info.getLucCheckId());
 
         }
+
         if(StringUtils.isNotBlank(info.getScCheckId())){
-          /*  scRegcaseDao.delete(info.getScCheckId());
+            scRegcaseDao.delete(info.getScCheckId());
             scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
-            familyCancerHistoryDao.deleteByCheckId(info.getScCheckId());*/
+            familyCancerHistoryDao.deleteByCheckId(info.getScCheckId());
         }
 
         if(info.getHistoryDelflag()<=0){
             System.out.println("确定删除个数："+info.getHistoryDelflag());
-            /*cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());*/
+            cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());
         }
-
+        
     }
+
 
 }

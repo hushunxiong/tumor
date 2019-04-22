@@ -30,10 +30,6 @@ public class LucRegcase extends BaseEntity {
 	@NotNull
 	private String manageid;	// 个人管理编号
 
-	@Length(max=64)
-	@NotNull
-	private String idNumber;	// 初筛ID：2位年份+5位机构编码+5位序号
-
 	@NotNull
 	private Integer checkYear;	// 初筛年度
 
@@ -114,13 +110,7 @@ public class LucRegcase extends BaseEntity {
 		this.manageid = manageid;
 	}
 
-	public String getIdNumber() {
-		return idNumber;
-	}
 
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
-	}
 
 	@JsonProperty("checkYear")
 	public Integer getCheckYear() {

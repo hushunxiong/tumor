@@ -197,7 +197,7 @@ public class ScreeningController extends BaseController {
             LicRegcase licRegcase=(LicRegcase)licRegcaseService.getByManageidAndYear(licRegcaseDao,manageid,year);
             if(licRegcase!=null){
                 screeningVo.setLicRegcase(licRegcase);
-                liccheckid=licRegcase.getIdNumber();
+                liccheckid=licRegcase.getId();
             }
 
             LicRiskAssessment licRiskAssessment=(LicRiskAssessment)licRiskAssessmentService.getByCheckid(licRiskAssessmentDao,liccheckid);
@@ -213,7 +213,7 @@ public class ScreeningController extends BaseController {
                 screeningVo.setScRegcase(scRegcase);
             }
 
-            ScRiskAssessment scRiskAssessment=(ScRiskAssessment)scRiskAssessmentService.getByCheckid(scRiskAssessmentDao,scRegcase.getIdNumber());
+            ScRiskAssessment scRiskAssessment=(ScRiskAssessment)scRiskAssessmentService.getByCheckid(scRiskAssessmentDao,scRegcase.getId());
             if(scRiskAssessment!=null){
                 screeningVo.setScRisk(scRiskAssessment);
             }
@@ -227,7 +227,7 @@ public class ScreeningController extends BaseController {
                 screeningVo.setLucRegcase(lucRegcase);
             }
 
-            LucRiskAssessment lucRiskAssessment=(LucRiskAssessment)lucRiskAssessmentService.getByCheckid(lucRiskAssessmentDao,lucRegcase.getIdNumber());
+            LucRiskAssessment lucRiskAssessment=(LucRiskAssessment)lucRiskAssessmentService.getByCheckid(lucRiskAssessmentDao,lucRegcase.getId());
             if(lucRiskAssessment!=null){
                 screeningVo.setLucRisk(lucRiskAssessment);
             }
@@ -289,30 +289,16 @@ public class ScreeningController extends BaseController {
     }
 
     /**
-     *新增时检查idnumber是否已经占用 1-crc 2-lic 3-sc 4-luc
+     *新增时检查idnumber是否已经占用
      **/
     @RequestMapping(value = {"", "checkIdnumber"}, method = RequestMethod.GET)
     @ResponseBody
-    public AjaxReturn checkIdnumber(String manageid, String idnumber,String opFlag){
+    public AjaxReturn checkIdnumber(String manageid, String idnumber){
         AjaxReturn ajaxReturn=new AjaxReturn();
         Boolean isChecked=false;
         String msg="该id已被占用！";
-        if(opFlag=="1"){
-            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||"".equals(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber))){
-                isChecked=true;
-            }
-        }else if(opFlag=="2"){
-            if(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber)==null||"".equals(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber))){
-                isChecked=true;
-            }
-        }else if(opFlag=="3"){
-            if(scRegcaseService.checkIdnumber(scRegcaseDao,manageid,idnumber)==null||"".equals(scRegcaseService.checkIdnumber(scRegcaseDao,manageid,idnumber))){
-                isChecked=true;
-            }
-        }else if(opFlag=="4"){
-            if(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber)==null||"".equals(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber))){
-                isChecked=true;
-            }
+        if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||"".equals(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber))){
+            isChecked=true;
         }
         ajaxReturn.setOk(isChecked);
         if(!isChecked){

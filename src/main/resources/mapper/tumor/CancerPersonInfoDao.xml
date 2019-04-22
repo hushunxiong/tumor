@@ -6,6 +6,85 @@
 		a.id AS "id",a.personcard_type AS "personcardType",a.personcard AS "personcard",a.name AS "name",a.gender AS "gender",a.birth AS "birth",a.telephone AS "telephone",a.mobile AS "mobile",a.nation AS "nation",a.nation_other AS "nationOther",a.marriage AS "marriage",a.education AS "education",a.payment_situation AS "paymentSituation",a.profession AS "profession",a.other_profession AS "otherProfession",a.paddress_province AS "paddressProvince",a.paddress_city AS "paddressCity",a.paddress_county AS "paddressCounty",a.paddress_town AS "paddressTown",a.paddress_committee AS "paddressCommittee",a.paddress_detail AS "paddressDetail",a.address_province AS "addressProvince",a.address_city AS "addressCity",a.address_county AS "addressCounty",a.address_town AS "addressTown",a.address_committee AS "addressCommittee",a.address_detail AS "addressDetail",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.del_flag AS "delFlag",a.ischange AS "ischange",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
 	</sql>
 
+	<select id="cancerPersonInfoResultList" resultType="com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo">
+		select
+         p.ID as "id",
+		 p.NAME as  "name",
+		 p.GENDER as "gender",
+		 p.PERSONCARD as "personCard",
+		 crc.ID_NUMBER as "idNumber",
+		 crc.CHECK_RESULT as "crcCheckResult",
+		 crcas.ASSESSMENT_RESULT as "crcAssessment",
+		 fobt.FIRST_FOBT_RESULT  as "firstFobtResult",
+		 fobt.SECOND_FOBT_RESULT as "secondFobtResult",
+		 fobt.fobt_result as "fobtResult",
+		 lic.CHECK_RESULT as "licCheckResult",
+		 licas.ASSESSMENT_RESULT as  "licAssessment",
+		 licc.LIC_ASSIST_RESULT as "licAssistResult",
+		 sc.CHECK_RESULT as "scCheckResult",
+		 luc.CHECK_RESULT as "lucCheckResult"
+from
+    CANCER_PERSON_INFO p LEFT JOIN CRC_REGCASE crc  on (crc.MANAGEID=p.ID )
+					LEFT JOIN CRC_RISK_ASSESSMENT crcas on (crc.ID = crcas.CRC_CHECK_ID)
+					LEFT JOIN CRC_FOBT fobt on (crc.ID = fobt.CRC_CHECK_ID)
+					LEFT JOIN LIC_REGCASE lic on (p.ID = lic.MANAGEID)
+					LEFT JOIN LIC_RISK_ASSESSMENT licas on (lic.ID = licas.LIC_CHECK_ID)
+					LEFT JOIN LIC_ASSIST_CHECK licc on (lic.ID = licc.LIC_CHECK_ID)
+					LEFT JOIN SC_REGCASE sc on (p.ID = sc.MANAGEID)
+					LEFT JOIN LUC_REGCASE luc  on (p.ID = luc.MANAGEID)
+	  where
+		p.DEL_FLAG = 0
+
+	  <if test=" id !=null and id !='' " >
+		and p.id=#{id}
+	  </if>
+	  <if test="csnf !=null and csnf !='' ">
+		and  p.create_date=#{csnf}
+	  </if>
+	  <if test="regarea !=null and regarea!=''">
+		and   regarea = #{regarea}
+	  </if>
+	  <if test="regorg != null and regorg!='' ">
+		and   p.regorg=#{regorg}
+	  </if>
+	  <if test="beginDateFrom !=null and beginDateFrom !=''">
+		and  p.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
+	  </if>
+	  <if test="endDateFrom !=null and endDateFrom !=''">
+		  AND b.TS_RQ &lt; to_date(#{tsRqEnd},'yyyy-MM-dd HH:mi:ss')+1
+	  </if>
+	  <if test="crcAssessmentResult !=null and crcAssessmentResult !=''">
+		and  crcAssessmentResult=#{crcAssessmentResult}
+	  </if>
+	  <if test="firstFobtResult !=null and firstFobtResult !=''">
+		and  firstFobtResult=#{firstFobtResult}
+	  </if>
+	  <if test="secondFobtResult !=null and secondFobtResult !=''">
+		and  secondFobtResult=#{secondFobtResult}
+	  </if>
+	  <if test="fobtResult !=null and fobtResult !=''">
+		and  fobtResult=#{fobtResult}
+	  </if>
+	  <if test="crcResult !=null and crcResult !=''">
+		and  crcResult=#{crcResult}
+	  </if>
+	  <if test="licAssessmentResult !=null and licAssessmentResult !=''">
+		and  licAssessmentResult=#{licAssessmentResult}
+	  </if>
+	  <if test="licAssistResult !=null and licAssistResult !=''">
+		and  licAssistResult=#{licAssistResult}
+	  </if>
+	  <if test="licResult !=null and licResult !=''">
+		and licResult=#{licResult}
+	  </if>
+	  <if test="scResult !=null and scResult !=''">
+		and  scResult=#{scResult}
+	  </if>
+	  <if test="lucResult !=null and lucResult !=''">
+		and  lucResult=#{lucResult}
+	  </if>
+
+	</select>
 	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
 		SELECT 
 			<include refid="CancerPersonInfoColumns"/>
