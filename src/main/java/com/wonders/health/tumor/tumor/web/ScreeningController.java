@@ -13,7 +13,6 @@ import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.*;
 import com.wonders.health.tumor.tumor.service.*;
 import com.wonders.health.tumor.tumor.vo.ScreeningVo;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +156,84 @@ public class ScreeningController extends BaseController {
         model.addAttribute("lucFlag", lucFlag);
         return "/register/form";
     }
+
+
+    @RequestMapping(value = {"", "checkHadDone"}, method = RequestMethod.GET)
+    @ResponseBody
+    public AjaxReturn checkHadDone(String year, String type, String personcard){
+        String[] cancers={crcFlag,licFlag,scFlag,lucFlag};
+        String hadDone=screeningService.checkHadDone(year,type,personcard,cancers);    //true-做过  false-没做过
+
+        if(hadDone=="done"||"done".equals(hadDone)){
+            return new AjaxReturn(false,"此人本年度已经进行过筛查");
+        }else if(hadDone=="1"||"1".equals(hadDone)){
+            logger.error("当前证件号码查不到任何信息");
+            return new AjaxReturn(false,"当前证件号码查不到任何信息");
+        }else{
+            //根据证件号码证件类型获取个人基本信息，有可能从健康档案接口获取
+            Optional<CancerPersonInfo> cancerPersonInfo=Optional.of(screeningService.getBaseInfoByCardnoAndType(personcard,type));
+            return new AjaxReturn(true,"",cancerPersonInfo.get());
+        }
+    }
+
+    //新增时检查完身份证号以后重新刷新页面一次
+    @RequestMapping(value = {"", "reform"}, method = RequestMethod.GET)
+    public String reform(Model model, String manageId, String checkYear,String type,String personcardno) {
+
+        List<DataOption> years = Lists.newArrayList();
+        for (int i = 0; i < 5; i++) {
+            DataOption option = new DataOption();
+            String year = DateUtils.formatDate(DateUtils.addYears(new Date(),i), "yyyy");
+            option.setId(year);
+            option.setText(year);
+            years.add(option);
+        }
+        model.addAttribute("years", AuthUtils.toJson(years));
+        model.addAttribute("checkYear", checkYear);
+
+        //个人管理编号
+
+        CancerPersonInfo personInfo=screeningService.getBaseInfoByCardnoAndType(personcardno,type);
+        personInfo.setRegdoc(getSessionUser().getId());
+        personInfo.setRegorg(getSessionUser().getOrgCode());
+        personInfo.setRegdate(new Date());
+        model.addAttribute("personInfo", personInfo);
+
+        if(manageId==null || manageId=="null" ||"null".equals(manageId)||"".equals(manageId)){
+            manageId=personInfo.getId();
+        }
+
+        if(manageId!=null && manageId!="null" &&!"null".equals(manageId)&&!"".equals(manageId)){
+            ScreeningVo screeningVo=getDetail(manageId,checkYear);
+            model.addAttribute("lucRisk", screeningVo.getLucRisk());
+            model.addAttribute("scRisk", screeningVo.getScRisk());
+            model.addAttribute("crcRisk", screeningVo.getCrcRisk());
+            model.addAttribute("licRisk", screeningVo.getLicRisk());
+        }else{
+            model.addAttribute("lucRisk", new LucRiskAssessment());
+            model.addAttribute("scRisk", new ScRiskAssessment());
+            model.addAttribute("crcRisk", new CrcRiskAssessment());
+            model.addAttribute("licRisk", new LicRiskAssessment());
+        }
+
+
+        model.addAttribute("idNumber", "");
+        model.addAttribute("flag", "1"); //1：新增
+
+
+        //各癌症数据库存在标志
+        model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
+        model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
+        model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
+        model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
+
+        model.addAttribute("crcFlag", crcFlag);
+        model.addAttribute("licFlag", licFlag);
+        model.addAttribute("scFlag", scFlag);
+        model.addAttribute("lucFlag", lucFlag);
+        return "/register/form";
+    }
+
 
     @RequestMapping(value = {"", "getBaseData"}, method = RequestMethod.GET)
     @ResponseBody

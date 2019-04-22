@@ -16,7 +16,7 @@
 	<select id="getByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase">
 		SELECT
 		<include refid="LicRegcaseColumns"/>
-		FROM crc_regcase a
+		FROM lic_regcase a
 		WHERE a.manageid = #{manageid}
 		and a.del_flag='0'
 		and a.check_year=#{checkyear}
