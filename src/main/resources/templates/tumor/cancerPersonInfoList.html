@@ -175,25 +175,24 @@
                 </table>
             </div>-->
 
-            <div id="datagrid" class="mini-datagrid" style=" overflow: auto;width: 1320px;height: auto">
+            <div id="datagrid" class="mini-datagrid" style=" overflow: auto;width: 1320px;height: auto" multiSelect="true">
                 <div property="columns" >
                     <div type="checkcolumn"></div>
-                    <div type="indexcolumn" width="40px" headerAlign="center" align="center">序号</div>
-                    <div type="action" renderer="actionRenderer" width="50px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
-                    <div field="personcard" sortField="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">身份证号</div>
+                    <div field="name" renderer="actionRenderer" width="50px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
+                    <div field="personCard" sortField="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">身份证号</div>
                     <div field="gender" sortField="gender" width="50px" headerAlign="center" allowSort="true">性别</div>
                     <!--<div field="" sortField="" width="50px"  headerAlign="center" allowSort="true" font-size="2">评估员</div>-->
-                    <div field="idNumberr" sortField="" width="100px"  headerAlign="center" allowSort="true">大肠癌初筛ID</div>
-                    <div field="forAssessmentResult" sortField="" width="150px" headerAlign="center" allowSort="true">大肠癌危险评估结果</div>
+                    <div field="idNumber" sortField="" width="100px"  headerAlign="center" allowSort="true">大肠癌初筛ID</div>
+                    <div field="crcAssessmentResult" sortField="" width="150px" headerAlign="center" allowSort="true">大肠癌危险评估结果</div>
                     <div field="firstFobtResult" sortField="" width="150px" headerAlign="center" allowSort="true">第一次便隐血检查结果</div>
                     <div field="secondFobtResult" sortField="" width="150px" headerAlign="center" allowSort="true">第二次便隐血检查结果</div>
                     <div field="fobtResult" sortField="" width="150px" headerAlign="center" allowSort="true">便隐血检查结果</div>
-                    <div field="fobCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">大肠癌判定结果</div>
+                    <div field="crcResult" sortField="" width="150px" headerAlign="center" allowSort="true">大肠癌判定结果</div>
                     <div field="licAssessmentResult" sortField="" width="150px" headerAlign="center" allowSort="true">肝癌危险评估结果</div>
                     <div field="licAssistResult" sortField="" width="150px" headerAlign="center" allowSort="true">肝癌初筛辅助检查结果</div>
-                    <div field="licAheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">肝癌判定结果</div>
-                    <div field="lucCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">胃癌判定结果</div>
-                    <div field="scCheckResult" sortField="" width="150px" headerAlign="center" allowSort="true">肺癌判定结果</div>
+                    <div field="licResult" sortField="" width="150px" headerAlign="center" allowSort="true">肝癌判定结果</div>
+                    <div field="scResult" sortField="" width="150px" headerAlign="center" allowSort="true">胃癌判定结果</div>
+                    <div field="lucResult" sortField="" width="150px" headerAlign="center" allowSort="true">肺癌判定结果</div>
                     <div type="action"  width="100px" headerAlign="center" allowSort="true">操作</div>
                 </div>
                 </div>
