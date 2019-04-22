@@ -96,5 +96,10 @@
 	    WHERE id = #{id}
 	</update>
 
+	<update id="deleteByManageIdAndYear">
+	    UPDATE CANCER_HISTORY SET del_flag = '1'
+	    WHERE manageid = #{manageId}
+	    and check_year = #{checkYear}
+	</update>
 	
 </mapper>

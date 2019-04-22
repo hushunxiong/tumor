@@ -87,5 +87,10 @@
 	    WHERE id = #{id}
 	</update>
 
+	<update id="deleteByCheckId">
+	    UPDATE family_cancer_history SET del_flag = '1'
+	    WHERE check_id = #{checkId}
+	</update>
+
 	
 </mapper>

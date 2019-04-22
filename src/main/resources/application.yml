@@ -95,6 +95,12 @@ luc_switch_flag: 1
 #区域代码
 area_code: '310106000000'
 
+#初筛诊断(crcFlag：大肠癌 lucFlag：肝癌   licFlag：肺癌  scFlag：胃癌 )
+crcFlag: 1
+lucFlag: 1
+licFlag: 1
+scFlag: 1
+
 healthArchive: http://192.168.9.114:9071/archive
 
 

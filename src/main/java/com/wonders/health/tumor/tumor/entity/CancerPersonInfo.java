@@ -124,6 +124,10 @@ public class CancerPersonInfo extends BaseEntity {
 
 	private  String licCheckId;  //肝癌初筛信息登记id
 
+	private  Integer historyDelflag;//危险度评估-癌症史表 删除标记
+
+	private String csnf;//初筛年份
+
 	public CancerPersonInfo() {
 		super();
 	}
@@ -440,5 +444,21 @@ public class CancerPersonInfo extends BaseEntity {
 
 	public void setLicCheckId(String licCheckId) {
 		this.licCheckId = licCheckId;
+	}
+
+	public Integer getHistoryDelflag() {
+		return historyDelflag;
+	}
+
+	public void setHistoryDelflag(Integer historyDelflag) {
+		this.historyDelflag = historyDelflag;
+	}
+
+	public String getCsnf() {
+		return csnf;
+	}
+
+	public void setCsnf(String csnf) {
+		this.csnf = csnf;
 	}
 }

@@ -58,7 +58,7 @@
                             <input id="id" name="id" type="text" class="mini-textbox" width="63%">
                         </div>
                         <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
-                            <input  id="csnf" name="csnf" type="text" class="mini-textbox">
+                            <input  id="csnf" name="csnf"   class="mini-monthpicker" showMonth="false"  format="yyyy"  showTime="false" allowInput="false">
                         </div>
 
                     </div>
@@ -226,6 +226,30 @@
         }
     }
 
+
+    //操作列
+    function actionRenderer(e) {
+        var r = e.record;
+        var h = '';
+        h += '<a onclick="goDj(\'' + r.mbglbh + '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
+        h += '<a onclick="goDj(\'' + r.mbglbh + '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
+        h += '<a onclick="goDj(\'' + r.mbglbh + '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
+        if(r.crc+r.luc+r.lic+r.sc>1){
+            h += '<a onclick="deleteRecords(\'' + r.id + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+        }else{
+            var data={};
+            data.glbh=r.id;
+            data.historyDelflag=0;
+            h += '<a onclick="del(\'' +data + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+        }
+
+
+        return h;
+    }
+
+
+
+
     function onSearch() {
         var keyword = $("#keyword").val();
         if (!validateKey(keyword)) {
@@ -258,7 +282,6 @@
                     //获取选中、编辑的结果
                     var data = iframe.contentWindow.getData();
                     data = mini.clone(data);
-                    console.log(data);
                     if (data!=null){
                         del(data);
                     }
@@ -268,6 +291,8 @@
     }
 
     function del(data) {
+        var csnf=mini.get('csnf').getValue();
+        data.csnf=csnf;
         mini.confirm("确认是否删除", "确定？",
             function (action) {
                 if (action == "ok") {

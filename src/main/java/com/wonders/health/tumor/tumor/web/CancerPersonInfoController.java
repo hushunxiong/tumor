@@ -44,11 +44,27 @@ public class CancerPersonInfoController extends BaseController {
     @Value("${area_code}")
     private  String areaCode;
 
+    @Value("${crcFlag}")
+    private  Integer crcFlag;
+
+    @Value("${lucFlag}")
+    private  Integer lucFlag;
+
+    @Value("${licFlag}")
+    private  Integer licFlag;
+
+    @Value("${scFlag}")
+    private  Integer scFlag;
+
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
         model.addAttribute("role", AuthUtils.judgeRole(AuthUtils.getUser().getOrgCode()));
-        model.addAttribute("areaCode", areaCode);
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
+        model.addAttribute("areaCode", areaCode);
+        model.addAttribute("crcFlag", crcFlag);
+        model.addAttribute("lucFlag", lucFlag);
+        model.addAttribute("licFlag", licFlag);
+        model.addAttribute("scFlag", scFlag);
         return "/tumor/cancerPersonInfoList";
     }
 
@@ -64,7 +80,7 @@ public class CancerPersonInfoController extends BaseController {
     public String form(Model model , String id) {
         if (StringUtils.isNotBlank(id)) {
             CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findById(id);
-            model.addAttribute("cancerPersonInfo", cancerPersonInfo);
+            model.addAttribute("vo", cancerPersonInfo);
         }
         model.addAttribute("crc", 1);
         model.addAttribute("glbh", "73766228");

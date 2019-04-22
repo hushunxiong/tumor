@@ -60,6 +60,12 @@ public class CancerPersonInfoService {
     @Autowired
     private LucRiskAssessmentDao lucRiskAssessmentDao;
 
+    @Autowired
+    private FamilyCancerHistoryDao familyCancerHistoryDao;
+
+    @Autowired
+    private  CancerHistoryDao cancerHistoryDao;
+
 
     public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
         Integer count = cancerPersonInfoDao.pageCount(search);
@@ -101,24 +107,36 @@ public class CancerPersonInfoService {
 
     @Transactional(readOnly = false)
     public void deleteByRegcaseId(CancerPersonInfo info) {
+
 	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
-	        crcRegcaseDao.delete(info.getCrcCheckId());
+	      /*  crcRegcaseDao.delete(info.getCrcCheckId());
 	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
 	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
+	        familyCancerHistoryDao.deleteByCheckId(info.getCrcCheckId());*/
         }
 	    if(StringUtils.isNotBlank(info.getLicCheckId())){
-	        licRegcaseDao.delete(info.getLicCheckId());
+	       /* licRegcaseDao.delete(info.getLicCheckId());
 	        licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
 	        licRiskAssessmentDao.delete(info.getLicCheckId());
+	        familyCancerHistoryDao.deleteByCheckId(info.getLicCheckId());*/
         }
         if(StringUtils.isNotBlank(info.getLucCheckId())){
-            lucRegcaseDao.delete(info.getLucCheckId());
+           /* lucRegcaseDao.delete(info.getLucCheckId());
             lucRiskAssessmentDao.deleteByCheckId(info.getLucCheckId());
+            familyCancerHistoryDao.deleteByCheckId(info.getLucCheckId());*/
+
         }
         if(StringUtils.isNotBlank(info.getScCheckId())){
-            scRegcaseDao.delete(info.getScCheckId());
+          /*  scRegcaseDao.delete(info.getScCheckId());
             scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
+            familyCancerHistoryDao.deleteByCheckId(info.getScCheckId());*/
         }
+
+        if(info.getHistoryDelflag()<=0){
+            System.out.println("确定删除个数："+info.getHistoryDelflag());
+            /*cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());*/
+        }
+
     }
 
 }

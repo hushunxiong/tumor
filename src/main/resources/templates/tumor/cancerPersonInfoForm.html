@@ -31,7 +31,7 @@
 
 <div class="content pd-10" style="width:auto; overflow: hidden;">
     <div class="mini-row" style="text-align: center">
-        <div class="mini-col-3" th:if="${crc==1?true:false}">
+        <div class="mini-col-3" th:if="${crc==1&&(vo!=null&&vo.crcCheckId!=null&&vo.crcCheckId!='')?true:false}">
             <input  id="crc" name="crc" type="text" text="大肠癌"  class="mini-checkbox" >
         </div>
         <div class="mini-col-3" th:if="${crc==1?true:false}">
@@ -59,19 +59,37 @@
         var luc = mini.get("luc").getValue();
         var sc = mini.get("sc").getValue();
         var lic = mini.get("lic").getValue();
+        var historyDelflag=0;
         var data ={};
+        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+            historyDelflag=historyDelflag+1;
+        }
+        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+            historyDelflag=historyDelflag+1;
+        }
+        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+            historyDelflag=historyDelflag+1;
+        }
+        if([[${glbh}]]!=null&&[[${glbh}]]!=''){
+            historyDelflag=historyDelflag+1;
+        }
         if(crc=='true'){
             data.crcCheckId = [[${glbh}]];
+            historyDelflag=historyDelflag-1;
         }
         if(luc=='true'){
             data.lucCheckId = [[${glbh}]];
+            historyDelflag=historyDelflag-1;
         }
         if(sc=='true'){
             data.scCheckId = [[${glbh}]];
+            historyDelflag=historyDelflag-1;
         }
         if(lic=='true'){
             data.licCheckId = [[${glbh}]];
+            historyDelflag=historyDelflag-1;
         }
+        data.historyDelflag=historyDelflag;
         return data;
     }
 
