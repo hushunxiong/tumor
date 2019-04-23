@@ -20,6 +20,28 @@
 		WHERE a.crc_check_id = #{checkid} and a.del_flag='0'
 	</select>
 
+	<insert id="insert">
+		INSERT INTO crc_risk_assessment(
+		id,crc_check_id,manxingfuxie,manxingbianmi,nianyexuebian,lanweiyan,dannangyan,jingshenchuangshang,aizhengshi,qinshu_aizhengshi,changxirou,xiyan,xuexichong,ganrannian,
+		assessment_result,assessment_doc,assessment_doc_name,assessment_date,
+		risk_quality_flag,upload_time,ischange,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{crcCheckId},#{manxingfuxie},#{manxingbianmi},#{nianyexuebian},#{lanweiyan},#{dannangyan},#{jingshenchuangshang},#{aizhengshi},#{qinshuAizhengshi},#{changxirou},#{xiyan},#{xuexichong},#{ganrannian},
+		#{assessmentResult},#{assessmentDoc},#{assessmentDocName},#{assessmentDate},
+		#{riskQualityFlag},#{uploadTime},#{ischange},'0',#{createBy},SYSDATE
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE crc_risk_assessment
+		SET
+		crc_check_id = #{crcCheckId},
+		manxingfuxie = #{manxingfuxie},manxingbianmi = #{manxingbianmi},nianyexuebian = #{nianyexuebian},lanweiyan = #{lanweiyan},dannangyan = #{dannangyan},jingshenchuangshang = #{jingshenchuangshang},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},changxirou = #{changxirou},xiyan = #{xiyan},xuexichong = #{xuexichong},ganrannian = #{ganrannian},
+		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},
+		risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},ischange = #{ischange}
+		WHERE id = #{id}
+	</update>
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRiskAssessment">
 		SELECT 
 			<include refid="CrcRiskAssessmentColumns"/>
@@ -73,7 +95,7 @@
 		</choose>
     </select>
 	
-	<insert id="insert">
+	<insert id="insert1">
 		INSERT INTO crc_risk_assessment(
 		id,crc_check_id,manxingfuxie,manxingbianmi,nianyexuebian,lanweiyan,dannangyan,jingshenchuangshang,aizhengshi,qinshu_aizhengshi,changxirou,xiyan,xuexichong,ganrannian,assessment_result,assessment_doc,assessment_doc_name,assessment_date,risk_quality_flag,upload_time,ischange,del_flag,create_by,create_date
 		) VALUES (
@@ -81,7 +103,7 @@
 		)
 	</insert>
 	
-	<update id="update">
+	<update id="update1">
 		UPDATE crc_risk_assessment SET
 		id = #{id},crc_check_id = #{crcCheckId},manxingfuxie = #{manxingfuxie},manxingbianmi = #{manxingbianmi},nianyexuebian = #{nianyexuebian},lanweiyan = #{lanweiyan},dannangyan = #{dannangyan},jingshenchuangshang = #{jingshenchuangshang},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},changxirou = #{changxirou},xiyan = #{xiyan},xuexichong = #{xuexichong},ganrannian = #{ganrannian},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},ischange = #{ischange},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
 		WHERE id = #{id}

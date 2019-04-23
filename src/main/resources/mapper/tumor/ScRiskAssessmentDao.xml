@@ -20,6 +20,32 @@
 		WHERE a.sc_check_id = #{checkid} and a.del_flag='0'
 	</select>
 
+	<insert id="insert">
+		INSERT INTO sc_risk_assessment(
+		id,sc_check_id,
+		xinxianshucai,xinxianshuiguo,xinxianroulei,jiagongroulei,meibianshiwu,hejiu,hejiupinlv,shifouzhidaohejiuliang,hejiuliang,weisuoxingweiyan,shierzhichangkuiyang,weichuxue,shiguanyan,weixirou,canwei,pinxue,aizhengshi,qinshu_aizhengshi,
+		assessment_result,assessment_doc,assessment_doc_name,assessment_date,
+		risk_quality_flag,upload_time,
+		del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{scCheckId},
+		#{xinxianshucai},#{xinxianshuiguo},#{xinxianroulei},#{jiagongroulei},#{meibianshiwu},#{hejiu},#{hejiupinlv},#{shifouzhidaohejiuliang},#{hejiuliang},#{weisuoxingweiyan},#{shierzhichangkuiyang},#{weichuxue},#{shiguanyan},#{weixirou},#{canwei},#{pinxue},#{aizhengshi},#{qinshuAizhengshi},
+		#{assessmentResult},#{assessmentDoc},#{assessmentDocName},#{assessmentDate},
+		#{riskQualityFlag},#{uploadTime},
+		'0',#{createBy},SYSDATE
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sc_risk_assessment
+		SET
+		sc_check_id = #{scCheckId},
+		xinxianshucai = #{xinxianshucai},xinxianshuiguo = #{xinxianshuiguo},xinxianroulei = #{xinxianroulei},jiagongroulei = #{jiagongroulei},meibianshiwu = #{meibianshiwu},hejiu = #{hejiu},hejiupinlv = #{hejiupinlv},shifouzhidaohejiuliang = #{shifouzhidaohejiuliang},hejiuliang = #{hejiuliang},weisuoxingweiyan = #{weisuoxingweiyan},shierzhichangkuiyang = #{shierzhichangkuiyang},weichuxue = #{weichuxue},shiguanyan = #{shiguanyan},weixirou = #{weixirou},canwei = #{canwei},pinxue = #{pinxue},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},
+		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},
+		upload_time = #{uploadTime}
+		WHERE id = #{id}
+	</update>
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.ScRiskAssessment">
 		SELECT 
 			<include refid="ScRiskAssessmentColumns"/>
@@ -73,7 +99,7 @@
 		</choose>
     </select>
 	
-	<insert id="insert">
+	<insert id="insert1">
 		INSERT INTO sc_risk_assessment(
 		id,sc_check_id,xinxianshucai,xinxianshuiguo,xinxianroulei,jiagongroulei,meibianshiwu,hejiu,hejiupinlv,shifouzhidaohejiuliang,hejiuliang,weisuoxingweiyan,shierzhichangkuiyang,weichuxue,shiguanyan,weixirou,canwei,pinxue,aizhengshi,qinshu_aizhengshi,assessment_result,assessment_doc,assessment_doc_name,assessment_date,risk_quality_flag,upload_time,del_flag,create_by,create_date
 		) VALUES (
@@ -81,7 +107,7 @@
 		)
 	</insert>
 	
-	<update id="update">
+	<update id="update1">
 		UPDATE sc_risk_assessment SET
 		id = #{id},sc_check_id = #{scCheckId},xinxianshucai = #{xinxianshucai},xinxianshuiguo = #{xinxianshuiguo},xinxianroulei = #{xinxianroulei},jiagongroulei = #{jiagongroulei},meibianshiwu = #{meibianshiwu},hejiu = #{hejiu},hejiupinlv = #{hejiupinlv},shifouzhidaohejiuliang = #{shifouzhidaohejiuliang},hejiuliang = #{hejiuliang},weisuoxingweiyan = #{weisuoxingweiyan},shierzhichangkuiyang = #{shierzhichangkuiyang},weichuxue = #{weichuxue},shiguanyan = #{shiguanyan},weixirou = #{weixirou},canwei = #{canwei},pinxue = #{pinxue},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
 		WHERE id = #{id}

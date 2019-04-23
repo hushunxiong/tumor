@@ -20,6 +20,55 @@
 		WHERE a.luc_check_id = #{checkid} and a.del_flag='0'
 	</select>
 
+	<insert id="insert">
+		INSERT INTO luc_risk_assessment(
+		id,luc_check_id,
+		chufangyouyan,youyanjiechupinlv,youyanjiechunianshu,chouyouyanji,
+		chouyouyanjinianshu,xiyan,zuihouyicxiyan,kaishixiyannianling,
+		meitianxiyanliang,beidongxiyan,beidongxiyanduixiang,beidongxiyannianshu,
+		zhiyezhiaiwuzhi,zhiaiwuzhileixing,zhiaiwuzhi_nianshu,xiaochuan,
+		xiaochuan_nianshu,zhiqiguanyan,zhiqiguanyan_nianshu,feiqizhong,
+		feiqizhong_nianshu,feijiehe,feijiehe_nianshu,guichenzhuo,
+		guichenzhuo_nianshu,xianweihua,xianweihua_nianshu,manzufei,
+		manzufei_nianshu,qitafeibing,qitafeibing_nianshu,ganke,
+		ganke_tianshu,tanzhongdaixue,tanzhongdaix_tianshu,qiji,
+		qiji_tianshu,xiongmen,xiongmen_tianshu,xiongtong,
+		xiongtong_tianshu,shengyinsiya,tongbuweifeiyan,feijiejie,
+		jiejiedaxiao,jiejiexingtai,maoboli,shixingjiejie,
+		aizhengshi,qinshu_aizhengshi,
+		assessment_result,assessment_doc,assessment_doc_name,assessment_date,risk_quality_flag,
+		upload_time,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{lucCheckId},
+		#{chufangyouyan},#{youyanjiechupinlv},#{youyanjiechunianshu},#{chouyouyanji},
+		#{chouyouyanjinianshu},#{xiyan},#{zuihouyicxiyan},#{kaishixiyannianling},
+		#{meitianxiyanliang},#{beidongxiyan},#{beidongxiyanduixiang},#{beidongxiyannianshu},
+		#{zhiyezhiaiwuzhi},#{zhiaiwuzhileixing},#{zhiaiwuzhiNianshu},#{xiaochuan},
+		#{xiaochuanNianshu},#{zhiqiguanyan},#{zhiqiguanyanNianshu},#{feiqizhong},
+		#{feiqizhongNianshu},#{feijiehe},#{feijieheNianshu},#{guichenzhuo},
+		#{guichenzhuoNianshu},#{xianweihua},#{xianweihuaNianshu},#{manzufei},
+		#{manzufeiNianshu},#{qitafeibing},#{qitafeibingNianshu},#{ganke},
+		#{gankeTianshu},#{tanzhongdaixue},#{tanzhongdaixTianshu},#{qiji},
+		#{qijiTianshu},#{xiongmen},#{xiongmenTianshu},#{xiongtong},
+		#{xiongtongTianshu},#{shengyinsiya},#{tongbuweifeiyan},#{feijiejie},
+		#{jiejiedaxiao},#{jiejiexingtai},#{maoboli},#{shixingjiejie},
+		#{aizhengshi},#{qinshuAizhengshi},
+		#{assessmentResult},#{assessmentDoc},#{assessmentDocName},#{assessmentDate},#{riskQualityFlag},
+		#{uploadTime},'0',#{createBy},SYSDATE
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE luc_risk_assessment
+		SET
+		luc_check_id = #{lucCheckId},
+		chufangyouyan = #{chufangyouyan},youyanjiechupinlv = #{youyanjiechupinlv},youyanjiechunianshu = #{youyanjiechunianshu},chouyouyanji = #{chouyouyanji},chouyouyanjinianshu = #{chouyouyanjinianshu},xiyan = #{xiyan},zuihouyicxiyan = #{zuihouyicxiyan},kaishixiyannianling = #{kaishixiyannianling},meitianxiyanliang = #{meitianxiyanliang},beidongxiyan = #{beidongxiyan},beidongxiyanduixiang = #{beidongxiyanduixiang},beidongxiyannianshu = #{beidongxiyannianshu},zhiyezhiaiwuzhi = #{zhiyezhiaiwuzhi},zhiaiwuzhileixing = #{zhiaiwuzhileixing},zhiaiwuzhi_nianshu = #{zhiaiwuzhiNianshu},xiaochuan = #{xiaochuan},xiaochuan_nianshu = #{xiaochuanNianshu},zhiqiguanyan = #{zhiqiguanyan},zhiqiguanyan_nianshu = #{zhiqiguanyanNianshu},feiqizhong = #{feiqizhong},feiqizhong_nianshu = #{feiqizhongNianshu},feijiehe = #{feijiehe},feijiehe_nianshu = #{feijieheNianshu},guichenzhuo = #{guichenzhuo},guichenzhuo_nianshu = #{guichenzhuoNianshu},xianweihua = #{xianweihua},xianweihua_nianshu = #{xianweihuaNianshu},manzufei = #{manzufei},manzufei_nianshu = #{manzufeiNianshu},qitafeibing = #{qitafeibing},qitafeibing_nianshu = #{qitafeibingNianshu},ganke = #{ganke},ganke_tianshu = #{gankeTianshu},tanzhongdaixue = #{tanzhongdaixue},tanzhongdaix_tianshu = #{tanzhongdaixTianshu},qiji = #{qiji},qiji_tianshu = #{qijiTianshu},xiongmen = #{xiongmen},xiongmen_tianshu = #{xiongmenTianshu},xiongtong = #{xiongtong},xiongtong_tianshu = #{xiongtongTianshu},shengyinsiya = #{shengyinsiya},tongbuweifeiyan = #{tongbuweifeiyan},feijiejie = #{feijiejie},jiejiedaxiao = #{jiejiedaxiao},jiejiexingtai = #{jiejiexingtai},maoboli = #{maoboli},shixingjiejie = #{shixingjiejie},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},
+		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},
+		risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime}
+		WHERE id = #{id}
+	</update>
+
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LucRiskAssessment">
 		SELECT 
 			<include refid="LucRiskAssessmentColumns"/>
@@ -73,7 +122,7 @@
 		</choose>
     </select>
 	
-	<insert id="insert">
+	<insert id="insert1">
 		INSERT INTO luc_risk_assessment(
 		id,luc_check_id,chufangyouyan,youyanjiechupinlv,youyanjiechunianshu,chouyouyanji,chouyouyanjinianshu,xiyan,zuihouyicxiyan,kaishixiyannianling,meitianxiyanliang,beidongxiyan,beidongxiyanduixiang,beidongxiyannianshu,zhiyezhiaiwuzhi,zhiaiwuzhileixing,zhiaiwuzhi_nianshu,xiaochuan,xiaochuan_nianshu,zhiqiguanyan,zhiqiguanyan_nianshu,feiqizhong,feiqizhong_nianshu,feijiehe,feijiehe_nianshu,guichenzhuo,guichenzhuo_nianshu,xianweihua,xianweihua_nianshu,manzufei,manzufei_nianshu,qitafeibing,qitafeibing_nianshu,ganke,ganke_tianshu,tanzhongdaixue,tanzhongdaix_tianshu,qiji,qiji_tianshu,xiongmen,xiongmen_tianshu,xiongtong,xiongtong_tianshu,shengyinsiya,tongbuweifeiyan,feijiejie,jiejiedaxiao,jiejiexingtai,maoboli,shixingjiejie,aizhengshi,qinshu_aizhengshi,assessment_result,assessment_doc,assessment_doc_name,assessment_date,risk_quality_flag,upload_time,del_flag,create_by,create_date
 		) VALUES (
@@ -81,7 +130,7 @@
 		)
 	</insert>
 	
-	<update id="update">
+	<update id="update1">
 		UPDATE luc_risk_assessment SET
 		id = #{id},luc_check_id = #{lucCheckId},chufangyouyan = #{chufangyouyan},youyanjiechupinlv = #{youyanjiechupinlv},youyanjiechunianshu = #{youyanjiechunianshu},chouyouyanji = #{chouyouyanji},chouyouyanjinianshu = #{chouyouyanjinianshu},xiyan = #{xiyan},zuihouyicxiyan = #{zuihouyicxiyan},kaishixiyannianling = #{kaishixiyannianling},meitianxiyanliang = #{meitianxiyanliang},beidongxiyan = #{beidongxiyan},beidongxiyanduixiang = #{beidongxiyanduixiang},beidongxiyannianshu = #{beidongxiyannianshu},zhiyezhiaiwuzhi = #{zhiyezhiaiwuzhi},zhiaiwuzhileixing = #{zhiaiwuzhileixing},zhiaiwuzhi_nianshu = #{zhiaiwuzhiNianshu},xiaochuan = #{xiaochuan},xiaochuan_nianshu = #{xiaochuanNianshu},zhiqiguanyan = #{zhiqiguanyan},zhiqiguanyan_nianshu = #{zhiqiguanyanNianshu},feiqizhong = #{feiqizhong},feiqizhong_nianshu = #{feiqizhongNianshu},feijiehe = #{feijiehe},feijiehe_nianshu = #{feijieheNianshu},guichenzhuo = #{guichenzhuo},guichenzhuo_nianshu = #{guichenzhuoNianshu},xianweihua = #{xianweihua},xianweihua_nianshu = #{xianweihuaNianshu},manzufei = #{manzufei},manzufei_nianshu = #{manzufeiNianshu},qitafeibing = #{qitafeibing},qitafeibing_nianshu = #{qitafeibingNianshu},ganke = #{ganke},ganke_tianshu = #{gankeTianshu},tanzhongdaixue = #{tanzhongdaixue},tanzhongdaix_tianshu = #{tanzhongdaixTianshu},qiji = #{qiji},qiji_tianshu = #{qijiTianshu},xiongmen = #{xiongmen},xiongmen_tianshu = #{xiongmenTianshu},xiongtong = #{xiongtong},xiongtong_tianshu = #{xiongtongTianshu},shengyinsiya = #{shengyinsiya},tongbuweifeiyan = #{tongbuweifeiyan},feijiejie = #{feijiejie},jiejiedaxiao = #{jiejiedaxiao},jiejiexingtai = #{jiejiexingtai},maoboli = #{maoboli},shixingjiejie = #{shixingjiejie},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
 		WHERE id = #{id}
