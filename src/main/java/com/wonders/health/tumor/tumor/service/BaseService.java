@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.tumor.service;
 
 import com.wonders.health.tumor.common.model.BaseDao;
+import com.wonders.health.tumor.common.model.BaseEntity;
 
 import java.util.List;
 
@@ -25,6 +26,13 @@ public interface BaseService {
     //4个业务危险度评估表新增时查询idnumber是否已占用
     default Object checkIdnumber(BaseDao baseDao,String manageid,String idnumber){
         return baseDao.checkIdnumber(manageid,idnumber);
+    }
+
+    default void insert(BaseDao baseDao, BaseEntity baseEntity){
+        baseDao.insert(baseEntity);
+    }
+    default void update(BaseDao baseDao, BaseEntity baseEntity){
+        baseDao.update(baseEntity);
     }
 
 }

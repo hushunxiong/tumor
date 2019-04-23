@@ -2,6 +2,7 @@ package com.wonders.health.tumor.tumor.web;
 
 
 import com.google.common.collect.Lists;
+import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -383,4 +385,59 @@ public class ScreeningController extends BaseController {
         }
         return ajaxReturn;
     }
+
+
+    @RequestMapping(value = {"", "save"}, method = RequestMethod.POST)
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public AjaxReturn save(ScreeningVo screeningVo){
+        CancerPersonInfo personInfo=screeningVo.getPersonInfo();
+        User user=getSessionUser();
+
+        if(personInfo.getId()==null){  //新增
+            personInfo.init(user.getId());
+            cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
+
+            if(isOpen(crcFlag)){
+                crcRegcaseService.insert(crcRegcaseDao,screeningVo.getCrcRegcase());
+                crcRiskAssessmentService.insert(crcRiskAssessmentDao,screeningVo.getCrcRisk());
+            }
+            if(isOpen(licFlag)){
+                licRegcaseService.insert(licRegcaseDao,screeningVo.getLicRegcase());
+                licRiskAssessmentService.insert(licRiskAssessmentDao,screeningVo.getLicRisk());
+            }
+            if(isOpen(lucFlag)){
+                lucRegcaseService.insert(lucRegcaseDao,screeningVo.getLucRegcase());
+                lucRiskAssessmentService.insert(lucRiskAssessmentDao,screeningVo.getLucRisk());
+            }
+            if(isOpen(scFlag)){
+                scRegcaseService.insert(scRegcaseDao,screeningVo.getScRegcase());
+                scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
+            }
+        }else{
+            personInfo.initByUpdate(user.getId());
+            cancerPersonInfoService.saveOrUpdate(personInfo,getSessionUser().getId());
+
+            if(isOpen(crcFlag)){
+                crcRegcaseService.update(crcRegcaseDao,screeningVo.getCrcRegcase());
+                crcRiskAssessmentService.update(crcRiskAssessmentDao,screeningVo.getCrcRisk());
+            }
+            if(isOpen(licFlag)){
+                licRegcaseService.update(licRegcaseDao,screeningVo.getLicRegcase());
+                licRiskAssessmentService.update(licRiskAssessmentDao,screeningVo.getLicRisk());
+            }
+            if(isOpen(lucFlag)){
+                lucRegcaseService.update(lucRegcaseDao,screeningVo.getLucRegcase());
+                lucRiskAssessmentService.update(lucRiskAssessmentDao,screeningVo.getLucRisk());
+            }
+            if(isOpen(scFlag)){
+                scRegcaseService.update(scRegcaseDao,screeningVo.getScRegcase());
+                scRiskAssessmentService.update(scRiskAssessmentDao,screeningVo.getScRisk());
+            }
+        }
+
+        return new AjaxReturn(true,"保存成功");
+    }
+
 }
+

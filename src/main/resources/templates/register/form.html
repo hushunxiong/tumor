@@ -18,7 +18,7 @@
                 <td width="10%"><span class="red-span">*</span>筛查年份</td>
                 <td width="20%">
                     <input id="checkYear" name="checkYear" class="mini-combobox" showNullItem="true"  width="47%" emptyText="请选择"
-                           th:data="${years}" th:value="${checkYear}"
+th:data="${years}" th:value="${checkYear}"
                            textField="text" valueField="id" allowInput="true" valueFromSelect="true" required="true" />
                 </td>
                 <td width="10%"><span class="red-span">*</span>证件类型</td>
@@ -720,22 +720,25 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="bg-white" style="padding:0px;">
-                            <table class="table_new table_new6">
+                            <table class="table_new table_new6" id="azsInnerTable">
                                 <tr>
-                                    <td class="bg-white" style="border: none;"><a href="#" onclick="">+</a></td>
+                                    <td class="bg-white" style="border: none;">
+                                        <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="azsAdd(this)">+ </a>
+                                        <a href="javascript:void(0);" style="text-decoration:none" onclick="azsRmv(this)">-</a>
+                                    </td>
                                     <td>癌症种类</td>
                                     <td class="bg-white">
-                                        <input id="azsType1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                        <input class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
                                                th:data="${#dic.generals('60020')}"
                                                textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                                     </td>
                                     <td>年龄</td>
                                     <td width="15%" class="bg-white">
-                                        <input id="age1" class="mini-textbox" width="100" vtype="int"/>
+                                        <input class="mini-textbox" width="100" vtype="int"/>
                                     </td>
                                     <td>诊断医院</td>
                                     <td width="25%" class="bg-white">
-                                        <input id="hospital1" class="mini-autocomplete" style="width:100%"
+                                        <input class="mini-autocomplete" style="width:100%"
                                                textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
                                                th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
                                     </td>
@@ -1495,6 +1498,69 @@
             $("#azsTable").children(":first").children(":eq(1)").hide();
         }
     }
+    function azsAdd(e){
+        var tr = $(e).closest('tr'),
+            td = tr.find('td');
+        // alert(tr[0].rowIndex)
+
+        var newRow="";
+        newRow+= " <tr>\n" +
+            "           <td class=\"bg-white\" style=\"border: none;\">" +
+            "<a href=\"javascript:void(0);\" style=\"text-decoration:none;;margin-right:15px\" onclick=\"azsAdd(this)\"> +   </a>" +
+            "<a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"azsRmv(this)\">   - </a>" +
+            "</td>" +
+            "            <td>癌症种类</td>" +
+            "            <td class=\"bg-white\">" +
+            "                <input class='mini-combobox' showNullItem='true' width='43%' emptyText='请选择'" +
+            "                         th:data=\"${#dic.generals('60020')}\"" +
+            "                         textField='name' valueField='code' allowInput='true' valueFromSelect='true' />" +
+            "            </td>\n" +
+            "             <td>年龄</td>\n" +
+            "             <td width=\"15%\" class=\"bg-white\">" +
+            "                  <input class=\"mini-textbox\" width=\"100\" vtype=\"int\"/>" +
+            "            </td>" +
+            "            <td>诊断医院</td>" +
+            "            <td width=\"25%\" class=\"bg-white\">" +
+            "                  <input class=\"mini-autocomplete\" style=\"width:100%\"" +
+            "                           textField=\"text\" valueField=\"id\" searchField=\"name\" popupEmptyText=\"未找到数据\"" +
+            "                            th:url=\"@{/hospital/queryName}\" showNullItem=\"false\" allowInput=\"true\"/>" +
+            "            </td>" +
+            "   </tr>";
+
+        $("#azsInnerTable tbody").append(newRow);
+        mini.parse();
+    }
+
+    function azsRmv(e) {
+        var tr = $(e).closest('tr');
+        $("#azsInnerTable tr:eq(" + tr[0].rowIndex + ")").remove();
+    }
+
+    //大肠癌亲属变更
+    function crcHistoryChanged(e) {
+        var crcHistory = mini.get("crcHistory").getValue();
+        //有
+        if (crcHistory == "1") {
+            $("#crcazsTable").children(":first").children(":eq(1)").show();
+
+        } else {
+            $("#crcazsTable").children(":first").children(":eq(1)").hide();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function save(){
         crcNumerChange();//单独再验证一次大肠癌id
