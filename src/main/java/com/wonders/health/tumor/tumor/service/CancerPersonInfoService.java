@@ -3,11 +3,13 @@
  */
 package com.wonders.health.tumor.tumor.service;
 
+import com.wonders.health.tumor.common.service.HospitalDicService;
 import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
+import com.wonders.health.tumor.tumor.entity.DicHospitalInfo;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import org.apache.commons.lang3.StringUtils;
@@ -68,15 +70,28 @@ public class CancerPersonInfoService {
     @Autowired
     private  CancerHistoryDao cancerHistoryDao;
 
+    @Autowired
+    private  DicHospitalInfoDao dicHospitalInfoDao;
+
 
     public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
-        Integer count = cancerPersonInfoDao.pageCount(search);
-        List<CancerPersonInfo> list = null;
-        if (count > 0) {
-        	list = cancerPersonInfoDao.pageList(search);
+
+        List<CancerPersonInfo> list=cancerPersonInfoDao.pageList(search);
+        if(list!=null&&list.size()>0){
+            for(CancerPersonInfo info:list){
+                //四种筛查都没做的不显示
+                if(StringUtils.isBlank(info.getCrcCheckYear())&&StringUtils.isBlank(info.getLucCheckYear())
+                        &&StringUtils.isBlank(info.getLicCheckYear())&&StringUtils.isBlank(info.getScCheckYear())){
+                    list.remove(info);
+                    if(list.size()<=0){
+                       break;
+                    }
+                }
+            }
         }
-        return new DataGrid<CancerPersonInfo>(count,list);
+        return new DataGrid<CancerPersonInfo>(list.size(),list);
     }
+
 
     public CancerPersonInfo findById(String id) {
         return cancerPersonInfoDao.get(id);

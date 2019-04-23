@@ -30,6 +30,13 @@ public class DicHospitalInfoService {
     @Autowired
     private DicHospitalInfoDao dicHospitalInfoDao;
 
+    /**
+     * 根据角色和区县代码获取社区机构
+     * 市疾控，区疾控--- 所属区下的所有社区机构
+     * @param areaCode
+     * @param user
+     * @return
+     */
     public List<DataOption> findHospitalsByAreaCode(String areaCode, User user) {
         List<DataOption> offices = Lists.newArrayList();
         if("bsq".equals(AuthUtils.judgeRole(user.getOrgCode()))){
@@ -47,7 +54,6 @@ public class DicHospitalInfoService {
                 }
             }
         }
-
         return  offices;
     }
 

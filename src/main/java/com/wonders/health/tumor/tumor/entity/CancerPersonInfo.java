@@ -148,6 +148,12 @@ public class CancerPersonInfo extends BaseEntity {
 	private String scResult; //胃癌判定结果
 	private String lucResult; //肺癌判定结果
 
+    private String crcCheckYear;
+    private String licCheckYear;
+    private String scCheckYear;
+    private String lucCheckYear;
+
+
 
 
 	public CancerPersonInfo() {
@@ -571,4 +577,68 @@ public class CancerPersonInfo extends BaseEntity {
 	public void setLucResult(String lucResult) {
 		this.lucResult = lucResult;
 	}
+
+    public Integer getCrc() {
+        return crc;
+    }
+
+    public void setCrc(Integer crc) {
+        this.crc = crc;
+    }
+
+    public Integer getLuc() {
+        return luc;
+    }
+
+    public void setLuc(Integer luc) {
+        this.luc = luc;
+    }
+
+    public Integer getLic() {
+        return lic;
+    }
+
+    public void setLic(Integer lic) {
+        this.lic = lic;
+    }
+
+    public Integer getSc() {
+        return sc;
+    }
+
+    public void setSc(Integer sc) {
+        this.sc = sc;
+    }
+
+    public String getCrcCheckYear() {
+        return crcCheckYear;
+    }
+
+    public void setCrcCheckYear(String crcCheckYear) {
+        this.crcCheckYear = crcCheckYear;
+    }
+
+    public String getLicCheckYear() {
+        return licCheckYear;
+    }
+
+    public void setLicCheckYear(String licCheckYear) {
+        this.licCheckYear = licCheckYear;
+    }
+
+    public String getScCheckYear() {
+        return scCheckYear;
+    }
+
+    public void setScCheckYear(String scCheckYear) {
+        this.scCheckYear = scCheckYear;
+    }
+
+    public String getLucCheckYear() {
+        return lucCheckYear;
+    }
+
+    public void setLucCheckYear(String lucCheckYear) {
+        this.lucCheckYear = lucCheckYear;
+    }
 }

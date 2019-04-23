@@ -21,7 +21,6 @@ public interface DicHospitalInfoDao extends BaseDao<DicHospitalInfo> {
 
 	public List<DicHospitalInfo> findHospitalsByAreaCode(@Param("areaCode") String areaCode);
 
-
 	public DicHospitalInfo getHospitalById(@Param("orgCode") String orgCode);
 
 

@@ -6,6 +6,9 @@ package com.wonders.health.tumor.tumor.vo;
 
 import com.wonders.health.tumor.common.model.DataGridSearch;
 import com.wonders.health.tumor.common.utils.DateUtils;
+import com.wonders.health.tumor.tumor.entity.DicHospitalInfo;
+
+import java.util.List;
 
 /**
  * 初筛对象信息搜索
@@ -31,6 +34,10 @@ public class CancerPersonInfoSearchVo extends DataGridSearch {
     private String licResult; //肝癌判定结果
     private String scResult; //胃癌判定结果
     private String lucResult; //肺癌判定结果
+    private String  crcFlag;
+    private String  lucFlag;
+    private String  licFlag;
+    private String  scFlag;
 
     public String getKeyword() {
         return keyword;
@@ -175,4 +182,38 @@ public class CancerPersonInfoSearchVo extends DataGridSearch {
     public void setLucResult(String lucResult) {
         this.lucResult = lucResult;
     }
+
+    public String getCrcFlag() {
+        return crcFlag;
+    }
+
+    public void setCrcFlag(String crcFlag) {
+        this.crcFlag = crcFlag;
+    }
+
+    public String getLucFlag() {
+        return lucFlag;
+    }
+
+    public void setLucFlag(String lucFlag) {
+        this.lucFlag = lucFlag;
+    }
+
+    public String getLicFlag() {
+        return licFlag;
+    }
+
+    public void setLicFlag(String licFlag) {
+        this.licFlag = licFlag;
+    }
+
+    public String getScFlag() {
+        return scFlag;
+    }
+
+    public void setScFlag(String scFlag) {
+        this.scFlag = scFlag;
+    }
+
+
 }

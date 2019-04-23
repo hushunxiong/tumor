@@ -3,6 +3,7 @@
  */
 package com.wonders.health.tumor.common.utils;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.text.ParseException;
@@ -10,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * 日期工具类, 继承org.apache.commons.lang.time.DateUtils类
@@ -443,6 +445,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         day = day*24*60*60*1000; // 要加上的天数转换成毫秒数
         time+=day; // 相加得到新的毫秒数
         return new Date(time); // 将毫秒数转换成日期
+    }
+
+    /**
+     * 获取最近n年的情况
+     * @param nd
+     * @param num
+     * @return
+     */
+    public static List<String> getYearBefore(int nd, int num){
+        List<String> nds = Lists.newArrayList();
+        for(int i = num;i > 0;i--){
+            nds.add(String.valueOf(nd - i + 1));
+        }
+        return nds;
     }
 
     /**

@@ -133,6 +133,14 @@ public class AuthUtils {
         return "bsq";
     }
 
+    /**
+     * 根据登录角色获取区县
+     * 市疾控---上海市所有区
+     * 区疾控---当前登录所属区
+     * 社区--当前登录所属区
+     * @param areaCode
+     * @return
+     */
     public  static List<DataOption> getAreas(String areaCode){
         List<DataOption> offices = Lists.newArrayList();
         String role=judgeRole(getUser().getOrgCode());
@@ -152,21 +160,5 @@ public class AuthUtils {
     }
 
 
-    /**
-     * 根据区县代码获取该区下的社区
-     * @return
-     */
-   /* public static List<DataOption> getOfficeByAreaCode(String areaCode){
-        List<DataOption> offices = Lists.newArrayList();
-        List<DicHospitalInfo> hospitals = dicHospitalInfoService.findHospitalsByAreaCode(areaCode);
-        if (hospitals != null && hospitals.size() > 0) {
-            for (DicHospitalInfo u : hospitals) {
-                if (StringUtils.isNotBlank(u.getHospitalName())) {
-                    offices.add(new DataOption(u.getHospitalId(), u.getHospitalName(), PinYinUtil.getFirstSpell(u.getHospitalName())));
-                }
-            }
-        }
-        return  offices;
-    }*/
 
 }

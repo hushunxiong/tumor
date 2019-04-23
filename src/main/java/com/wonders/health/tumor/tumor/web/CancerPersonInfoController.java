@@ -5,6 +5,7 @@ package com.wonders.health.tumor.tumor.web;
 
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.utils.AuthUtils;
+import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
@@ -29,6 +30,7 @@ import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataGridSearch;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 /**
@@ -59,8 +61,14 @@ public class CancerPersonInfoController extends BaseController {
     @Value("${scFlag}")
     private  Integer scFlag;
 
+    @Value("${yearNum}")
+    private  Integer yearNum;
+
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
+        List<String> nds = DateUtils.getYearBefore(Integer.parseInt(DateUtils.getYear()), yearNum);
+        Collections.sort(nds,Collections.reverseOrder());
+        model.addAttribute("csnf",nds);
         model.addAttribute("role", AuthUtils.judgeRole(AuthUtils.getUser().getOrgCode()));
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
@@ -74,6 +82,10 @@ public class CancerPersonInfoController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "data", produces = "application/json; charset=utf-8")
     public DataGrid<CancerPersonInfo> data(CancerPersonInfoSearchVo search) {
+        search.setCrcFlag(crcFlag.toString());
+        search.setLucFlag(lucFlag.toString());
+        search.setLicFlag(licFlag.toString());
+        search.setScFlag(scFlag.toString());
         DataGrid<CancerPersonInfo> grid = cancerPersonInfoService.findPage(search);
         return grid;
     }
