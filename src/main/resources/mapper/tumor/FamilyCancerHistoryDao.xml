@@ -84,7 +84,7 @@
 		</choose>
     </select>
 	
-	<insert id="insert">
+	<insert id="insert1">
 		INSERT INTO family_cancer_history(
 		id,check_id,relation,cancer_type,icd10,cancer_name,age,lived,del_flag,ischange,create_by,create_date,update_by,update_date
 		) VALUES (
@@ -92,7 +92,7 @@
 		)
 	</insert>
 	
-	<update id="update">
+	<update id="update1">
 		UPDATE family_cancer_history SET
 		id = #{id},check_id = #{checkId},relation = #{relation},cancer_type = #{cancerType},icd10 = #{icd10},cancer_name = #{cancerName},age = #{age},lived = #{lived},del_flag = #{delFlag},ischange = #{ischange},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
 		WHERE id = #{id}
