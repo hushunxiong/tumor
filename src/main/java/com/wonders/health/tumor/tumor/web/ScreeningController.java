@@ -6,10 +6,7 @@ import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
-import com.wonders.health.tumor.common.utils.AuthUtils;
-import com.wonders.health.tumor.common.utils.DateUtils;
-import com.wonders.health.tumor.common.utils.SpringContextHolder;
-import com.wonders.health.tumor.common.utils.StringUtils;
+import com.wonders.health.tumor.common.utils.*;
 import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.*;
 import com.wonders.health.tumor.tumor.service.*;
@@ -196,38 +193,44 @@ public class ScreeningController extends BaseController {
         //个人管理编号
 
         CancerPersonInfo personInfo=screeningService.getBaseInfoByCardnoAndType(personcardno,type);
+
         personInfo.setRegdoc(getSessionUser().getId());
         personInfo.setRegorg(getSessionUser().getOrgCode());
         personInfo.setRegdate(new Date());
+
         model.addAttribute("personInfo", personInfo);
-
-        if(manageId==null || manageId=="null" ||"null".equals(manageId)||"".equals(manageId)){
-            manageId=personInfo.getId();
-        }
-
+//
+//        if(manageId==null || manageId=="null" ||"null".equals(manageId)||"".equals(manageId)){
+//            manageId=personInfo.getId();
+//        }else
         if(manageId!=null && manageId!="null" &&!"null".equals(manageId)&&!"".equals(manageId)){
             ScreeningVo screeningVo=getDetail(manageId,checkYear);
             model.addAttribute("lucRisk", screeningVo.getLucRisk());
             model.addAttribute("scRisk", screeningVo.getScRisk());
             model.addAttribute("crcRisk", screeningVo.getCrcRisk());
             model.addAttribute("licRisk", screeningVo.getLicRisk());
+
+            model.addAttribute("flag", "2"); //2:修改
+            //各癌症数据库存在标志
+            model.addAttribute("crcDbflag", "2"); //数据库状态  1：新增 2：修改
+            model.addAttribute("licDbflag", "2"); //数据库状态  1：新增 2：修改
+            model.addAttribute("scDbflag", "2");  //数据库状态  1：新增 2：修改
+            model.addAttribute("lucDbflag", "2"); //数据库状态  1：新增 2：修改
+            model.addAttribute("idNumber", personInfo.getIdNumber());
         }else{
             model.addAttribute("lucRisk", new LucRiskAssessment());
             model.addAttribute("scRisk", new ScRiskAssessment());
             model.addAttribute("crcRisk", new CrcRiskAssessment());
             model.addAttribute("licRisk", new LicRiskAssessment());
+
+            model.addAttribute("flag", "1"); //1：新增
+            //各癌症数据库存在标志
+            model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
+            model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
+            model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
+            model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
+            model.addAttribute("idNumber", "");
         }
-
-
-        model.addAttribute("idNumber", "");
-        model.addAttribute("flag", "1"); //1：新增
-
-
-        //各癌症数据库存在标志
-        model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
-        model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
-        model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
-        model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
 
         model.addAttribute("crcFlag", crcFlag);
         model.addAttribute("licFlag", licFlag);
@@ -237,21 +240,6 @@ public class ScreeningController extends BaseController {
     }
 
 
-    @RequestMapping(value = {"", "getBaseData"}, method = RequestMethod.GET)
-    @ResponseBody
-    public AjaxReturn getBaseData( String type, String personcard){
-        //个人基本信息
-        Optional<CancerPersonInfo> cancerPersonInfo=Optional.of(screeningService.getBaseInfoByCardnoAndType(personcard,type));
-        if(cancerPersonInfo.isPresent()){
-            return new AjaxReturn(true,"",cancerPersonInfo.get());
-        }else{
-            logger.error("当前证件号码查不到任何信息");
-            return new AjaxReturn(false,"当前证件号码查不到任何信息");
-        }
-    }
-
-    @RequestMapping(value = {"", "getDetail"}, method = RequestMethod.GET)
-    @ResponseBody
     public ScreeningVo getDetail(String manageid, String year){
         ScreeningVo screeningVo=new ScreeningVo();
         String crccheckid="";
@@ -343,30 +331,6 @@ public class ScreeningController extends BaseController {
         return screeningVo;
     }
 
-
-    @RequestMapping(value = {"", "formForView"}, method = RequestMethod.GET)
-    public String formForView(Model model, String manageId, String checkYear) {
-        model.addAttribute("manageId", manageId);
-        model.addAttribute("checkYear", checkYear);
-        model.addAttribute("flag", "2"); //2：修改
-        //各癌症数据库存在标志
-        model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
-        model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
-        model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
-        model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
-        model.addAttribute("crcFlag", crcFlag);
-        model.addAttribute("licFlag", licFlag);
-        model.addAttribute("scFlag", scFlag);
-        model.addAttribute("lucFlag", lucFlag);
-
-        CancerPersonInfo cancerPersonInfo=cancerPersonInfoService.findById(manageId);
-        ScreeningVo screeningVo=getDetail(manageId,checkYear);
-        screeningVo.setPersonInfo(cancerPersonInfo);
-
-        model.addAttribute("screeningVo", screeningVo);
-        return "/register/form";
-    }
-
     /**
      *新增时检查idnumber是否已经占用
      **/
@@ -391,11 +355,18 @@ public class ScreeningController extends BaseController {
     @ResponseBody
     @Transactional(readOnly = true)
     public AjaxReturn save(ScreeningVo screeningVo){
+
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
         User user=getSessionUser();
 
         if(personInfo.getId()==null){  //新增
+            personInfo.setId(IdGen.uuid());
             personInfo.init(user.getId());
+            screeningVo.getCrcRegcase().setManageid(personInfo.getId());
+            screeningVo.getScRegcase().setManageid(personInfo.getId());
+            screeningVo.getLicRegcase().setManageid(personInfo.getId());
+            screeningVo.getLucRegcase().setManageid(personInfo.getId());
+
             cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
 
             if(isOpen(crcFlag)){
@@ -417,6 +388,7 @@ public class ScreeningController extends BaseController {
         }else{
             personInfo.initByUpdate(user.getId());
             cancerPersonInfoService.saveOrUpdate(personInfo,getSessionUser().getId());
+            cancerPersonInfoService.updateChange(personInfo.getId());
 
             if(isOpen(crcFlag)){
                 crcRegcaseService.update(crcRegcaseDao,screeningVo.getCrcRegcase());
@@ -436,7 +408,7 @@ public class ScreeningController extends BaseController {
             }
         }
 
-        return new AjaxReturn(true,"保存成功");
+        return new AjaxReturn(true,"保存成功",personInfo.getId());
     }
 
 }

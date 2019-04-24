@@ -185,5 +185,9 @@ public class CancerPersonInfoService {
 
     }
 
+    public void updateChange(String id){
+        cancerPersonInfoDao.updateChange(id);
+    }
+
 
 }

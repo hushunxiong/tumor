@@ -278,5 +278,11 @@
 	    WHERE id = #{id}
 	</update>
 
+	<update id="updateChange">
+		UPDATE cancer_person_info
+		SET
+		ischange='1'
+		WHERE id = #{id} and del_flag='0'
+	</update>
 	
 </mapper>
