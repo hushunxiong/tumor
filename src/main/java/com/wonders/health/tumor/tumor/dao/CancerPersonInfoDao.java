@@ -29,4 +29,5 @@ public interface CancerPersonInfoDao extends BaseDao<CancerPersonInfo> {
     //初筛一览列表显示
     List<CancerPersonInfo> cancerPersonInfoResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo);
 
+    void updateChange(@Param("id")String id);
 }

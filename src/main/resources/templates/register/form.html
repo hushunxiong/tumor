@@ -754,41 +754,42 @@ th:data="${years}" th:value="${checkYear}"
         <div th:if="${crcFlag} eq '1'">
             <table id="crcazsTable" class="table_new table_new5 mt-10">
                 <tbody>
-                <tr>
-                    <td width="20%">大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史</td>
-                    <td width="80%" class="text-l">
-                        <input id="crcHistory"  class="mini-radiobuttonlist"
-                               th:data="${#dic.generals('60007')}"
-                               textField="name" valueField="code" onvaluechanged="crcHistoryChanged"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="bg-white" style="padding:0px;">
-                        <table class="table_new table_new6">
-                            <tr>
-                                <td class="bg-white" style="border: none;">+</td>
-                                <td>亲属关系</td>
-                                <td class="bg-white">
-                                    <input id="crcrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                                           th:data="${#dic.generals('60018')}"
-                                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
-                                </td>
-                                <td>发病年龄</td>
-                                <td width="15%" class="bg-white">
-                                    <input id="crcage1" class="mini-textbox"
-                                           width="100" vtype="int"/>
-                                </td>
-                                <td>是否在世</td>
-                                <td width="25%" class="bg-white">
-                                    <input id="crclived1" class="mini-radiobuttonlist"
-                                           th:data="${#dic.generals('60019')}"
-                                           textField="name" valueField="code" />
-                                </td>
-
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
+                    <tr>
+                        <td width="20%">大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史</td>
+                        <td width="80%" class="text-l">
+                            <input id="crcHistory"  class="mini-radiobuttonlist"
+                                   th:data="${#dic.generals('60007')}"
+                                   textField="name" valueField="code" onvaluechanged="crcHistoryChanged"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="bg-white" style="padding:0px;">
+                            <table class="table_new table_new6" id="crcInnerTable">
+                                <tr>
+                                    <td class="bg-white" style="border: none;">
+                                        <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="crcAdd(this)">+ </a>
+                                        <a href="javascript:void(0);" style="text-decoration:none" onclick="crcRmv(this)">-</a></td>
+                                    <td>亲属关系</td>
+                                    <td class="bg-white">
+                                        <input id="crcrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                               th:data="${#dic.generals('60018')}"
+                                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                                    </td>
+                                    <td>发病年龄</td>
+                                    <td width="15%" class="bg-white">
+                                        <input id="crcage1" class="mini-textbox"
+                                               width="100" vtype="int"/>
+                                    </td>
+                                    <td>是否在世</td>
+                                    <td width="25%" class="bg-white">
+                                        <input id="crclived1" class="mini-radiobuttonlist"
+                                               th:data="${#dic.generals('60019')}"
+                                               textField="name" valueField="code" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -1504,18 +1505,18 @@ th:data="${years}" th:value="${checkYear}"
         // alert(tr[0].rowIndex)
 
         var newRow="";
-        newRow+= " <tr>\n" +
+        newRow+= " <tr>" +
             "           <td class=\"bg-white\" style=\"border: none;\">" +
-            "<a href=\"javascript:void(0);\" style=\"text-decoration:none;;margin-right:15px\" onclick=\"azsAdd(this)\"> +   </a>" +
-            "<a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"azsRmv(this)\">   - </a>" +
-            "</td>" +
+            "               <a href=\"javascript:void(0);\" style=\"text-decoration:none;;margin-right:15px\" onclick=\"azsAdd(this)\"> +   </a>" +
+            "               <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"azsRmv(this)\">   - </a>" +
+            "           </td>" +
             "            <td>癌症种类</td>" +
             "            <td class=\"bg-white\">" +
             "                <input class='mini-combobox' showNullItem='true' width='43%' emptyText='请选择'" +
             "                         th:data=\"${#dic.generals('60020')}\"" +
             "                         textField='name' valueField='code' allowInput='true' valueFromSelect='true' />" +
-            "            </td>\n" +
-            "             <td>年龄</td>\n" +
+            "            </td>" +
+            "             <td>年龄</td>" +
             "             <td width=\"15%\" class=\"bg-white\">" +
             "                  <input class=\"mini-textbox\" width=\"100\" vtype=\"int\"/>" +
             "            </td>" +
@@ -1530,7 +1531,6 @@ th:data="${years}" th:value="${checkYear}"
         $("#azsInnerTable tbody").append(newRow);
         mini.parse();
     }
-
     function azsRmv(e) {
         var tr = $(e).closest('tr');
         $("#azsInnerTable tr:eq(" + tr[0].rowIndex + ")").remove();
@@ -1542,9 +1542,72 @@ th:data="${years}" th:value="${checkYear}"
         //有
         if (crcHistory == "1") {
             $("#crcazsTable").children(":first").children(":eq(1)").show();
-
         } else {
             $("#crcazsTable").children(":first").children(":eq(1)").hide();
+        }
+    }
+    function crcAdd(e){
+        var tr = $(e).closest('tr');
+        var newRow="";
+        newRow+=" <tr>" +
+            "            <td class=\"bg-white\" style=\"border: none;\">" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"crcAdd(this)\">+ </a>" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"crcRmv(this)\">-</a>" +
+            "           </td>" +
+            "            <td>亲属关系</td>" +
+            "            <td class=\"bg-white\">" +
+            "                    <input class=\"mini-combobox\" showNullItem=\"true\" width=\"43%\" emptyText=\"请选择\"" +
+            "                           th:data=\"${#dic.generals('60018')}\" textField=\"name\" valueField=\"code\" allowInput=\"true\" valueFromSelect=\"true\" />" +
+            "            </td>" +
+            "            <td>发病年龄</td>" +
+            "            <td width=\"15%\" class=\"bg-white\">" +
+            "                      <input class=\"mini-textbox\" width=\"100\" vtype=\"int\" />" +
+            "            </td>" +
+            "            <td>是否在世</td>" +
+            "            <td width=\"25%\" class=\"bg-white\">" +
+            "                     <input class=\"mini-radiobuttonlist\"" +
+            "                              th:data=\"${#dic.generals('60019')}\" textField=\"name\" valueField=\"code\" />" +
+            "             </td>" +
+            "     </tr>";
+        $("#crcInnerTable tbody").append(newRow);
+        mini.parse();
+    }
+    function crcRmv(e) {
+        var tr = $(e).closest('tr');
+        $("#crcInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
+    }
+
+    //肝癌亲属变更
+    function licHistoryChanged(e) {
+        var licHistory = mini.get("licHistory").getValue();
+        //有
+        if (licHistory == "1") {
+            $("#licazsTable").children(":first").children(":eq(1)").show();
+        } else {
+            $("#licazsTable").children(":first").children(":eq(1)").hide();
+        }
+    }
+
+    //胃癌亲属变更
+    function scHistoryChanged(e) {
+        var scHistory = mini.get("scHistory").getValue();
+        //有
+        if (scHistory == "1") {
+            $("#scazsTable").children(":first").children(":eq(1)").show();
+        } else {
+            $("#scazsTable").children(":first").children(":eq(1)").hide();
+        }
+    }
+
+
+    //肺癌亲属变更
+    function lucHistoryChanged(e) {
+        var lucHistory = mini.get("lucHistory").getValue();
+        //有
+        if (lucHistory == "1") {
+            $("#lucazsTable").children(":first").children(":eq(1)").show();
+        } else {
+            $("#lucazsTable").children(":first").children(":eq(1)").hide();
         }
     }
 
@@ -1554,31 +1617,65 @@ th:data="${years}" th:value="${checkYear}"
 
 
 
-
-
-
-
-
-
-
-
     function save(){
+        var params={};
         crcNumerChange();//单独再验证一次大肠癌id
         var form = new mini.Form("#form1");
         form.validate();
         if (form.isValid() == false){
             miniErrorLocation();
             mini.showTips({
-                content: "报表状态必须输入",
-                state: "warning",
+                content: "页面有项目未正确填写",
+                state: "error",
                 x: "center",
                 y: "center",
                 timeout: 3000
             });
             return;
         }else{
+            params=form.getData(true);
+            mini.mask({
+                el: document.body,
+                cls: 'mini-mask-loading',
+                html: '保存中...'
+            });
+            $.ajax({
+                url:"/tumor/screening/save",
+                data:params,
+                type:"POST",
+                dataType:"json",
+                success:function(res){
+                    // mini.unmask(document.body);
+                    if(res.ok){ //检查过
+                        mini.showTips({
+                            content: res.msg,
+                            state: "success",
+                            x: "center",
+                            y: "center",
+                            timeout: 2000
+                        });
+                        var zjhm = mini.get("personcard").getValue();
+                        var zjlx = mini.get("personcardType").getValue();
+                        var checkYear = mini.get("checkYear").getValue();
+
+                        setTimeout(function(){
+                            window.location.href='/tumor/screening/reform?manageId='+res.value+"&&checkYear="+checkYear+
+                                "&&type="+zjlx+"&&personcardno="+zjhm;
+                        },2000)
+
+                    }else{
+                        mini.showTips({
+                            content: res.msg,
+                            state: "success",
+                            x: "center",
+                            y: "center",
+                            timeout: 2000
+                        });
 
 
+                    }
+                }
+            })
         }
     }
     
