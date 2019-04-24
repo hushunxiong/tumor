@@ -3,20 +3,19 @@
  */
 package com.wonders.health.tumor.tumor.service;
 
-import com.wonders.health.tumor.common.service.HospitalDicService;
+
 import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
-import com.wonders.health.tumor.tumor.entity.DicHospitalInfo;
-import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -77,24 +76,46 @@ public class CancerPersonInfoService {
     public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
 
         List<CancerPersonInfo> list=cancerPersonInfoDao.pageList(search);
+        List<CancerPersonInfo>  gridList=new ArrayList<>();
         if(list!=null&&list.size()>0){
             for(CancerPersonInfo info:list){
                 //四种筛查都没做的不显示
                 if(StringUtils.isBlank(info.getCrcCheckYear())&&StringUtils.isBlank(info.getLucCheckYear())
                         &&StringUtils.isBlank(info.getLicCheckYear())&&StringUtils.isBlank(info.getScCheckYear())){
-                    list.remove(info);
-                    if(list.size()<=0){
-                       break;
+                }else{
+                    //标识多选删除还是直接删除
+                    Integer delRecordsFlag=0;
+                    if(StringUtils.isNotBlank(info.getCrcCheckYear())){
+                        info.setCsnf(info.getCrcCheckYear());
+                        delRecordsFlag++;
                     }
+                    if(StringUtils.isNotBlank(info.getLucCheckYear())){
+                        info.setCsnf(info.getLucCheckYear());
+                        delRecordsFlag++;
+                    }
+                    if(StringUtils.isNotBlank(info.getLicCheckYear())){
+                        info.setCsnf(info.getLicCheckYear());
+                        delRecordsFlag++;
+                    }
+                    if(StringUtils.isNotBlank(info.getScCheckYear())){
+                        info.setCsnf(info.getScCheckYear());
+                        delRecordsFlag++;
+                    }
+                    info.setDelRecordsFlag(delRecordsFlag);
+                    gridList.add(info);
                 }
             }
         }
-        return new DataGrid<CancerPersonInfo>(list.size(),list);
+        return new DataGrid<CancerPersonInfo>(gridList.size(),gridList);
     }
 
 
     public CancerPersonInfo findById(String id) {
         return cancerPersonInfoDao.get(id);
+    }
+
+    public CancerPersonInfo findByInfoId(String id,String csnf) {
+        return cancerPersonInfoDao.getById(id,csnf);
     }
 
     //初筛一览列表
@@ -130,8 +151,7 @@ public class CancerPersonInfoService {
     @Transactional(readOnly = false)
     public void deleteByRegcaseId(CancerPersonInfo info) {
 
-
-	   /* if(StringUtils.isNotBlank(info.getCrcCheckId())){
+	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
 	        crcRegcaseDao.delete(info.getCrcCheckId());
 	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
 	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
@@ -149,16 +169,18 @@ public class CancerPersonInfoService {
             familyCancerHistoryDao.deleteByCheckId(info.getLucCheckId());
 
         }
-*/
         if(StringUtils.isNotBlank(info.getScCheckId())){
             scRegcaseDao.delete(info.getScCheckId());
             scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
             familyCancerHistoryDao.deleteByCheckId(info.getScCheckId());
         }
 
+        /**
+         * 四种癌症初筛信息都不存在
+         * 删除危险度评估-癌症史表信息
+         */
         if(info.getHistoryDelflag()<=0){
-            System.out.println("确定删除个数："+info.getHistoryDelflag());
-           /* cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());*/
+            cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());
         }
 
     }

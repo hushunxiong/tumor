@@ -92,9 +92,12 @@ public class CancerPersonInfoController extends BaseController {
 
 
     @RequestMapping(value = "form", method = RequestMethod.GET)
-    public String form(Model model, String id) {
-        if (StringUtils.isNotBlank(id)) {
-            CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findById(id);
+    public String form(Model model, String id,String csnf) {
+        if (StringUtils.isNotBlank(id)&&StringUtils.isNotBlank(csnf)) {
+            CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findByInfoId(id,csnf);
+            if(cancerPersonInfo!=null){
+                cancerPersonInfo.setCsnf(csnf);
+            }
             model.addAttribute("vo", cancerPersonInfo);
         }
         model.addAttribute("crcFlag", crcFlag);

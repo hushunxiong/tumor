@@ -164,8 +164,7 @@
                     </div>
                     <div class="mini-row">
                         <div class="mini-col-4">
-                            <button class="my-btn my-btn-blue" onclick="location.href='新增筛查信息.html'">新增初筛登记</button>
-                            <button class="my-btn my-btn-blue"  onclick="deleteRecords('1')">提交数据</button>
+                            <button class="my-btn my-btn-blue" onclick="goto()">新增初筛登记</button>
                         </div>
                     </div>
 
@@ -173,19 +172,10 @@
 
             </div>
 
-           <!-- <div class="grid-box">
-                <table class="table_new">
-                    <thead><tr><th><input type="checkbox"></th><th>姓名</th><th>身份证号</th><th>性别</th><th>评估员</th><th>大肠癌初筛ID</th><th>大肠癌危险评估结果</th></tr></thead>
-                    <tbody>
-                    <tr><td><input type="checkbox"></td><td >张三</td><td>310102XXXXXXXXXXXX</td><td>男</td><td>XXX</td><td>XXX</td><td>XXX</td></tr>
-                    </tbody>
-                </table>
-            </div>-->
 
-            <div id="datagrid" url="../cancerPersonInfo/data" class="mini-datagrid" style=" overflow: auto;width: 1320px;height: auto" multiSelect="true"
+            <div id="datagrid" url="../cancerPersonInfo/data" class="mini-datagrid" style=" overflow: auto;width: 1320px;height: auto"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
-                    <div type="checkcolumn"></div>
                     <div field="name"  width="50px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
                     <div field="personcard" sortField="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">身份证号</div>
                     <div field="gender" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
@@ -257,14 +247,15 @@
         var r = e.record;
         var h = '';
         if(r.crc+r.luc+r.lic+r.sc>=1){
-            h += '<a onclick="edit(\'' + r.id+ '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
-            h += '<a onclick="edit(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
-            h += '<a onclick="edit(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
-            if(r.crc+r.luc+r.lic+r.sc>1){
-                h += '<a onclick="deleteRecords(\'' + r.id + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+            h += '<a onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
+            h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
+            h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
+            if(r.delRecordsFlag>1){
+                h += '<a onclick="deleteRecords(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
             }else{
                 var data={};
                 data.id=r.id;
+                data.csnf=r.csnf;
                 data.crcCheckId=r.crcCheckId;
                 data.lurCheckId=r.lurCheckId;
                 data.licCheckId=r.licCheckId;
@@ -277,9 +268,15 @@
         return h;
     }
 
-    
-    function  edit(id,csnf) {
-        
+
+    function goto(id,csnf) {
+        var url = "../screening/form/?manageId="+id+"&checkYear="+csnf;
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        window.location.href =url;
     }
 
 
@@ -320,9 +317,9 @@
         mini.get("regorg").setUrl(url);
     }
 
-    function deleteRecords(id) {
+    function deleteRecords(id,csnf) {
         mini.open({
-            url: '../cancerPersonInfo/form?&id='+id,
+            url: '../cancerPersonInfo/form?&id='+id+'&csnf='+csnf,
             showMaxButton: false,
             title: "初筛登记信息删除",
             height:150,
@@ -345,8 +342,6 @@
     }
 
     function del(data) {
-        var csnf=mini.get('csnf').getValue();
-        data.csnf=csnf;
         mini.confirm("确认是否删除", "确定？",
             function (action) {
                 if (action == "ok") {
@@ -356,20 +351,20 @@
                         dataType: "json",
                         success: function (res) {
                             if (res.ok) {
-                                onSearch();
                                 mini.showTips({
                                     content: res.msg,
                                     state: "success",
                                     x: "center",
-                                    y: "top",
+                                    y: "center",
                                     timeout: 3000
                                 });
+                                onSearch();
                             } else {
                                 mini.showTips({
                                     content: res.msg,
                                     state: "warning",
                                     x: "center",
-                                    y: "top",
+                                    y: "center",
                                     timeout: 3000
                                 });
                             }

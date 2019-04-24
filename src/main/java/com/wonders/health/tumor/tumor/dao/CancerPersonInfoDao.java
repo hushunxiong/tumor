@@ -22,6 +22,8 @@ import java.util.List;
 public interface CancerPersonInfoDao extends BaseDao<CancerPersonInfo> {
 	public CancerPersonInfo get(@Param("id") String id);
 
+    public CancerPersonInfo getById(@Param("id") String id,@Param("csnf") String csnf);
+
     public int delete(@Param("id") String id);
 
     public CancerPersonInfo getByCardnoAndYType(@Param("personcardno")String personcardno,@Param("type")String type);

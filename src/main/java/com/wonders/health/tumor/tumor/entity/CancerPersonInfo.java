@@ -136,6 +136,8 @@ public class CancerPersonInfo extends BaseEntity {
 
 	private Integer sc;
 
+	private Integer delRecordsFlag;
+
 	private String idNumber;   //大肠癌初筛编号
 	private String crcAssessmentResult; //大肠癌危险评估结果
 	private String firstFobtResult; //第一次便隐血结果
@@ -641,4 +643,12 @@ public class CancerPersonInfo extends BaseEntity {
     public void setLucCheckYear(String lucCheckYear) {
         this.lucCheckYear = lucCheckYear;
     }
+
+	public Integer getDelRecordsFlag() {
+		return delRecordsFlag;
+	}
+
+	public void setDelRecordsFlag(Integer delRecordsFlag) {
+		this.delRecordsFlag = delRecordsFlag;
+	}
 }
