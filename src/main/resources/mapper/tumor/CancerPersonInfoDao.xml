@@ -7,10 +7,10 @@
 	</sql>
 
 	<sql id="CancerPersonInfoListColumns">
-			P . ID AS "id",
-			P . NAME AS "name",
-			P .GENDER AS "gender",
-
+		P . ID AS "id",
+		P . NAME AS "name",
+		P .GENDER AS "gender",
+		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
 			crc.id  as  "crcCheckId",
 			crc.check_year as  "crcCheckYear",
 			1 as "crc",
@@ -20,30 +20,59 @@
 			fobt.FIRST_FOBT_RESULT AS "firstFobtResult",
 			fobt.SECOND_FOBT_RESULT AS "secondFobtResult",
 			fobt.fobt_result AS "fobtResult",
-
+		</if>
+		<if test=" licFlag !=null and licFlag !='' and licFlag=='1'.toString()" >
 			lic.id  as  "licCheckId",
 			lic.check_year as  "licCheckYear",
 			1 as "lic",
 			lic.CHECK_RESULT AS "licResult",
 			licas.ASSESSMENT_RESULT AS "licAssessmentResult",
 			licac.LIC_ASSIST_RESULT AS "licAssistResult",
-
+		</if>
+		<if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
 			sc.id  as  "scCheckId",
 			sc.check_year as  "scCheckYear",
 			1 as "sc",
 			sc.CHECK_RESULT AS "scResult",
-
+		</if>
+		<if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
 			luc.id  as  "lucCheckId",
 			luc.check_year as  "lucCheckYear",
 			1 as "luc",
 			luc.CHECK_RESULT AS "lucResult",
-
-			P .PERSONCARD AS "personCard"
+		</if>
+		P .PERSONCARD AS "personCard"
 	</sql>
 
 	<select id="getById" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
 		SELECT
-		<include refid="CancerPersonInfoListColumns"/>
+		    P . ID AS "id",
+			P . NAME AS "name",
+			P .GENDER AS "gender",
+			crc.id  as  "crcCheckId",
+			crc.check_year as  "crcCheckYear",
+			1 as "crc",
+			crc.ID_NUMBER AS "idNumber",
+			crc.CHECK_RESULT AS "crcResult",
+			crcas.ASSESSMENT_RESULT AS "crcAssessmentResult",
+			fobt.FIRST_FOBT_RESULT AS "firstFobtResult",
+			fobt.SECOND_FOBT_RESULT AS "secondFobtResult",
+			fobt.fobt_result AS "fobtResult",
+			lic.id  as  "licCheckId",
+			lic.check_year as  "licCheckYear",
+			1 as "lic",
+			lic.CHECK_RESULT AS "licResult",
+			licas.ASSESSMENT_RESULT AS "licAssessmentResult",
+			licac.LIC_ASSIST_RESULT AS "licAssistResult",
+			sc.id  as  "scCheckId",
+			sc.check_year as  "scCheckYear",
+			1 as "sc",
+			sc.CHECK_RESULT AS "scResult",
+			luc.id  as  "lucCheckId",
+			luc.check_year as  "lucCheckYear",
+			1 as "luc",
+			luc.CHECK_RESULT AS "lucResult",
+			P .PERSONCARD AS "personCard"
 		FROM cancer_person_info p
 			LEFT JOIN CRC_REGCASE crc ON (crc.MANAGEID = P . ID)  and  crc.check_year=#{csnf}
 			LEFT JOIN CRC_RISK_ASSESSMENT crcas ON (crc. ID = crcas.CRC_CHECK_ID)

@@ -69,8 +69,6 @@ public class CancerPersonInfoService {
     @Autowired
     private  CancerHistoryDao cancerHistoryDao;
 
-    @Autowired
-    private  DicHospitalInfoDao dicHospitalInfoDao;
 
 
     public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {

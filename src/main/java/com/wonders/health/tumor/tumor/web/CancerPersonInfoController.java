@@ -8,12 +8,10 @@ import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 
-import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import com.wonders.health.tumor.tumor.service.CancerPersonInfoService;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +19,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
-import com.wonders.health.tumor.common.model.DataGridSearch;
 
 import javax.validation.Valid;
 import java.util.Collections;
@@ -49,16 +45,16 @@ public class CancerPersonInfoController extends BaseController {
     @Value("${area_code}")
     private String areaCode;
 
-    @Value("${crcFlag}")
+    @Value("${crc_switch_flag}")
     private  Integer crcFlag;
 
-    @Value("${lucFlag}")
+    @Value("${luc_switch_flag}")
     private  Integer lucFlag;
 
-    @Value("${licFlag}")
+    @Value("${lic_switch_flag}")
     private  Integer licFlag;
 
-    @Value("${scFlag}")
+    @Value("${sc_switch_flag}")
     private  Integer scFlag;
 
     @Value("${yearNum}")

@@ -87,6 +87,8 @@ spring:
 health_base_url: http://10.1.93.111/health
 casServerUrlPrefix: http://10.1.93.111/cas
 shiroServerUrlPrefix: http://localhost:7001
+
+#初筛诊断(crc_switch_flag：大肠癌 luc_switch_flag：肝癌   lic_switch_flag：肺癌  sc_switch_flag：胃癌 )
 crc_switch_flag: 1
 lic_switch_flag: 1
 sc_switch_flag: 1
@@ -98,11 +100,6 @@ area_code: '310106000000'
 #最近n年
 yearNum: 10
 
-#初筛诊断(crcFlag：大肠癌 lucFlag：肝癌   licFlag：肺癌  scFlag：胃癌 )
-crcFlag: 1
-lucFlag: 1
-licFlag: 1
-scFlag: 1
 
 healthArchive: http://10.1.93.110/archive
 

@@ -5,7 +5,6 @@ package com.wonders.health.tumor.tumor.dao;
 
 import com.wonders.health.tumor.common.model.BaseDao;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
-import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchResultVo;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
