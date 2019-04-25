@@ -253,15 +253,8 @@
             if(r.delRecordsFlag>1){
                 h += '<a onclick="deleteRecords(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
             }else{
-                var data={};
-                data.id=r.id;
-                data.csnf=r.csnf;
-                data.crcCheckId=r.crcCheckId;
-                data.lurCheckId=r.lurCheckId;
-                data.licCheckId=r.licCheckId;
-                data.scCheckId=r.scCheckId;
-                data.historyDelflag=0;
-                h += '<a onclick="del(\'' +data + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+
+                h += '<a onclick="deleteRecord(\'' +r.id + '\',\''+ r.csnf + '\',\''+ r.crcCheckId +'\',\''+ r.lurCheckId +'\',\''+ r.licCheckId +'\',\''+ r.scCheckId +'\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
             }
         }
 
@@ -341,6 +334,20 @@
         });
     }
 
+
+    function deleteRecord(id,csnf,crcCheckId,lurCheckId,licCheckId,scCheckId) {
+        var data={};
+        data.id=id;
+        data.csnf=csnf;
+        data.crcCheckId=crcCheckId;
+        data.lurCheckId=lurCheckId;
+        data.licCheckId=licCheckId;
+        data.scCheckId=scCheckId;
+        data.historyDelflag=0;
+        del(data);
+    }
+
+
     function del(data) {
         mini.confirm("确认是否删除", "确定？",
             function (action) {
@@ -356,7 +363,7 @@
                                     state: "success",
                                     x: "center",
                                     y: "center",
-                                    timeout: 3000
+                                    timeout: 2000
                                 });
                                 onSearch();
                             } else {
@@ -365,7 +372,7 @@
                                     state: "warning",
                                     x: "center",
                                     y: "center",
-                                    timeout: 3000
+                                    timeout: 2000
                                 });
                             }
                         }
