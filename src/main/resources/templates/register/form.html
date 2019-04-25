@@ -768,7 +768,8 @@ th:data="${years}" th:value="${checkYear}"
                                 <tr>
                                     <td class="bg-white" style="border: none;">
                                         <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="crcAdd(this)">+ </a>
-                                        <a href="javascript:void(0);" style="text-decoration:none" onclick="crcRmv(this)">-</a></td>
+                                        <a href="javascript:void(0);" style="text-decoration:none" onclick="crcRmv(this)">-</a>
+                                    </td>
                                     <td>亲属关系</td>
                                     <td class="bg-white">
                                         <input id="crcrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
@@ -807,9 +808,12 @@ th:data="${years}" th:value="${checkYear}"
                 </tr>
                 <tr>
                     <td colspan="2" class="bg-white" style="padding:0px;">
-                        <table class="table_new table_new6">
+                        <table class="table_new table_new6" id="licInnerTable">
                             <tr>
-                                <td class="bg-white" style="border: none;">+</td>
+                                <td class="bg-white" style="border: none;">
+                                    <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="licAdd(this)">+ </a>
+                                    <a href="javascript:void(0);" style="text-decoration:none" onclick="licRmv(this)">-</a>
+                                </td>
                                 <td>亲属关系</td>
                                 <td class="bg-white">
                                     <input id="licrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
@@ -849,9 +853,11 @@ th:data="${years}" th:value="${checkYear}"
                 </tr>
                 <tr>
                     <td colspan="2" class="bg-white" style="padding:0px;">
-                        <table class="table_new table_new6">
+                        <table class="table_new table_new6" id="scInnerTable">
                             <tr>
-                                <td class="bg-white" style="border: none;">+</td>
+                                <td class="bg-white" style="border: none;"><a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="scAdd(this)">+ </a>
+                                    <a href="javascript:void(0);" style="text-decoration:none" onclick="scRmv(this)">-</a>
+                                </td>
                                 <td>亲属关系</td>
                                 <td class="bg-white">
                                     <input id="screlation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
@@ -891,9 +897,11 @@ th:data="${years}" th:value="${checkYear}"
                 </tr>
                 <tr>
                     <td colspan="2" class="bg-white" style="padding:0px;">
-                        <table class="table_new table_new6">
+                        <table class="table_new table_new6"  id="lucInnerTable">
                             <tr>
-                                <td class="bg-white" style="border: none;">+</td>
+                                <td class="bg-white" style="border: none;"> <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="lucAdd(this)">+ </a>
+                                    <a href="javascript:void(0);" style="text-decoration:none" onclick="lucRmv(this)">-</a>
+                                </td>
                                 <td>亲属关系</td>
                                 <td class="bg-white">
                                     <input id="lucrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
@@ -919,6 +927,7 @@ th:data="${years}" th:value="${checkYear}"
                 </tbody>
             </table>
         </div>
+
 
         <div class="title_tip mt-30">危险度评估结果</div>
         <table class="table_new table_new5 mt-10">
@@ -1536,24 +1545,9 @@ th:data="${years}" th:value="${checkYear}"
         $("#azsInnerTable tr:eq(" + tr[0].rowIndex + ")").remove();
     }
 
-    //大肠癌亲属变更
-    function crcHistoryChanged(e) {
-        var crcHistory = mini.get("crcHistory").getValue();
-        //有
-        if (crcHistory == "1") {
-            $("#crcazsTable").children(":first").children(":eq(1)").show();
-        } else {
-            $("#crcazsTable").children(":first").children(":eq(1)").hide();
-        }
-    }
-    function crcAdd(e){
-        var tr = $(e).closest('tr');
+    function getNewRow(){
         var newRow="";
-        newRow+=" <tr>" +
-            "            <td class=\"bg-white\" style=\"border: none;\">" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"crcAdd(this)\">+ </a>" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"crcRmv(this)\">-</a>" +
-            "           </td>" +
+        newRow+=
             "            <td>亲属关系</td>" +
             "            <td class=\"bg-white\">" +
             "                    <input class=\"mini-combobox\" showNullItem=\"true\" width=\"43%\" emptyText=\"请选择\"" +
@@ -1567,13 +1561,38 @@ th:data="${years}" th:value="${checkYear}"
             "            <td width=\"25%\" class=\"bg-white\">" +
             "                     <input class=\"mini-radiobuttonlist\"" +
             "                              th:data=\"${#dic.generals('60019')}\" textField=\"name\" valueField=\"code\" />" +
-            "             </td>" +
+            "            </td>" +
             "     </tr>";
+        return newRow;
+    }
+
+    //大肠癌亲属变更
+    function crcHistoryChanged(e) {
+        var crcHistory = mini.get("crcHistory").getValue();
+        //有
+        if (crcHistory == "1") {
+            $("#crcazsTable").children(":first").children(":eq(1)").show();
+        } else {
+            $("#crcazsTable").children(":first").children(":eq(1)").hide();
+        }
+    }
+    function crcAdd(e){
+        var newRow='';
+        newRow+=" <tr>" +
+        "            <td class=\"bg-white\" style=\"border: none;\">" +
+        "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"crcAdd(this)\">+ </a>" +
+        "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"crcRmv(this)\">-</a>" +
+        "           </td>"
+
+        newRow+=getNewRow();
+
+
         $("#crcInnerTable tbody").append(newRow);
         mini.parse();
     }
     function crcRmv(e) {
         var tr = $(e).closest('tr');
+        alert(tr[0].rowIndex )
         $("#crcInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
     }
 
@@ -1588,6 +1607,26 @@ th:data="${years}" th:value="${checkYear}"
         }
     }
 
+    function licAdd(e){
+        var newRow='';
+        newRow+=" <tr>" +
+            "            <td class=\"bg-white\" style=\"border: none;\">" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"licAdd(this)\">+ </a>" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"licRmv(this)\">-</a>" +
+            "           </td>"
+
+        newRow+=getNewRow();
+
+
+        $("#licInnerTable tbody").append(newRow);
+        mini.parse();
+    }
+    function licRmv(e) {
+        var tr = $(e).closest('tr');
+        alert(tr[0].rowIndex )
+        $("#licInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
+    }
+
     //胃癌亲属变更
     function scHistoryChanged(e) {
         var scHistory = mini.get("scHistory").getValue();
@@ -1599,6 +1638,25 @@ th:data="${years}" th:value="${checkYear}"
         }
     }
 
+    function scAdd(e){
+        var newRow='';
+        newRow+=" <tr>" +
+            "            <td class=\"bg-white\" style=\"border: none;\">" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"scAdd(this)\">+ </a>" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"scRmv(this)\">-</a>" +
+            "           </td>"
+
+        newRow+=getNewRow();
+
+
+        $("#scInnerTable tbody").append(newRow);
+        mini.parse();
+    }
+    function scRmv(e) {
+        var tr = $(e).closest('tr');
+        alert(tr[0].rowIndex )
+        $("#scInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
+    }
 
     //肺癌亲属变更
     function lucHistoryChanged(e) {
@@ -1610,7 +1668,25 @@ th:data="${years}" th:value="${checkYear}"
             $("#lucazsTable").children(":first").children(":eq(1)").hide();
         }
     }
+    function lucAdd(e){
+        var newRow='';
+        newRow+=" <tr>" +
+            "            <td class=\"bg-white\" style=\"border: none;\">" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"lucAdd(this)\">+ </a>" +
+            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"lucRmv(this)\">-</a>" +
+            "           </td>"
 
+        newRow+=getNewRow();
+
+
+        $("#lucInnerTable tbody").append(newRow);
+        mini.parse();
+    }
+    function lucRmv(e) {
+        var tr = $(e).closest('tr');
+        alert(tr[0].rowIndex )
+        $("#lucInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
+    }
 
 
 
@@ -1634,6 +1710,20 @@ th:data="${years}" th:value="${checkYear}"
             return;
         }else{
             params=form.getData(true);
+
+            var rows = $('#overtimeTable').find('tr');
+            var json = "[ ";
+            for(var i=0; i< rows.length - 1; i++) {//最后一条是空白，不计入
+                var overtime = rows[i].cells[1].children[0].value;
+
+                var overtimeNum = rows[i].cells[3].children[0].value;
+                var multi = rows[i].cells[5].children[0].value;
+                var staId = rows[i].cells[7].children[1].value;
+                json += '{ "overtime" : "' + overtime + '", "overtimeNum" : "' + overtimeNum + '", "multi" : "' + multi + '", "staId" : "' + staId + '"} , ';
+            }
+            json = json.substring(0, json.length - 2) + " ]";
+
+
             mini.mask({
                 el: document.body,
                 cls: 'mini-mask-loading',
