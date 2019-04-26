@@ -133,6 +133,11 @@ public class CancerPersonInfoController extends BaseController {
         }
     }
 
+    /**
+     * 初筛信息删除
+     * @param info
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "delRecords", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public AjaxReturn<String> delRecords(CancerPersonInfo info) {
@@ -151,11 +156,4 @@ public class CancerPersonInfoController extends BaseController {
 
     }
 
-    //初筛一览列表
-
-    @RequestMapping(value = {"SearchResultList"}, method = RequestMethod.GET)
-    @ResponseBody
-    public List<CancerPersonInfo> cancerPersonInfoSearchResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
-        return   cancerPersonInfoService.cancerPersonInfoSearchResult(cancerPersonInfoSearchVo);
-    }
 }

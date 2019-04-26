@@ -9,7 +9,6 @@ import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
-import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class CancerPersonInfoService {
     private CancerPersonInfoDao cancerPersonInfoDao;
 
     @Autowired
-    private CrcRegcaseDao crcRegcaseDao; //
+    private CrcRegcaseDao crcRegcaseDao;
 
     @Autowired
     private CrcRiskAssessmentDao crcRiskAssessmentDao;
@@ -108,6 +107,7 @@ public class CancerPersonInfoService {
     }
 
 
+
     public CancerPersonInfo findById(String id) {
         return cancerPersonInfoDao.get(id);
     }
@@ -116,10 +116,6 @@ public class CancerPersonInfoService {
         return cancerPersonInfoDao.getById(id,csnf);
     }
 
-    //初筛一览列表
-    public List<CancerPersonInfo> cancerPersonInfoSearchResult(CancerPersonInfoSearchVo cancerPersonInfoSearchVo){
-        return cancerPersonInfoDao.cancerPersonInfoResultList(cancerPersonInfoSearchVo);
-    }
 
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId) {
@@ -146,6 +142,10 @@ public class CancerPersonInfoService {
         cancerPersonInfoDao.delete(id);
     }
 
+    /**
+     * 初筛信息删除
+     * @param info
+     */
     @Transactional(readOnly = false)
     public void deleteByRegcaseId(CancerPersonInfo info) {
 

@@ -45,8 +45,8 @@
                             </div>
                         </td>
                         <td width="100px" align="center">
-                            <span  onclick="toggleVisibility(div1)"><strong style="color:#3f93d4">高级搜索&nbsp;<img
-                                    th:src="@{/images/pp_down.png}" src="../static/images/pp_down.png" id="pctid"></strong></span></td>
+                            <a herf="#" onclick="toggleVisibility(div1)"><strong style="color:#3f93d4">高级搜索&nbsp;<img
+                                    th:src="@{/images/pp_up.png}" src="../static/images/pp_up.png" id="pctid"></strong></a></td>
                         <td align="left"></td>
                         <td style="width: 200px" align="right">
 
@@ -60,24 +60,9 @@
                             <input id="id" name="id" type="text" class="mini-textbox" width="63%">
                         </div>
                         <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
-                            <select id="csnf" name="csnf" class="select-default radius" style="width:50%">
+                            <select id="csnf" name="csnf" class="select-default radius" style="width:55%">
                                     <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  ></option>
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="mini-row">
-                        <div class="mini-col-3">
-                            <label class="mr-5">登记机构所属区：</label>
-                            <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="45%"
-                                   th:data="${#auth.getAreas(areaCode)}"
-                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sfy' ? '':areaCode}"  th:showNullItem="${role =='sfy' ? true:false}"  th:disabled="${role =='sfy' ? false:true}"/>
-                        </div>
-                        <div class="mini-col-3">
-                            <label class="mr-5">登记机构：</label>
-
-                            <input id="regorg" name="regorg"  class="mini-combobox" width="55%"
-                                   textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                         </div>
                         <div class="mini-col-4">
                             <label class="mr-5">初筛登记日期：</label>
@@ -89,13 +74,28 @@
                             <input id="endDateFrom" name="endDateFrom" class="mini-datepicker"
                                    value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
                         </div>
+                    </div>
 
-                        <div class="mini-col-2">
-                            <label class="mr-5">初筛状态：</label>
-                            <input class="mini-combobox form-control" id="status" name="status" style="width:48%"
-                                   emptyText="请选择" textField="name" valueField="code"
-                                   showNullItem="true" th:data="${#dic.generals('60003')}"/>
+                    <div class="mini-row">
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构所属区：</label>
+                            <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="47%"
+                                   th:data="${#auth.getAreas(areaCode)}"
+                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sfy' ? '':areaCode}"  th:showNullItem="${role =='sfy' ? true:false}"  th:disabled="${role =='sfy' ? false:true}"/>
                         </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构：</label>
+
+                            <input id="regorg" name="regorg"  class="mini-combobox" width="55%"
+                                   textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">初筛状态：</label>
+                            <input class="mini-combobox form-control" id="status" name="status"
+                                   emptyText="请选择" textField="name" valueField="code" style="width:50%"
+                                   showNullItem="true" th:data="${#dic.generals('60003')}" />
+                        </div>
+
                     </div>
                     <div class="mini-row" th:if="${crcFlag==1?true:false}">
                         <div class="mini-col-12" >
@@ -110,15 +110,14 @@
                                 <input id="firstFobtResult" name="firstFobtResult" showNullItem="true" class="mini-combobox" width="38%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
-                            <div class="mini-col-4" >
+                            <div class="mini-col-3" >
                                 <label class="mr-5">第二次便隐血结果：</label>
 
-                                <input id="secondFobtResult" name="secondFobtResult" showNullItem="true" class="mini-combobox" width="35%"
+                                <input id="secondFobtResult" name="secondFobtResult" showNullItem="true" class="mini-combobox" width="33%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
-                            <div class="mini-col-2" >
+                            <div class="mini-col-3" >
                                 <label class="mr-5">便隐血检查结果：</label>
-
                                 <input id="fobtResult" name="fobtResult" showNullItem="true" class="mini-combobox" width="35%"
                                        emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                             </div>
@@ -128,23 +127,22 @@
                     <div class="mini-row">
                         <div class="mini-col-3"th:if="${crcFlag==1?true:false}">
                              <label class="mr-5">大肠癌判定结果：</label>
-                            <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox" width="45%"
+                            <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox" width="46%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                         <div class="mini-col-3" th:if="${scFlag==1?true:false}">
                             <label class="mr-5">胃癌判定结果：</label>
-                            <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="45%"
+                            <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="47%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-4" th:if="${licFlag==1?true:false}">
+                        <div class="mini-col-3" th:if="${licFlag==1?true:false}">
                             <label class="mr-5">肺癌判定结果：</label>
-
-                            <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="45%"
+                            <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="42%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-2" th:if="${lucFlag==1?true:false}">
+                        <div class="mini-col-3" th:if="${lucFlag==1?true:false}">
                             <label class="mr-5">肝癌判定结果：</label>
-                            <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="38%"
+                            <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="39%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                     </div>
@@ -231,14 +229,20 @@
        getHospitals();
     });
 
+    var ctxStatic ='..';
     function toggleVisibility(div1) {
-        if (div1.style.display == "") {
-            div1.style.display = "none";
-            document.getElementById("pctid").src = '../static/images/pp_up.png';
+
+        if (div1.style.display == 'none'){
+            div1.style.display = 'block';
+            document.getElementById("pctid").src =ctxStatic+ '/images/pp_down.png';
+        } else if (div1.style.display == 'block') {
+            div1.style.display = 'none';
+            document.getElementById("pctid").src = ctxStatic+'/images/pp_up.png';
         } else {
-            div1.style.display = "";
-            document.getElementById("pctid").src = '../static/images/pp_down.png';
+            div1.style.display = 'block';
+            document.getElementById("pctid").src = ctxStatic+'/images/pp_down.png';
         }
+
     }
 
 
@@ -257,7 +261,6 @@
                 h += '<a onclick="deleteRecord(\'' +r.id + '\',\''+ r.csnf + '\',\''+ r.crcCheckId +'\',\''+ r.lurCheckId +'\',\''+ r.licCheckId +'\',\''+ r.scCheckId +'\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
             }
         }
-
         return h;
     }
 

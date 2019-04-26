@@ -21,14 +21,18 @@ import java.util.List;
 public interface CancerPersonInfoDao extends BaseDao<CancerPersonInfo> {
 	public CancerPersonInfo get(@Param("id") String id);
 
+    /**
+     * 根据个人管理编号和初筛年份查询初筛信息
+     * @param id
+     * @param csnf
+     * @return
+     */
     public CancerPersonInfo getById(@Param("id") String id,@Param("csnf") String csnf);
 
     public int delete(@Param("id") String id);
 
     public CancerPersonInfo getByCardnoAndYType(@Param("personcardno")String personcardno,@Param("type")String type);
 
-    //初筛一览列表显示
-    List<CancerPersonInfo> cancerPersonInfoResultList(CancerPersonInfoSearchVo cancerPersonInfoSearchVo);
 
     void updateChange(@Param("id")String id);
 }
