@@ -162,7 +162,7 @@
                     </div>
                     <div class="mini-row">
                         <div class="mini-col-4">
-                            <button class="my-btn my-btn-blue" onclick="goto()">新增初筛登记</button>
+                            <button class="my-btn my-btn-blue" onclick="goto('','')">新增初筛登记</button>
                         </div>
                     </div>
 
@@ -266,6 +266,9 @@
 
 
     function goto(id,csnf) {
+        if(id==null||id==''||id==undefined){
+            csnf=$("#csnf").val();
+        }
         var url = "../screening/form/?manageId="+id+"&checkYear="+csnf;
         mini.mask({
             el: document.body,
