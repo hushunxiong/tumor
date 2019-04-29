@@ -728,17 +728,17 @@ th:data="${years}" th:value="${checkYear}"
                                     </td>
                                     <td>癌症种类</td>
                                     <td class="bg-white">
-                                        <input class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                        <input class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择" name="icd10"
                                                th:data="${#dic.generals('60020')}"
                                                textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                                     </td>
                                     <td>年龄</td>
                                     <td width="15%" class="bg-white">
-                                        <input class="mini-textbox" width="100" vtype="int"/>
+                                        <input class="mini-textbox" name="age" width="100" vtype="int"/>
                                     </td>
                                     <td>诊断医院</td>
                                     <td width="25%" class="bg-white">
-                                        <input class="mini-autocomplete" style="width:100%"
+                                        <input class="mini-autocomplete" style="width:100%" name="hospitalCode"
                                                textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
                                                th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
                                     </td>
@@ -772,18 +772,18 @@ th:data="${years}" th:value="${checkYear}"
                                     </td>
                                     <td>亲属关系</td>
                                     <td class="bg-white">
-                                        <input id="crcrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                        <input id="crcrelation1" class="mini-combobox" name="relation" showNullItem="true" width="43%" emptyText="请选择"
                                                th:data="${#dic.generals('60018')}"
                                                textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                                     </td>
                                     <td>发病年龄</td>
                                     <td width="15%" class="bg-white">
-                                        <input id="crcage1" class="mini-textbox"
+                                        <input id="crcage1" class="mini-textbox" name="age"
                                                width="100" vtype="int"/>
                                     </td>
                                     <td>是否在世</td>
                                     <td width="25%" class="bg-white">
-                                        <input id="crclived1" class="mini-radiobuttonlist"
+                                        <input id="crclived1" class="mini-radiobuttonlist" name="lived"
                                                th:data="${#dic.generals('60019')}"
                                                textField="name" valueField="code" />
                                     </td>
@@ -816,18 +816,18 @@ th:data="${years}" th:value="${checkYear}"
                                 </td>
                                 <td>亲属关系</td>
                                 <td class="bg-white">
-                                    <input id="licrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                    <input id="licrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择" name="relation"
                                            th:data="${#dic.generals('60018')}"
                                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                                 </td>
                                 <td>发病年龄</td>
                                 <td width="15%" class="bg-white">
-                                    <input id="licage1" class="mini-textbox"
+                                    <input id="licage1" class="mini-textbox" name="age"
                                            width="100" vtype="int"/>
                                 </td>
                                 <td>是否在世</td>
                                 <td width="25%" class="bg-white">
-                                    <input id="liclived1" class="mini-radiobuttonlist"
+                                    <input id="liclived1" class="mini-radiobuttonlist" name="lived"
                                            th:data="${#dic.generals('60019')}"
                                            textField="name" valueField="code" />
                                 </td>
@@ -861,17 +861,17 @@ th:data="${years}" th:value="${checkYear}"
                                 <td>亲属关系</td>
                                 <td class="bg-white">
                                     <input id="screlation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                                           th:data="${#dic.generals('60018')}"
+                                           th:data="${#dic.generals('60018')}" name="relation"
                                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                                 </td>
                                 <td>发病年龄</td>
                                 <td width="15%" class="bg-white">
-                                    <input id="scage1" class="mini-textbox"
+                                    <input id="scage1" class="mini-textbox" name="age"
                                            width="100" vtype="int"/>
                                 </td>
                                 <td>是否在世</td>
                                 <td width="25%" class="bg-white">
-                                    <input id="sclived1" class="mini-radiobuttonlist"
+                                    <input id="sclived1" class="mini-radiobuttonlist" name="lived"
                                            th:data="${#dic.generals('60019')}"
                                            textField="name" valueField="code" />
                                 </td>
@@ -905,17 +905,17 @@ th:data="${years}" th:value="${checkYear}"
                                 <td>亲属关系</td>
                                 <td class="bg-white">
                                     <input id="lucrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                                           th:data="${#dic.generals('60018')}"
+                                           th:data="${#dic.generals('60018')}" name="relation"
                                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                                 </td>
                                 <td>发病年龄</td>
                                 <td width="15%" class="bg-white">
-                                    <input id="lucage1" class="mini-textbox"
+                                    <input id="lucage1" class="mini-textbox" name="age"
                                            width="100" vtype="int"/>
                                 </td>
                                 <td>是否在世</td>
                                 <td width="25%" class="bg-white">
-                                    <input id="luclived1" class="mini-radiobuttonlist"
+                                    <input id="luclived1" class="mini-radiobuttonlist" name="lived"
                                            th:data="${#dic.generals('60019')}"
                                            textField="name" valueField="code" />
                                 </td>
@@ -1694,6 +1694,8 @@ th:data="${years}" th:value="${checkYear}"
 
 
     function save(){
+        var id=$("#id").val();  //个人管理编号
+
         var params={};
         crcNumerChange();//单独再验证一次大肠癌id
         var form = new mini.Form("#form1");
@@ -1710,19 +1712,83 @@ th:data="${years}" th:value="${checkYear}"
             return;
         }else{
             params=form.getData(true);
+            params.personInfo.id=id;
 
-            var rows = $('#overtimeTable').find('tr');
-            var json = "[ ";
-            for(var i=0; i< rows.length - 1; i++) {//最后一条是空白，不计入
-                var overtime = rows[i].cells[1].children[0].value;
+            var azsArray=new Array();
+            $("#azsInnerTable").find("td").each(function(){
+                var json = {};
+                var flag = false;
+                $(this).find("[value]").each(function(){
+                    flag = true;
+                    json[$(this).attr("name")] = $(this).val();
+                });
+                if (flag) {
+                    azsArray.push(json);
+                }
+            });
 
-                var overtimeNum = rows[i].cells[3].children[0].value;
-                var multi = rows[i].cells[5].children[0].value;
-                var staId = rows[i].cells[7].children[1].value;
-                json += '{ "overtime" : "' + overtime + '", "overtimeNum" : "' + overtimeNum + '", "multi" : "' + multi + '", "staId" : "' + staId + '"} , ';
-            }
-            json = json.substring(0, json.length - 2) + " ]";
 
+
+            var jsonArr = new Array();
+            $("#crcInnerTable").find("td").each(function(){
+                var json = {};
+                var flag = false;
+                json[cancerType]='01';
+                $(this).find("[value]").each(function(){
+                    flag = true;
+                    json[$(this).attr("name")] = $(this).val();
+                });
+                if (flag) {
+                    jsonArr.push(json);
+                }
+            });
+            $("#licInnerTable").find("td").each(function(){
+                var json = {};
+                var flag = false;
+                json[cancerType]='02';
+                $(this).find("[value]").each(function(){
+                    flag = true;
+                    json[$(this).attr("name")] = $(this).val();
+                });
+                if (flag) {
+                    jsonArr.push(json);
+                }
+            });
+            $("#scInnerTable").find("td").each(function(){
+                var json = {};
+                var flag = false;
+                json[cancerType]='03';
+                $(this).find("[value]").each(function(){
+                    flag = true;
+                    json[$(this).attr("name")] = $(this).val();
+                });
+                if (flag) {
+                    jsonArr.push(json);
+                }
+            });
+
+            var xhArr = new Array();
+            $("#lucInnerTable").find("td").each(function(){
+                var json = {};
+                var flag = false;
+                json[icd10]='04';
+                $(this).find("[value]").each(function(){
+                    flag = true;
+                    json[$(this).attr("name")] = $(this).val();
+                });
+                if (flag) {
+                    xhArr.push(json);
+                }
+            });
+
+
+            var azsTemp =JSON.stringify(azsArray);//把数组转换成json
+            var jsonTemp =JSON.stringify(jsonArr);
+            var xhTemp =JSON.stringify(xhArr);
+
+            params.historyList=azsTemp;
+            params.familyCancerHistoryList=jsonTemp;
+            params.lucFamilyCancerHistoryXHList=xhTemp;
 
             mini.mask({
                 el: document.body,
@@ -1733,10 +1799,10 @@ th:data="${years}" th:value="${checkYear}"
                 url:"/tumor/screening/save",
                 data:params,
                 type:"POST",
-                dataType:"json",
+                dataType: "json",
                 success:function(res){
                     // mini.unmask(document.body);
-                    if(res.ok){ //检查过
+                    if(res.ok){ //保存成功
                         mini.showTips({
                             content: res.msg,
                             state: "success",
@@ -1761,8 +1827,6 @@ th:data="${years}" th:value="${checkYear}"
                             y: "center",
                             timeout: 2000
                         });
-
-
                     }
                 }
             })

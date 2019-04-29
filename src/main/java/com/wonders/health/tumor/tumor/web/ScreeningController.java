@@ -11,6 +11,7 @@ import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.*;
 import com.wonders.health.tumor.tumor.service.*;
 import com.wonders.health.tumor.tumor.vo.ScreeningVo;
+import freemarker.template.utility.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +113,9 @@ public class ScreeningController extends BaseController {
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear) {
+        if(StringUtils.isBlank(checkYear)){
+            checkYear= DateUtils.getYear();
+        }
 
         List<DataOption> years = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
@@ -355,8 +359,32 @@ public class ScreeningController extends BaseController {
     @ResponseBody
     @Transactional(readOnly = true)
     public AjaxReturn save(ScreeningVo screeningVo){
-
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
+
+        //历史表
+        List<CancerHistory> historyList=screeningVo.getHistoryList();
+
+        historyList.stream().forEach(history->{
+            history.setCancerName(getCancerName(history.getIcd10()));
+        });
+
+        //亲属历史表
+        List<FamilyCancerHistory>familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();
+
+        familyCancerHistoryList.stream().forEach(family->{
+            family.setIcd10(family.getCancerType());
+            family.setCancerName(getCancerName(family.getCancerType()));
+        });
+
+
+        //亲属历史表-徐汇
+        List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();
+
+        lucFamilyCancerHistoryXHList.stream().forEach(family->{
+            family.setCancerName(getCancerName(family.getIcd10()));
+        });
+
+
         User user=getSessionUser();
 
         if(personInfo.getId()==null){  //新增
@@ -385,6 +413,35 @@ public class ScreeningController extends BaseController {
                 scRegcaseService.insert(scRegcaseDao,screeningVo.getScRegcase());
                 scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
             }
+
+            //插入历史癌症表
+            historyList.stream().forEach(history->{
+                history.setId(IdGen.uuid());
+                history.setManageid(personInfo.getId());
+                history.setCheckYear(Integer.parseInt(screeningVo.getCheckYear()));
+                history.setCreateBy(user.getId());
+                history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
+                cancerHistoryService.insert(cancerHistoryDao,history);
+
+            });
+
+            //亲属历史表
+            familyCancerHistoryList.stream().forEach(family->{
+                family.setId(IdGen.uuid());
+                family.setCheckId(personInfo.getId());
+                family.setCreateBy(user.getId());
+                familyCancerHistoryService.insert(familyCancerHistoryDao,family);
+            });
+
+            //亲属历史表-徐汇
+            lucFamilyCancerHistoryXHList.stream().forEach(luc->{
+                luc.setId(IdGen.uuid());
+                luc.setCheckId(user.getId());
+                luc.setCreateBy(user.getId());
+                lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
+            });
+
+
         }else{
             personInfo.initByUpdate(user.getId());
             cancerPersonInfoService.saveOrUpdate(personInfo,getSessionUser().getId());
@@ -406,9 +463,39 @@ public class ScreeningController extends BaseController {
                 scRegcaseService.update(scRegcaseDao,screeningVo.getScRegcase());
                 scRiskAssessmentService.update(scRiskAssessmentDao,screeningVo.getScRisk());
             }
+
+            //插入历史癌症表
+            historyList.stream().forEach(history->{
+                history.setManageid(personInfo.getId());
+                history.setCheckYear(Integer.parseInt(screeningVo.getCheckYear()));
+                history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
+                history.setUpdateBy(user.getId());
+                history.setIschange("1");
+                cancerHistoryService.update(cancerHistoryDao,history);
+
+            });
+
+            //亲属历史表
+            familyCancerHistoryList.stream().forEach(family->{
+                family.setCheckId(personInfo.getId());
+                family.setUpdateBy(user.getId());
+                familyCancerHistoryService.update(familyCancerHistoryDao,family);
+            });
+
+            //亲属历史表-徐汇
+            lucFamilyCancerHistoryXHList.stream().forEach(luc->{
+                luc.setCheckId(user.getId());
+                luc.setUpdateBy(user.getId());
+                lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
+            });
         }
 
         return new AjaxReturn(true,"保存成功",personInfo.getId());
+    }
+
+    //根据字典表 60020 获取癌症名称
+    private String getCancerName(String cancerType){
+       return DictUtils.generalForMap("60020").get(cancerType).getName();
     }
 
 }

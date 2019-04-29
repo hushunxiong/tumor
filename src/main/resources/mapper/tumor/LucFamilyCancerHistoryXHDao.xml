@@ -70,15 +70,18 @@
 	
 	<insert id="insert">
 		INSERT INTO luc_family_cancer_history_XH(
-		id,check_id,relation,icd10,cancer_name,age,lived,del_flag,create_by,create_date,update_by,update_date
+		id,check_id,relation,icd10,cancer_name,age,lived,del_flag,create_by,create_date
 		) VALUES (
-		#{id},#{checkId},#{relation},#{icd10},#{cancerName},#{age},#{lived},#{delFlag},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		#{id},#{checkId},#{relation},#{icd10},#{cancerName},#{age},#{lived},'0',#{createBy},SYSDATE
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE luc_family_cancer_history_XH SET
-		id = #{id},check_id = #{checkId},relation = #{relation},icd10 = #{icd10},cancer_name = #{cancerName},age = #{age},lived = #{lived},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		check_id = #{checkId},relation = #{relation},icd10 = #{icd10},
+		cancer_name = #{cancerName},age = #{age},lived = #{lived},
+		update_by = #{updateBy},update_date =SYSDATE
+
 		WHERE id = #{id}
 	</update>
 

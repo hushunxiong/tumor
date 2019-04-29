@@ -79,15 +79,21 @@
 	
 	<insert id="insert">
 		INSERT INTO CANCER_HISTORY(
-		id,manageid,check_year,icd10,cancer_name,age,hospital_code,hospital_name,ischange,del_flag,create_by,create_date,update_by,update_date
+		id,manageid,check_year,
+		icd10,cancer_name,age,hospital_code,hospital_name,
+		ischange,del_flag,create_by,create_date
 		) VALUES (
-		#{id},#{manageid},#{checkYear},#{icd10},#{cancerName},#{age},#{hospitalCode},#{hospitalName},#{ischange},#{delFlag},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		#{id},#{manageid},#{checkYear},
+		#{icd10},#{cancerName},#{age},#{hospitalCode},#{hospitalName},
+		'2','0',#{createBy},SYSDATE
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE CANCER_HISTORY SET
-		id = #{id},manageid = #{manageid},check_year = #{checkYear},icd10 = #{icd10},cancer_name = #{cancerName},age = #{age},hospital_code = #{hospitalCode},hospital_name = #{hospitalName},ischange = #{ischange},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		cancer_name = #{cancerName},age = #{age},
+		hospital_code = #{hospitalCode},hospital_name = #{hospitalName},
+		ischange = #{ischange},update_by = #{updateBy},update_date = SYSDATE
 		WHERE id = #{id}
 	</update>
 
