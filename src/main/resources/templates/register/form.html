@@ -707,7 +707,7 @@ th:data="${years}" th:value="${checkYear}"
             </table>
         </div>
 
-        <div>
+        <!--<div>
             <table id="azsTable" class="table_new table_new5 mt-10">
                 <tbody>
                     <tr>
@@ -749,6 +749,9 @@ th:data="${years}" th:value="${checkYear}"
                     </tr>
                 </tbody>
             </table>
+        </div>-->
+
+        <div th:replace="/common/selfCancer :: selfSelect">
         </div>
 
         <div th:if="${crcFlag} eq '1'">
@@ -1507,10 +1510,10 @@ th:data="${years}" th:value="${checkYear}"
         var azsHistory = mini.get("azsHistory").getValue();
         //有
         if (azsHistory == "1") {
-            $("#azsTable").children(":first").children(":eq(1)").show();
+            addSelfRow(null);
             azsTrue=true;
         } else {
-            $("#azsTable").children(":first").children(":eq(1)").hide();
+            $("#azsTable").children(":first").children(":gt(0)").remove();
             azsTrue=false;
         }
     }
