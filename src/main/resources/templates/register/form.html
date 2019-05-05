@@ -11,14 +11,14 @@
 <div class="content pd-10" style="width:auto; overflow: hidden;">
     <div id="form1">
         <div class="title_tip mt-30">基本信息</div>
-        <span style="display: none" id="id" th:value="${personInfo.id}"></span>
+        <span style="display: none" id="id" name="personInfo.id" th:value="${personInfo.id}"></span>
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr>
                 <td width="10%"><span class="red-span">*</span>筛查年份</td>
                 <td width="20%">
                     <input id="checkYear" name="checkYear" class="mini-combobox" showNullItem="true"  width="47%" emptyText="请选择"
-th:data="${years}" th:value="${checkYear}"
+                           th:data="${years}" th:value="${checkYear}"
                            textField="text" valueField="id" allowInput="true" valueFromSelect="true" required="true" />
                 </td>
                 <td width="10%"><span class="red-span">*</span>证件类型</td>
@@ -29,7 +29,7 @@ th:data="${years}" th:value="${checkYear}"
                 </td>
                 <td width="10%"><span class="red-span">*</span>证件号码</td>
                 <td>
-                    <input id="personcard" name="personInfo.personcard" class="mini-textbox" vtype="IdCard" emptyText="请输入" th:value="${personInfo.personcard}" maxLength="18" required="true" onvaluechanged="personcardChange"/>
+                    <input id="personcard" name="personInfo.personcard" class="mini-textbox" vtype="IdCard" emptyText="请输入" th:value="${personInfo.personcard}" maxLength="18" required="true" onvaluechanged="personcardChange" width="90%"/>
                 </td>
             </tr>
             <tr>
@@ -707,230 +707,34 @@ th:data="${years}" th:value="${checkYear}"
             </table>
         </div>
 
-        <!--<div>
-            <table id="azsTable" class="table_new table_new5 mt-10">
-                <tbody>
-                    <tr>
-                        <td width="20%">有无癌症史</td>
-                        <td width="80%" class="text-l">
-                            <input id="azsHistory"  class="mini-radiobuttonlist"
-                                   th:data="${#dic.generals('60007')}"
-                                   textField="name" valueField="code" onvaluechanged="azsChanged"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="bg-white" style="padding:0px;">
-                            <table class="table_new table_new6" id="azsInnerTable">
-                                <tr>
-                                    <td class="bg-white" style="border: none;">
-                                        <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="azsAdd(this)">+ </a>
-                                        <a href="javascript:void(0);" style="text-decoration:none" onclick="azsRmv(this)">-</a>
-                                    </td>
-                                    <td>癌症种类</td>
-                                    <td class="bg-white">
-                                        <input class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择" name="icd10"
-                                               th:data="${#dic.generals('60020')}"
-                                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
-                                    </td>
-                                    <td>年龄</td>
-                                    <td width="15%" class="bg-white">
-                                        <input class="mini-textbox" name="age" width="100" vtype="int"/>
-                                    </td>
-                                    <td>诊断医院</td>
-                                    <td width="25%" class="bg-white">
-                                        <input class="mini-autocomplete" style="width:100%" name="hospitalCode"
-                                               textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
-                                               th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
-                                    </td>
-
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>-->
-
         <div th:replace="/common/selfCancer :: selfSelect">
         </div>
 
-        <div th:if="${crcFlag} eq '1'">
-            <table id="crcazsTable" class="table_new table_new5 mt-10">
-                <tbody>
-                    <tr>
-                        <td width="20%">大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史</td>
-                        <td width="80%" class="text-l">
-                            <input id="crcHistory"  class="mini-radiobuttonlist"
-                                   th:data="${#dic.generals('60007')}"
-                                   textField="name" valueField="code" onvaluechanged="crcHistoryChanged"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="bg-white" style="padding:0px;">
-                            <table class="table_new table_new6" id="crcInnerTable">
-                                <tr>
-                                    <td class="bg-white" style="border: none;">
-                                        <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="crcAdd(this)">+ </a>
-                                        <a href="javascript:void(0);" style="text-decoration:none" onclick="crcRmv(this)">-</a>
-                                    </td>
-                                    <td>亲属关系</td>
-                                    <td class="bg-white">
-                                        <input id="crcrelation1" class="mini-combobox" name="relation" showNullItem="true" width="43%" emptyText="请选择"
-                                               th:data="${#dic.generals('60018')}"
-                                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
-                                    </td>
-                                    <td>发病年龄</td>
-                                    <td width="15%" class="bg-white">
-                                        <input id="crcage1" class="mini-textbox" name="age"
-                                               width="100" vtype="int"/>
-                                    </td>
-                                    <td>是否在世</td>
-                                    <td width="25%" class="bg-white">
-                                        <input id="crclived1" class="mini-radiobuttonlist" name="lived"
-                                               th:data="${#dic.generals('60019')}"
-                                               textField="name" valueField="code" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div th:if="${crcFlag} eq '1' && ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('crcFamilyTable', 'crcFamilyBody', 'crcFamilyFlag', '大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史')">
+            </div>
         </div>
 
-        <div th:if="${licFlag} eq '1'">
-            <table id="licazsTable" class="table_new table_new5 mt-10">
-                <tbody>
-                <tr>
-                    <td width="20%">肝癌：一级亲属（父母、兄弟姐妹、子女）有无肝癌史</td>
-                    <td width="80%" class="text-l">
-                        <input id="licHistory"  class="mini-radiobuttonlist"
-                               th:data="${#dic.generals('60007')}"
-                               textField="name" valueField="code" onvaluechanged="licHistoryChanged"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="bg-white" style="padding:0px;">
-                        <table class="table_new table_new6" id="licInnerTable">
-                            <tr>
-                                <td class="bg-white" style="border: none;">
-                                    <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="licAdd(this)">+ </a>
-                                    <a href="javascript:void(0);" style="text-decoration:none" onclick="licRmv(this)">-</a>
-                                </td>
-                                <td>亲属关系</td>
-                                <td class="bg-white">
-                                    <input id="licrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择" name="relation"
-                                           th:data="${#dic.generals('60018')}"
-                                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
-                                </td>
-                                <td>发病年龄</td>
-                                <td width="15%" class="bg-white">
-                                    <input id="licage1" class="mini-textbox" name="age"
-                                           width="100" vtype="int"/>
-                                </td>
-                                <td>是否在世</td>
-                                <td width="25%" class="bg-white">
-                                    <input id="liclived1" class="mini-radiobuttonlist" name="lived"
-                                           th:data="${#dic.generals('60019')}"
-                                           textField="name" valueField="code" />
-                                </td>
-
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div th:if="${licFlag} eq '1' && ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('licFamilyTable', 'licFamilyBody', 'licFamilyFlag', '肝癌：一级亲属（父母、兄弟姐妹、子女）有无肝癌史')">
+            </div>
         </div>
 
-        <div th:if="${scFlag} eq '1'">
-            <table id="scazsTable" class="table_new table_new5 mt-10">
-                <tbody>
-                <tr>
-                    <td width="20%">胃癌：一级亲属（父母、兄弟姐妹、子女）有无胃癌史</td>
-                    <td width="80%" class="text-l">
-                        <input id="scHistory"  class="mini-radiobuttonlist"
-                               th:data="${#dic.generals('60007')}"
-                               textField="name" valueField="code" onvaluechanged="scHistoryChanged"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="bg-white" style="padding:0px;">
-                        <table class="table_new table_new6" id="scInnerTable">
-                            <tr>
-                                <td class="bg-white" style="border: none;"><a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="scAdd(this)">+ </a>
-                                    <a href="javascript:void(0);" style="text-decoration:none" onclick="scRmv(this)">-</a>
-                                </td>
-                                <td>亲属关系</td>
-                                <td class="bg-white">
-                                    <input id="screlation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                                           th:data="${#dic.generals('60018')}" name="relation"
-                                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
-                                </td>
-                                <td>发病年龄</td>
-                                <td width="15%" class="bg-white">
-                                    <input id="scage1" class="mini-textbox" name="age"
-                                           width="100" vtype="int"/>
-                                </td>
-                                <td>是否在世</td>
-                                <td width="25%" class="bg-white">
-                                    <input id="sclived1" class="mini-radiobuttonlist" name="lived"
-                                           th:data="${#dic.generals('60019')}"
-                                           textField="name" valueField="code" />
-                                </td>
-
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div th:if="${scFlag} eq '1' && ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('scFamilyTable', 'scFamilyBody', 'scFamilyFlag', '胃癌：一级亲属（父母、兄弟姐妹、子女）有无胃癌史')">
+            </div>
         </div>
 
-        <div th:if="${lucFlag} eq '1'">
-            <table id="lucazsTable" class="table_new table_new5 mt-10">
-                <tbody>
-                <tr>
-                    <td width="20%">肺癌：一级亲属（父母、兄弟姐妹、子女）有无肺癌史</td>
-                    <td width="80%" class="text-l">
-                        <input id="lucHistory"  class="mini-radiobuttonlist"
-                               th:data="${#dic.generals('60007')}"
-                               textField="name" valueField="code" onvaluechanged="lucHistoryChanged"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="bg-white" style="padding:0px;">
-                        <table class="table_new table_new6"  id="lucInnerTable">
-                            <tr>
-                                <td class="bg-white" style="border: none;"> <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="lucAdd(this)">+ </a>
-                                    <a href="javascript:void(0);" style="text-decoration:none" onclick="lucRmv(this)">-</a>
-                                </td>
-                                <td>亲属关系</td>
-                                <td class="bg-white">
-                                    <input id="lucrelation1" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                                           th:data="${#dic.generals('60018')}" name="relation"
-                                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
-                                </td>
-                                <td>发病年龄</td>
-                                <td width="15%" class="bg-white">
-                                    <input id="lucage1" class="mini-textbox" name="age"
-                                           width="100" vtype="int"/>
-                                </td>
-                                <td>是否在世</td>
-                                <td width="25%" class="bg-white">
-                                    <input id="luclived1" class="mini-radiobuttonlist" name="lived"
-                                           th:data="${#dic.generals('60019')}"
-                                           textField="name" valueField="code" />
-                                </td>
-
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div th:if="${lucFlag} eq '1' && ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('lucFamilyTable', 'lucFamilyBody', 'lucFamilyFlag', '肺癌：一级亲属（父母、兄弟姐妹、子女）有无肺癌史')">
+            </div>
         </div>
 
+
+        <div th:if="${areaCode} eq '310104000000'">
+            <div th:replace="/common/xuhuiCancer :: xuhuiSelect">
+            </div>
+        </div>
 
         <div class="title_tip mt-30">危险度评估结果</div>
         <table class="table_new table_new5 mt-10">
@@ -1252,14 +1056,7 @@ th:data="${years}" th:value="${checkYear}"
         
         //有无癌症史
         $("#azsTable").children(":first").children(":gt(0)").hide();
-        //大肠癌：一级亲属
-        $("#crcazsTable").children(":first").children(":gt(0)").hide();
-        //肝癌：一级亲属
-        $("#licazsTable").children(":first").children(":gt(0)").hide();
-        //胃癌：一级亲属
-        $("#scazsTable").children(":first").children(":gt(0)").hide();
-        //肺癌：一级亲属
-        $("#lucazsTable").children(":first").children(":gt(0)").hide();
+
     });
 
     //证件类型
@@ -1364,7 +1161,6 @@ th:data="${years}" th:value="${checkYear}"
 
     function crcNumerChange(){
         var id=$("#id").val();
-        // alert(id)
         var crcNum=mini.get("idNumber").getValue();
         $.ajax({
             url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
@@ -1517,42 +1313,6 @@ th:data="${years}" th:value="${checkYear}"
             azsTrue=false;
         }
     }
-    function azsAdd(e){
-        var tr = $(e).closest('tr'),
-            td = tr.find('td');
-        // alert(tr[0].rowIndex)
-
-        var newRow="";
-        newRow+= " <tr>" +
-            "           <td class=\"bg-white\" style=\"border: none;\">" +
-            "               <a href=\"javascript:void(0);\" style=\"text-decoration:none;;margin-right:15px\" onclick=\"azsAdd(this)\"> +   </a>" +
-            "               <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"azsRmv(this)\">   - </a>" +
-            "           </td>" +
-            "            <td>癌症种类</td>" +
-            "            <td class=\"bg-white\">" +
-            "                <input class='mini-combobox' showNullItem='true' width='43%' emptyText='请选择'" +
-            "                         th:data=\"${#dic.generals('60020')}\"" +
-            "                         textField='name' valueField='code' allowInput='true' valueFromSelect='true' />" +
-            "            </td>" +
-            "             <td>年龄</td>" +
-            "             <td width=\"15%\" class=\"bg-white\">" +
-            "                  <input class=\"mini-textbox\" width=\"100\" vtype=\"int\"/>" +
-            "            </td>" +
-            "            <td>诊断医院</td>" +
-            "            <td width=\"25%\" class=\"bg-white\">" +
-            "                  <input class=\"mini-autocomplete\" style=\"width:100%\"" +
-            "                           textField=\"text\" valueField=\"id\" searchField=\"name\" popupEmptyText=\"未找到数据\"" +
-            "                            th:url=\"@{/hospital/queryName}\" showNullItem=\"false\" allowInput=\"true\"/>" +
-            "            </td>" +
-            "   </tr>";
-
-        $("#azsInnerTable tbody").append(newRow);
-        mini.parse();
-    }
-    function azsRmv(e) {
-        var tr = $(e).closest('tr');
-        $("#azsInnerTable tr:eq(" + tr[0].rowIndex + ")").remove();
-    }
 
     function getNewRow(){
         var newRow="";
@@ -1604,7 +1364,6 @@ th:data="${years}" th:value="${checkYear}"
     }
     function crcRmv(e) {
         var tr = $(e).closest('tr');
-        alert(tr[0].rowIndex )
         $("#crcInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
     }
 
@@ -1637,7 +1396,6 @@ th:data="${years}" th:value="${checkYear}"
     }
     function licRmv(e) {
         var tr = $(e).closest('tr');
-        alert(tr[0].rowIndex )
         $("#licInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
     }
 
@@ -1670,7 +1428,6 @@ th:data="${years}" th:value="${checkYear}"
     }
     function scRmv(e) {
         var tr = $(e).closest('tr');
-        alert(tr[0].rowIndex )
         $("#scInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
     }
 
@@ -1702,15 +1459,10 @@ th:data="${years}" th:value="${checkYear}"
     }
     function lucRmv(e) {
         var tr = $(e).closest('tr');
-        alert(tr[0].rowIndex )
         $("#lucInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
     }
 
-
-
-
-
-
+    //保存
     function save(){
         var id=$("#id").val();  //个人管理编号
 
@@ -1729,95 +1481,7 @@ th:data="${years}" th:value="${checkYear}"
             });
             return;
         }else{
-            params=form.getData(true);
-            params.personInfo.id=id;
-
-            var azsArray=new Array();
-            if(azsTrue){
-                $("#azsInnerTable").find("td").each(function(){
-                    var json = {};
-                    var flag = false;
-                    $(this).find("[value]").each(function(){
-                        flag = true;
-                        json[$(this).attr("name")] = $(this).val();
-                    });
-                    if (flag) {
-                        azsArray.push(json);
-                    }
-                });
-            }
-
-
-            var jsonArr = new Array();
-            if(crcTrue){
-                $("#crcInnerTable").find("td").each(function(){
-                    var json = {};
-                    var flag = false;
-                    json[cancerType]='01';
-                    $(this).find("[value]").each(function(){
-                        flag = true;
-                        json[$(this).attr("name")] = $(this).val();
-                    });
-                    if (flag) {
-                        jsonArr.push(json);
-                    }
-                });
-            }
-            if(licTrue){
-                $("#licInnerTable").find("td").each(function(){
-                    var json = {};
-                    var flag = false;
-                    json[cancerType]='02';
-                    $(this).find("[value]").each(function(){
-                        flag = true;
-                        json[$(this).attr("name")] = $(this).val();
-                    });
-                    if (flag) {
-                        jsonArr.push(json);
-                    }
-                });
-            }
-
-            if(scTrue){
-                $("#scInnerTable").find("td").each(function(){
-                    var json = {};
-                    var flag = false;
-                    json[cancerType]='03';
-                    $(this).find("[value]").each(function(){
-                        flag = true;
-                        json[$(this).attr("name")] = $(this).val();
-                    });
-                    if (flag) {
-                        jsonArr.push(json);
-                    }
-                });
-            }
-
-
-           var xhArr = new Array();
-           if(lucTrue){
-               $("#lucInnerTable").find("td").each(function(){
-                   var json = {};
-                   var flag = false;
-                   json[icd10]='04';
-                   $(this).find("[value]").each(function(){
-                       flag = true;
-                       json[$(this).attr("name")] = $(this).val();
-                   });
-                   if (flag) {
-                       xhArr.push(json);
-                   }
-               });
-           }
-
-
-            var azsTemp =JSON.stringify(azsArray);//把数组转换成json
-            var jsonTemp =JSON.stringify(jsonArr);
-            var xhTemp =JSON.stringify(xhArr);
-
-            params.historyList=azsTemp;
-            params.familyCancerHistoryList=jsonTemp;
-            params.lucFamilyCancerHistoryXHList=xhTemp;
+            params=form.getData(true, false);
 
             mini.mask({
                 el: document.body,
@@ -1830,7 +1494,7 @@ th:data="${years}" th:value="${checkYear}"
                 type:"POST",
                 dataType: "json",
                 success:function(res){
-                    // mini.unmask(document.body);
+                    mini.unmask(document.body);
                     if(res.ok){ //保存成功
                         mini.showTips({
                             content: res.msg,
@@ -1857,12 +1521,91 @@ th:data="${years}" th:value="${checkYear}"
                             timeout: 2000
                         });
                     }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    mini.unmask(document.body);
                 }
             })
         }
     }
-    
 
+    //显示亲属癌症行
+    function showFamily(id, bodyId) {
+        var v = mini.get(id).getValue();
+        var obj = mini.get(id).getEl();
+        if (v == "1") {
+            addFamilyRow(null, bodyId);
+        } else {
+            $('#' + bodyId).children(":gt(0)").remove();
+        }
+    }
+
+    //增加一级亲属癌症行
+    function addFamilyRow(data, bodyId) {
+        if (data == null) {
+            data = {index: 0};
+        } else {
+            data.index = 0;
+        }
+        data.bodyId = bodyId;
+
+        var max = -1;
+        $('#crcFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        $('#licFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        $('#scFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        $('#lucFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        max++;
+        data.index = max;
+
+        if (bodyId == "crcFamilyBody") {
+            data.cancerType = "1";
+        } else if (bodyId == "licFamilyBody") {
+            data.cancerType = "2";
+        } else if (bodyId == "scFamilyBody") {
+            data.cancerType = "3";
+        } else if (bodyId == "lucFamilyBody") {
+            data.cancerType = "4";
+        }
+
+        var tpl = $('#familyRowTpl').html();
+        var html = template.render(tpl, data);
+
+        $('#' + bodyId).append(html);
+        mini.parse();
+    }
+
+
+    //删除一级亲属癌症行
+    function delFamilyRow(index, bodyId) {
+        if ($('#' + bodyId).children().length == 2) {
+            return;
+        }
+        $("#familyRow" + index).remove();
+    }
 
 </script>
 </html>

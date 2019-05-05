@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div th:fragment="familySelect(tableId, bodyId, id, title)">
+
+    <script id="familyRowTpl" type="text/template" style="display: none;">
+        <tr id="familyRow{{index}}" index="{{index}}">
+            <td colspan="2" class="bg-white" style="padding:0px;">
+                <table class="table_new table_new6">
+                    <tr>
+                        <td class="bg-white" style="border: none;">
+                            <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="addFamilyRow(null, '{{bodyId}}');">+</a>
+                            <a href="javascript:void(0);" style="text-decoration:none;" onclick="delFamilyRow({{index}}, '{{bodyId}}');">-</a>
+                        </td>
+                        <td>亲属关系</td>
+                        <td class="bg-white">
+                            <input id="relation{{index}}" name="familyCancerHistoryList[{{index}}].relation" value="{{relation}}" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                   textField="name" valueField="code" valueFromSelect="true" th:data="${#dic.generals('60018')}"/>
+                        </td>
+                        <td>发病年龄</td>
+                        <td width="15%" class="bg-white">
+                            <input id="age{{index}}" name="familyCancerHistoryList[{{index}}].relation" value="{{age}}" class="mini-textbox" width="100" vtype="int" />
+                        </td>
+                        <td>是否在世</td>
+                        <td width="25%" class="bg-white">
+                            <input id="lived{{index}}" name="familyCancerHistoryList[{{index}}].lived" value="{{lived}}" class="mini-radiobuttonlist"
+                                   textField="name" valueField="code" th:data="${#dic.generals('60019')}"/>
+                            <input id="cancerType{{index}}" name="familyCancerHistoryList[{{index}}].cancerType" value="{{cancerType}}" class="mini-hidden" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </script>
+
+    <table th:id="${tableId}" class="table_new table_new5 mt-10">
+        <tbody th:id="${bodyId}">
+        <tr>
+            <td width="20%" th:text="${title}"></td>
+            <td width="80%" class="text-l">
+                <input th:id="${id}" class="mini-radiobuttonlist"
+                       th:data="${#dic.generals('60007')}"
+                       textField="name" valueField="code"
+                       th:attr="onvaluechanged='showFamily(\''+${id}+'\', \''+${bodyId}+'\');'"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

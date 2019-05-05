@@ -49,6 +49,9 @@ public class ScreeningController extends BaseController {
     @Value("${luc_switch_flag}")
     private String lucFlag;
 
+    @Value("${area_code}")
+    private String areaCode;
+
     @Autowired
     private ScreeningService screeningService;
 
@@ -157,6 +160,7 @@ public class ScreeningController extends BaseController {
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
         model.addAttribute("lucFlag", lucFlag);
+        model.addAttribute("areaCode", areaCode);
         return "/register/form";
     }
 
@@ -201,6 +205,8 @@ public class ScreeningController extends BaseController {
         personInfo.setRegdoc(getSessionUser().getId());
         personInfo.setRegorg(getSessionUser().getOrgCode());
         personInfo.setRegdate(new Date());
+        personInfo.setPersoncardType(type);
+        personInfo.setPersoncard(personcardno);
 
         model.addAttribute("personInfo", personInfo);
 //
