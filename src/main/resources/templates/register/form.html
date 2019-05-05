@@ -1496,6 +1496,11 @@ th:data="${years}" th:value="${checkYear}"
             $("#xxcTable").children(":first").children(":first").children(":gt(0)").hide();
         }
     }
+    var crcTrue=false;
+    var licTrue=false;
+    var scTrue=false;
+    var lucTrue=false;
+    var azsTrue=false;
 
     //癌症史变更
     function azsChanged(e) {
@@ -1503,9 +1508,10 @@ th:data="${years}" th:value="${checkYear}"
         //有
         if (azsHistory == "1") {
             $("#azsTable").children(":first").children(":eq(1)").show();
-
+            azsTrue=true;
         } else {
             $("#azsTable").children(":first").children(":eq(1)").hide();
+            azsTrue=false;
         }
     }
     function azsAdd(e){
@@ -1566,14 +1572,17 @@ th:data="${years}" th:value="${checkYear}"
         return newRow;
     }
 
+
     //大肠癌亲属变更
     function crcHistoryChanged(e) {
         var crcHistory = mini.get("crcHistory").getValue();
         //有
         if (crcHistory == "1") {
             $("#crcazsTable").children(":first").children(":eq(1)").show();
+            crcTrue=true;
         } else {
             $("#crcazsTable").children(":first").children(":eq(1)").hide();
+            crcTrue=false;
         }
     }
     function crcAdd(e){
@@ -1602,8 +1611,10 @@ th:data="${years}" th:value="${checkYear}"
         //有
         if (licHistory == "1") {
             $("#licazsTable").children(":first").children(":eq(1)").show();
+            licTrue=true;
         } else {
             $("#licazsTable").children(":first").children(":eq(1)").hide();
+            licTrue=false;
         }
     }
 
@@ -1633,8 +1644,10 @@ th:data="${years}" th:value="${checkYear}"
         //有
         if (scHistory == "1") {
             $("#scazsTable").children(":first").children(":eq(1)").show();
+            scTrue=true;
         } else {
             $("#scazsTable").children(":first").children(":eq(1)").hide();
+            scTrue=false;
         }
     }
 
@@ -1664,8 +1677,10 @@ th:data="${years}" th:value="${checkYear}"
         //有
         if (lucHistory == "1") {
             $("#lucazsTable").children(":first").children(":eq(1)").show();
+            lucTrue=true;
         } else {
             $("#lucazsTable").children(":first").children(":eq(1)").hide();
+            lucTrue=false;
         }
     }
     function lucAdd(e){
@@ -1715,71 +1730,82 @@ th:data="${years}" th:value="${checkYear}"
             params.personInfo.id=id;
 
             var azsArray=new Array();
-            $("#azsInnerTable").find("td").each(function(){
-                var json = {};
-                var flag = false;
-                $(this).find("[value]").each(function(){
-                    flag = true;
-                    json[$(this).attr("name")] = $(this).val();
+            if(azsTrue){
+                $("#azsInnerTable").find("td").each(function(){
+                    var json = {};
+                    var flag = false;
+                    $(this).find("[value]").each(function(){
+                        flag = true;
+                        json[$(this).attr("name")] = $(this).val();
+                    });
+                    if (flag) {
+                        azsArray.push(json);
+                    }
                 });
-                if (flag) {
-                    azsArray.push(json);
-                }
-            });
-
+            }
 
 
             var jsonArr = new Array();
-            $("#crcInnerTable").find("td").each(function(){
-                var json = {};
-                var flag = false;
-                json[cancerType]='01';
-                $(this).find("[value]").each(function(){
-                    flag = true;
-                    json[$(this).attr("name")] = $(this).val();
+            if(crcTrue){
+                $("#crcInnerTable").find("td").each(function(){
+                    var json = {};
+                    var flag = false;
+                    json[cancerType]='01';
+                    $(this).find("[value]").each(function(){
+                        flag = true;
+                        json[$(this).attr("name")] = $(this).val();
+                    });
+                    if (flag) {
+                        jsonArr.push(json);
+                    }
                 });
-                if (flag) {
-                    jsonArr.push(json);
-                }
-            });
-            $("#licInnerTable").find("td").each(function(){
-                var json = {};
-                var flag = false;
-                json[cancerType]='02';
-                $(this).find("[value]").each(function(){
-                    flag = true;
-                    json[$(this).attr("name")] = $(this).val();
+            }
+            if(licTrue){
+                $("#licInnerTable").find("td").each(function(){
+                    var json = {};
+                    var flag = false;
+                    json[cancerType]='02';
+                    $(this).find("[value]").each(function(){
+                        flag = true;
+                        json[$(this).attr("name")] = $(this).val();
+                    });
+                    if (flag) {
+                        jsonArr.push(json);
+                    }
                 });
-                if (flag) {
-                    jsonArr.push(json);
-                }
-            });
-            $("#scInnerTable").find("td").each(function(){
-                var json = {};
-                var flag = false;
-                json[cancerType]='03';
-                $(this).find("[value]").each(function(){
-                    flag = true;
-                    json[$(this).attr("name")] = $(this).val();
-                });
-                if (flag) {
-                    jsonArr.push(json);
-                }
-            });
+            }
 
-            var xhArr = new Array();
-            $("#lucInnerTable").find("td").each(function(){
-                var json = {};
-                var flag = false;
-                json[icd10]='04';
-                $(this).find("[value]").each(function(){
-                    flag = true;
-                    json[$(this).attr("name")] = $(this).val();
+            if(scTrue){
+                $("#scInnerTable").find("td").each(function(){
+                    var json = {};
+                    var flag = false;
+                    json[cancerType]='03';
+                    $(this).find("[value]").each(function(){
+                        flag = true;
+                        json[$(this).attr("name")] = $(this).val();
+                    });
+                    if (flag) {
+                        jsonArr.push(json);
+                    }
                 });
-                if (flag) {
-                    xhArr.push(json);
-                }
-            });
+            }
+
+
+           var xhArr = new Array();
+           if(lucTrue){
+               $("#lucInnerTable").find("td").each(function(){
+                   var json = {};
+                   var flag = false;
+                   json[icd10]='04';
+                   $(this).find("[value]").each(function(){
+                       flag = true;
+                       json[$(this).attr("name")] = $(this).val();
+                   });
+                   if (flag) {
+                       xhArr.push(json);
+                   }
+               });
+           }
 
 
             var azsTemp =JSON.stringify(azsArray);//把数组转换成json
