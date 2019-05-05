@@ -710,22 +710,22 @@
         <div th:replace="/common/selfCancer :: selfSelect">
         </div>
 
-        <div th:if="${crcFlag} eq '1' && ${areaCode} ne '310104000000'">
+        <div th:if="${crcFlag} eq '1' and ${areaCode} ne '310104000000'">
             <div th:replace="/common/familyCancer :: familySelect('crcFamilyTable', 'crcFamilyBody', 'crcFamilyFlag', '大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史')">
             </div>
         </div>
 
-        <div th:if="${licFlag} eq '1' && ${areaCode} ne '310104000000'">
+        <div th:if="${licFlag} eq '1' and ${areaCode} ne '310104000000'">
             <div th:replace="/common/familyCancer :: familySelect('licFamilyTable', 'licFamilyBody', 'licFamilyFlag', '肝癌：一级亲属（父母、兄弟姐妹、子女）有无肝癌史')">
             </div>
         </div>
 
-        <div th:if="${scFlag} eq '1' && ${areaCode} ne '310104000000'">
+        <div th:if="${scFlag} eq '1' and ${areaCode} ne '310104000000'">
             <div th:replace="/common/familyCancer :: familySelect('scFamilyTable', 'scFamilyBody', 'scFamilyFlag', '胃癌：一级亲属（父母、兄弟姐妹、子女）有无胃癌史')">
             </div>
         </div>
 
-        <div th:if="${lucFlag} eq '1' && ${areaCode} ne '310104000000'">
+        <div th:if="${lucFlag} eq '1' and ${areaCode} ne '310104000000'">
             <div th:replace="/common/familyCancer :: familySelect('lucFamilyTable', 'lucFamilyBody', 'lucFamilyFlag', '肺癌：一级亲属（父母、兄弟姐妹、子女）有无肺癌史')">
             </div>
         </div>
