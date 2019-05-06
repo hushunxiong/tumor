@@ -85,7 +85,7 @@
 		) VALUES (
 		#{id},#{manageid},#{checkYear},
 		#{icd10},#{cancerName},#{age},#{hospitalCode},#{hospitalName},
-		'2','0',#{createBy},SYSDATE
+		#{isChange},'0',#{createBy},SYSDATE
 		)
 	</insert>
 	
@@ -94,7 +94,7 @@
 		cancer_name = #{cancerName},age = #{age},
 		hospital_code = #{hospitalCode},hospital_name = #{hospitalName},
 		ischange = #{ischange},update_by = #{updateBy},update_date = SYSDATE
-		WHERE id = #{id}
+		WHERE manageid = #{manageid}
 	</update>
 
 	<update id="delete">

@@ -3,7 +3,7 @@
 <mapper namespace="com.wonders.health.tumor.tumor.dao.FamilyCancerHistoryDao">
     
 	<sql id="FamilyCancerHistoryColumns">
-		a.id AS "id",a.check_id AS "checkId",a.relation AS "relation",a.cancer_type AS "cancerType",a.icd10 AS "icd10",a.cancer_name AS "cancerName",a.age AS "age",a.lived AS "lived",a.del_flag AS "delFlag",a.ischange AS "ischange",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+		a.id AS "id",a.check_id AS "checkId",a.relation AS "relation",a.cancer_type AS "cancerType",a.age AS "age",a.lived AS "lived",a.del_flag AS "delFlag",a.ischange AS "ischange",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
 	</sql>
 
 	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.FamilyCancerHistory">
@@ -15,9 +15,9 @@
 
 	<insert id="insert">
 		INSERT INTO family_cancer_history(
-		id,check_id,relation,cancer_type,icd10,cancer_name,age,lived,del_flag,ischange,create_by,create_date
+		id,check_id,relation,cancer_type,age,lived,del_flag,ischange,create_by,create_date
 		) VALUES (
-		#{id},#{checkId},#{relation},#{cancerType},#{icd10},#{cancerName},#{age},#{lived},'0',#{ischange},
+		#{id},#{checkId},#{relation},#{cancerType},#{age},#{lived},'0',#{ischange},
 		#{createBy},SYSDATE
 		)
 	</insert>
@@ -25,7 +25,7 @@
 	<update id="update">
 		UPDATE family_cancer_history SET
 		check_id = #{checkId},relation = #{relation},cancer_type = #{cancerType},
-		icd10 = #{icd10},cancer_name = #{cancerName},age = #{age},lived = #{lived},
+		age = #{age},lived = #{lived},
 		ischange = #{ischange},update_by = #{updateBy},update_date = SYSDATE
 		WHERE id = #{id}
 	</update>
@@ -87,15 +87,15 @@
 	
 	<insert id="insert1">
 		INSERT INTO family_cancer_history(
-		id,check_id,relation,cancer_type,icd10,cancer_name,age,lived,del_flag,ischange,create_by,create_date,update_by,update_date
+		id,check_id,relation,cancer_type,age,lived,del_flag,ischange,create_by,create_date,update_by,update_date
 		) VALUES (
-		#{id},#{checkId},#{relation},#{cancerType},#{icd10},#{cancerName},#{age},#{lived},#{delFlag},#{ischange},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		#{id},#{checkId},#{relation},#{cancerType},#{age},#{lived},#{delFlag},#{ischange},#{createBy},#{createDate},#{updateBy},#{updateDate}
 		)
 	</insert>
 	
 	<update id="update1">
 		UPDATE family_cancer_history SET
-		id = #{id},check_id = #{checkId},relation = #{relation},cancer_type = #{cancerType},icd10 = #{icd10},cancer_name = #{cancerName},age = #{age},lived = #{lived},del_flag = #{delFlag},ischange = #{ischange},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		id = #{id},check_id = #{checkId},relation = #{relation},cancer_type = #{cancerType},age = #{age},lived = #{lived},del_flag = #{delFlag},ischange = #{ischange},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
 		WHERE id = #{id}
 	</update>
 

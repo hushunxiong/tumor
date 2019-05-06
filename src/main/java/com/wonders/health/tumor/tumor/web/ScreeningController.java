@@ -179,7 +179,9 @@ public class ScreeningController extends BaseController {
         }else{
             //根据证件号码证件类型获取个人基本信息，有可能从健康档案接口获取
             Optional<CancerPersonInfo> cancerPersonInfo=Optional.of(screeningService.getBaseInfoByCardnoAndType(personcard,type));
-            return new AjaxReturn(true,"",cancerPersonInfo.get());
+            ScreeningVo sc=new ScreeningVo();
+            sc.setPersonInfo(cancerPersonInfo.get());
+            return new AjaxReturn(true,"",sc);
         }
     }
 
@@ -367,29 +369,25 @@ public class ScreeningController extends BaseController {
     public AjaxReturn save(ScreeningVo screeningVo){
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
 
-        //历史表
+        //处理插入表的癌症名称和癌症code
+
+        //本人癌症史表
         List<CancerHistory> historyList=screeningVo.getHistoryList();
-
         historyList.stream().forEach(history->{
-            history.setCancerName(getCancerName(history.getIcd10()));
+            history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+            history.setCancerName(getCancerName(history.getIcd10(),"60020"));
+            history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
         });
-
-        //亲属历史表
-        List<FamilyCancerHistory>familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();
-
-        familyCancerHistoryList.stream().forEach(family->{
-            family.setIcd10(family.getCancerType());
-            family.setCancerName(getCancerName(family.getCancerType()));
-        });
-
 
         //亲属历史表-徐汇
         List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();
+        List<FamilyCancerHistory> familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();
 
-        lucFamilyCancerHistoryXHList.stream().forEach(family->{
-            family.setCancerName(getCancerName(family.getIcd10()));
-        });
-
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0){
+            lucFamilyCancerHistoryXHList.stream().forEach(family->{
+                family.setCancerName(getCancerName(family.getIcd10(),"60020"));
+            });
+        }
 
         User user=getSessionUser();
 
@@ -424,31 +422,29 @@ public class ScreeningController extends BaseController {
             historyList.stream().forEach(history->{
                 history.setId(IdGen.uuid());
                 history.setManageid(personInfo.getId());
-                history.setCheckYear(Integer.parseInt(screeningVo.getCheckYear()));
                 history.setCreateBy(user.getId());
-                history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
                 cancerHistoryService.insert(cancerHistoryDao,history);
-
             });
 
-            //亲属历史表
-            familyCancerHistoryList.stream().forEach(family->{
-                family.setId(IdGen.uuid());
-                family.setCheckId(personInfo.getId());
-                family.setCreateBy(user.getId());
-                familyCancerHistoryService.insert(familyCancerHistoryDao,family);
-            });
+            if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0){
+                //亲属历史表-徐汇
+                lucFamilyCancerHistoryXHList.stream().forEach(luc->{
+                    luc.setId(IdGen.uuid());
+                    luc.setCheckId(user.getId());
+                    luc.setCreateBy(user.getId());
+                    lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
+                });
+            }else{
+                //亲属历史表
+                familyCancerHistoryList.stream().forEach(family->{
+                    family.setId(IdGen.uuid());
+                    family.setCheckId(personInfo.getId());
+                    family.setCreateBy(user.getId());
+                    familyCancerHistoryService.insert(familyCancerHistoryDao,family);
+                });
+            }
 
-            //亲属历史表-徐汇
-            lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                luc.setId(IdGen.uuid());
-                luc.setCheckId(user.getId());
-                luc.setCreateBy(user.getId());
-                lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
-            });
-
-
-        }else{
+        }else{  //修改
             personInfo.initByUpdate(user.getId());
             cancerPersonInfoService.saveOrUpdate(personInfo,getSessionUser().getId());
             cancerPersonInfoService.updateChange(personInfo.getId());
@@ -470,25 +466,22 @@ public class ScreeningController extends BaseController {
                 scRiskAssessmentService.update(scRiskAssessmentDao,screeningVo.getScRisk());
             }
 
-            //插入历史癌症表
+            //修改历史癌症表
             historyList.stream().forEach(history->{
                 history.setManageid(personInfo.getId());
-                history.setCheckYear(Integer.parseInt(screeningVo.getCheckYear()));
-                history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
                 history.setUpdateBy(user.getId());
                 history.setIschange("1");
                 cancerHistoryService.update(cancerHistoryDao,history);
-
             });
 
-            //亲属历史表
+            //修改亲属历史表
             familyCancerHistoryList.stream().forEach(family->{
                 family.setCheckId(personInfo.getId());
                 family.setUpdateBy(user.getId());
                 familyCancerHistoryService.update(familyCancerHistoryDao,family);
             });
 
-            //亲属历史表-徐汇
+            //修改亲属历史表-徐汇
             lucFamilyCancerHistoryXHList.stream().forEach(luc->{
                 luc.setCheckId(user.getId());
                 luc.setUpdateBy(user.getId());
@@ -499,9 +492,9 @@ public class ScreeningController extends BaseController {
         return new AjaxReturn(true,"保存成功",personInfo.getId());
     }
 
-    //根据字典表 60020 获取癌症名称
-    private String getCancerName(String cancerType){
-       return DictUtils.generalForMap("60020").get(cancerType).getName();
+    //根据字典表 id 获取癌症名称
+    private String getCancerName(String cancerType,String dicCode){
+       return DictUtils.generalForMap(dicCode).get(cancerType).getName();
     }
 
 }

@@ -35,13 +35,6 @@ public class FamilyCancerHistory extends BaseEntity {
 	@Length(max=2)
 	private String cancerType;	// 癌症种类 cdc_dic_personinfo id=60020code=1：大肠癌；code=2：肝癌；code=3：胃癌；code=4：肺癌
 
-	@Length(max=12)
-	private String icd10;	// 癌症种类ICD10编码
-
-	@Length(max=200)
-	private String cancerName;	// 癌症名称
-
-	
 	private Integer age;	// 发病年龄
 
 	@Length(max=1)
@@ -90,24 +83,6 @@ public class FamilyCancerHistory extends BaseEntity {
 
 	public void setCancerType(String cancerType) {
 		this.cancerType = cancerType;
-	}
-
-	@JsonProperty("icd10")
-	public String getIcd10() {
-		return icd10;
-	}
-
-	public void setIcd10(String icd10) {
-		this.icd10 = icd10;
-	}
-
-	@JsonProperty("cancerName")
-	public String getCancerName() {
-		return cancerName;
-	}
-
-	public void setCancerName(String cancerName) {
-		this.cancerName = cancerName;
 	}
 
 	@JsonProperty("age")

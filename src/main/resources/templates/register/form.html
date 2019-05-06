@@ -1118,8 +1118,11 @@
                     });
                     return;
                 }else{//没检查过，返回值为个人身份信息
-                    window.location.href='/tumor/screening/reform?manageId='+res.value.id+"&&checkYear="+mini.get("checkYear").getValue()+
-                    "&&type="+zjlx+"&&personcardno="+zjhm;
+                    mini.unmask(document.body);
+                    var form = new mini.Form("#form1");
+                    form.setData(res.value);
+                    // window.location.href='/tumor/screening/reform?manageId='+res.value.id+"&&checkYear="+mini.get("checkYear").getValue()+
+                    // "&&type="+zjlx+"&&personcardno="+zjhm;
                 }
             }
         })

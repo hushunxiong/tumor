@@ -36,12 +36,11 @@
 	<update id="update">
 		UPDATE lic_risk_assessment
 		SET
-		lic_check_id = #{licCheckId},
 		yigan = #{yigan},binggan = #{binggan},ganyinghua = #{ganyinghua},aizhengshi = #{aizhengshi},
 		qinshu_aizhengshi = #{qinshuAizhengshi},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},
 		assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},
 		risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime}
-		WHERE id = #{id}
+		WHERE lic_check_id = #{licCheckId}
 	</update>
 
 

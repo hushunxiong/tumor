@@ -77,16 +77,23 @@
 	
 	<insert id="insert">
 		INSERT INTO sc_regcase(
-		id,manageid,check_year,check_result,region_code,regorg,regdoc,regdate,submits_status,submit_date,trans_date,print_date,close_status,close_date,close_result,check_quality_flag,checkresult_quality_flag,upload_time,source_id,del_flag,create_by,create_date
+		id,manageid,check_year,check_result,region_code,regorg,regdoc,regdate,submits_status,submit_date,trans_date,
+		print_date,close_status,close_date,close_result,check_quality_flag,checkresult_quality_flag,upload_time,source_id,
+		del_flag,create_by,create_date
 		) VALUES (
-		#{id},#{manageid},#{checkYear},#{checkResult},#{regionCode},#{regorg},#{regdoc},#{regdate},#{submitsStatus},#{submitDate},#{transDate},#{printDate},#{closeStatus},#{closeDate},#{closeResult},#{checkQualityFlag},#{checkresultQualityFlag},#{uploadTime},#{sourceId},#{delFlag},#{createBy},#{createDate}
+		#{id},#{manageid},#{checkYear},#{checkResult},#{regionCode},#{regorg},#{regdoc},#{regdate},#{submitsStatus},#{submitDate},#{transDate},
+		#{printDate},#{closeStatus},#{closeDate},#{closeResult},#{checkQualityFlag},#{checkresultQualityFlag},#{uploadTime},#{sourceId},
+		'0',#{createBy},SYSDATE
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE sc_regcase SET
-		id = #{id},manageid = #{manageid},check_year = #{checkYear},check_result = #{checkResult},region_code = #{regionCode},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},submits_status = #{submitsStatus},submit_date = #{submitDate},trans_date = #{transDate},print_date = #{printDate},close_status = #{closeStatus},close_date = #{closeDate},close_result = #{closeResult},check_quality_flag = #{checkQualityFlag},checkresult_quality_flag = #{checkresultQualityFlag},upload_time = #{uploadTime},source_id = #{sourceId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
-		WHERE id = #{id}
+		check_year = #{checkYear},check_result = #{checkResult},region_code = #{regionCode},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},
+		submits_status = #{submitsStatus},submit_date = #{submitDate},trans_date = #{transDate},print_date = #{printDate},
+		close_status = #{closeStatus},close_date = #{closeDate},close_result = #{closeResult},check_quality_flag = #{checkQualityFlag},
+		checkresult_quality_flag = #{checkresultQualityFlag},upload_time = #{uploadTime}
+		WHERE Id_number = #{idNumber}
 	</update>
 
 	<update id="delete">
