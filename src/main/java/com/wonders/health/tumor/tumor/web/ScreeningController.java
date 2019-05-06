@@ -405,19 +405,67 @@ public class ScreeningController extends BaseController {
             cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
 
             if(isOpen(crcFlag)){
-                crcRegcaseService.insert(crcRegcaseDao,screeningVo.getCrcRegcase());
+                CrcRegcase crcRegcase=screeningVo.getCrcRegcase();
+                crcRegcase.setId(IdGen.uuid());
+                crcRegcase.setManageid(personInfo.getId());
+                crcRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                crcRegcase.setRegionCode(areaCode);
+                crcRegcase.setRegorg(getSessionUser().getOrgCode());
+                crcRegcase.setRegdoc(getSessionUser().getId());
+                crcRegcase.setRegdate(new Date());
+                crcRegcase.setSubmitsStatus("1");
+                crcRegcase.setCloseStatus("2");
+                crcRegcase.setCreateBy(user.getId());
+                crcRegcase.init();
+                crcRegcaseService.insert(crcRegcaseDao,crcRegcase);
                 crcRiskAssessmentService.insert(crcRiskAssessmentDao,screeningVo.getCrcRisk());
             }
             if(isOpen(licFlag)){
-                licRegcaseService.insert(licRegcaseDao,screeningVo.getLicRegcase());
+                LicRegcase licRegcase=screeningVo.getLicRegcase();
+                licRegcase.setId(IdGen.uuid());
+                licRegcase.setManageid(personInfo.getId());
+                licRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                licRegcase.setRegionCode(areaCode);
+                licRegcase.setRegorg(getSessionUser().getOrgCode());
+                licRegcase.setRegdoc(getSessionUser().getId());
+                licRegcase.setRegdate(new Date());
+                licRegcase.setSubmitsStatus("1");
+                licRegcase.setCloseStatus("2");
+                licRegcase.setCreateBy(user.getId());
+                licRegcase.init();
+                licRegcaseService.insert(licRegcaseDao,licRegcase);
                 licRiskAssessmentService.insert(licRiskAssessmentDao,screeningVo.getLicRisk());
             }
             if(isOpen(lucFlag)){
-                lucRegcaseService.insert(lucRegcaseDao,screeningVo.getLucRegcase());
+                LucRegcase lucRegcase=screeningVo.getLucRegcase();
+                lucRegcase.setId(IdGen.uuid());
+                lucRegcase.setManageid(personInfo.getId());
+                lucRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                lucRegcase.setRegionCode(areaCode);
+                lucRegcase.setRegorg(getSessionUser().getOrgCode());
+                lucRegcase.setRegdoc(getSessionUser().getId());
+                lucRegcase.setRegdate(new Date());
+                lucRegcase.setSubmitsStatus("1");
+                lucRegcase.setCloseStatus("2");
+                lucRegcase.setCreateBy(user.getId());
+                lucRegcase.init();
+                lucRegcaseService.insert(lucRegcaseDao,lucRegcase);
                 lucRiskAssessmentService.insert(lucRiskAssessmentDao,screeningVo.getLucRisk());
             }
             if(isOpen(scFlag)){
-                scRegcaseService.insert(scRegcaseDao,screeningVo.getScRegcase());
+                ScRegcase scRegcase=screeningVo.getScRegcase();
+                scRegcase.setId(IdGen.uuid());
+                scRegcase.setManageid(personInfo.getId());
+                scRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                scRegcase.setRegionCode(areaCode);
+                scRegcase.setRegorg(getSessionUser().getOrgCode());
+                scRegcase.setRegdoc(getSessionUser().getId());
+                scRegcase.setRegdate(new Date());
+                scRegcase.setSubmitsStatus("1");
+                scRegcase.setCloseStatus("2");
+                scRegcase.setCreateBy(user.getId());
+                scRegcase.init();
+                scRegcaseService.insert(scRegcaseDao,scRegcase);
                 scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
             }
 
