@@ -817,7 +817,7 @@
                 <td width="10%">第一次便隐血检查结果</td>
                 <td class="text-l">
                     <input id="firstFobtResult" name="crcFobt.firstFobtResult" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                           th:data="${#dic.generals('60001')}"
+                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.firstFobtResult}"
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                 </td>
                 <td width="10%">第一次采便器交回时间</td>
@@ -828,14 +828,14 @@
                 <td width="10%">第一次便隐血检查时间</td>
                 <td class="text-l">
                     <input id="firstFobtDate" name="crcFobt.firstFobtDate" class="mini-datepicker"
-                           width="70%" allowInput="false"/>
+                           width="70%" allowInput="false" th:value="${crcFobt.firstFobtDate}"/>
                 </td>
             </tr>
             <tr>
                 <td width="10%">第二次便隐血检查结果</td>
                 <td class="text-l">
                     <input id="secondFobtResult" name="crcFobt.secondFobtResult" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                           th:data="${#dic.generals('60001')}"
+                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.secondFobtResult}"
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                 </td>
                 <td width="10%">第二次采便器交回时间</td>
@@ -846,7 +846,7 @@
                 <td width="10%">第二次便隐血检查时间</td>
                 <td class="text-l">
                     <input id="secondFobtDate" name="crcFobt.secondFobtDate" class="mini-datepicker"
-                           width="70%" allowInput="false"/>
+                           width="70%" allowInput="false" th:value="${crcFobt.secondFobtDate}"/>
             </tr>
             <tr>
                 <td>便隐血检查结果</td>
@@ -874,27 +874,29 @@
             <tr>
                 <td width="10%">GTP</td>
                 <td class="text-l">
-                    <input id="gtp" name="licCheck.gtp" class="mini-textbox" />
+                    <input id="gtp" name="licCheck.gtp" class="mini-textbox" th:value="${licCheck.gtp}" vtype="int"/>
                 </td>
                 <td width="10%">Hbeg</td>
                 <td class="text-l">
-                    <input id="hbeg" name="licCheck.hbeg" class="mini-textbox"/>
+                    <input id="hbeg" name="licCheck.hbeg" class="mini-textbox" th:value="${licCheck.hbeg}"/>
                 </td>
             </tr>
             <tr>
                 <td width="10%">AFP（ug/L）</td>
                 <td class="text-l">
-                    <input id="afp" name="licCheck.afp" class="mini-textbox" />
+                    <input id="afp" name="licCheck.afp" class="mini-textbox" th:value="${licCheck.afp}" vtype="int"/>
                 </td>
                 <td width="10%">B超</td>
                 <td class="text-l">
-                    <input id="bus" name="licCheck.bus" class="mini-textbox" />
+                    <input id="bus" name="licCheck.bus" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
+                           th:data="${#dic.generals('60001')}" th:value="${licCheck.bus}"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                 </td>
             </tr>
             <tr>
                 <td width="10%">肝癌辅助检查结果</td>
                 <td class="text-l">
-                    <input id="licResult" class="mini-textbox" allowInput="false"/>
+                    <input id="licResult" class="mini-textbox" allowInput="false" />
                     <input id="licAssistResult" name="licCheck.licAssistResult" class="mini-hidden" />
                 </td>
                 <td width="10%">肝癌辅助检验人员</td>
@@ -1122,8 +1124,30 @@
                     var form = new mini.Form("#baseForm");
                     form.setData(res.value,false);
                     mini.get("checkYear").setValue(checkyear);
-                    // window.location.href='/tumor/screening/reform?manageId='+res.value.id+"&&checkYear="+mini.get("checkYear").getValue()+
-                    // "&&type="+zjlx+"&&personcardno="+zjhm;
+
+                    var obj = res.value.personInfo;
+
+                    mini.get("hjdprovince").setValue(obj.paddressProvince);
+                    Address.setAddressCity("hjd");
+                    mini.get("hjdcity").setValue(obj.paddressCity);
+                    Address.setAddressCounty("hjd");
+                    mini.get("hjdcounty").setValue(obj.paddressCounty);
+                    Address.setAddressTown("hjd");
+                    mini.get("hjdtown").setValue(obj.paddressTown);
+                    Address.setAddressCommittee("hjd");
+                    mini.get("hjdcommittee").setValue(obj.paddressCommittee);
+
+
+                    mini.get("jzdprovince").setValue(obj.addressProvince);
+                    Address.setAddressCity("jzd");
+                    mini.get("jzdcity").setValue(obj.addressCity);
+                    Address.setAddressCounty("jzd");
+                    mini.get("jzdcounty").setValue(obj.addressCounty);
+                    Address.setAddressTown("jzd");
+                    mini.get("jzdtown").setValue(obj.addressTown);
+                    Address.setAddressCommittee("jzd");
+                    mini.get("jzdcommittee").setValue(obj.addressCommittee);
+
                 }
             }
         })

@@ -143,6 +143,9 @@ public class ScreeningController extends BaseController {
             model.addAttribute("scRisk", new ScRiskAssessment());
             model.addAttribute("crcRisk", new CrcRiskAssessment());
             model.addAttribute("licRisk", new LicRiskAssessment());
+            model.addAttribute("crcFobt", new CrcFobt());
+            model.addAttribute("licCheck", new LicAssistCheck());
+
             model.addAttribute("idNumber", "");
             model.addAttribute("flag", "1"); //1：新增
         } else {
