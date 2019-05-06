@@ -12,7 +12,7 @@
     <div id="form1">
         <div class="title_tip mt-30">基本信息</div>
         <span style="display: none" id="id" name="personInfo.id" th:value="${personInfo.id}"></span>
-        <table class="table_new table_new5 mt-10">
+        <table class="table_new table_new5 mt-10" id="baseForm">
             <tbody>
             <tr>
                 <td width="10%"><span class="red-span">*</span>筛查年份</td>
@@ -1119,8 +1119,9 @@
                     return;
                 }else{//没检查过，返回值为个人身份信息
                     mini.unmask(document.body);
-                    var form = new mini.Form("#form1");
-                    form.setData(res.value);
+                    var form = new mini.Form("#baseForm");
+                    form.setData(res.value,false);
+                    mini.get("checkYear").setValue(checkyear);
                     // window.location.href='/tumor/screening/reform?manageId='+res.value.id+"&&checkYear="+mini.get("checkYear").getValue()+
                     // "&&type="+zjlx+"&&personcardno="+zjhm;
                 }
