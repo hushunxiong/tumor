@@ -1298,11 +1298,7 @@
             $("#xxcTable").children(":first").children(":first").children(":gt(0)").hide();
         }
     }
-    var crcTrue=false;
-    var licTrue=false;
-    var scTrue=false;
-    var lucTrue=false;
-    var azsTrue=false;
+
 
     //癌症史变更
     function azsChanged(e) {
@@ -1310,159 +1306,20 @@
         //有
         if (azsHistory == "1") {
             addSelfRow(null);
-            azsTrue=true;
         } else {
             $("#azsTable").children(":first").children(":gt(0)").remove();
-            azsTrue=false;
         }
     }
 
-    function getNewRow(){
-        var newRow="";
-        newRow+=
-            "            <td>亲属关系</td>" +
-            "            <td class=\"bg-white\">" +
-            "                    <input class=\"mini-combobox\" showNullItem=\"true\" width=\"43%\" emptyText=\"请选择\"" +
-            "                           th:data=\"${#dic.generals('60018')}\" textField=\"name\" valueField=\"code\" allowInput=\"true\" valueFromSelect=\"true\" />" +
-            "            </td>" +
-            "            <td>发病年龄</td>" +
-            "            <td width=\"15%\" class=\"bg-white\">" +
-            "                      <input class=\"mini-textbox\" width=\"100\" vtype=\"int\" />" +
-            "            </td>" +
-            "            <td>是否在世</td>" +
-            "            <td width=\"25%\" class=\"bg-white\">" +
-            "                     <input class=\"mini-radiobuttonlist\"" +
-            "                              th:data=\"${#dic.generals('60019')}\" textField=\"name\" valueField=\"code\" />" +
-            "            </td>" +
-            "     </tr>";
-        return newRow;
-    }
-
-
-    //大肠癌亲属变更
-    function crcHistoryChanged(e) {
-        var crcHistory = mini.get("crcHistory").getValue();
+    //徐汇肺癌变更
+    function xhChanged(e) {
+        var xhHistory = mini.get("xhHistory").getValue();
         //有
-        if (crcHistory == "1") {
-            $("#crcazsTable").children(":first").children(":eq(1)").show();
-            crcTrue=true;
+        if (xhHistory == "1") {
+            addXuhuiRow(null);
         } else {
-            $("#crcazsTable").children(":first").children(":eq(1)").hide();
-            crcTrue=false;
+            $("#xhTable").children(":first").children(":gt(0)").remove();
         }
-    }
-    function crcAdd(e){
-        var newRow='';
-        newRow+=" <tr>" +
-        "            <td class=\"bg-white\" style=\"border: none;\">" +
-        "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"crcAdd(this)\">+ </a>" +
-        "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"crcRmv(this)\">-</a>" +
-        "           </td>"
-
-        newRow+=getNewRow();
-
-
-        $("#crcInnerTable tbody").append(newRow);
-        mini.parse();
-    }
-    function crcRmv(e) {
-        var tr = $(e).closest('tr');
-        $("#crcInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
-    }
-
-    //肝癌亲属变更
-    function licHistoryChanged(e) {
-        var licHistory = mini.get("licHistory").getValue();
-        //有
-        if (licHistory == "1") {
-            $("#licazsTable").children(":first").children(":eq(1)").show();
-            licTrue=true;
-        } else {
-            $("#licazsTable").children(":first").children(":eq(1)").hide();
-            licTrue=false;
-        }
-    }
-
-    function licAdd(e){
-        var newRow='';
-        newRow+=" <tr>" +
-            "            <td class=\"bg-white\" style=\"border: none;\">" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"licAdd(this)\">+ </a>" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"licRmv(this)\">-</a>" +
-            "           </td>"
-
-        newRow+=getNewRow();
-
-
-        $("#licInnerTable tbody").append(newRow);
-        mini.parse();
-    }
-    function licRmv(e) {
-        var tr = $(e).closest('tr');
-        $("#licInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
-    }
-
-    //胃癌亲属变更
-    function scHistoryChanged(e) {
-        var scHistory = mini.get("scHistory").getValue();
-        //有
-        if (scHistory == "1") {
-            $("#scazsTable").children(":first").children(":eq(1)").show();
-            scTrue=true;
-        } else {
-            $("#scazsTable").children(":first").children(":eq(1)").hide();
-            scTrue=false;
-        }
-    }
-
-    function scAdd(e){
-        var newRow='';
-        newRow+=" <tr>" +
-            "            <td class=\"bg-white\" style=\"border: none;\">" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"scAdd(this)\">+ </a>" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"scRmv(this)\">-</a>" +
-            "           </td>"
-
-        newRow+=getNewRow();
-
-
-        $("#scInnerTable tbody").append(newRow);
-        mini.parse();
-    }
-    function scRmv(e) {
-        var tr = $(e).closest('tr');
-        $("#scInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
-    }
-
-    //肺癌亲属变更
-    function lucHistoryChanged(e) {
-        var lucHistory = mini.get("lucHistory").getValue();
-        //有
-        if (lucHistory == "1") {
-            $("#lucazsTable").children(":first").children(":eq(1)").show();
-            lucTrue=true;
-        } else {
-            $("#lucazsTable").children(":first").children(":eq(1)").hide();
-            lucTrue=false;
-        }
-    }
-    function lucAdd(e){
-        var newRow='';
-        newRow+=" <tr>" +
-            "            <td class=\"bg-white\" style=\"border: none;\">" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none;margin-right:15px\" onclick=\"lucAdd(this)\">+ </a>" +
-            "                     <a href=\"javascript:void(0);\" style=\"text-decoration:none\" onclick=\"lucRmv(this)\">-</a>" +
-            "           </td>"
-
-        newRow+=getNewRow();
-
-
-        $("#lucInnerTable tbody").append(newRow);
-        mini.parse();
-    }
-    function lucRmv(e) {
-        var tr = $(e).closest('tr');
-        $("#lucInnerTable tbody tr:eq(" + tr[0].rowIndex + ")").remove();
     }
 
     //保存
