@@ -247,6 +247,13 @@
                                textField="name" valueField="code" />
                     </td>
                 </tr>
+                <tr>
+                    <td width="20%">肺癌：致癌物质累计接触年数</td>
+                    <td width="80%" class="text-l">
+                        <input id="zhiaiwuzhinianshu" name="lucRisk.zhiaiwuzhiNianshu" class="mini-textbox"
+                               width="100" th:value="${lucRisk.zhiaiwuzhiNianshu}" vtype="int;maxLength:3"/>&nbsp;&nbsp;年
+                    </td>
+                </tr>
                 </tbody>
             </table>
 
@@ -736,7 +743,7 @@
             </div>
         </div>
 
-        <div class="title_tip mt-30">危险度评估结果</div>
+        <div class="title_tip mt-30">危险度评估结果<button name="" onclick="makeResult()">计算</button> </div>
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr th:if="${crcFlag} eq '1'">
@@ -980,6 +987,12 @@
     var scDbflag = [[${scDbflag}]];
     var lucDbflag = [[${lucDbflag}]];
 
+    //危险度评估结果
+    var crcRiskResult=false;    //大肠癌危险度评估结果
+    var licRiskResult=false;    //肝癌危险度评估结果
+    var scRiskResult=false;     //胃癌危险度评估结果
+    var lucRiskResult=false;    //肺癌危险度评估结果
+
     $(function() {
         //大肠癌新增
         if (crcDbflag == "1") {
@@ -1059,7 +1072,12 @@
         //有无癌症史
         $("#azsTable").children(":first").children(":gt(0)").hide();
 
+        $('input.mini-radiobuttonlist').bind('valuechanged', function() {
+            console.log("===="+$(this).val());
+        });
+
     });
+
 
     //证件类型
     function personcardTypeChange(e) {
@@ -1078,7 +1096,6 @@
         }
     }
 
-
     //证件号码
     function personcardChange(e) {
         var zjhm = mini.get("personcard");
@@ -1092,6 +1109,7 @@
                 var res = getBirthDayAndSex(zjhm.getValue());
                 xb.setValue(res.sex);
                 mini.get("birth").setValue(res.birthday);
+
             }
             //唯一性检查
             uniquenessCheck(mini.get("checkYear").getValue(),zjlx.getValue(), zjhm.getValue());
@@ -1493,5 +1511,216 @@
         $("#familyRow" + index).remove();
     }
 
+
+    //危险度评估结果计算
+    function makeResult() {
+        $("#crcRiskResult").text("阴性");
+        $("#scRiskResult").text("阴性");
+        $("#licRiskResult").text("阴性");
+        $("#lucRiskResult").text("阴性");
+
+        var areaCode='${areaCode}';
+
+        if (areaCode =='310104000000') {  //徐汇区
+
+
+        }else{  //非徐汇区
+
+
+//2-1 大肠癌危险的评估条件，满足下列条件任意一项者，危险度评估结果为 阳性。
+            var crcFamilyFlag = mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
+            var azsHistoryFlag = mini.get("azsHistory").getValue();//b.本人有癌症史；
+            var changxirouFlag = mini.get("changxirou").getValue(); //c.本人有肠道息肉史
+
+            //d.同时具有以下两项或两项以上者：
+            var manxingfuxie = mini.get("manxingfuxie").getValue(); //慢性腹泻
+            var manxingbianmi = mini.get("manxingbianmi").getValue(); //慢性腹泻
+            var nianyexuebian = mini.get("nianyexuebian").getValue(); //粘液血便
+            var jingshenchuangshang = mini.get("jingshenchuangshang").getValue(); //重大精神创伤或痛苦事件
+            var lanweiyan = mini.get("lanweiyan").getValue(); //慢性阑尾炎或阑尾切除史
+            var dannangyan = mini.get("dannangyan").getValue(); //慢性胆道疾病史或胆囊切除史
+
+            var liangxiang=0;
+            if(eval(manxingfuxie+manxingbianmi+nianyexuebian+jingshenchuangshang+lanweiyan+dannangyan)>=2){
+                liangxiang=1;
+            }
+            if(eval(crcFamilyFlag+azsHistoryFlag+changxirouFlag+liangxiang)>=1){
+                crcRiskResult=true;
+                $("#crcRiskResult").text("阳性");
+            }
+
+
+//2-2 肝癌危险的评估条件，满足下列a项以及b～f任一项者，危险度评估结果为 阳性。
+            //a.35-64岁的男性居民和45-64岁的女性居民；
+            var ageGenderFlag=0;
+            var gender = mini.get("gender").getValue();
+            var birth = mini.get("birth").getValue();
+            var start=new Date(birth);
+
+            var myDate = new Date();
+            var month = myDate.getMonth() + 1;
+            var day = myDate.getDate();
+            var age = myDate.getFullYear() - start.getFullYear() - 1;   //年龄
+
+            if (start.getMonth() < month ||start.getMonth()  == month && start.getDate() <= day) {
+                age++;
+            }
+            if(gender==1){
+                if(age>=35 &&age<=64){
+                    ageGenderFlag=1;
+                }
+            }else{
+                if(age>=45 &&age<=64){
+                    ageGenderFlag=1;
+                }
+            }
+            if(ageGenderFlag==1){
+                licRiskResult=true; //阳性
+                $("#licRiskResult").text("阳性");
+            }else{
+                var yiganFlag = mini.get("yigan").getValue();  //b.乙型肝炎
+
+                var bingganFlag = mini.get("binggan").getValue();  // c.丙型肝炎
+
+                var ganyinghuaFlag = mini.get("ganyinghua").getValue();  // d.肝硬化
+
+                var licFamilyFlag = mini.get("licFamilyFlag").getValue();//f.一级亲属有肝癌病史；
+
+                if(eval(yiganFlag+bingganFlag+ganyinghuaFlag+azsHistoryFlag+licFamilyFlag)>=1){
+                    licRiskResult=true;
+                    $("#licRiskResult").text("阳性");
+                }
+            }
+
+// 2-3 胃癌危险的评估条件，满足下列a项以及b～m任一项者，危险度评估结果为 阳性。
+            // a.年龄40岁以上，男女不限
+            if(age>40){
+                scRiskResult=true;
+                $("#scRiskResult").text("阳性");
+            }else{
+                var weisuoxingweiyanFlag = mini.get("weisuoxingweiyan").getValue();  //b.慢性萎缩性胃炎或肥厚性胃炎
+                var shierzhichangkuiyangFlag = mini.get("shierzhichangkuiyang").getValue();  //c.胃、十二指肠溃疡
+                var weichuxueFlag = mini.get("weichuxue").getValue();  //d.胃出血
+                var shiguanyanFlag = mini.get("shiguanyan").getValue();  //e.食管炎；
+                var weixirouFlag = mini.get("weixirou").getValue();  //f.胃息肉；
+                var canweiFlag = mini.get("canwei").getValue();  //g.手术后残胃
+                var pinxueFlag = mini.get("pinxue").getValue();  //h.恶性贫血
+
+                var jiagongrouleiFlag=0;// i.加工肉类选择“很少”或“经常”
+                var jiagongroulei = mini.get("jiagongroulei").getValue();
+                if(jiagongroulei==2 ||jiagongroulei==3){
+                    jiagongrouleiFlag=1;
+                }
+
+                var meibianshiwuFlag=0;//j.霉变食物选择“很少”或“经常”
+                var meibianshiwu = mini.get("meibianshiwu").getValue();
+                if(meibianshiwu==2 ||meibianshiwu==3){
+                    meibianshiwuFlag=1;
+                }
+
+                var hejiuFlag=0; //k.饮酒频率选择“每天”、“1～2天/每周”、“3～4天/每周”、“5～6天/每周”
+                var hejiu = mini.get("hejiu").getValue();
+                if(hejiu==1){
+                    var hejiupinlv = mini.get("hejiupinlv").getValue();
+                    if(hejiupinlv==1 ||hejiupinlv==2 ||hejiupinlv==3||hejiupinlv==4){
+                        hejiuFlag=1;
+                    }
+                }
+                // l.本人有癌症史；
+                var scFamilyFlag = mini.get("scFamilyFlag").getValue();  //m.一级亲属有胃癌病史；
+
+                if(eval(weisuoxingweiyanFlag+shierzhichangkuiyangFlag+weichuxueFlag+shiguanyanFlag+weixirouFlag+canweiFlag+pinxueFlag
+                    +jiagongrouleiFlag+meibianshiwuFlag+hejiuFlag+azsHistoryFlag+scFamilyFlag)>=1){
+                    scRiskResult=true;
+                    $("#scRiskResult").text("阳性");
+                }
+
+            }
+
+// 2-4 肺癌危险的评估条件，满足下列a项以及b～m任一项者，危险度评估结果为 阳性。
+            if(age>45){             //a.年龄45岁以上，男女不限
+                lucRiskResult=true;
+                $("#lucRiskResult").text("阳性");
+            }else{
+
+                var xiyanFlag=0;    // b.目前吸烟且指数400年支以上（20支/包）
+                var jieyanFLag=0;   // c.戒烟 <= 15年
+                var xiyan = mini.get("xiyan").getValue();
+                if(xiyan==3){
+                    var meitianxiyanliang = mini.get("meitianxiyanliang").getValue();
+                    if(eval(meitianxiyanliang*365>=400)){
+                        xiyanFlag=1;
+                    }
+                }else if(xiyan==2){
+                    var zuihouyicxiyan = mini.get("zuihouyicxiyan").getValue();
+                    if(zuihouyicxiyan<=15){
+                        jieyanFLag=1;
+                    }
+                }
+
+                var changqiFlag=0;   // d.长期厨房油烟接触频 选择“每天”
+                var leijiFlag=0;     // e.累计厨房油烟接触>=10年
+
+                var chufangyouyan = mini.get("chufangyouyan").getValue();
+                if(chufangyouyan==1){
+                    var youyanjiechupinlv = mini.get("youyanjiechupinlv").getValue();
+                    if(youyanjiechupinlv==4){
+                        changqiFlag=1;
+                    }
+
+                    var youyanjiechunianshu = mini.get("youyanjiechunianshu").getValue();
+                    if(youyanjiechunianshu>10){
+                        leijiFlag=1;
+                    }
+                }
+                var beidongFlag=0;  //f.被动吸烟选择“>2小时/天”
+                var leijibeidongFlag=0; //g.累计被动吸烟>=10年
+                var beidongxiyan = mini.get("beidongxiyan").getValue();
+                if(beidongxiyan!=4){
+                    if(beidongxiyan==3){
+                        beidongFlag=1;
+                    }else{
+                        var beidongxiyannianshu = mini.get("beidongxiyannianshu").getValue();
+                        if(beidongxiyannianshu>=10){
+                            leijibeidongFlag=1;
+                        }
+                    }
+                }
+
+                var zhiaiwuzhiFlag=0; //h.致癌物质暴露史>=5年
+                var zhiyezhiaiwuzhi = mini.get("zhiyezhiaiwuzhi").getValue();
+                if(zhiyezhiaiwuzhi==1){
+                    var zhiaiwuzhinianshu = mini.get("zhiaiwuzhinianshu").getValue();
+                    if(zhiaiwuzhinianshu>=5){
+                        zhiaiwuzhiFlag=1;
+                    }
+                }
+
+                var jibingFlag=0; // i.患有下列任意一疾病
+                var xiaochuan = mini.get("xiaochuan").getValue();
+                var zhiqiguanyan = mini.get("zhiqiguanyan").getValue();
+                var feiqizhong = mini.get("feiqizhong").getValue();
+                var feijiehe = mini.get("feijiehe").getValue();
+                var guichenzhuo = mini.get("guichenzhuo").getValue();
+                var xianweihua = mini.get("xianweihua").getValue();
+                var manzufei = mini.get("manzufei").getValue();
+                var qitafeibing = mini.get("qitafeibing").getValue();
+                if(eval(xiaochuan+zhiqiguanyan+feiqizhong+feijiehe+guichenzhuo+xianweihua+manzufei+qitafeibing)>=1){
+                    jibingFlag=1;
+                }
+                var lucFamilyFlag = mini.get("lucFamilyFlag").getValue();// m.一级亲属有癌症病史；
+
+                if(eval(xiyanFlag+jieyanFLag+changqiFlag+leijiFlag+beidongFlag+leijibeidongFlag+zhiaiwuzhiFlag+jibingFlag+azsHistoryFlag+lucFamilyFlag)>=1){
+                    lucRiskResult=true;
+                    $("#lucRiskResult").text("阳性");
+                }
+
+            }
+
+        }
+
+
+
+    }
 </script>
 </html>
