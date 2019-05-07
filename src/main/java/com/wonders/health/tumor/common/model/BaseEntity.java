@@ -12,29 +12,29 @@ public class BaseEntity implements Serializable {
 
     public static final String DEL_FLAG_DELETE = "1";
     public static final String DEL_FLAG_NORMAL = "0";
-    public static final String[] IGNORES = {"delFlag", "createDt", "createBy", "updateDt", "updateBy"};
+    public static final String[] IGNORES = {"delFlag", "createDate", "createBy", "updateDate", "updateBy"};
 
     protected String delFlag;
 
-    protected Date createDt;
+    protected Date createDate;
 
     protected String createBy;
 
-    protected Date updateDt;
+    protected Date updateDate;
 
     protected String updateBy;
 
     protected String remarks;
 
     public void initByUpdate() {
-        this.updateDt = new Date();
+        this.updateDate = new Date();
     }
 
     public void initByUpdate(String userId) {
         if (StringUtils.isNotBlank(userId)) {
             this.updateBy = userId;
         }
-        this.updateDt = new Date();
+        this.updateDate = new Date();
     }
 
     public void init(String userId) {
@@ -45,8 +45,8 @@ public class BaseEntity implements Serializable {
 
     public void init() {
         this.delFlag = DEL_FLAG_NORMAL;
-        this.createDt = new Date();
-        this.updateDt = this.createDt;
+        this.createDate = new Date();
+        this.updateDate = this.createDate;
     }
 
     public String getDelFlag() {
@@ -81,19 +81,19 @@ public class BaseEntity implements Serializable {
         this.remarks = remarks == null ? null : remarks.trim();
     }
 
-    public Date getCreateDt() {
-        return createDt;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public Date getUpdateDt() {
-        return updateDt;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    public void setUpdateDt(Date updateDt) {
-        this.updateDt = updateDt;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 }
