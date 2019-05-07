@@ -1071,11 +1071,6 @@
         
         //有无癌症史
         $("#azsTable").children(":first").children(":gt(0)").hide();
-
-        $('input.mini-radiobuttonlist').bind('valuechanged', function() {
-            console.log("===="+$(this).val());
-        });
-
     });
 
 
@@ -1524,19 +1519,38 @@
         }
     }
 
+
+    //徐汇专用 判断是否做过亲属癌症登记，传递参数为中文癌症汉字
+    function getXhAizheng(aizheng){
+        var flag=2;
+        var trList = $("#xhBody").children("tr");
+
+        for (var i=1;i<trList.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+            var aizhengzhonglei=tdArr.eq(5).find('input').val();
+
+            if(aizhengzhonglei==aizheng){
+                flag= 1;
+            }
+
+        }
+        return flag;
+    }
+
     //危险度评估结果计算
     function makeResult() {
         notDoneFlag=0;
 
         var areaCode='${areaCode}';
 
-        if (areaCode =='310104000000') {  //徐汇区
-
-
-        }else{  //非徐汇区
-
 //2-1 大肠癌危险的评估条件，满足下列条件任意一项者，危险度评估结果为 阳性。
-            var crcFamilyFlag = mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
+            var crcFamilyFlag =2;
+            if (areaCode =='310104000000') {    //徐汇区单独判断
+                crcFamilyFlag=getXhAizheng("大肠癌");//a.一级亲属有大肠癌病史；
+            }else{
+                crcFamilyFlag= mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
+            }
+
             var azsHistoryFlag = mini.get("azsHistory").getValue();//b.本人有癌症史；
             var changxirouFlag = mini.get("changxirou").getValue(); //c.本人有肠道息肉史
 
@@ -1606,7 +1620,12 @@
 
                 var ganyinghuaFlag = mini.get("ganyinghua").getValue();  // d.肝硬化
 
-                var licFamilyFlag = mini.get("licFamilyFlag").getValue();//f.一级亲属有肝癌病史；
+                var licFamilyFlag = 2;
+                if (areaCode =='310104000000') {        //徐汇区单独判断
+                    licFamilyFlag=getXhAizheng("肝癌");//f.一级亲属有肝癌病史；
+                }else{
+                    licFamilyFlag= mini.get("licFamilyFlag").getValue(); //f.一级亲属有肝癌病史；
+                }
 
                 if(eval(parseIntPlus(yiganFlag)+parseIntPlus(bingganFlag)+parseIntPlus(ganyinghuaFlag)+parseIntPlus(azsHistoryFlag)
                     +parseIntPlus(licFamilyFlag))>=1){
@@ -1662,7 +1681,12 @@
                     }
                 }
                 // l.本人有癌症史；
-                var scFamilyFlag = mini.get("scFamilyFlag").getValue();  //m.一级亲属有胃癌病史；
+                var scFamilyFlag = 2;
+                if (areaCode =='310104000000') {        //徐汇区单独判断
+                    scFamilyFlag=getXhAizheng("胃癌"); //m.一级亲属有胃癌病史；
+                }else{
+                    scFamilyFlag= mini.get("scFamilyFlag").getValue();  //m.一级亲属有胃癌病史；
+                }
 
                 if(eval(parseIntPlus(weisuoxingweiyanFlag)+parseIntPlus(shierzhichangkuiyangFlag)+parseIntPlus(weichuxueFlag)+parseIntPlus(shiguanyanFlag)
                     +parseIntPlus(weixirouFlag)+parseIntPlus(canweiFlag)+parseIntPlus(pinxueFlag)
@@ -1690,7 +1714,6 @@
                 lucRiskResult=true;
                 $("#lucRiskResult").text("阳性");
             }else{
-
                 var xiyanFlag=0;    // b.目前吸烟且指数400年支以上（20支/包）
                 var jieyanFlag=0;   // c.戒烟 <= 15年
                 var xiyan = mini.get("xiyan").getValue();
@@ -1757,7 +1780,12 @@
                     +parseIntPlus(xianweihua)+parseIntPlus(manzufei)+parseIntPlus(qitafeibing))>=1){
                     jibingFlag=1;
                 }
-                var lucFamilyFlag = mini.get("lucFamilyFlag").getValue();// m.一级亲属有癌症病史；
+                var lucFamilyFlag = 2;
+                if (areaCode =='310104000000') {        //徐汇区单独判断
+                    lucFamilyFlag=getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
+                }else{
+                    lucFamilyFlag= mini.get("lucFamilyFlag").getValue();  //m.一级亲属有肺癌病史；
+                }
 
                 if(eval(parseIntPlus(xiyanFlag)+parseIntPlus(jieyanFlag)+parseIntPlus(changqiFlag)+parseIntPlus(leijiFlag)+parseIntPlus(beidongFlag)
                     +parseIntPlus(leijibeidongFlag)+parseIntPlus(zhiaiwuzhiFlag)+parseIntPlus(jibingFlag)+parseIntPlus(azsHistoryFlag)+parseIntPlus(lucFamilyFlag))>=1){
@@ -1777,11 +1805,6 @@
                     $("#lucRiskResult").text("阴性");
                 }
             }
-
-        }
-
-
-
     }
 </script>
 </html>

@@ -418,7 +418,15 @@ public class ScreeningController extends BaseController {
                 crcRegcase.setCreateBy(user.getId());
                 crcRegcase.init();
                 crcRegcaseService.insert(crcRegcaseDao,crcRegcase);
-                crcRiskAssessmentService.insert(crcRiskAssessmentDao,screeningVo.getCrcRisk());
+                CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
+                crcrisk.setId(IdGen.uuid());
+                crcrisk.setCrcCheckId(personInfo.getId());
+                crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
+                crcrisk.setAssessmentDate(new Date());
+                crcrisk.setRiskQualityFlag("1");
+                crcrisk.setCreateBy(user.getId());
+                crcrisk.init();
+                crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
             }
             if(isOpen(licFlag)){
                 LicRegcase licRegcase=screeningVo.getLicRegcase();
@@ -434,7 +442,15 @@ public class ScreeningController extends BaseController {
                 licRegcase.setCreateBy(user.getId());
                 licRegcase.init();
                 licRegcaseService.insert(licRegcaseDao,licRegcase);
-                licRiskAssessmentService.insert(licRiskAssessmentDao,screeningVo.getLicRisk());
+                LicRiskAssessment licrisk=screeningVo.getLicRisk();
+                licrisk.setId(IdGen.uuid());
+                licrisk.setLicCheckId(personInfo.getId());
+                licrisk.setAssessmentDocName(AuthUtils.getUserById(licrisk.getAssessmentDoc()).getName());
+                licrisk.setAssessmentDate(new Date());
+                licrisk.setRiskQualityFlag("1");
+                licrisk.setCreateBy(user.getId());
+                licrisk.init();
+                licRiskAssessmentService.insert(licRiskAssessmentDao,licrisk);
             }
             if(isOpen(lucFlag)){
                 LucRegcase lucRegcase=screeningVo.getLucRegcase();
@@ -450,7 +466,15 @@ public class ScreeningController extends BaseController {
                 lucRegcase.setCreateBy(user.getId());
                 lucRegcase.init();
                 lucRegcaseService.insert(lucRegcaseDao,lucRegcase);
-                lucRiskAssessmentService.insert(lucRiskAssessmentDao,screeningVo.getLucRisk());
+                LucRiskAssessment lucrisk=screeningVo.getLucRisk();
+                lucrisk.setId(IdGen.uuid());
+                lucrisk.setLucCheckId(personInfo.getId());
+                lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
+                lucrisk.setAssessmentDate(new Date());
+                lucrisk.setRiskQualityFlag("1");
+                lucrisk.setCreateBy(user.getId());
+                lucrisk.init();
+                lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
             }
             if(isOpen(scFlag)){
                 ScRegcase scRegcase=screeningVo.getScRegcase();
@@ -466,6 +490,14 @@ public class ScreeningController extends BaseController {
                 scRegcase.setCreateBy(user.getId());
                 scRegcase.init();
                 scRegcaseService.insert(scRegcaseDao,scRegcase);
+                ScRiskAssessment scrisk=screeningVo.getScRisk();
+                scrisk.setId(IdGen.uuid());
+                scrisk.setScCheckId(personInfo.getId());
+                scrisk.setAssessmentDocName(AuthUtils.getUserById(scrisk.getAssessmentDoc()).getName());
+                scrisk.setAssessmentDate(new Date());
+                scrisk.setRiskQualityFlag("1");
+                scrisk.setCreateBy(user.getId());
+                scrisk.init();
                 scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
             }
 
@@ -534,7 +566,7 @@ public class ScreeningController extends BaseController {
 
             //修改亲属历史表-徐汇
             lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                luc.setCheckId(user.getId());
+                luc.setCheckId(personInfo.getId());
                 luc.setUpdateBy(user.getId());
                 lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
             });
