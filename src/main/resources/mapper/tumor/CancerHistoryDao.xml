@@ -85,7 +85,7 @@
 		) VALUES (
 		#{id},#{manageid},#{checkYear},
 		#{icd10},#{cancerName},#{age},#{hospitalCode},#{hospitalName},
-		#{isChange},'0',#{createBy},SYSDATE
+		#{ischange},'0',#{createBy},SYSDATE
 		)
 	</insert>
 	

@@ -7,6 +7,8 @@ import java.util.Date;
 import java.lang.String;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
+
+import com.wonders.health.auth.client.vo.User;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -65,6 +67,15 @@ public class CrcFobt extends BaseEntity {
 
 	public CrcFobt() {
 		super();
+	}
+	public CrcFobt(User user) {
+		super();
+		this.cbqReturnDate1=new Date();
+		this.cbqReturnDate2=new Date();
+		this.firstFobtDate=new Date();
+		this.secondFobtDate=new Date();
+		this.fobtDoc=user.getId();
+		this.fobtDocName=user.getName();
 	}
 
 	@JsonProperty("id")

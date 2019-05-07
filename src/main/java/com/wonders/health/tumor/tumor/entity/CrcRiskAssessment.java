@@ -8,6 +8,8 @@ import java.lang.String;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 import java.lang.Integer;
+
+import com.wonders.health.auth.client.vo.User;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -95,6 +97,12 @@ public class CrcRiskAssessment extends BaseEntity {
 
 	public CrcRiskAssessment() {
 		super();
+	}
+	public CrcRiskAssessment(User user) {
+		super();
+		this.assessmentDocName=user.getName();
+		this.assessmentDoc=user.getId();
+		this.assessmentDate=new Date();
 	}
 
 	@JsonProperty("id")

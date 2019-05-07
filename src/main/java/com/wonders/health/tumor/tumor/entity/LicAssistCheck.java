@@ -8,6 +8,8 @@ import java.lang.String;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 import java.lang.Integer;
+
+import com.wonders.health.auth.client.vo.User;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -64,7 +66,12 @@ public class LicAssistCheck extends BaseEntity {
 	public LicAssistCheck() {
 		super();
 	}
-
+	public LicAssistCheck(User user) {
+		super();
+		this.licAssistDate=new Date();
+		this.licAssistDoc=user.getId();
+		this.licAssistDocName=user.getName();
+	}
 	@JsonProperty("id")
 	public String getId() {
 		return id;

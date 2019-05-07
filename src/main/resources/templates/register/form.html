@@ -749,65 +749,73 @@
             <tr th:if="${crcFlag} eq '1'">
                 <td width="10%">大肠癌危险度评估结果</td>
                 <td class="text-l">
-                    <input id="crcRiskResult" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentResult1" name="crcRisk.assessmentResult" class="mini-hidden" />
+                    <input id="crcRiskResult" class="mini-textbox" th:value="${crcRisk.assessmentResult}" allowInput="false"/>
+                    <input id="assessmentResult1" name="crcRisk.assessmentResult" th:value="${crcRisk.assessmentResult}" class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估人员</td>
                 <td class="text-l">
-                    <input id="assessmentDocName1" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentDoc1" name="crcRisk.assessmentDoc" class="mini-hidden" />
+                    <input id="assessmentDocName1" class="mini-textbox" th:value="${crcRisk.assessmentDocName}" allowInput="false"/>
+                    <input id="assessmentDoc1" name="crcRisk.assessmentDoc" th:value="${crcRisk.assessmentDoc}"  class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估日期</td>
                 <td class="text-l">
-                    <input id="assessmentDate1" name="crcRisk.assessmentDate" class="mini-datepicker" allowInput="false"/>
+                    <input id="assessmentDate1" name="crcRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(crcRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
                 </td>
             </tr>
             <tr th:if="${licFlag} eq '1'">
                 <td width="10%">肝癌危险度评估结果</td>
                 <td class="text-l">
-                    <input id="licRiskResult" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentResult2" name="licRisk.assessmentResult" class="mini-hidden" />
+                    <input id="licRiskResult" class="mini-textbox" th:value="${licRisk.assessmentResult}"  allowInput="false"/>
+                    <input id="assessmentResult2" name="licRisk.assessmentResult" th:value="${licRisk.assessmentResult}"  class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估人员</td>
                 <td class="text-l">
-                    <input id="assessmentDocName2" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentDoc2" name="licRisk.assessmentDoc" class="mini-hidden" />
+                    <input id="assessmentDocName2" class="mini-textbox" th:value="${licRisk.assessmentDocName}" allowInput="false"/>
+                    <input id="assessmentDoc2" name="licRisk.assessmentDoc" th:value="${licRisk.assessmentDoc}" class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估日期</td>
                 <td class="text-l">
-                    <input id="assessmentDate2" name="licRisk.assessmentDate" class="mini-datepicker" allowInput="false"/>
+                    <input id="assessmentDate2" name="licRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(licRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
                 </td>
             </tr>
             <tr th:if="${scFlag} eq '1'">
                 <td width="10%">胃癌危险度评估结果</td>
                 <td class="text-l">
-                    <input id="scRiskResult" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentResult3" name="scRisk.assessmentResult" class="mini-hidden" />
+                    <input id="scRiskResult" class="mini-textbox" th:value="${scRisk.assessmentResult}" allowInput="false"/>
+                    <input id="assessmentResult3" name="scRisk.assessmentResult" th:value="${scRisk.assessmentResult}" class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估人员</td>
                 <td class="text-l">
-                    <input id="assessmentDocName3" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentDoc3" name="scRisk.assessmentDoc" class="mini-hidden" />
+                    <input id="assessmentDocName3" class="mini-textbox" th:value="${scRisk.assessmentDocName}" allowInput="false"/>
+                    <input id="assessmentDoc3" name="scRisk.assessmentDoc"  th:value="${scRisk.assessmentDoc}" class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估日期</td>
                 <td class="text-l">
-                    <input id="assessmentDate3" name="scRisk.assessmentDate" class="mini-datepicker" allowInput="false"/>
+                    <input id="assessmentDate3" name="scRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(scRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
                 </td>
             </tr>
             <tr th:if="${lucFlag} eq '1'">
                 <td width="10%">肺癌危险度评估结果</td>
                 <td class="text-l">
-                    <input id="lucRiskResult" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentResult4" name="lucRisk.assessmentResult" class="mini-hidden" />
+                    <input id="lucRiskResult" class="mini-textbox"  th:value="${lucRisk.assessmentResult}" allowInput="false"/>
+                    <input id="assessmentResult4" name="lucRisk.assessmentResult"  th:value="${lucRisk.assessmentResult}"  class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估人员</td>
                 <td class="text-l">
-                    <input id="assessmentDocName4" class="mini-textbox" allowInput="false"/>
-                    <input id="assessmentDoc4" name="lucRisk.assessmentDoc" class="mini-hidden" />
+                    <input id="assessmentDocName4" class="mini-textbox"  th:value="${lucRisk.assessmentDocName}" allowInput="false"/>
+                    <input id="assessmentDoc4" name="lucRisk.assessmentDoc"  th:value="${lucRisk.assessmentDoc}" class="mini-hidden" />
                 </td>
                 <td width="10%">危险度评估日期</td>
                 <td class="text-l">
-                    <input id="assessmentDate4" name="lucRisk.assessmentDate" class="mini-datepicker" allowInput="false"/>
+                    <input id="assessmentDate4" name="lucRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(lucRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
                 </td>
             </tr>
             </tbody>
@@ -830,12 +838,14 @@
                 <td width="10%">第一次采便器交回时间</td>
                 <td class="text-l">
                     <input id="cbqReturnDate1" name="crcFobt.cbqReturnDate1" class="mini-datepicker"
+                           th:value="${#dates.format(crcFobt.cbqReturnDate1,'yyyy-MM-dd')}"
                            width="70%" allowInput="false"/>
                 </td>
                 <td width="10%">第一次便隐血检查时间</td>
                 <td class="text-l">
                     <input id="firstFobtDate" name="crcFobt.firstFobtDate" class="mini-datepicker"
-                           width="70%" allowInput="false" th:value="${crcFobt.firstFobtDate}"/>
+                           th:value="${#dates.format(crcFobt.firstFobtDate,'yyyy-MM-dd')}"
+                           width="70%" allowInput="false"/>
                 </td>
             </tr>
             <tr>
@@ -848,23 +858,25 @@
                 <td width="10%">第二次采便器交回时间</td>
                 <td class="text-l">
                     <input id="cbqReturnDate2" name="crcFobt.cbqReturnDate2" class="mini-datepicker"
+                           th:value="${#dates.format(crcFobt.cbqReturnDate2,'yyyy-MM-dd')}"
                            width="70%" allowInput="false"/>
                 </td>
                 <td width="10%">第二次便隐血检查时间</td>
                 <td class="text-l">
                     <input id="secondFobtDate" name="crcFobt.secondFobtDate" class="mini-datepicker"
-                           width="70%" allowInput="false" th:value="${crcFobt.secondFobtDate}"/>
+                           th:value="${#dates.format(crcFobt.secondFobtDate,'yyyy-MM-dd')}"
+                           width="70%" allowInput="false" />
             </tr>
             <tr>
                 <td>便隐血检查结果</td>
                 <td>
-                    <input id="byxResult" class="mini-textbox" allowInput="false"/>
-                    <input id="fobtResult" name="crcFobt.fobtResult" class="mini-hidden" />
+                    <input id="byxResult" class="mini-textbox" allowInput="false" th:value="${crcFobt.fobtResult}"/>
+                    <input id="fobtResult" name="crcFobt.fobtResult" class="mini-hidden"  th:value="${crcFobt.fobtResult}"/>
                 </td>
                 <td>便隐血检验员</td>
                 <td>
-                    <input id="fobtDocName" class="mini-textbox" allowInput="false"/>
-                    <input id="fobtDoc" name="crcFobt.fobtDoc" class="mini-hidden" />
+                    <input id="fobtDocName" class="mini-textbox" allowInput="false"  th:value="${crcFobt.fobtDocName}"/>
+                    <input id="fobtDoc" name="crcFobt.fobtDoc" class="mini-hidden" th:value="${crcFobt.fobtDoc}"/>
                 </td>
                 <td colspan="2" class="bg-white"></td>
             </tr>
@@ -903,17 +915,19 @@
             <tr>
                 <td width="10%">肝癌辅助检查结果</td>
                 <td class="text-l">
-                    <input id="licResult" class="mini-textbox" allowInput="false" />
-                    <input id="licAssistResult" name="licCheck.licAssistResult" class="mini-hidden" />
+                    <input id="licResult" class="mini-textbox" allowInput="false" th:value="${licCheck.licAssistResult}"/>
+                    <input id="licAssistResult" name="licCheck.licAssistResult"  th:value="${licCheck.licAssistResult}" class="mini-hidden" />
                 </td>
                 <td width="10%">肝癌辅助检验人员</td>
                 <td class="text-l">
-                    <input id="licAssistDocName" class="mini-textbox" allowInput="false"/>
-                    <input id="licAssistDoc" name="licCheck.licAssistDoc" class="mini-hidden" />
+                    <input id="licAssistDocName" class="mini-textbox" allowInput="false"  th:value="${licCheck.licAssistDocName}"/>
+                    <input id="licAssistDoc" name="licCheck.licAssistDoc" class="mini-hidden"  th:value="${licCheck.licAssistDoc}"/>
                 </td>
                 <td width="10%">肝癌辅助检验日期</td>
                 <td class="text-l">
-                    <input id="licAssistDate" name="licCheck.licAssistDate" class="mini-datepicker" allowInput="false"/>
+                    <input id="licAssistDate" name="licCheck.licAssistDate" class="mini-datepicker"
+                           th:value="${#dates.format(licCheck.licAssistDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
                 </td>
             </tr>
             </tbody>
@@ -926,29 +940,29 @@
                 <tr th:if="${crcFlag} eq '1'">
                     <td width="10%">大肠癌初筛结果判定</td>
                     <td width="90%" class="text-l">
-                        <input id="checkResultName1" class="mini-textbox" allowInput="false"/>
-                        <input id="checkResult1" name="crcRegcase.checkResult" class="mini-hidden"/>
+                        <input id="checkResultName1" class="mini-textbox" allowInput="false" th:value="${crcRegcase.checkResult}"/>
+                        <input id="checkResult1" name="crcRegcase.checkResult" class="mini-hidden"  th:value="${crcRegcase.checkResult}"/>
                     </td>
                 </tr>
                 <tr th:if="${licFlag} eq '1'">
                     <td width="10%">肝癌初筛结果判定</td>
                     <td width="90%" class="text-l">
-                        <input id="checkResultName2" class="mini-textbox" allowInput="false"/>
-                        <input id="checkResult2" name="licRegcase.checkResult" class="mini-hidden"/>
+                        <input id="checkResultName2" class="mini-textbox" allowInput="false"  th:value="${licRegcase.checkResult}"/>
+                        <input id="checkResult2" name="licRegcase.checkResult" class="mini-hidden" th:value="${licRegcase.checkResult}"/>
                     </td>
                 </tr>
                 <tr th:if="${scFlag} eq '1'">
                     <td width="10%">胃癌初筛结果判定</td>
                     <td width="90%" class="text-l">
-                        <input id="checkResultName3" class="mini-textbox" allowInput="false"/>
-                        <input id="checkResult3" name="scRegcase.checkResult" class="mini-hidden"/>
+                        <input id="checkResultName3" class="mini-textbox" allowInput="false" th:value="${scRegcase.checkResult}"/>
+                        <input id="checkResult3" name="scRegcase.checkResult" class="mini-hidden" th:value="${scRegcase.checkResult}"/>
                     </td>
                 </tr>
                 <tr th:if="${lucFlag} eq '1'">
                     <td width="10%">肺癌初筛结果判定</td>
                     <td width="90%" class="text-l">
-                        <input id="checkResultName4" class="mini-textbox" allowInput="false"/>
-                        <input id="checkResult4" name="lucRegcase.checkResult" class="mini-hidden"/>
+                        <input id="checkResultName4" class="mini-textbox" allowInput="false" th:value="${lucRegcase.checkResult}"/>
+                        <input id="checkResult4" name="lucRegcase.checkResult" class="mini-hidden" th:value="${lucRegcase.checkResult}"/>
                     </td>
                 </tr>
             </tbody>
@@ -986,6 +1000,7 @@
     var licDbflag = [[${licDbflag}]];
     var scDbflag = [[${scDbflag}]];
     var lucDbflag = [[${lucDbflag}]];
+    var nowDate='${nowDate}';
 
     //危险度评估结果
     var crcRiskResult=false;    //大肠癌危险度评估结果
@@ -1542,6 +1557,8 @@
         notDoneFlag=0;
 
         var areaCode='${areaCode}';
+        var docName="${#auth.getUserById(personInfo.regdoc).name}";
+
 
 //2-1 大肠癌危险的评估条件，满足下列条件任意一项者，危险度评估结果为 阳性。
             var crcFamilyFlag =2;

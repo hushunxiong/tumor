@@ -139,20 +139,42 @@ public class ScreeningController extends BaseController {
             personInfo.setRegdate(new Date());
 
             model.addAttribute("personInfo", personInfo);
-            model.addAttribute("lucRisk", new LucRiskAssessment());
-            model.addAttribute("scRisk", new ScRiskAssessment());
-            model.addAttribute("crcRisk", new CrcRiskAssessment());
-            model.addAttribute("licRisk", new LicRiskAssessment());
-            model.addAttribute("crcFobt", new CrcFobt());
-            model.addAttribute("licCheck", new LicAssistCheck());
+            model.addAttribute("lucRisk", new LucRiskAssessment(getSessionUser()));
+            model.addAttribute("scRisk", new ScRiskAssessment(getSessionUser()));
+            model.addAttribute("crcRisk", new CrcRiskAssessment(getSessionUser()));
+            model.addAttribute("licRisk", new LicRiskAssessment(getSessionUser()));
+            model.addAttribute("crcFobt", new CrcFobt(getSessionUser()));
+            model.addAttribute("licCheck", new LicAssistCheck(getSessionUser()));
+
+            model.addAttribute("crcRegcase", new CrcRegcase());
+            model.addAttribute("licRegcase", new LicRegcase());
+            model.addAttribute("lucRegcase", new LucRegcase());
+            model.addAttribute("scRegcase", new ScRegcase());
 
             model.addAttribute("idNumber", "");
             model.addAttribute("flag", "1"); //1：新增
         } else {
+            ScreeningVo screeningVo=getDetail(manageId,checkYear);
+            model.addAttribute("lucRisk", screeningVo.getLucRisk());
+            model.addAttribute("scRisk", screeningVo.getScRisk());
+            model.addAttribute("crcRisk", screeningVo.getCrcRisk());
+            model.addAttribute("licRisk", screeningVo.getLicRisk());
+
+            model.addAttribute("crcRegcase", screeningVo.getCrcRegcase());
+            model.addAttribute("licRegcase", screeningVo.getLicRegcase());
+            model.addAttribute("lucRegcase", screeningVo.getLucRegcase());
+            model.addAttribute("scRegcase", screeningVo.getScRegcase());
+
+            model.addAttribute("flag", "2"); //2:修改
+            //各癌症数据库存在标志
+            model.addAttribute("crcDbflag", "2"); //数据库状态  1：新增 2：修改
+            model.addAttribute("licDbflag", "2"); //数据库状态  1：新增 2：修改
+            model.addAttribute("scDbflag", "2");  //数据库状态  1：新增 2：修改
+            model.addAttribute("lucDbflag", "2"); //数据库状态  1：新增 2：修改
+            model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
             model.addAttribute("flag", "2"); //2：修改
         }
 
-        //TODO
         //各癌症数据库存在标志
         model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
         model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
@@ -164,6 +186,8 @@ public class ScreeningController extends BaseController {
         model.addAttribute("scFlag", scFlag);
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("areaCode", areaCode);
+
+        model.addAttribute("nowDate",DateUtils.formatDate(new Date(),"yyyy-mm-dd"));
         return "/register/form";
     }
 
@@ -376,17 +400,20 @@ public class ScreeningController extends BaseController {
 
         //本人癌症史表
         List<CancerHistory> historyList=screeningVo.getHistoryList();
-        historyList.stream().forEach(history->{
-            history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-            history.setCancerName(getCancerName(history.getIcd10(),"60020"));
-            history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
-        });
+        if(historyList!=null&& historyList.size()>0){
+            historyList.stream().forEach(history->{
+                history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                history.setCancerName(getCancerName(history.getIcd10(),"60020"));
+                history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
+            });
+        }
+
 
         //亲属历史表-徐汇
         List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();
         List<FamilyCancerHistory> familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();
 
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0){
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
             lucFamilyCancerHistoryXHList.stream().forEach(family->{
                 family.setCancerName(getCancerName(family.getIcd10(),"60020"));
             });
@@ -395,121 +422,135 @@ public class ScreeningController extends BaseController {
         User user=getSessionUser();
 
         if(personInfo.getId()==null){  //新增
-            personInfo.setId(IdGen.uuid());
+//            personInfo.setId(IdGen.uuid());
             personInfo.init(user.getId());
-            screeningVo.getCrcRegcase().setManageid(personInfo.getId());
-            screeningVo.getScRegcase().setManageid(personInfo.getId());
-            screeningVo.getLicRegcase().setManageid(personInfo.getId());
-            screeningVo.getLucRegcase().setManageid(personInfo.getId());
 
             cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
 
+
             if(isOpen(crcFlag)){
                 CrcRegcase crcRegcase=screeningVo.getCrcRegcase();
-                crcRegcase.setId(IdGen.uuid());
-                crcRegcase.setManageid(personInfo.getId());
-                crcRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                crcRegcase.setRegionCode(areaCode);
-                crcRegcase.setRegorg(getSessionUser().getOrgCode());
-                crcRegcase.setRegdoc(getSessionUser().getId());
-                crcRegcase.setRegdate(new Date());
-                crcRegcase.setSubmitsStatus("1");
-                crcRegcase.setCloseStatus("2");
-                crcRegcase.setCreateBy(user.getId());
-                crcRegcase.init();
-                crcRegcaseService.insert(crcRegcaseDao,crcRegcase);
+                if(crcRegcase!=null && StringUtils.isNotBlank(crcRegcase.getIdNumber())){
+                    crcRegcase.setId(IdGen.uuid());
+                    crcRegcase.setManageid(personInfo.getId());
+                    crcRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    crcRegcase.setRegionCode(areaCode);
+                    crcRegcase.setRegorg(getSessionUser().getOrgCode());
+                    crcRegcase.setRegdoc(getSessionUser().getId());
+                    crcRegcase.setRegdate(new Date());
+                    crcRegcase.setSubmitsStatus("1");
+                    crcRegcase.setCloseStatus("2");
+                    crcRegcase.setCreateBy(user.getId());
+                    crcRegcase.init();
+                    crcRegcaseService.insert(crcRegcaseDao,crcRegcase);
+                }
                 CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
-                crcrisk.setId(IdGen.uuid());
-                crcrisk.setCrcCheckId(personInfo.getId());
-                crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
-                crcrisk.setAssessmentDate(new Date());
-                crcrisk.setRiskQualityFlag("1");
-                crcrisk.setCreateBy(user.getId());
-                crcrisk.init();
-                crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
+                if(crcrisk!=null&&crcrisk.getAssessmentDoc()!=null && StringUtils.isNotBlank(crcrisk.getAssessmentDoc()) ){
+                    crcrisk.setId(IdGen.uuid());
+                    crcrisk.setCrcCheckId(personInfo.getId());
+                    crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
+                    crcrisk.setAssessmentDate(new Date());
+                    crcrisk.setRiskQualityFlag("1");
+                    crcrisk.setCreateBy(user.getId());
+                    crcrisk.init();
+                    crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
+                }
             }
             if(isOpen(licFlag)){
                 LicRegcase licRegcase=screeningVo.getLicRegcase();
-                licRegcase.setId(IdGen.uuid());
-                licRegcase.setManageid(personInfo.getId());
-                licRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                licRegcase.setRegionCode(areaCode);
-                licRegcase.setRegorg(getSessionUser().getOrgCode());
-                licRegcase.setRegdoc(getSessionUser().getId());
-                licRegcase.setRegdate(new Date());
-                licRegcase.setSubmitsStatus("1");
-                licRegcase.setCloseStatus("2");
-                licRegcase.setCreateBy(user.getId());
-                licRegcase.init();
-                licRegcaseService.insert(licRegcaseDao,licRegcase);
+                if(licRegcase!=null){
+                    licRegcase.setId(IdGen.uuid());
+                    licRegcase.setManageid(personInfo.getId());
+                    licRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    licRegcase.setRegionCode(areaCode);
+                    licRegcase.setRegorg(getSessionUser().getOrgCode());
+                    licRegcase.setRegdoc(getSessionUser().getId());
+                    licRegcase.setRegdate(new Date());
+                    licRegcase.setSubmitsStatus("1");
+                    licRegcase.setCloseStatus("2");
+                    licRegcase.setCreateBy(user.getId());
+                    licRegcase.init();
+                    licRegcaseService.insert(licRegcaseDao,licRegcase);
+                }
                 LicRiskAssessment licrisk=screeningVo.getLicRisk();
-                licrisk.setId(IdGen.uuid());
-                licrisk.setLicCheckId(personInfo.getId());
-                licrisk.setAssessmentDocName(AuthUtils.getUserById(licrisk.getAssessmentDoc()).getName());
-                licrisk.setAssessmentDate(new Date());
-                licrisk.setRiskQualityFlag("1");
-                licrisk.setCreateBy(user.getId());
-                licrisk.init();
-                licRiskAssessmentService.insert(licRiskAssessmentDao,licrisk);
+                if(licrisk!=null && StringUtils.isNotBlank(licrisk.getAssessmentDoc()) ){
+                    licrisk.setId(IdGen.uuid());
+                    licrisk.setLicCheckId(personInfo.getId());
+                    licrisk.setAssessmentDocName(AuthUtils.getUserById(licrisk.getAssessmentDoc()).getName());
+                    licrisk.setAssessmentDate(new Date());
+                    licrisk.setRiskQualityFlag("1");
+                    licrisk.setCreateBy(user.getId());
+                    licrisk.init();
+                    licRiskAssessmentService.insert(licRiskAssessmentDao,licrisk);
+                }
             }
             if(isOpen(lucFlag)){
                 LucRegcase lucRegcase=screeningVo.getLucRegcase();
-                lucRegcase.setId(IdGen.uuid());
-                lucRegcase.setManageid(personInfo.getId());
-                lucRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                lucRegcase.setRegionCode(areaCode);
-                lucRegcase.setRegorg(getSessionUser().getOrgCode());
-                lucRegcase.setRegdoc(getSessionUser().getId());
-                lucRegcase.setRegdate(new Date());
-                lucRegcase.setSubmitsStatus("1");
-                lucRegcase.setCloseStatus("2");
-                lucRegcase.setCreateBy(user.getId());
-                lucRegcase.init();
-                lucRegcaseService.insert(lucRegcaseDao,lucRegcase);
+                if(lucRegcase!=null){
+                    lucRegcase.setId(IdGen.uuid());
+                    lucRegcase.setManageid(personInfo.getId());
+                    lucRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    lucRegcase.setRegionCode(areaCode);
+                    lucRegcase.setRegorg(getSessionUser().getOrgCode());
+                    lucRegcase.setRegdoc(getSessionUser().getId());
+                    lucRegcase.setRegdate(new Date());
+                    lucRegcase.setSubmitsStatus("1");
+                    lucRegcase.setCloseStatus("2");
+                    lucRegcase.setCreateBy(user.getId());
+                    lucRegcase.init();
+                    lucRegcaseService.insert(lucRegcaseDao,lucRegcase);
+                }
                 LucRiskAssessment lucrisk=screeningVo.getLucRisk();
-                lucrisk.setId(IdGen.uuid());
-                lucrisk.setLucCheckId(personInfo.getId());
-                lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
-                lucrisk.setAssessmentDate(new Date());
-                lucrisk.setRiskQualityFlag("1");
-                lucrisk.setCreateBy(user.getId());
-                lucrisk.init();
-                lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
+                if(lucrisk!=null && StringUtils.isNotBlank(lucrisk.getAssessmentDoc())){
+                    lucrisk.setId(IdGen.uuid());
+                    lucrisk.setLucCheckId(personInfo.getId());
+                    lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
+                    lucrisk.setAssessmentDate(new Date());
+                    lucrisk.setRiskQualityFlag("1");
+                    lucrisk.setCreateBy(user.getId());
+                    lucrisk.init();
+                    lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
+                }
             }
             if(isOpen(scFlag)){
                 ScRegcase scRegcase=screeningVo.getScRegcase();
-                scRegcase.setId(IdGen.uuid());
-                scRegcase.setManageid(personInfo.getId());
-                scRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                scRegcase.setRegionCode(areaCode);
-                scRegcase.setRegorg(getSessionUser().getOrgCode());
-                scRegcase.setRegdoc(getSessionUser().getId());
-                scRegcase.setRegdate(new Date());
-                scRegcase.setSubmitsStatus("1");
-                scRegcase.setCloseStatus("2");
-                scRegcase.setCreateBy(user.getId());
-                scRegcase.init();
-                scRegcaseService.insert(scRegcaseDao,scRegcase);
+                if(scRegcase!=null){
+                    scRegcase.setId(IdGen.uuid());
+                    scRegcase.setManageid(personInfo.getId());
+                    scRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    scRegcase.setRegionCode(areaCode);
+                    scRegcase.setRegorg(getSessionUser().getOrgCode());
+                    scRegcase.setRegdoc(getSessionUser().getId());
+                    scRegcase.setRegdate(new Date());
+                    scRegcase.setSubmitsStatus("1");
+                    scRegcase.setCloseStatus("2");
+                    scRegcase.setCreateBy(user.getId());
+                    scRegcase.init();
+                    scRegcaseService.insert(scRegcaseDao,scRegcase);
+                }
                 ScRiskAssessment scrisk=screeningVo.getScRisk();
-                scrisk.setId(IdGen.uuid());
-                scrisk.setScCheckId(personInfo.getId());
-                scrisk.setAssessmentDocName(AuthUtils.getUserById(scrisk.getAssessmentDoc()).getName());
-                scrisk.setAssessmentDate(new Date());
-                scrisk.setRiskQualityFlag("1");
-                scrisk.setCreateBy(user.getId());
-                scrisk.init();
-                scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
+                if(scrisk!=null && StringUtils.isNotBlank(scrisk.getAssessmentDoc())){
+                    scrisk.setId(IdGen.uuid());
+                    scrisk.setScCheckId(personInfo.getId());
+                    scrisk.setAssessmentDocName(AuthUtils.getUserById(scrisk.getAssessmentDoc()).getName());
+                    scrisk.setAssessmentDate(new Date());
+                    scrisk.setRiskQualityFlag("1");
+                    scrisk.setCreateBy(user.getId());
+                    scrisk.init();
+                    scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
+                }
+            }
+            if(historyList!=null && historyList.size()>0){
+                //插入历史癌症表
+                historyList.stream().forEach(history->{
+                    history.setId(IdGen.uuid());
+                    history.setManageid(personInfo.getId());
+                    history.setCreateBy(user.getId());
+                    cancerHistoryService.insert(cancerHistoryDao,history);
+                });
             }
 
-            //插入历史癌症表
-            historyList.stream().forEach(history->{
-                history.setId(IdGen.uuid());
-                history.setManageid(personInfo.getId());
-                history.setCreateBy(user.getId());
-                cancerHistoryService.insert(cancerHistoryDao,history);
-            });
-
-            if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0){
+            if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
                 //亲属历史表-徐汇
                 lucFamilyCancerHistoryXHList.stream().forEach(luc->{
                     luc.setId(IdGen.uuid());
@@ -518,13 +559,15 @@ public class ScreeningController extends BaseController {
                     lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
                 });
             }else{
-                //亲属历史表
-                familyCancerHistoryList.stream().forEach(family->{
-                    family.setId(IdGen.uuid());
-                    family.setCheckId(personInfo.getId());
-                    family.setCreateBy(user.getId());
-                    familyCancerHistoryService.insert(familyCancerHistoryDao,family);
-                });
+                if(familyCancerHistoryList!=null){
+                    //亲属历史表
+                    familyCancerHistoryList.stream().forEach(family->{
+                        family.setId(IdGen.uuid());
+                        family.setCheckId(personInfo.getId());
+                        family.setCreateBy(user.getId());
+                        familyCancerHistoryService.insert(familyCancerHistoryDao,family);
+                    });
+                }
             }
 
         }else{  //修改
@@ -533,43 +576,63 @@ public class ScreeningController extends BaseController {
             cancerPersonInfoService.updateChange(personInfo.getId());
 
             if(isOpen(crcFlag)){
-                crcRegcaseService.update(crcRegcaseDao,screeningVo.getCrcRegcase());
-                crcRiskAssessmentService.update(crcRiskAssessmentDao,screeningVo.getCrcRisk());
+                if(screeningVo.getCrcRegcase()!=null){
+                    crcRegcaseService.update(crcRegcaseDao,screeningVo.getCrcRegcase());
+                }
+                if(screeningVo.getCrcRisk()!=null){
+                    crcRiskAssessmentService.update(crcRiskAssessmentDao,screeningVo.getCrcRisk());
+                }
+
             }
             if(isOpen(licFlag)){
-                licRegcaseService.update(licRegcaseDao,screeningVo.getLicRegcase());
-                licRiskAssessmentService.update(licRiskAssessmentDao,screeningVo.getLicRisk());
+                if(screeningVo.getLicRegcase()!=null){
+                    licRegcaseService.update(licRegcaseDao,screeningVo.getLicRegcase());
+                }
+                if(screeningVo.getLicRisk()!=null){
+                    licRiskAssessmentService.update(licRiskAssessmentDao,screeningVo.getLicRisk());
+                }
             }
             if(isOpen(lucFlag)){
-                lucRegcaseService.update(lucRegcaseDao,screeningVo.getLucRegcase());
-                lucRiskAssessmentService.update(lucRiskAssessmentDao,screeningVo.getLucRisk());
+                if(screeningVo.getLucRegcase()!=null){
+                    lucRegcaseService.update(lucRegcaseDao,screeningVo.getLucRegcase());
+                }
+                if(screeningVo.getLucRisk()!=null){
+                    lucRiskAssessmentService.update(lucRiskAssessmentDao,screeningVo.getLucRisk());
+                }
             }
             if(isOpen(scFlag)){
-                scRegcaseService.update(scRegcaseDao,screeningVo.getScRegcase());
-                scRiskAssessmentService.update(scRiskAssessmentDao,screeningVo.getScRisk());
+                if(screeningVo.getScRegcase()!=null){
+                    scRegcaseService.update(scRegcaseDao,screeningVo.getScRegcase());
+                }
+                if(screeningVo.getScRisk()!=null){
+                    scRiskAssessmentService.update(scRiskAssessmentDao,screeningVo.getScRisk());
+                }
             }
-
-            //修改历史癌症表
-            historyList.stream().forEach(history->{
-                history.setManageid(personInfo.getId());
-                history.setUpdateBy(user.getId());
-                history.setIschange("1");
-                cancerHistoryService.update(cancerHistoryDao,history);
-            });
-
-            //修改亲属历史表
-            familyCancerHistoryList.stream().forEach(family->{
-                family.setCheckId(personInfo.getId());
-                family.setUpdateBy(user.getId());
-                familyCancerHistoryService.update(familyCancerHistoryDao,family);
-            });
-
-            //修改亲属历史表-徐汇
-            lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                luc.setCheckId(personInfo.getId());
-                luc.setUpdateBy(user.getId());
-                lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
-            });
+            if(historyList!=null){
+                //修改历史癌症表
+                historyList.stream().forEach(history->{
+                    history.setManageid(personInfo.getId());
+                    history.setUpdateBy(user.getId());
+                    history.setIschange("1");
+                    cancerHistoryService.update(cancerHistoryDao,history);
+                });
+            }
+            if(familyCancerHistoryList!=null){
+                //修改亲属历史表
+                familyCancerHistoryList.stream().forEach(family->{
+                    family.setCheckId(personInfo.getId());
+                    family.setUpdateBy(user.getId());
+                    familyCancerHistoryService.update(familyCancerHistoryDao,family);
+                });
+            }
+            if(lucFamilyCancerHistoryXHList!=null){
+                //修改亲属历史表-徐汇
+                lucFamilyCancerHistoryXHList.stream().forEach(luc->{
+                    luc.setCheckId(personInfo.getId());
+                    luc.setUpdateBy(user.getId());
+                    lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
+                });
+            }
         }
 
         return new AjaxReturn(true,"保存成功",personInfo.getId());
