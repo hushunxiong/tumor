@@ -3,7 +3,7 @@
 <mapper namespace="com.wonders.health.tumor.tumor.dao.CrcFobtDao">
     
 	<sql id="CrcFobtColumns">
-		a.id AS "id",a.crc_check_id AS "crcCheckId",a.cbq_return_date1 as cbqReturnDate1,a.cbq_return_date2 as cbqReturnDate2,
+		a.id AS "id",a.crc_check_id AS "crcCheckId",
 		a.first_fobt_result AS "firstFobtResult",a.second_fobt_result AS "secondFobtResult",a.first_fobt_date AS "firstFobtDate",a.second_fobt_date AS "secondFobtDate",a.fobt_result AS "fobtResult",a.fobt_doc AS "fobtDoc",a.fobt_doc_name AS "fobtDocName",a.upload_time AS "uploadTime",a.ischange AS "ischange",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
 	</sql>
 
@@ -77,18 +77,17 @@
 	
 	<insert id="insert">
 		INSERT INTO crc_fobt(
-		id,crc_check_id,cbq_return_date1,cbq_return_date2,
+		id,crc_check_id,
 		first_fobt_result,second_fobt_result,first_fobt_date,second_fobt_date,fobt_result,fobt_doc,fobt_doc_name,upload_time,ischange,del_flag,create_by,create_date
 		) VALUES (
-		#{id},#{crcCheckId},#{cbqReturnDate1},#{cbqReturnDate2}
+		#{id},#{crcCheckId},
 		#{firstFobtResult},#{secondFobtResult},#{firstFobtDate},#{secondFobtDate},#{fobtResult},#{fobtDoc},#{fobtDocName},#{uploadTime},#{ischange},#{delFlag},#{createBy},#{createDate}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE crc_fobt SET
-		cbq_return_date1=#{cbqReturnDate1},
-		cbq_return_date2=#{cbqReturnDate2},
+
 		first_fobt_result = #{firstFobtResult},second_fobt_result = #{secondFobtResult},first_fobt_date = #{firstFobtDate},second_fobt_date = #{secondFobtDate},fobt_result = #{fobtResult},fobt_doc = #{fobtDoc},fobt_doc_name = #{fobtDocName},upload_time = #{uploadTime},ischange = #{ischange},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
 		WHERE id = #{id}
 	</update>

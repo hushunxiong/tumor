@@ -4,6 +4,7 @@
     
 	<sql id="CrcRegcaseColumns">
 		a.id AS "id",a.manageid AS "manageid",a.id_number AS "idNumber",
+		a.cbq_return_date1 as cbqReturnDate1,
 		a.check_year AS "checkYear",a.check_result AS "checkResult",
 		a.region_code AS "regionCode",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",
 		a.submits_status AS "submitsStatus",a.submit_date AS "submitDate",
@@ -47,7 +48,7 @@
 
 	<insert id="insert">
 		INSERT INTO crc_regcase(
-		id,manageid,
+		id,manageid,cbq_return_date1,cbq_return_date2,
 		id_number,check_year,check_result,
 		region_code,regorg,regdoc,
 		regdate,submits_status,submit_date,
@@ -57,7 +58,7 @@
 		upload_time,source_id,
 		ischange,del_flag,create_by,create_date
 		) VALUES (
-		#{id},#{manageid},
+		#{id},#{manageid},#{cbqReturnDate1},#{cbqReturnDate2},
 		#{idNumber},#{checkYear},#{checkResult},
 		#{regionCode},#{regorg},#{regdoc},
 		#{regdate},#{submitsStatus},#{submitDate},
@@ -71,9 +72,9 @@
 	<update id="update">
 		UPDATE crc_regcase
 		SET
-		manageid = #{manageid},
-		id_number = #{idNumber},
-		check_year = #{checkYear},check_result = #{checkResult},
+		cbq_return_date1=#{cbqReturnDate1},
+		cbq_return_date2=#{cbqReturnDate2},
+		check_result = #{checkResult},
 		region_code = #{regionCode},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},
 		submits_status = #{submitsStatus},submit_date = #{submitDate},
 		trans_date = #{transDate},print_date = #{printDate},

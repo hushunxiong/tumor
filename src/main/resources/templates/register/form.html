@@ -743,7 +743,7 @@
             </div>
         </div>
 
-        <div class="title_tip mt-30">危险度评估结果<button name="" onclick="makeResult()">计算</button> </div>
+        <div class="title_tip mt-30">危险度评估结果 <button class="my-btn my-btn-blue mr-20" onclick="makeResult()">计算危险度评估结果</button></div>
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr th:if="${crcFlag} eq '1'">
@@ -832,13 +832,13 @@
                 <td width="10%">第一次便隐血检查结果</td>
                 <td class="text-l">
                     <input id="firstFobtResult" name="crcFobt.firstFobtResult" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.firstFobtResult}"
+                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.firstFobtResult}" onvaluechanged="makeByxResult()"
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                 </td>
                 <td width="10%">第一次采便器交回时间</td>
                 <td class="text-l">
-                    <input id="cbqReturnDate1" name="crcFobt.cbqReturnDate1" class="mini-datepicker"
-                           th:value="${#dates.format(crcFobt.cbqReturnDate1,'yyyy-MM-dd')}"
+                    <input id="cbqReturnDate1" name="crcRegcase.cbqReturnDate1" class="mini-datepicker"
+                           th:value="${#dates.format(crcRegcase.cbqReturnDate1,'yyyy-MM-dd')}"
                            width="70%" allowInput="false"/>
                 </td>
                 <td width="10%">第一次便隐血检查时间</td>
@@ -852,13 +852,13 @@
                 <td width="10%">第二次便隐血检查结果</td>
                 <td class="text-l">
                     <input id="secondFobtResult" name="crcFobt.secondFobtResult" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
-                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.secondFobtResult}"
+                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.secondFobtResult}" onvaluechanged="makeByxResult()"
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                 </td>
                 <td width="10%">第二次采便器交回时间</td>
                 <td class="text-l">
-                    <input id="cbqReturnDate2" name="crcFobt.cbqReturnDate2" class="mini-datepicker"
-                           th:value="${#dates.format(crcFobt.cbqReturnDate2,'yyyy-MM-dd')}"
+                    <input id="cbqReturnDate2" name="crcRegcase.cbqReturnDate2" class="mini-datepicker"
+                           th:value="${#dates.format(crcRegcase.cbqReturnDate2,'yyyy-MM-dd')}"
                            width="70%" allowInput="false"/>
                 </td>
                 <td width="10%">第二次便隐血检查时间</td>
@@ -870,7 +870,7 @@
             <tr>
                 <td>便隐血检查结果</td>
                 <td>
-                    <input id="byxResult" class="mini-textbox" allowInput="false" th:value="${crcFobt.fobtResult}"/>
+                    <input id="byxResult" class="mini-textbox" name="crcFobt.fobtResult" allowInput="false" th:value="${crcFobt.fobtResult}"/>
                     <input id="fobtResult" name="crcFobt.fobtResult" class="mini-hidden"  th:value="${crcFobt.fobtResult}"/>
                 </td>
                 <td>便隐血检验员</td>
@@ -903,12 +903,12 @@
             <tr>
                 <td width="10%">AFP（ug/L）</td>
                 <td class="text-l">
-                    <input id="afp" name="licCheck.afp" class="mini-textbox" th:value="${licCheck.afp}" vtype="int"/>
+                    <input id="afp" name="licCheck.afp" class="mini-textbox" th:value="${licCheck.afp}" vtype="int" onvaluechanged="makeLicResult();"/>
                 </td>
                 <td width="10%">B超</td>
                 <td class="text-l">
                     <input id="bus" name="licCheck.bus" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
-                           th:data="${#dic.generals('60001')}" th:value="${licCheck.bus}"
+                           th:data="${#dic.generals('60001')}" th:value="${licCheck.bus}"  onvaluechanged="makeLicResult();"
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
                 </td>
             </tr>
@@ -934,7 +934,7 @@
         </table>
         </div>
 
-        <div class="title_tip mt-30">初筛结果判定</div>
+        <div class="title_tip mt-30">初筛结果判定<button class="my-btn my-btn-blue mr-20" onclick="makeChushaiResult()">计算初筛结果</button></div>
         <table class="table_new table_new5 mt-10">
             <tbody>
                 <tr th:if="${crcFlag} eq '1'">
@@ -1137,7 +1137,7 @@
             type:'get',
             dataType:'json',
             success:function(res){
-                // mini.unmask(document.body);
+                mini.unmask(document.body);
                 if(!res.ok){ //检查过
                     mini.showTips({
                         content: res.msg,
@@ -1422,10 +1422,9 @@
                         var checkYear = mini.get("checkYear").getValue();
                         $("#id").val(res.value);
 
-                        // setTimeout(function(){
-                        //     window.location.href='/tumor/screening/reform?manageId='+res.value+"&&checkYear="+checkYear+
-                        //         "&&type="+zjlx+"&&personcardno="+zjhm;
-                        // },2000)
+                        setTimeout(function(){
+                            window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
+                        },2000)
 
                     }else{
                         mini.showTips({
@@ -1589,6 +1588,7 @@
             if(eval(parseIntPlus(crcFamilyFlag)+parseIntPlus(azsHistoryFlag)+parseIntPlus(changxirouFlag)+parseIntPlus(liangxiang))>=1){
                     crcRiskResult=true;
                     $("#crcRiskResult").text("阳性");
+                    $("#assessmentResult1").val("2");
             }else{
                 if(notDoneFlag==1){
                     mini.showTips({
@@ -1602,6 +1602,7 @@
                 }
 
                 $("#crcRiskResult").text("阴性");
+                $("#assessmentResult1").val("1");
             }
 
 //2-2 肝癌危险的评估条件，满足下列a项以及b～f任一项者，危险度评估结果为 阳性。
@@ -1631,6 +1632,7 @@
             if(ageGenderFlag==1){
                 licRiskResult=true; //阳性
                 $("#licRiskResult").text("阳性");
+                $("#assessmentResult2").val("2");
             }else{
                 var yiganFlag = mini.get("yigan").getValue();  //b.乙型肝炎
 
@@ -1649,6 +1651,7 @@
                     +parseIntPlus(licFamilyFlag))>=1){
                         licRiskResult=true;
                         $("#licRiskResult").text("阳性");
+                        $("#assessmentResult2").val("2");
                 }else{
                     if(notDoneFlag==1){
                         mini.showTips({
@@ -1661,6 +1664,7 @@
                         return;
                     }
                     $("#licRiskResult").text("阴性");
+                    $("#assessmentResult2").val("1");
                 }
             }
 
@@ -1669,6 +1673,7 @@
             if(age>40){
                 scRiskResult=true;
                 $("#scRiskResult").text("阳性");
+                $("#assessmentResult3").val("2");
             }else{
                 var weisuoxingweiyanFlag = mini.get("weisuoxingweiyan").getValue();  //b.慢性萎缩性胃炎或肥厚性胃炎
                 var shierzhichangkuiyangFlag = mini.get("shierzhichangkuiyang").getValue();  //c.胃、十二指肠溃疡
@@ -1711,6 +1716,7 @@
                     +parseIntPlus(jiagongrouleiFlag)+parseIntPlus(meibianshiwuFlag)+parseIntPlus(hejiuFlag+azsHistoryFlag)+parseIntPlus(scFamilyFlag))>=1){
                         scRiskResult=true;
                         $("#scRiskResult").text("阳性");
+                        $("#assessmentResult3").val("2");
                 }else{
                     if(notDoneFlag==1){
                         mini.showTips({
@@ -1723,6 +1729,7 @@
                         return;
                     }
                     $("#scRiskResult").text("阴性");
+                    $("#assessmentResult3").val("1");
                 }
 
             }
@@ -1731,6 +1738,7 @@
             if(age>45){             //a.年龄45岁以上，男女不限
                 lucRiskResult=true;
                 $("#lucRiskResult").text("阳性");
+                $("#assessmentResult4").val("2");
             }else{
                 var xiyanFlag=0;    // b.目前吸烟且指数400年支以上（20支/包）
                 var jieyanFlag=0;   // c.戒烟 <= 15年
@@ -1809,6 +1817,7 @@
                     +parseIntPlus(leijibeidongFlag)+parseIntPlus(zhiaiwuzhiFlag)+parseIntPlus(jibingFlag)+parseIntPlus(azsHistoryFlag)+parseIntPlus(lucFamilyFlag))>=1){
                         lucRiskResult=true;
                         $("#lucRiskResult").text("阳性");
+                        $("#assessmentResult4").val("2");
                 }else{
                     if(notDoneFlag==1){
                         mini.showTips({
@@ -1821,8 +1830,80 @@
                         return;
                     }
                     $("#lucRiskResult").text("阴性");
+                    $("#assessmentResult4").val("1");
                 }
             }
+    }
+    //辅助检查结果计算
+    function makeByxResult(){
+        var first=mini.get("firstFobtResult").getValue();
+        var seconde=mini.get("secondFobtResult").getValue();
+        alert(first)
+        if(first=='2'){ //第一次就阳性
+            mini.get("byxResult").setValue("阳性");
+        }else{              //第一次阴性
+            if(seconde=='2'){//第二次阳性
+                mini.get("byxResult").setValue("阳性");
+            } else{         //两次都阴性
+                mini.get("byxResult").setValue("阴性");
+            }
+        }
+    }
+    //肝癌辅助检查结果计算
+    function makeLicResult(){
+        var afp=mini.get("afp").getValue();
+        var bus=mini.get("bus").getValue();
+        if(afp>20){
+            mini.get("licResult").setValue("阳性");
+        }else{
+            if(bus=='2'){
+                mini.get("licResult").setValue("阳性");
+            }else{
+                mini.get("licResult").setValue("阴性");
+            }
+        }
+    }
+    function makeChushaiResult(){
+        var dcpinggu= $("#crcRiskResult").text();//大肠癌危险度评估结果
+        var gapinggu= $("#licRiskResult").text();//肝癌危险度评估结果
+        var wapinggu= $("#scRiskResult").text();//胃癌危险度评估结果
+        var fapinggu= $("#lucRiskResult").text();//肺癌危险度评估结果
+
+        var byxresult=mini.get("byxResult").getValue();//便隐血辅助检查结果
+        var licResult=mini.get("licResult").getValue();//肝癌辅助检查结果
+
+        //大肠癌初筛结果：问卷为阳性即为阳性；问卷为阴性，便隐血检查结果为阳性即为阳性；问卷为阴性，便隐血检查结果为阴性即为阴性
+        if(dcpinggu=="阳性"){
+            mini.get("checkResultName1").setValue("阳性");
+        }else{
+            if(byxresult=="阳性"){
+                mini.get("checkResultName1").setValue("阳性");
+            }else if(byxresult=="阴性"){
+                mini.get("checkResultName1").setValue("阴性");
+            }
+        }
+
+        //肝癌初筛结果：问卷为阳性即为阳性；问卷为阴性，辅助检查结果为阳性即为阳性；问卷为阴性，辅助检查结果为阴性即为阴性。
+        if(gapinggu=="阳性"){
+            mini.get("checkResultName2").setValue("阳性");
+        }else{
+            if(licResult=="阳性"){
+                mini.get("checkResultName2").setValue("阳性");
+            }else if(licResult=="阴性"){
+                mini.get("checkResultName2").setValue("阴性");
+            }
+        }
+        if(wapinggu=="阳性"){
+            mini.get("checkResultName3").setValue("阳性");
+        }else if(wapinggu=="阴性"){
+            mini.get("checkResultName3").setValue("阴性");
+        }
+        if(fapinggu=="阳性"){
+            mini.get("checkResultName4").setValue("阳性");
+        }else if(fapinggu=="阴性"){
+            mini.get("checkResultName4").setValue("阴性");
+        }
+
     }
 </script>
 </html>

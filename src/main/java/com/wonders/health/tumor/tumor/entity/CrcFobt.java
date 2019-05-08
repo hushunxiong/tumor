@@ -31,10 +31,6 @@ public class CrcFobt extends BaseEntity {
 	@NotNull
 	private String crcCheckId;	// 大肠癌初筛信息登记id
 
-	private Date cbqReturnDate1;	//第一次采便器交回日期
-
-	private Date cbqReturnDate2;	//第二次采便器交回日期
-
 	@Length(max=1)
 	private String firstFobtResult;	// 第一次便隐血检查结果 cdc_dic_personinfo id=60001 code=1：阴性；code=2：阳性
 
@@ -70,8 +66,6 @@ public class CrcFobt extends BaseEntity {
 	}
 	public CrcFobt(User user) {
 		super();
-		this.cbqReturnDate1=new Date();
-		this.cbqReturnDate2=new Date();
 		this.firstFobtDate=new Date();
 		this.secondFobtDate=new Date();
 		this.fobtDoc=user.getId();
@@ -94,22 +88,6 @@ public class CrcFobt extends BaseEntity {
 
 	public void setCrcCheckId(String crcCheckId) {
 		this.crcCheckId = crcCheckId;
-	}
-
-	public Date getCbqReturnDate1() {
-		return cbqReturnDate1;
-	}
-
-	public void setCbqReturnDate1(Date cbqReturnDate1) {
-		this.cbqReturnDate1 = cbqReturnDate1;
-	}
-
-	public Date getCbqReturnDate2() {
-		return cbqReturnDate2;
-	}
-
-	public void setCbqReturnDate2(Date cbqReturnDate2) {
-		this.cbqReturnDate2 = cbqReturnDate2;
 	}
 
 	@JsonProperty("firstFobtResult")

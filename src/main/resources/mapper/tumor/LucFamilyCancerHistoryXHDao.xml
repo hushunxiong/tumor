@@ -13,6 +13,14 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getListByPersonId" resultType="com.wonders.health.tumor.tumor.entity.LucFamilyCancerHistoryXH">
+		SELECT
+		<include refid="LucFamilyCancerHistoryXHColumns"/>
+		FROM luc_family_cancer_history_XH a
+		WHERE a.check_id = #{personId}
+		and a.del_flag='0'
+	</select>
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LucFamilyCancerHistoryXH">
 		SELECT 
 			<include refid="LucFamilyCancerHistoryXHColumns"/>

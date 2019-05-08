@@ -13,6 +13,14 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getListByPersonId" resultType="com.wonders.health.tumor.tumor.entity.FamilyCancerHistory">
+		SELECT
+		<include refid="FamilyCancerHistoryColumns"/>
+		FROM family_cancer_history a
+		WHERE a.check_id = #{personId}
+		and a.del_flag='0'
+	</select>
+
 	<insert id="insert">
 		INSERT INTO family_cancer_history(
 		id,check_id,relation,cancer_type,age,lived,del_flag,ischange,create_by,create_date

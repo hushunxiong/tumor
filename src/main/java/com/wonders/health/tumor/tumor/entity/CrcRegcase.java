@@ -44,6 +44,12 @@ public class CrcRegcase extends BaseEntity {
 	@Length(max=1)
 	private String checkResult;	// 判定结果
 
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mi:ss")
+	private Date cbqReturnDate1;	// 第一次采便器交回日期
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mi:ss")
+	private Date cbqReturnDate2;	// 第二次采便器交回日期
+
 	@Length(max=32)
 	@NotNull
 	private String regionCode;	// 初筛数据所属行政区划代码
@@ -101,6 +107,8 @@ public class CrcRegcase extends BaseEntity {
 
 	public CrcRegcase() {
 		super();
+		this.cbqReturnDate1=new Date();
+		this.cbqReturnDate2=new Date();
 	}
 
 	@JsonProperty("id")
@@ -146,6 +154,26 @@ public class CrcRegcase extends BaseEntity {
 
 	public void setCheckResult(String checkResult) {
 		this.checkResult = checkResult;
+	}
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonProperty("cbqReturnDate1")
+	public Date getCbqReturnDate1() {
+		return cbqReturnDate1;
+	}
+
+	public void setCbqReturnDate1(Date cbqReturnDate1) {
+		this.cbqReturnDate1 = cbqReturnDate1;
+	}
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonProperty("cbqReturnDate2")
+	public Date getCbqReturnDate2() {
+		return cbqReturnDate2;
+	}
+
+	public void setCbqReturnDate2(Date cbqReturnDate2) {
+		this.cbqReturnDate2 = cbqReturnDate2;
 	}
 
 	@JsonProperty("regionCode")
