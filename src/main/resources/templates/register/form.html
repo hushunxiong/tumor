@@ -1420,11 +1420,12 @@
                         var zjhm = mini.get("personcard").getValue();
                         var zjlx = mini.get("personcardType").getValue();
                         var checkYear = mini.get("checkYear").getValue();
+                        $("#id").val(res.value);
 
-                        setTimeout(function(){
-                            window.location.href='/tumor/screening/reform?manageId='+res.value+"&&checkYear="+checkYear+
-                                "&&type="+zjlx+"&&personcardno="+zjhm;
-                        },2000)
+                        // setTimeout(function(){
+                        //     window.location.href='/tumor/screening/reform?manageId='+res.value+"&&checkYear="+checkYear+
+                        //         "&&type="+zjlx+"&&personcardno="+zjhm;
+                        // },2000)
 
                     }else{
                         mini.showTips({

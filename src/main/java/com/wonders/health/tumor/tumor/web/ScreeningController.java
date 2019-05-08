@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -116,6 +117,7 @@ public class ScreeningController extends BaseController {
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear) {
+        User user=getSessionUser();
         if(StringUtils.isBlank(checkYear)){
             checkYear= DateUtils.getYear();
         }
@@ -134,8 +136,8 @@ public class ScreeningController extends BaseController {
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
             CancerPersonInfo personInfo = new CancerPersonInfo();
-            personInfo.setRegdoc(getSessionUser().getId());
-            personInfo.setRegorg(getSessionUser().getOrgCode());
+            personInfo.setRegdoc(user.getId());
+            personInfo.setRegorg(user.getOrgCode());
             personInfo.setRegdate(new Date());
 
             model.addAttribute("personInfo", personInfo);
@@ -216,6 +218,7 @@ public class ScreeningController extends BaseController {
     @RequestMapping(value = {"", "reform"}, method = RequestMethod.GET)
     public String reform(Model model, String manageId, String checkYear,String type,String personcardno) {
 
+        User user=getSessionUser();
         List<DataOption> years = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
             DataOption option = new DataOption();
@@ -231,8 +234,8 @@ public class ScreeningController extends BaseController {
 
         CancerPersonInfo personInfo=screeningService.getBaseInfoByCardnoAndType(personcardno,type);
 
-        personInfo.setRegdoc(getSessionUser().getId());
-        personInfo.setRegorg(getSessionUser().getOrgCode());
+        personInfo.setRegdoc(user.getId());
+        personInfo.setRegorg(user.getOrgCode());
         personInfo.setRegdate(new Date());
         personInfo.setPersoncardType(type);
         personInfo.setPersoncard(personcardno);
@@ -394,12 +397,25 @@ public class ScreeningController extends BaseController {
     @ResponseBody
     @Transactional(readOnly = true)
     public AjaxReturn save(ScreeningVo screeningVo){
+        User user=getSessionUser();
+
+        //基本信息处理
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
+        CancerPersonInfo personInfoBase=screeningService.getBaseInfoByCardnoAndType(personInfo.getPersoncard(),personInfo.getPersoncardType());
+        if(personInfoBase!=null){
+            personInfo.setId(personInfoBase.getId());
+        }
+        if(personInfo.getId()==null){   //新增
+            personInfo.init(user.getId());
+            cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
+        }else{                          //修改
+            personInfo.initByUpdate(user.getId());
+            cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
+            cancerPersonInfoService.updateChange(personInfo.getId());
+        }
 
         //处理插入表的癌症名称和癌症code
-
-        //本人癌症史表
-        List<CancerHistory> historyList=screeningVo.getHistoryList();
+        List<CancerHistory> historyList=screeningVo.getHistoryList();  //本人癌症史表
         if(historyList!=null&& historyList.size()>0){
             historyList.stream().forEach(history->{
                 history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
@@ -408,10 +424,8 @@ public class ScreeningController extends BaseController {
             });
         }
 
-
-        //亲属历史表-徐汇
-        List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();
-        List<FamilyCancerHistory> familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();
+        List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();  //亲属历史表-徐汇
+        List<FamilyCancerHistory> familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();                 //亲属历史表  不需做额外处理
 
         if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
             lucFamilyCancerHistoryXHList.stream().forEach(family->{
@@ -419,24 +433,66 @@ public class ScreeningController extends BaseController {
             });
         }
 
-        User user=getSessionUser();
 
-        if(personInfo.getId()==null){  //新增
-//            personInfo.setId(IdGen.uuid());
-            personInfo.init(user.getId());
+        if(historyList!=null){
+            historyList.stream().forEach(history->{
+                if(StringUtils.isNotBlank(history.getId())){ //修改历史癌症表
+                    history.setUpdateBy(user.getId());
+                    if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+                        history.setIschange("1");
+                    }
+                    cancerHistoryService.update(cancerHistoryDao,history);
+                }else{                                        //插入历史癌症表
+                    history.setId(IdGen.uuid());
+                    history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    history.setManageid(personInfo.getId());
+                    history.setCreateBy(user.getId());
+                    cancerHistoryService.insert(cancerHistoryDao,history);
+                }
+            });
+        }
 
-            cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
+            lucFamilyCancerHistoryXHList.stream().forEach(luc->{
+                if(StringUtils.isNotBlank(luc.getId())){    //修改亲属历史表-徐汇
+                    luc.setUpdateBy(user.getId());
+                    lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
+                }else{                                      //插入亲属历史表-徐汇
+                    luc.setId(IdGen.uuid());
+                    luc.setCheckId(user.getId());
+                    luc.setCreateBy(user.getId());
+                    lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
+                }
 
+            });
+        }else{
+            if(familyCancerHistoryList!=null){
+                familyCancerHistoryList.stream().forEach(family->{
+                    if(StringUtils.isNotBlank(family.getId())){ //修改亲属历史表
+                        family.setUpdateBy(user.getId());
+                        familyCancerHistoryService.update(familyCancerHistoryDao,family);
+                    }else{                                      //插入亲属历史表
+                        family.setId(IdGen.uuid());
+                        family.setCheckId(personInfo.getId());
+                        family.setCreateBy(user.getId());
+                        familyCancerHistoryService.insert(familyCancerHistoryDao,family);
+                    }
+                });
+            }
+        }
 
-            if(isOpen(crcFlag)){
-                CrcRegcase crcRegcase=screeningVo.getCrcRegcase();
-                if(crcRegcase!=null && StringUtils.isNotBlank(crcRegcase.getIdNumber())){
+        if(isOpen(crcFlag)){
+            CrcRegcase crcRegcase=screeningVo.getCrcRegcase();
+            if(crcRegcase!=null  && !checkObjAllFieldsIsNull(crcRegcase)){
+                if(crcRegcase.getIdNumber()!=null){
+                    crcRegcaseService.update(crcRegcaseDao,crcRegcase);
+                }else{
                     crcRegcase.setId(IdGen.uuid());
                     crcRegcase.setManageid(personInfo.getId());
                     crcRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     crcRegcase.setRegionCode(areaCode);
-                    crcRegcase.setRegorg(getSessionUser().getOrgCode());
-                    crcRegcase.setRegdoc(getSessionUser().getId());
+                    crcRegcase.setRegorg(user.getOrgCode());
+                    crcRegcase.setRegdoc(user.getId());
                     crcRegcase.setRegdate(new Date());
                     crcRegcase.setSubmitsStatus("1");
                     crcRegcase.setCloseStatus("2");
@@ -444,8 +500,12 @@ public class ScreeningController extends BaseController {
                     crcRegcase.init();
                     crcRegcaseService.insert(crcRegcaseDao,crcRegcase);
                 }
-                CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
-                if(crcrisk!=null&&crcrisk.getAssessmentDoc()!=null && StringUtils.isNotBlank(crcrisk.getAssessmentDoc()) ){
+            }
+            CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
+            if(crcrisk!=null && !checkObjAllFieldsIsNull(crcrisk)){
+                if(crcrisk.getCrcCheckId()!=null){
+                    crcRiskAssessmentService.update(crcRiskAssessmentDao,crcrisk);
+                }else{
                     crcrisk.setId(IdGen.uuid());
                     crcrisk.setCrcCheckId(personInfo.getId());
                     crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
@@ -455,16 +515,21 @@ public class ScreeningController extends BaseController {
                     crcrisk.init();
                     crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
                 }
+
             }
-            if(isOpen(licFlag)){
-                LicRegcase licRegcase=screeningVo.getLicRegcase();
-                if(licRegcase!=null){
+        }
+        if(isOpen(licFlag)){
+            LicRegcase licRegcase=screeningVo.getLicRegcase();
+            if(licRegcase!=null && !checkObjAllFieldsIsNull(licRegcase)){
+                if(StringUtils.isNotBlank(licRegcase.getManageid())){
+                    licRegcaseService.update(licRegcaseDao,licRegcase);
+                }else{
                     licRegcase.setId(IdGen.uuid());
                     licRegcase.setManageid(personInfo.getId());
                     licRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     licRegcase.setRegionCode(areaCode);
-                    licRegcase.setRegorg(getSessionUser().getOrgCode());
-                    licRegcase.setRegdoc(getSessionUser().getId());
+                    licRegcase.setRegorg(user.getOrgCode());
+                    licRegcase.setRegdoc(user.getId());
                     licRegcase.setRegdate(new Date());
                     licRegcase.setSubmitsStatus("1");
                     licRegcase.setCloseStatus("2");
@@ -472,8 +537,12 @@ public class ScreeningController extends BaseController {
                     licRegcase.init();
                     licRegcaseService.insert(licRegcaseDao,licRegcase);
                 }
-                LicRiskAssessment licrisk=screeningVo.getLicRisk();
-                if(licrisk!=null && StringUtils.isNotBlank(licrisk.getAssessmentDoc()) ){
+            }
+            LicRiskAssessment licrisk=screeningVo.getLicRisk();
+            if(licrisk!=null && !checkObjAllFieldsIsNull(licrisk)){
+                if(StringUtils.isNotBlank(licrisk.getLicCheckId())){
+                    licRiskAssessmentService.update(licRiskAssessmentDao,licrisk);
+                }else{
                     licrisk.setId(IdGen.uuid());
                     licrisk.setLicCheckId(personInfo.getId());
                     licrisk.setAssessmentDocName(AuthUtils.getUserById(licrisk.getAssessmentDoc()).getName());
@@ -483,16 +552,21 @@ public class ScreeningController extends BaseController {
                     licrisk.init();
                     licRiskAssessmentService.insert(licRiskAssessmentDao,licrisk);
                 }
+
             }
-            if(isOpen(lucFlag)){
-                LucRegcase lucRegcase=screeningVo.getLucRegcase();
-                if(lucRegcase!=null){
+        }
+        if(isOpen(lucFlag)){
+            LucRegcase lucRegcase=screeningVo.getLucRegcase();
+            if(lucRegcase!=null  && !checkObjAllFieldsIsNull(lucRegcase)){
+                if(StringUtils.isNotBlank(lucRegcase.getManageid())){
+                    lucRegcaseService.update(lucRegcaseDao,lucRegcase);
+                }else{
                     lucRegcase.setId(IdGen.uuid());
                     lucRegcase.setManageid(personInfo.getId());
                     lucRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     lucRegcase.setRegionCode(areaCode);
-                    lucRegcase.setRegorg(getSessionUser().getOrgCode());
-                    lucRegcase.setRegdoc(getSessionUser().getId());
+                    lucRegcase.setRegorg(user.getOrgCode());
+                    lucRegcase.setRegdoc(user.getId());
                     lucRegcase.setRegdate(new Date());
                     lucRegcase.setSubmitsStatus("1");
                     lucRegcase.setCloseStatus("2");
@@ -500,8 +574,12 @@ public class ScreeningController extends BaseController {
                     lucRegcase.init();
                     lucRegcaseService.insert(lucRegcaseDao,lucRegcase);
                 }
-                LucRiskAssessment lucrisk=screeningVo.getLucRisk();
-                if(lucrisk!=null && StringUtils.isNotBlank(lucrisk.getAssessmentDoc())){
+            }
+            LucRiskAssessment lucrisk=screeningVo.getLucRisk();
+            if(lucrisk!=null  && !checkObjAllFieldsIsNull(lucrisk)){
+                if(StringUtils.isNotBlank(lucrisk.getLucCheckId())){
+                    lucRiskAssessmentService.update(lucRiskAssessmentDao,lucrisk);
+                }else{
                     lucrisk.setId(IdGen.uuid());
                     lucrisk.setLucCheckId(personInfo.getId());
                     lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
@@ -511,16 +589,21 @@ public class ScreeningController extends BaseController {
                     lucrisk.init();
                     lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
                 }
+
             }
-            if(isOpen(scFlag)){
-                ScRegcase scRegcase=screeningVo.getScRegcase();
-                if(scRegcase!=null){
+        }
+        if(isOpen(scFlag)){
+            ScRegcase scRegcase=screeningVo.getScRegcase();
+            if(scRegcase!=null && !checkObjAllFieldsIsNull(scRegcase) ){
+                if(StringUtils.isNotBlank(scRegcase.getManageid())){
+                    scRegcaseService.update(scRegcaseDao,scRegcase);
+                }else{
                     scRegcase.setId(IdGen.uuid());
                     scRegcase.setManageid(personInfo.getId());
                     scRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     scRegcase.setRegionCode(areaCode);
-                    scRegcase.setRegorg(getSessionUser().getOrgCode());
-                    scRegcase.setRegdoc(getSessionUser().getId());
+                    scRegcase.setRegorg(user.getOrgCode());
+                    scRegcase.setRegdoc(user.getId());
                     scRegcase.setRegdate(new Date());
                     scRegcase.setSubmitsStatus("1");
                     scRegcase.setCloseStatus("2");
@@ -528,8 +611,13 @@ public class ScreeningController extends BaseController {
                     scRegcase.init();
                     scRegcaseService.insert(scRegcaseDao,scRegcase);
                 }
-                ScRiskAssessment scrisk=screeningVo.getScRisk();
-                if(scrisk!=null && StringUtils.isNotBlank(scrisk.getAssessmentDoc())){
+            }
+
+            ScRiskAssessment scrisk=screeningVo.getScRisk();
+            if(scrisk!=null && !checkObjAllFieldsIsNull(scrisk)){
+                if(StringUtils.isNotBlank(scrisk.getScCheckId())){
+                    scRiskAssessmentService.update(scRiskAssessmentDao,scrisk);
+                }else{
                     scrisk.setId(IdGen.uuid());
                     scrisk.setScCheckId(personInfo.getId());
                     scrisk.setAssessmentDocName(AuthUtils.getUserById(scrisk.getAssessmentDoc()).getName());
@@ -540,107 +628,34 @@ public class ScreeningController extends BaseController {
                     scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
                 }
             }
-            if(historyList!=null && historyList.size()>0){
-                //插入历史癌症表
-                historyList.stream().forEach(history->{
-                    history.setId(IdGen.uuid());
-                    history.setManageid(personInfo.getId());
-                    history.setCreateBy(user.getId());
-                    cancerHistoryService.insert(cancerHistoryDao,history);
-                });
-            }
-
-            if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
-                //亲属历史表-徐汇
-                lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                    luc.setId(IdGen.uuid());
-                    luc.setCheckId(user.getId());
-                    luc.setCreateBy(user.getId());
-                    lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
-                });
-            }else{
-                if(familyCancerHistoryList!=null){
-                    //亲属历史表
-                    familyCancerHistoryList.stream().forEach(family->{
-                        family.setId(IdGen.uuid());
-                        family.setCheckId(personInfo.getId());
-                        family.setCreateBy(user.getId());
-                        familyCancerHistoryService.insert(familyCancerHistoryDao,family);
-                    });
-                }
-            }
-
-        }else{  //修改
-            personInfo.initByUpdate(user.getId());
-            cancerPersonInfoService.saveOrUpdate(personInfo,getSessionUser().getId());
-            cancerPersonInfoService.updateChange(personInfo.getId());
-
-            if(isOpen(crcFlag)){
-                if(screeningVo.getCrcRegcase()!=null){
-                    crcRegcaseService.update(crcRegcaseDao,screeningVo.getCrcRegcase());
-                }
-                if(screeningVo.getCrcRisk()!=null){
-                    crcRiskAssessmentService.update(crcRiskAssessmentDao,screeningVo.getCrcRisk());
-                }
-
-            }
-            if(isOpen(licFlag)){
-                if(screeningVo.getLicRegcase()!=null){
-                    licRegcaseService.update(licRegcaseDao,screeningVo.getLicRegcase());
-                }
-                if(screeningVo.getLicRisk()!=null){
-                    licRiskAssessmentService.update(licRiskAssessmentDao,screeningVo.getLicRisk());
-                }
-            }
-            if(isOpen(lucFlag)){
-                if(screeningVo.getLucRegcase()!=null){
-                    lucRegcaseService.update(lucRegcaseDao,screeningVo.getLucRegcase());
-                }
-                if(screeningVo.getLucRisk()!=null){
-                    lucRiskAssessmentService.update(lucRiskAssessmentDao,screeningVo.getLucRisk());
-                }
-            }
-            if(isOpen(scFlag)){
-                if(screeningVo.getScRegcase()!=null){
-                    scRegcaseService.update(scRegcaseDao,screeningVo.getScRegcase());
-                }
-                if(screeningVo.getScRisk()!=null){
-                    scRiskAssessmentService.update(scRiskAssessmentDao,screeningVo.getScRisk());
-                }
-            }
-            if(historyList!=null){
-                //修改历史癌症表
-                historyList.stream().forEach(history->{
-                    history.setManageid(personInfo.getId());
-                    history.setUpdateBy(user.getId());
-                    history.setIschange("1");
-                    cancerHistoryService.update(cancerHistoryDao,history);
-                });
-            }
-            if(familyCancerHistoryList!=null){
-                //修改亲属历史表
-                familyCancerHistoryList.stream().forEach(family->{
-                    family.setCheckId(personInfo.getId());
-                    family.setUpdateBy(user.getId());
-                    familyCancerHistoryService.update(familyCancerHistoryDao,family);
-                });
-            }
-            if(lucFamilyCancerHistoryXHList!=null){
-                //修改亲属历史表-徐汇
-                lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                    luc.setCheckId(personInfo.getId());
-                    luc.setUpdateBy(user.getId());
-                    lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
-                });
-            }
         }
-
         return new AjaxReturn(true,"保存成功",personInfo.getId());
     }
 
     //根据字典表 id 获取癌症名称
     private String getCancerName(String cancerType,String dicCode){
        return DictUtils.generalForMap(dicCode).get(cancerType).getName();
+    }
+
+    public static boolean checkObjAllFieldsIsNull(Object object) {
+        if (null == object) {
+            return true;
+        }
+
+        try {
+            for (Field f : object.getClass().getDeclaredFields()) {
+                f.setAccessible(true);
+
+                if (f.get(object) != null && StringUtils.isNotBlank(f.get(object).toString())) {
+                    return false;
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
 }

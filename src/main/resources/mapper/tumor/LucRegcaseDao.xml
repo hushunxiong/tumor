@@ -94,7 +94,7 @@
 		close_status = #{closeStatus},close_date = #{closeDate},close_result = #{closeResult},check_quality_flag = #{checkQualityFlag},
 		checkresult_quality_flag = #{checkresultQualityFlag},
 		upload_time = #{uploadTime}
-		WHERE Id_number = #{idNumber}
+		WHERE manageid = #{manageid} and check_year=#{checkYear} and del_flag='0'
 	</update>
 
 	<update id="delete">

@@ -94,7 +94,7 @@
 		cancer_name = #{cancerName},age = #{age},
 		hospital_code = #{hospitalCode},hospital_name = #{hospitalName},
 		ischange = #{ischange},update_by = #{updateBy},update_date = SYSDATE
-		WHERE manageid = #{manageid}
+		WHERE id = #{id}
 	</update>
 
 	<update id="delete">

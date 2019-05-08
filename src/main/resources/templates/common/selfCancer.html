@@ -56,6 +56,7 @@
                         </td>
                         <td>癌症种类</td>
                         <td class="bg-white">
+                            <input id="historyId{{index}}" name="historyList[{{index}}].id" value="{{id}}" style="display: none"/>
                             <input id="icd10{{index}}" name="historyList[{{index}}].icd10" value="{{icd10}}"
                                    class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
                                    th:data="${#dic.generals('60020')}"

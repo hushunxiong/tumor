@@ -93,8 +93,8 @@
 		regdoc = #{regdoc},regdate = #{regdate},submits_status = #{submitsStatus},submit_date = #{submitDate},
 		trans_date = #{transDate},print_date = #{printDate},close_status = #{closeStatus},close_date = #{closeDate},
 		close_result = #{closeResult},check_quality_flag = #{checkQualityFlag},checkresult_quality_flag = #{checkresultQualityFlag},
-		upload_time = #{uploadTime},ischange = #{ischange}
-		WHERE Id_number = #{idNumber}
+		upload_time = #{uploadTime}
+		WHERE manageid = #{manageid} and check_year=#{checkYear} and del_flag='0'
 	</update>
 
 	<update id="delete">
