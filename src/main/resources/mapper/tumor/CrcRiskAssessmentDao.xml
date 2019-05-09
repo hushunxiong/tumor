@@ -37,9 +37,12 @@
 		SET
 		crc_check_id = #{crcCheckId},
 		manxingfuxie = #{manxingfuxie},manxingbianmi = #{manxingbianmi},nianyexuebian = #{nianyexuebian},lanweiyan = #{lanweiyan},dannangyan = #{dannangyan},jingshenchuangshang = #{jingshenchuangshang},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},changxirou = #{changxirou},xiyan = #{xiyan},xuexichong = #{xuexichong},ganrannian = #{ganrannian},
-		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},
-		risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},ischange = #{ischange}
-		WHERE crc_check_id = #{crcCheckId}
+		assessment_result = #{assessmentResult},
+		assessment_doc = #{assessmentDoc},
+		assessment_doc_name = #{assessmentDocName},
+		assessment_date = #{assessmentDate},
+		ischange = #{ischange}
+		WHERE id = #{id}
 	</update>
 
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRiskAssessment">

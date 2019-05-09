@@ -164,6 +164,9 @@ public class ScreeningController extends BaseController {
             model.addAttribute("crcRisk", screeningVo.getCrcRisk());
             model.addAttribute("licRisk", screeningVo.getLicRisk());
 
+            model.addAttribute("crcFobt", screeningVo.getCrcFobt());
+            model.addAttribute("licCheck",screeningVo.getLicCheck());
+
             model.addAttribute("crcRegcase", screeningVo.getCrcRegcase());
             model.addAttribute("licRegcase", screeningVo.getLicRegcase());
             model.addAttribute("lucRegcase", screeningVo.getLucRegcase());
@@ -175,7 +178,9 @@ public class ScreeningController extends BaseController {
             model.addAttribute("licDbflag", "2"); //数据库状态  1：新增 2：修改
             model.addAttribute("scDbflag", "2");  //数据库状态  1：新增 2：修改
             model.addAttribute("lucDbflag", "2"); //数据库状态  1：新增 2：修改
-            model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
+            if(StringUtils.isNotBlank(screeningVo.getCrcRegcase().getIdNumber())){
+                model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
+            }
             model.addAttribute("flag", "2"); //2：修改
         }
 
@@ -386,16 +391,30 @@ public class ScreeningController extends BaseController {
         //大肠癌便隐血检查表
         if(StringUtils.isNotBlank(crccheckid)){
             CrcFobt crcFobt=(CrcFobt)crcFobtService.getByCheckid(crcFobtDao,crccheckid);
-            if(crcFobt!=null){
-                screeningVo.setCrcFobt(crcFobt);
+            if(crcFobt==null){
+                crcFobt=new CrcFobt(getSessionUser());
+            }else{
+                if(crcFobt.getFobtResult()=="2" || "2".equals(crcFobt.getFobtResult())){
+                    crcFobt.setFobtResult("阳性");
+                }else if(crcFobt.getFobtResult()=="1" || "1".equals(crcFobt.getFobtResult())){
+                    crcFobt.setFobtResult("阴性");
+                }
             }
+            screeningVo.setCrcFobt(crcFobt);
         }
         if(StringUtils.isNotBlank(liccheckid)){
             //肝癌辅助检查表
             LicAssistCheck licAssistCheck=(LicAssistCheck)licAssistCheckService.getByCheckid(licAssistCheckDao,liccheckid);
-            if(licAssistCheck!=null){
-                screeningVo.setLicCheck(licAssistCheck);
+            if(licAssistCheck==null){
+                licAssistCheck=new LicAssistCheck(getSessionUser());
+            }else{
+                if(licAssistCheck.getLicAssistResult() =="2" || "2".equals(licAssistCheck.getLicAssistResult())){
+                    licAssistCheck.setLicAssistResult("阳性");
+                }else if(licAssistCheck.getLicAssistResult()=="1" || "1".equals(licAssistCheck.getLicAssistResult())){
+                    licAssistCheck.setLicAssistResult("阴性");
+                }
             }
+            screeningVo.setLicCheck(licAssistCheck);
         }
 
         //危险度评估-癌症史表
@@ -531,10 +550,10 @@ public class ScreeningController extends BaseController {
             if(crcRegcase!=null  && !checkObjAllFieldsIsNull(crcRegcase)){
                 if(crcRegcase.getCheckResult()=="阴性" || "阴性".equals(crcRegcase.getCheckResult())){
                     crcRegcase.setCheckResult("1");
-                }else{
+                }else  if(crcRegcase.getCheckResult()=="阳性" || "阳性".equals(crcRegcase.getCheckResult())){
                     crcRegcase.setCheckResult("2");
                 }
-                if(crcRegcase.getId()!=null){
+                if(StringUtils.isNotBlank(crcRegcase.getId())){
                     crcRegcaseService.update(crcRegcaseDao,crcRegcase);
                 }else{
                     crcRegcase.setId(IdGen.uuid());
@@ -553,13 +572,17 @@ public class ScreeningController extends BaseController {
             }
             CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
             if(crcrisk!=null && !checkObjAllFieldsIsNull(crcrisk)){
-                if(crcrisk.getCrcCheckId()!=null){
+                crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
+                if(crcrisk.getAssessmentResult()=="阴性" || "阴性".equals(crcrisk.getAssessmentResult())){
+                    crcrisk.setAssessmentResult("1");
+                }else  if(crcrisk.getAssessmentResult()=="阳性" || "阳性".equals(crcrisk.getAssessmentResult())){
+                    crcrisk.setAssessmentResult("2");
+                }
+                if(StringUtils.isNotBlank(crcrisk.getId())){
                     crcRiskAssessmentService.update(crcRiskAssessmentDao,crcrisk);
                 }else{
                     crcrisk.setId(IdGen.uuid());
                     crcrisk.setCrcCheckId(crcRegcase.getId());
-                    crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
-                    crcrisk.setAssessmentDate(new Date());
                     crcrisk.setRiskQualityFlag("1");
                     crcrisk.setCreateBy(user.getId());
                     crcrisk.init();
@@ -573,10 +596,10 @@ public class ScreeningController extends BaseController {
             if(licRegcase!=null && !checkObjAllFieldsIsNull(licRegcase)){
                 if(licRegcase.getCheckResult()=="阴性" || "阴性".equals(licRegcase.getCheckResult())){
                     licRegcase.setCheckResult("1");
-                }else{
+                }else  if(licRegcase.getCheckResult()=="阳性" || "阳性".equals(licRegcase.getCheckResult())){
                     licRegcase.setCheckResult("2");
                 }
-                if(StringUtils.isNotBlank(licRegcase.getManageid())){
+                if(StringUtils.isNotBlank(licRegcase.getId())){
                     licRegcaseService.update(licRegcaseDao,licRegcase);
                 }else{
                     licRegcase.setId(IdGen.uuid());
@@ -595,13 +618,17 @@ public class ScreeningController extends BaseController {
             }
             LicRiskAssessment licrisk=screeningVo.getLicRisk();
             if(licrisk!=null && !checkObjAllFieldsIsNull(licrisk)){
-                if(StringUtils.isNotBlank(licrisk.getLicCheckId())){
+                licrisk.setAssessmentDocName(AuthUtils.getUserById(licrisk.getAssessmentDoc()).getName());
+                if(licrisk.getAssessmentResult()=="阴性" || "阴性".equals(licrisk.getAssessmentResult())){
+                    licrisk.setAssessmentResult("1");
+                }else  if(licrisk.getAssessmentResult()=="阳性" || "阳性".equals(licrisk.getAssessmentResult())){
+                    licrisk.setAssessmentResult("2");
+                }
+                if(StringUtils.isNotBlank(licrisk.getId())){
                     licRiskAssessmentService.update(licRiskAssessmentDao,licrisk);
                 }else{
                     licrisk.setId(IdGen.uuid());
                     licrisk.setLicCheckId(licRegcase.getId());
-                    licrisk.setAssessmentDocName(AuthUtils.getUserById(licrisk.getAssessmentDoc()).getName());
-                    licrisk.setAssessmentDate(new Date());
                     licrisk.setRiskQualityFlag("1");
                     licrisk.setCreateBy(user.getId());
                     licrisk.init();
@@ -615,10 +642,10 @@ public class ScreeningController extends BaseController {
             if(lucRegcase!=null  && !checkObjAllFieldsIsNull(lucRegcase)){
                 if(lucRegcase.getCheckResult()=="阴性" || "阴性".equals(lucRegcase.getCheckResult())){
                     lucRegcase.setCheckResult("1");
-                }else{
+                }else if(lucRegcase.getCheckResult()=="阳性" || "阳性".equals(lucRegcase.getCheckResult())){
                     lucRegcase.setCheckResult("2");
                 }
-                if(StringUtils.isNotBlank(lucRegcase.getManageid())){
+                if(StringUtils.isNotBlank(lucRegcase.getId())){
                     lucRegcaseService.update(lucRegcaseDao,lucRegcase);
                 }else{
                     lucRegcase.setId(IdGen.uuid());
@@ -637,13 +664,17 @@ public class ScreeningController extends BaseController {
             }
             LucRiskAssessment lucrisk=screeningVo.getLucRisk();
             if(lucrisk!=null  && !checkObjAllFieldsIsNull(lucrisk)){
-                if(StringUtils.isNotBlank(lucrisk.getLucCheckId())){
+                lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
+                if(lucrisk.getAssessmentResult()=="阴性" || "阴性".equals(lucrisk.getAssessmentResult())){
+                    lucrisk.setAssessmentResult("1");
+                }else  if(lucrisk.getAssessmentResult()=="阳性" || "阳性".equals(lucrisk.getAssessmentResult())){
+                    lucrisk.setAssessmentResult("2");
+                }
+                if(StringUtils.isNotBlank(lucrisk.getId())){
                     lucRiskAssessmentService.update(lucRiskAssessmentDao,lucrisk);
                 }else{
                     lucrisk.setId(IdGen.uuid());
                     lucrisk.setLucCheckId(lucRegcase.getId());
-                    lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
-                    lucrisk.setAssessmentDate(new Date());
                     lucrisk.setRiskQualityFlag("1");
                     lucrisk.setCreateBy(user.getId());
                     lucrisk.init();
@@ -657,10 +688,10 @@ public class ScreeningController extends BaseController {
             if(scRegcase!=null && !checkObjAllFieldsIsNull(scRegcase) ){
                 if(scRegcase.getCheckResult()=="阴性" || "阴性".equals(scRegcase.getCheckResult())){
                     scRegcase.setCheckResult("1");
-                }else{
+                }else if(scRegcase.getCheckResult()=="阳性" || "阳性".equals(scRegcase.getCheckResult())){
                     scRegcase.setCheckResult("2");
                 }
-                if(StringUtils.isNotBlank(scRegcase.getManageid())){
+                if(StringUtils.isNotBlank(scRegcase.getId())){
                     scRegcaseService.update(scRegcaseDao,scRegcase);
                 }else{
                     scRegcase.setId(IdGen.uuid());
@@ -680,13 +711,17 @@ public class ScreeningController extends BaseController {
 
             ScRiskAssessment scrisk=screeningVo.getScRisk();
             if(scrisk!=null && !checkObjAllFieldsIsNull(scrisk)){
-                if(StringUtils.isNotBlank(scrisk.getScCheckId())){
+                scrisk.setAssessmentDocName(AuthUtils.getUserById(scrisk.getAssessmentDoc()).getName());
+                if(scrisk.getAssessmentResult()=="阴性" || "阴性".equals(scrisk.getAssessmentResult())){
+                    scrisk.setAssessmentResult("1");
+                }else  if(scrisk.getAssessmentResult()=="阳性" || "阳性".equals(scrisk.getAssessmentResult())){
+                    scrisk.setAssessmentResult("2");
+                }
+                if(StringUtils.isNotBlank(scrisk.getId())){
                     scRiskAssessmentService.update(scRiskAssessmentDao,scrisk);
                 }else{
                     scrisk.setId(IdGen.uuid());
                     scrisk.setScCheckId(scRegcase.getId());
-                    scrisk.setAssessmentDocName(AuthUtils.getUserById(scrisk.getAssessmentDoc()).getName());
-                    scrisk.setAssessmentDate(new Date());
                     scrisk.setRiskQualityFlag("1");
                     scrisk.setCreateBy(user.getId());
                     scrisk.init();
@@ -694,6 +729,53 @@ public class ScreeningController extends BaseController {
                 }
             }
         }
+
+        CrcFobt crcFobt=screeningVo.getCrcFobt();
+        if(!checkObjAllFieldsIsNull(crcFobt)){
+            if(crcFobt.getFobtResult()=="阴性" || "阴性".equals(crcFobt.getFobtResult())){
+                crcFobt.setFobtResult("1");
+            }else if(crcFobt.getFobtResult()=="阳性" || "阳性".equals(crcFobt.getFobtResult())){
+                crcFobt.setFobtResult("2");
+            }
+            if(StringUtils.isBlank(crcFobt.getId())){
+                crcFobt.setId(IdGen.uuid());
+                crcFobt.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                crcFobt.setFobtDocName(AuthUtils.getUserById(crcFobt.getFobtDoc()).getName());
+                crcFobt.setCreateBy(user.getId());
+                crcFobt.init();
+                crcFobtService.insert(crcFobtDao,crcFobt);
+            }else{
+                crcFobt.setFobtDocName(AuthUtils.getUserById(crcFobt.getFobtDoc()).getName());
+                crcFobt.setUpdateBy(user.getId());
+                crcFobt.initByUpdate();
+                crcFobtService.update(crcFobtDao,crcFobt);
+            }
+
+        }
+
+        LicAssistCheck licAssistCheck=screeningVo.getLicCheck();
+        if(!checkObjAllFieldsIsNull(licAssistCheck)){
+            licAssistCheck.setLicAssistDocName(AuthUtils.getUserById(crcFobt.getFobtDoc()).getName());
+            if(licAssistCheck.getLicAssistResult()=="阴性" || "阴性".equals(licAssistCheck.getLicAssistResult())){
+                licAssistCheck.setLicAssistResult("1");
+            }else if(licAssistCheck.getLicAssistResult()=="阳性" || "阳性".equals(licAssistCheck.getLicAssistResult())){
+                licAssistCheck.setLicAssistResult("2");
+            }
+
+            if(StringUtils.isBlank(licAssistCheck.getId())){
+                licAssistCheck.setId(IdGen.uuid());
+                licAssistCheck.setLicCheckId(screeningVo.getLicRegcase().getId());
+                licAssistCheck.setCreateBy(user.getId());
+                licAssistCheck.init();
+                licAssistCheckService.insert(licAssistCheckDao,licAssistCheck);
+            }else{
+                licAssistCheck.setUpdateBy(user.getId());
+                licAssistCheck.initByUpdate();
+                licAssistCheckService.update(licAssistCheckDao,licAssistCheck);
+            }
+
+        }
+
         return new AjaxReturn(true,"保存成功",personInfo.getId());
     }
 

@@ -127,6 +127,8 @@
             <table id="yyTable" class="table_new table_new5 mt-10">
                 <tbody>
                 <tr>
+                    <input id="lucRegcaseid" name="lucRegcase.id" class="mini-hidden" th:value="${lucRegcase.id}"/>
+                    <input id="lucriskid" name="lucRisk.id" class="mini-hidden" th:value="${lucRisk.id}"/>
                     <td width="20%">肺癌：是否有长期厨房油烟接触（烹饪半小时以上）</td>
                     <td width="80%" class="text-l">
                         <input id="chufangyouyan" name="lucRisk.chufangyouyan" class="mini-radiobuttonlist" width="47%"
@@ -443,6 +445,8 @@
             <table class="table_new table_new5 mt-10">
                 <tbody>
                 <tr>
+                    <input id="scRegcaseid" name="scRegcase.id" class="mini-hidden" th:value="${scRegcase.id}"/>
+                    <input id="scriskid" name="scRisk.id" class="mini-hidden" th:value="${scRisk.id}"/>
                     <td width="20%" rowspan="2">胃癌：常吃下列食物吗？</td>
                     <td width="15%" class="bg-white">a. 新鲜蔬菜</td>
                     <td class="bg-white">
@@ -533,6 +537,7 @@
             <table class="table_new table_new5 mt-10">
                 <tbody>
                 <tr>
+                    <input id="scssid" name="licRisk.scCheckId" th:value="${scRisk.scCheckId}" class="mini-hidden"/>
                     <td width="20%">胃癌：有无慢性萎缩性胃炎或肥厚性胃炎</td>
                     <td width="80%" class="text-l">
                         <div th:replace="/common/existSelect :: select('weisuoxingweiyan','scRisk.weisuoxingweiyan',${scRisk.weisuoxingweiyan})">
@@ -589,10 +594,13 @@
             <table class="table_new table_new5 mt-10">
                 <tbody>
                 <tr>
-                    <td width="20%">大肠癌：大肠癌筛查ID</td>
+                    <input id="crcid" name="crcRegcase.id" th:value="${crcRegcase.id}" class="mini-hidden"/>
+                    <input id="crcRiskid" name="crcRisk.id" th:value="${crcRisk.id}" class="mini-hidden"/>
+                    <input id="crcCheckId" name="crcRisk.crcCheckId" th:value="${crcRisk.crcCheckId}" class="mini-hidden"/>
+                    <td width="20%"><span class="red-span">*</span>大肠癌：大肠癌筛查ID</td>
                     <td width="80%" class="text-l">
-                        <input id="idNumber" name="crcRegcase.idNumber" class="mini-textbox"
-                               width="100" maxlength="12" vtype="crcNumer" onvaluechanged="crcNumerChange"/>
+                        <input id="idNumber" name="crcRegcase.idNumber" class="mini-textbox" th:value="${crcRegcase.idNumber}"
+                               width="100" maxlength="12" vtype="crcNumer" required="required" onvaluechanged="crcNumerChange"/>
                     </td>
                 </tr>
                 <tr>
@@ -688,8 +696,9 @@
         <div th:if="${licFlag} eq '1'">
             <table class="table_new table_new5 mt-10">
                 <tbody>
-
                 <tr>
+                    <input id="licRegcaseid" name="licRegcase.id" class="mini-hidden" th:value="${licRegcase.id}"/>
+                    <input id="licssid" name="licRisk.id" th:value="${licRisk.id}" class="mini-hidden"/>
                     <td width="20%">肝癌：有无乙型肝炎</td>
                     <td width="80%" class="text-l">
                         <div th:replace="/common/existSelect :: select('yigan','licRisk.yigan',${licRisk.yigan})">
@@ -831,6 +840,7 @@
             <tr>
                 <td width="10%">第一次便隐血检查结果</td>
                 <td class="text-l">
+                    <input id="crcfobtid" name="crcFobt.id" class="mini-hidden" th:value="${crcFobt.id}"/>
                     <input id="firstFobtResult" name="crcFobt.firstFobtResult" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
                            th:data="${#dic.generals('60001')}" th:value="${crcFobt.firstFobtResult}" onvaluechanged="makeByxResult()"
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
@@ -893,6 +903,7 @@
             <tr>
                 <td width="10%">GTP</td>
                 <td class="text-l">
+                    <input id="licid" name="licCheck.id" class="mini-hidden" th:value="${licCheck.id}"/>
                     <input id="gtp" name="licCheck.gtp" class="mini-textbox" th:value="${licCheck.gtp}" vtype="int"/>
                 </td>
                 <td width="10%">Hbeg</td>
@@ -940,6 +951,7 @@
                 <tr th:if="${crcFlag} eq '1'">
                     <td width="10%">大肠癌初筛结果判定</td>
                     <td width="90%" class="text-l">
+                        <input id="crRegcasemid" name="crcRegcase.manageid" class="mini-hidden" th:value="${crcRegcase.manageid}"/>
                         <input id="checkResultName1" class="mini-textbox" allowInput="false" th:value="${crcRegcase.checkResult}"/>
                         <input id="checkResult1" name="crcRegcase.checkResult" class="mini-hidden"  th:value="${crcRegcase.checkResult}"/>
                     </td>
@@ -947,6 +959,7 @@
                 <tr th:if="${licFlag} eq '1'">
                     <td width="10%">肝癌初筛结果判定</td>
                     <td width="90%" class="text-l">
+                        <input name="licRegcase.manageid" class="mini-hidden" th:value="${licRegcase.manageid}"/>
                         <input id="checkResultName2" class="mini-textbox" allowInput="false"  th:value="${licRegcase.checkResult}"/>
                         <input id="checkResult2" name="licRegcase.checkResult" class="mini-hidden" th:value="${licRegcase.checkResult}"/>
                     </td>
@@ -954,6 +967,7 @@
                 <tr th:if="${scFlag} eq '1'">
                     <td width="10%">胃癌初筛结果判定</td>
                     <td width="90%" class="text-l">
+                        <input name="scRegcase.manageid" class="mini-hidden" th:value="${scRegcase.manageid}"/>
                         <input id="checkResultName3" class="mini-textbox" allowInput="false" th:value="${scRegcase.checkResult}"/>
                         <input id="checkResult3" name="scRegcase.checkResult" class="mini-hidden" th:value="${scRegcase.checkResult}"/>
                     </td>
@@ -961,6 +975,7 @@
                 <tr th:if="${lucFlag} eq '1'">
                     <td width="10%">肺癌初筛结果判定</td>
                     <td width="90%" class="text-l">
+                        <input id="luRegcaseid" name="lucRegcase.manageid" class="mini-hidden" th:value="${lucRegcase.manageid}"/>
                         <input id="checkResultName4" class="mini-textbox" allowInput="false" th:value="${lucRegcase.checkResult}"/>
                         <input id="checkResult4" name="lucRegcase.checkResult" class="mini-hidden" th:value="${lucRegcase.checkResult}"/>
                     </td>
@@ -1000,6 +1015,7 @@
     var licDbflag = [[${licDbflag}]];
     var scDbflag = [[${scDbflag}]];
     var lucDbflag = [[${lucDbflag}]];
+    var flag='${flag}';
     var nowDate='${nowDate}';
 
     //危险度评估结果
@@ -1380,7 +1396,9 @@
         var id=$("#id").val();  //个人管理编号
 
         var params={};
-        crcNumerChange();//单独再验证一次大肠癌id
+        if(flag==1){
+            crcNumerChange();//单独再验证一次大肠癌id
+        }
         var form = new mini.Form("#form1");
         form.validate();
         if (form.isValid() == false){
@@ -1838,14 +1856,16 @@
     function makeByxResult(){
         var first=mini.get("firstFobtResult").getValue();
         var seconde=mini.get("secondFobtResult").getValue();
-        alert(first)
         if(first=='2'){ //第一次就阳性
             mini.get("byxResult").setValue("阳性");
+            mini.get("fobtResult").setValue("2");
         }else{              //第一次阴性
             if(seconde=='2'){//第二次阳性
                 mini.get("byxResult").setValue("阳性");
+                mini.get("fobtResult").setValue("2");
             } else{         //两次都阴性
                 mini.get("byxResult").setValue("阴性");
+                mini.get("fobtResult").setValue("1");
             }
         }
     }
@@ -1855,11 +1875,14 @@
         var bus=mini.get("bus").getValue();
         if(afp>20){
             mini.get("licResult").setValue("阳性");
+            mini.get("licAssistResult").setValue("2");
         }else{
             if(bus=='2'){
                 mini.get("licResult").setValue("阳性");
+                mini.get("licAssistResult").setValue("2");
             }else{
                 mini.get("licResult").setValue("阴性");
+                mini.get("licAssistResult").setValue("1");
             }
         }
     }

@@ -37,10 +37,10 @@
 		UPDATE lic_risk_assessment
 		SET
 		yigan = #{yigan},binggan = #{binggan},ganyinghua = #{ganyinghua},aizhengshi = #{aizhengshi},
-		qinshu_aizhengshi = #{qinshuAizhengshi},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},
-		assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},
-		risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime}
-		WHERE lic_check_id = #{licCheckId}
+		qinshu_aizhengshi = #{qinshuAizhengshi},
+		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},
+		assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate}
+		WHERE id = #{id}
 	</update>
 
 

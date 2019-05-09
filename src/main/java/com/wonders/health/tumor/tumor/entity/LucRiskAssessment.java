@@ -71,7 +71,7 @@ public class LucRiskAssessment extends BaseEntity {
 	@Length(max=1)
 	private String zhiyezhiaiwuzhi;	// 职业致癌物质接触 cdc_dic_personinfo id=60007code=1：有；code=2：无
 
-//	@Length(max=2)
+	@Length(max=100)
 	private String zhiaiwuzhileixing;	// 致癌物质类型 cdc_dic_personinfo id=60022多选，以,分隔
 
 	

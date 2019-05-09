@@ -61,11 +61,22 @@
 	<update id="update">
 		UPDATE luc_risk_assessment
 		SET
-		luc_check_id = #{lucCheckId},
-		chufangyouyan = #{chufangyouyan},youyanjiechupinlv = #{youyanjiechupinlv},youyanjiechunianshu = #{youyanjiechunianshu},chouyouyanji = #{chouyouyanji},chouyouyanjinianshu = #{chouyouyanjinianshu},xiyan = #{xiyan},zuihouyicxiyan = #{zuihouyicxiyan},kaishixiyannianling = #{kaishixiyannianling},meitianxiyanliang = #{meitianxiyanliang},beidongxiyan = #{beidongxiyan},beidongxiyanduixiang = #{beidongxiyanduixiang},beidongxiyannianshu = #{beidongxiyannianshu},zhiyezhiaiwuzhi = #{zhiyezhiaiwuzhi},zhiaiwuzhileixing = #{zhiaiwuzhileixing},zhiaiwuzhi_nianshu = #{zhiaiwuzhiNianshu},xiaochuan = #{xiaochuan},xiaochuan_nianshu = #{xiaochuanNianshu},zhiqiguanyan = #{zhiqiguanyan},zhiqiguanyan_nianshu = #{zhiqiguanyanNianshu},feiqizhong = #{feiqizhong},feiqizhong_nianshu = #{feiqizhongNianshu},feijiehe = #{feijiehe},feijiehe_nianshu = #{feijieheNianshu},guichenzhuo = #{guichenzhuo},guichenzhuo_nianshu = #{guichenzhuoNianshu},xianweihua = #{xianweihua},xianweihua_nianshu = #{xianweihuaNianshu},manzufei = #{manzufei},manzufei_nianshu = #{manzufeiNianshu},qitafeibing = #{qitafeibing},qitafeibing_nianshu = #{qitafeibingNianshu},ganke = #{ganke},ganke_tianshu = #{gankeTianshu},tanzhongdaixue = #{tanzhongdaixue},tanzhongdaix_tianshu = #{tanzhongdaixTianshu},qiji = #{qiji},qiji_tianshu = #{qijiTianshu},xiongmen = #{xiongmen},xiongmen_tianshu = #{xiongmenTianshu},xiongtong = #{xiongtong},xiongtong_tianshu = #{xiongtongTianshu},shengyinsiya = #{shengyinsiya},tongbuweifeiyan = #{tongbuweifeiyan},feijiejie = #{feijiejie},jiejiedaxiao = #{jiejiedaxiao},jiejiexingtai = #{jiejiexingtai},maoboli = #{maoboli},shixingjiejie = #{shixingjiejie},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},
-		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},
-		risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime}
-		WHERE luc_check_id = #{lucCheckId}
+		chufangyouyan = #{chufangyouyan},youyanjiechupinlv = #{youyanjiechupinlv},youyanjiechunianshu = #{youyanjiechunianshu},
+		chouyouyanji = #{chouyouyanji},chouyouyanjinianshu = #{chouyouyanjinianshu},xiyan = #{xiyan},
+		zuihouyicxiyan = #{zuihouyicxiyan},kaishixiyannianling = #{kaishixiyannianling},meitianxiyanliang = #{meitianxiyanliang},
+		beidongxiyan = #{beidongxiyan},beidongxiyanduixiang = #{beidongxiyanduixiang},beidongxiyannianshu = #{beidongxiyannianshu},
+		zhiyezhiaiwuzhi = #{zhiyezhiaiwuzhi},zhiaiwuzhileixing = #{zhiaiwuzhileixing},zhiaiwuzhi_nianshu = #{zhiaiwuzhiNianshu},
+		xiaochuan = #{xiaochuan},xiaochuan_nianshu = #{xiaochuanNianshu},zhiqiguanyan = #{zhiqiguanyan},zhiqiguanyan_nianshu = #{zhiqiguanyanNianshu},
+		feiqizhong = #{feiqizhong},feiqizhong_nianshu = #{feiqizhongNianshu},feijiehe = #{feijiehe},feijiehe_nianshu = #{feijieheNianshu},
+		guichenzhuo = #{guichenzhuo},guichenzhuo_nianshu = #{guichenzhuoNianshu},xianweihua = #{xianweihua},xianweihua_nianshu = #{xianweihuaNianshu},
+		manzufei = #{manzufei},manzufei_nianshu = #{manzufeiNianshu},qitafeibing = #{qitafeibing},qitafeibing_nianshu = #{qitafeibingNianshu},
+		ganke = #{ganke},ganke_tianshu = #{gankeTianshu},tanzhongdaixue = #{tanzhongdaixue},tanzhongdaix_tianshu = #{tanzhongdaixTianshu},
+		qiji = #{qiji},qiji_tianshu = #{qijiTianshu},xiongmen = #{xiongmen},xiongmen_tianshu = #{xiongmenTianshu},xiongtong = #{xiongtong},
+		xiongtong_tianshu = #{xiongtongTianshu},shengyinsiya = #{shengyinsiya},tongbuweifeiyan = #{tongbuweifeiyan},feijiejie = #{feijiejie},
+		jiejiedaxiao = #{jiejiedaxiao},jiejiexingtai = #{jiejiexingtai},maoboli = #{maoboli},shixingjiejie = #{shixingjiejie},aizhengshi = #{aizhengshi},
+		qinshu_aizhengshi = #{qinshuAizhengshi},
+		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate}
+		WHERE id = #{id}
 	</update>
 
 

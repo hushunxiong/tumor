@@ -78,17 +78,26 @@
 	<insert id="insert">
 		INSERT INTO crc_fobt(
 		id,crc_check_id,
-		first_fobt_result,second_fobt_result,first_fobt_date,second_fobt_date,fobt_result,fobt_doc,fobt_doc_name,upload_time,ischange,del_flag,create_by,create_date
+		first_fobt_result,second_fobt_result,first_fobt_date,second_fobt_date,fobt_result,
+		fobt_doc,fobt_doc_name,upload_time,ischange,del_flag,create_by,create_date
 		) VALUES (
 		#{id},#{crcCheckId},
-		#{firstFobtResult},#{secondFobtResult},#{firstFobtDate},#{secondFobtDate},#{fobtResult},#{fobtDoc},#{fobtDocName},#{uploadTime},#{ischange},#{delFlag},#{createBy},#{createDate}
+		#{firstFobtResult},#{secondFobtResult},#{firstFobtDate},#{secondFobtDate},#{fobtResult},
+		#{fobtDoc},#{fobtDocName},#{uploadTime},#{ischange},#{delFlag},#{createBy},#{createDate}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE crc_fobt SET
-
-		first_fobt_result = #{firstFobtResult},second_fobt_result = #{secondFobtResult},first_fobt_date = #{firstFobtDate},second_fobt_date = #{secondFobtDate},fobt_result = #{fobtResult},fobt_doc = #{fobtDoc},fobt_doc_name = #{fobtDocName},upload_time = #{uploadTime},ischange = #{ischange},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		first_fobt_result = #{firstFobtResult},
+		second_fobt_result = #{secondFobtResult},
+		first_fobt_date = #{firstFobtDate},
+		second_fobt_date = #{secondFobtDate},
+		fobt_result = #{fobtResult},
+		fobt_doc = #{fobtDoc},
+		fobt_doc_name = #{fobtDocName},
+		upload_time = #{uploadTime},
+		ischange = #{ischange}
 		WHERE id = #{id}
 	</update>
 

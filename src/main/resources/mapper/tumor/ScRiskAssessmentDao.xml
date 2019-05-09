@@ -39,11 +39,9 @@
 	<update id="update">
 		UPDATE sc_risk_assessment
 		SET
-		sc_check_id = #{scCheckId},
 		xinxianshucai = #{xinxianshucai},xinxianshuiguo = #{xinxianshuiguo},xinxianroulei = #{xinxianroulei},jiagongroulei = #{jiagongroulei},meibianshiwu = #{meibianshiwu},hejiu = #{hejiu},hejiupinlv = #{hejiupinlv},shifouzhidaohejiuliang = #{shifouzhidaohejiuliang},hejiuliang = #{hejiuliang},weisuoxingweiyan = #{weisuoxingweiyan},shierzhichangkuiyang = #{shierzhichangkuiyang},weichuxue = #{weichuxue},shiguanyan = #{shiguanyan},weixirou = #{weixirou},canwei = #{canwei},pinxue = #{pinxue},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},
-		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},
-		upload_time = #{uploadTime}
-		WHERE sc_check_id = #{scCheckId}
+		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate}
+		WHERE id = #{id}
 	</update>
 
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.ScRiskAssessment">

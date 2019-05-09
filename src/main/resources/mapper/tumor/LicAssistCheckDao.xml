@@ -83,7 +83,11 @@
 	
 	<update id="update">
 		UPDATE lic_assist_check SET
-		id = #{id},lic_check_id = #{licCheckId},gtp = #{gtp},hbeg = #{hbeg},afp = #{afp},bus = #{bus},lic_assist_result = #{licAssistResult},lic_assist_doc = #{licAssistDoc},lic_assist_doc_name = #{licAssistDocName},lic_assist_date = #{licAssistDate},upload_time = #{uploadTime},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		gtp = #{gtp},hbeg = #{hbeg},afp = #{afp},bus = #{bus},
+		lic_assist_result = #{licAssistResult},
+		lic_assist_doc = #{licAssistDoc},lic_assist_doc_name = #{licAssistDocName},
+		lic_assist_date = #{licAssistDate},
+		upload_time = #{uploadTime}
 		WHERE id = #{id}
 	</update>
 
