@@ -85,7 +85,7 @@
             <td width="20%">有无癌症史</td>
             <td width="80%" class="text-l">
                 <input id="azsHistory" class="mini-radiobuttonlist"
-                       th:data="${#dic.generals('60007')}"
+                       th:data="${#dic.generals('60007')}"  th:value="${historyListFlag}"
                        textField="name" valueField="code"
                        onvaluechanged="azsChanged"/>
             </td>

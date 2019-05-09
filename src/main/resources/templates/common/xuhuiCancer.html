@@ -90,7 +90,7 @@
             <td width="20%">徐汇肺癌：一级亲属（父母、兄弟姐妹、子女）有无癌症史</td>
             <td width="80%" class="text-l">
                 <input id="xhHistory" class="mini-radiobuttonlist"
-                       th:data="${#dic.generals('60007')}"
+                       th:data="${#dic.generals('60007')}"  th:value="${lucFamilyCancerHistoryXHListFlag}"
                        textField="name" valueField="code"
                        onvaluechanged="xhChanged"/>
             </td>

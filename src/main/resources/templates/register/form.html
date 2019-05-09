@@ -1025,6 +1025,7 @@
     var lucRiskResult=false;    //肺癌危险度评估结果
 
     $(function() {
+
         //大肠癌新增
         if (crcDbflag == "1") {
         	//血吸虫病
@@ -1099,9 +1100,16 @@
 			
             
         }
-        
-        //有无癌症史
-        $("#azsTable").children(":first").children(":gt(0)").hide();
+
+        var historyList = [[${historyList}]];
+        if(historyList!=null){
+            $.each(historyList,function(n,hos){
+                addSelfRow(hos);
+                mini.get("hospitalCode"+n).setValue(hos.hospitalCode);
+                mini.get("hospitalCode"+n).setText(hos.hospitalName);
+            })
+        }
+
     });
 
 
@@ -1537,6 +1545,7 @@
         }
         $("#familyRow" + index).remove();
     }
+
 
     var notDoneFlag=0;
     function parseIntPlus(str){

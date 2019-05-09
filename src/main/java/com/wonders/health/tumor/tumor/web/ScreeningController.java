@@ -172,6 +172,25 @@ public class ScreeningController extends BaseController {
             model.addAttribute("lucRegcase", screeningVo.getLucRegcase());
             model.addAttribute("scRegcase", screeningVo.getScRegcase());
 
+            model.addAttribute("historyList", screeningVo.getHistoryList());
+            model.addAttribute("lucFamilyCancerHistoryXHList", screeningVo.getLucFamilyCancerHistoryXHList());
+            model.addAttribute("familyCancerHistoryList", screeningVo.getFamilyCancerHistoryList());
+
+            if(screeningVo.getHistoryList()!=null && screeningVo.getHistoryList().size()>0){
+                model.addAttribute("historyListFlag", "1"); //
+            }else{
+                model.addAttribute("historyListFlag", "2"); //
+            }
+            if(screeningVo.getLucFamilyCancerHistoryXHList()!=null && screeningVo.getLucFamilyCancerHistoryXHList().size()>0){
+                model.addAttribute("lucFamilyCancerHistoryXHListFlag", "1"); //
+            }else{
+                model.addAttribute("lucFamilyCancerHistoryXHListFlag", "2"); //
+            }if(screeningVo.getFamilyCancerHistoryList()!=null && screeningVo.getFamilyCancerHistoryList().size()>0){
+                model.addAttribute("familyCancerHistoryListFlag", "1"); //
+            }else{
+                model.addAttribute("familyCancerHistoryListFlag", "2"); //
+            }
+
             model.addAttribute("flag", "2"); //2:修改
             //各癌症数据库存在标志
             model.addAttribute("crcDbflag", "2"); //数据库状态  1：新增 2：修改
