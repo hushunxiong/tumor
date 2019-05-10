@@ -5,6 +5,7 @@
 	<sql id="CrcRegcaseColumns">
 		a.id AS "id",a.manageid AS "manageid",a.id_number AS "idNumber",
 		a.cbq_return_date1 as cbqReturnDate1,
+		a.cbq_return_date2 as cbqReturnDate2,
 		a.check_year AS "checkYear",a.check_result AS "checkResult",
 		a.region_code AS "regionCode",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",
 		a.submits_status AS "submitsStatus",a.submit_date AS "submitDate",
