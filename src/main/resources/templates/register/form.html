@@ -1133,15 +1133,19 @@
             })
         }
 
-        var xhList=[[${lucFamilyCancerHistoryXHList}]];
-        if(xhList!=null){
-            mini.get("xhHistory").setValue("1")
-            $.each(xhList,function(n,xh){
-                addXuhuiRow(xh);
-            })
-        }else{
-            mini.get("xhHistory").setValue("2")
+        var areaCode='${areaCode}';
+        if (areaCode =='310104000000') {
+            var xhList=[[${lucFamilyCancerHistoryXHList}]];
+            if(xhList!=null){
+                mini.get("xhHistory").setValue("1")
+                $.each(xhList,function(n,xh){
+                    addXuhuiRow(xh);
+                })
+            }else{
+                mini.get("xhHistory").setValue("2")
+            }
         }
+
         yyjcChange();
         xiyanChange();
         bdxyChange();
