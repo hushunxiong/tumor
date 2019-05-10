@@ -747,10 +747,10 @@
         </div>
 
 
-        <!--<div th:if="${areaCode} eq '310104000000'">-->
+        <div th:if="${areaCode} eq '310104000000'">
             <div th:replace="/common/xuhuiCancer :: xuhuiSelect">
             </div>
-        <!--</div>-->
+        </div>
 
         <div class="title_tip mt-30">危险度评估结果 <button class="my-btn my-btn-blue mr-20" onclick="makeResult()">计算危险度评估结果</button></div>
         <table class="table_new table_new5 mt-10">
@@ -1004,7 +1004,7 @@
     </div>
     <div class="btn-list text-c mt-30">
         <button class="my-btn my-btn-blue mr-20" onclick="save()">保存</button>
-        <button class="my-btn my-btn-blue mr-20">关闭</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
         <button class="my-btn my-btn-blue mr-20">打印转诊单</button>
     </div>
 </div>
@@ -2001,6 +2001,10 @@
             mini.get("checkResultName4").setValue("阴性");
         }
 
+    }
+
+    function closeWindow(){
+        window.history.go(-1);
     }
 </script>
 </html>
