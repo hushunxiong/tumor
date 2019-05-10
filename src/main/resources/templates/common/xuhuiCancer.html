@@ -56,7 +56,7 @@
                         </td>
                         <td>亲属关系</td>
                         <td width="15%" class="bg-white">
-                            <input id="relationid{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].id" value="{{id}}" style="display: none"/>
+                            <input id="relationid{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].id" value="{{id}}" class="mini-hidden"/>
                             <input id="xhrelation{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].relation" value="{{relation}}" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
                                    textField="name" valueField="code" valueFromSelect="true" th:data="${#dic.generals('60018')}"/>
                         </td>

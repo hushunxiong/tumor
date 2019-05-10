@@ -21,4 +21,6 @@ public interface CancerHistoryDao extends BaseDao<CancerHistory> {
 
     public int deleteByManageIdAndYear(@Param("manageId") String manageId,@Param("checkYear") String checkYear);
 
+    public void changeIschange(@Param("manageId") String manageId,@Param("checkYear") String checkYear);
+
 }

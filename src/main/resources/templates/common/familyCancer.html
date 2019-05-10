@@ -14,13 +14,13 @@
                         </td>
                         <td>亲属关系</td>
                         <td class="bg-white">
-                            <input id="relationid{{index}}" name="familyCancerHistoryList[{{index}}].id" value="{{id}}" style="display: none"/>
+                            <input id="relationid{{index}}" name="familyCancerHistoryList[{{index}}].id" value="{{id}}" class="mini-hidden"/>
                             <input id="relation{{index}}" name="familyCancerHistoryList[{{index}}].relation" value="{{relation}}" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
                                    textField="name" valueField="code" valueFromSelect="true" th:data="${#dic.generals('60018')}"/>
                         </td>
                         <td>发病年龄</td>
                         <td width="15%" class="bg-white">
-                            <input id="age{{index}}" name="familyCancerHistoryList[{{index}}].relation" value="{{age}}" class="mini-textbox" width="100" vtype="int" />
+                            <input id="age{{index}}" name="familyCancerHistoryList[{{index}}].age" value="{{age}}" class="mini-textbox" width="100" vtype="int" />
                         </td>
                         <td>是否在世</td>
                         <td width="25%" class="bg-white">
@@ -40,7 +40,7 @@
             <td width="20%" th:text="${title}"></td>
             <td width="80%" class="text-l">
                 <input th:id="${id}" class="mini-radiobuttonlist"
-                       th:data="${#dic.generals('60007')}"  th:value="${familyCancerHistoryList}"
+                       th:data="${#dic.generals('60007')}"
                        textField="name" valueField="code"
                        th:attr="onvaluechanged='showFamily(\''+${id}+'\', \''+${bodyId}+'\');'"/>
             </td>

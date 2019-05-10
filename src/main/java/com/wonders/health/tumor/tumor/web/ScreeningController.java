@@ -522,7 +522,9 @@ public class ScreeningController extends BaseController {
                 if(StringUtils.isNotBlank(history.getId())){ //修改历史癌症表
                     history.setUpdateBy(user.getId());
                     if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
-                        history.setIschange("1");
+                        if(isOpen(crcFlag)){
+                            history.setIschange("1");
+                        }
                     }
                     cancerHistoryService.update(cancerHistoryDao,history);
                 }else{                                        //插入历史癌症表
@@ -530,6 +532,7 @@ public class ScreeningController extends BaseController {
                     history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     history.setManageid(personInfo.getId());
                     history.setCreateBy(user.getId());
+                    history.setIschange("2");
                     cancerHistoryService.insert(cancerHistoryDao,history);
                 }
             });
@@ -553,11 +556,15 @@ public class ScreeningController extends BaseController {
                 familyCancerHistoryList.stream().forEach(family->{
                     if(StringUtils.isNotBlank(family.getId())){ //修改亲属历史表
                         family.setUpdateBy(user.getId());
+                        if(isOpen(crcFlag)){
+                            family.setIschange("1");
+                        }
                         familyCancerHistoryService.update(familyCancerHistoryDao,family);
                     }else{                                      //插入亲属历史表
                         family.setId(IdGen.uuid());
                         family.setCheckId(personInfo.getId());
                         family.setCreateBy(user.getId());
+                        family.setIschange("2");
                         familyCancerHistoryService.insert(familyCancerHistoryDao,family);
                     }
                 });
@@ -573,6 +580,7 @@ public class ScreeningController extends BaseController {
                     crcRegcase.setCheckResult("2");
                 }
                 if(StringUtils.isNotBlank(crcRegcase.getId())){
+                    crcRegcase.setIschange("1");
                     crcRegcaseService.update(crcRegcaseDao,crcRegcase);
                 }else{
                     crcRegcase.setId(IdGen.uuid());
@@ -585,6 +593,7 @@ public class ScreeningController extends BaseController {
                     crcRegcase.setSubmitsStatus("1");
                     crcRegcase.setCloseStatus("2");
                     crcRegcase.setCreateBy(user.getId());
+                    crcRegcase.setIschange("2");
                     crcRegcase.init();
                     crcRegcaseService.insert(crcRegcaseDao,crcRegcase);
                 }
@@ -798,6 +807,39 @@ public class ScreeningController extends BaseController {
         return new AjaxReturn(true,"保存成功",personInfo.getId());
     }
 
+    @RequestMapping(value = {"", "deleteSelfHistory"}, method = RequestMethod.GET)
+    @ResponseBody
+    public String deleteSelfHistory(String id,String manageId,String checkYear){
+        try{
+            if(StringUtils.isNotBlank(id)){
+                cancerHistoryService.deleteById(id);
+                if(StringUtils.isNotBlank(manageId)){
+                    cancerHistoryService.isChange(manageId,checkYear);
+                }
+            }
+            return "1";
+        }catch (Exception e){
+            return "2";
+        }
+
+    }
+
+    @RequestMapping(value = {"", "deleteFamHistory"}, method = RequestMethod.GET)
+    @ResponseBody
+    public String deleteFamHistory(String id,String checkId){
+        try{
+            if(StringUtils.isNotBlank(id)){
+                familyCancerHistoryService.deleteById(id);
+                if(StringUtils.isNotBlank(checkId)){
+                    familyCancerHistoryService.isChange(checkId);
+                }
+            }
+            return "1";
+        }catch (Exception e){
+            return "2";
+        }
+
+    }
     //根据字典表 id 获取癌症名称
     private String getCancerName(String cancerType,String dicCode){
        return DictUtils.generalForMap(dicCode).get(cancerType).getName();

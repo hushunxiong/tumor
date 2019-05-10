@@ -32,7 +32,7 @@
 
 	<update id="update">
 		UPDATE family_cancer_history SET
-		check_id = #{checkId},relation = #{relation},cancer_type = #{cancerType},
+		relation = #{relation},cancer_type = #{cancerType},
 		age = #{age},lived = #{lived},
 		ischange = #{ischange},update_by = #{updateBy},update_date = SYSDATE
 		WHERE id = #{id}
@@ -108,7 +108,7 @@
 	</update>
 
 	<update id="delete">
-	    UPDATE family_cancer_history SET del_flag = '1'
+	    DELETE FROM  family_cancer_history
 	    WHERE id = #{id}
 	</update>
 
@@ -117,5 +117,7 @@
 	    WHERE check_id = #{checkId}
 	</update>
 
-	
+	<update id="changeIschange">
+		UPDATE family_cancer_history SET ischange='1' where check_id=#{checkId}
+	</update>
 </mapper>

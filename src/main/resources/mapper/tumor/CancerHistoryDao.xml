@@ -98,7 +98,7 @@
 	</update>
 
 	<update id="delete">
-	    UPDATE CANCER_HISTORY SET del_flag = '1'
+	    DELETE FROM  CANCER_HISTORY
 	    WHERE id = #{id}
 	</update>
 
@@ -107,5 +107,8 @@
 	    WHERE manageid = #{manageId}
 	    and check_year = #{checkYear}
 	</update>
-	
+
+	<update id="changeIschange">
+		UPDATE CANCER_HISTORY SET ischange='1' where manageid=#{manageId} and del_flag='0' and check_year=#{checkYear}
+	</update>
 </mapper>

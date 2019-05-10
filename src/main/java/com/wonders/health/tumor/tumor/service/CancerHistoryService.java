@@ -68,4 +68,9 @@ public class CancerHistoryService implements BaseService{
         cancerHistoryDao.delete(id);
     }
 
+    @Transactional(readOnly = false)
+    public void isChange(String manageId,String checkYear) {
+        cancerHistoryDao.changeIschange(manageId,checkYear);
+    }
+
 }

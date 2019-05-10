@@ -67,5 +67,10 @@ public class FamilyCancerHistoryService implements BaseService{
     public void deleteById(String id) {
         familyCancerHistoryDao.delete(id);
     }
+    @Transactional(readOnly = false)
+    public void isChange(String checkId) {
+	    familyCancerHistoryDao.changeIschange(checkId);
+    }
+
 
 }

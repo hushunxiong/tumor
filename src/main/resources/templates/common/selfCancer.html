@@ -39,6 +39,33 @@
             if(index == 0){
                 return;
             }
+            if ($('#azsBody').children().length == 2) {
+                return;
+            }
+
+            var id=mini.get("historyId"+index).getValue();//后台删除记录
+
+            if(id!=null && id!=''){
+                var personid=mini.get("id").getValue();
+                var checkYear=mini.get("checkYear").getValue();
+                $.ajax({
+                    url: "/tumor/screening/deleteSelfHistory?id="+id+"&&checkId="+personid+"&&checkYear="+checkYear,
+                    type:'get',
+                    dataType:'text',
+                    success:function(res) {
+                        if (res=="2") { //删除失败
+                            mini.showTips({
+                                content: '删除癌症史失败',
+                                state: "warning",
+                                x: "center",
+                                y: "center",
+                                timeout: 2000
+                            });
+                            return;
+                        }
+                    }
+                })
+            }
 
             $("#selfRow" + index).remove();
         }
@@ -56,7 +83,7 @@
                         </td>
                         <td>癌症种类</td>
                         <td class="bg-white">
-                            <input id="historyId{{index}}" name="historyList[{{index}}].id" value="{{id}}" style="display: none"/>
+                            <input id="historyId{{index}}" name="historyList[{{index}}].id" value="{{id}}" class="mini-hidden"/>
                             <input id="icd10{{index}}" name="historyList[{{index}}].icd10" value="{{icd10}}"
                                    class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
                                    th:data="${#dic.generals('60020')}"

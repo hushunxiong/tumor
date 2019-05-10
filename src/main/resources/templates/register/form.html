@@ -11,7 +11,7 @@
 <div class="content pd-10" style="width:auto; overflow: hidden;">
     <div id="form1">
         <div class="title_tip mt-30">基本信息</div>
-        <span style="display: none" id="id" name="personInfo.id" th:value="${personInfo.id}"></span>
+        <span class="mini-hidden" id="id" name="personInfo.id" th:value="${personInfo.id}"></span>
         <table class="table_new table_new5 mt-10" id="baseForm">
             <tbody>
             <tr>
@@ -747,10 +747,10 @@
         </div>
 
 
-        <div th:if="${areaCode} eq '310104000000'">
+        <!--<div th:if="${areaCode} eq '310104000000'">-->
             <div th:replace="/common/xuhuiCancer :: xuhuiSelect">
             </div>
-        </div>
+        <!--</div>-->
 
         <div class="title_tip mt-30">危险度评估结果 <button class="my-btn my-btn-blue mr-20" onclick="makeResult()">计算危险度评估结果</button></div>
         <table class="table_new table_new5 mt-10">
@@ -1109,6 +1109,47 @@
                 mini.get("hospitalCode"+n).setText(hos.hospitalName);
             })
         }
+        var famList=[[${familyCancerHistoryList}]];
+        mini.get("crcFamilyFlag").setValue("2");
+        mini.get("licFamilyFlag").setValue("2");
+        mini.get("scFamilyFlag").setValue("2");
+        mini.get("lucFamilyFlag").setValue("2");
+        if(famList!=null){
+            $.each(famList,function(n,fam){
+                if(fam.cancerType=="1"){
+                    mini.get("crcFamilyFlag").setValue("1");
+                    addFamilyRow(fam,"crcFamilyBody");
+                }else if(fam.cancerType=="2"){
+                    mini.get("licFamilyFlag").setValue("1");
+                    addFamilyRow(fam,"licFamilyBody");
+                }else if(fam.cancerType=="3"){
+                    mini.get("scFamilyFlag").setValue("1");
+                    addFamilyRow(fam,"scFamilyBody");
+                }else if(fam.cancerType=="4"){
+                    mini.get("lucFamilyFlag").setValue("1");
+                    addFamilyRow(fam,"lucFamilyBody");
+                }
+
+            })
+        }
+
+        var xhList=[[${lucFamilyCancerHistoryXHList}]];
+        if(xhList!=null){
+            mini.get("xhHistory").setValue("1")
+            $.each(xhList,function(n,xh){
+                addXuhuiRow(xh);
+            })
+        }else{
+            mini.get("xhHistory").setValue("2")
+        }
+        yyjcChange();
+        xiyanChange();
+        bdxyChange();
+        zawzChange();
+        fjjChange();
+        hejiuChange();
+        sfzdhjlChange();
+        xxcChange();
 
     });
 
@@ -1240,7 +1281,7 @@
     }
 
     function crcNumerChange(){
-        var id=$("#id").val();
+        var id=mini.get("id").getValue();
         var crcNum=mini.get("idNumber").getValue();
         $.ajax({
             url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
@@ -1401,7 +1442,7 @@
 
     //保存
     function save(){
-        var id=$("#id").val();  //个人管理编号
+        var id=mini.get("id").getValue();  //个人管理编号
 
         var params={};
         if(flag==1){
@@ -1420,6 +1461,8 @@
             });
             return;
         }else{
+            makeResult();
+            makeChushaiResult();
             params=form.getData(true, false);
             params.id=id;
 
@@ -1446,8 +1489,8 @@
                         var zjhm = mini.get("personcard").getValue();
                         var zjlx = mini.get("personcardType").getValue();
                         var checkYear = mini.get("checkYear").getValue();
-                        $("#id").val(res.value);
-
+                        // $("#id").val();
+                        mini.get("id").setValue(res.value)
                         setTimeout(function(){
                             window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
                         },2000)
@@ -1539,9 +1582,30 @@
     }
 
     //删除一级亲属癌症行
-    function delFamilyRow(index, bodyId) {
+    function delFamilyRow(index, bodyId,e) {
         if ($('#' + bodyId).children().length == 2) {
             return;
+        }
+        var id=mini.get("relationid"+index).getValue();//后台删除记录
+        if(id!=null && id!=''){
+            var personid=mini.get("id").getValue();
+            $.ajax({
+                url: "/tumor/screening/deleteFamHistory?id="+id+"&&checkId="+personid,
+                type:'get',
+                dataType:'text',
+                success:function(res) {
+                    if (res=="2") { //删除失败
+                        mini.showTips({
+                            content: '删除癌症史失败',
+                            state: "warning",
+                            x: "center",
+                            y: "center",
+                            timeout: 2000
+                        });
+                        return;
+                    }
+                }
+            })
         }
         $("#familyRow" + index).remove();
     }
@@ -1581,6 +1645,7 @@
 
     //危险度评估结果计算
     function makeResult() {
+        debugger;
         notDoneFlag=0;
 
         var areaCode='${areaCode}';
@@ -1612,7 +1677,7 @@
                 liangxiang=1;
             }
 
-            if(eval(parseIntPlus(crcFamilyFlag)+parseIntPlus(azsHistoryFlag)+parseIntPlus(changxirouFlag)+parseIntPlus(liangxiang))>=1){
+            if(eval(parseIntPlus(crcFamilyFlag)+parseIntPlus(azsHistoryFlag)+parseIntPlus(changxirouFlag)+liangxiang)>=1){
                     crcRiskResult=true;
                     $("#crcRiskResult").text("阳性");
                     $("#assessmentResult1").val("2");
