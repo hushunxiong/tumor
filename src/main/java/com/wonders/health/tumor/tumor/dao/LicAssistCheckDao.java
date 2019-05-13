@@ -1,0 +1,24 @@
+/**
+ * 
+ */
+package com.wonders.health.tumor.tumor.dao;
+
+import com.wonders.health.tumor.common.model.BaseDao;
+import com.wonders.health.tumor.tumor.entity.LicAssistCheck;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+/**
+ * 肝癌辅助检查表DAO接口
+ * @author menglianghai
+ */
+@Mapper
+@Repository
+public interface LicAssistCheckDao extends BaseDao<LicAssistCheck> {
+	public LicAssistCheck get(@Param("id") String id);
+
+    public int delete(@Param("id") String id);
+
+    public int deleteByCheckId(@Param("checkId") String checkId);
+
+}

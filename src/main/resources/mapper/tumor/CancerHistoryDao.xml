@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CancerHistoryDao">
+    
+	<sql id="CancerHistoryColumns">
+		a.id AS "id",a.manageid AS "manageid",a.check_year AS "checkYear",a.icd10 AS "icd10",a.cancer_name AS "cancerName",a.age AS "age",a.hospital_code AS "hospitalCode",a.hospital_name AS "hospitalName",a.ischange AS "ischange",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CancerHistory">
+		SELECT 
+			<include refid="CancerHistoryColumns"/>
+		FROM CANCER_HISTORY a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getListByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.CancerHistory">
+		SELECT
+		<include refid="CancerHistoryColumns"/>
+		FROM CANCER_HISTORY a
+		WHERE a.manageid = #{manageid}
+		and a.del_flag='0'
+		and a.check_year=#{checkyear}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CancerHistory">
+		SELECT 
+			<include refid="CancerHistoryColumns"/>
+		FROM CANCER_HISTORY a
+		<where>
+			a.del_flag = '0'
+		</where>		
+			ORDER BY a.update_date DESC
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM CANCER_HISTORY a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerHistory"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CancerHistoryColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO CANCER_HISTORY(
+		id,manageid,check_year,
+		icd10,cancer_name,age,hospital_code,hospital_name,
+		ischange,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{manageid},#{checkYear},
+		#{icd10},#{cancerName},#{age},#{hospitalCode},#{hospitalName},
+		#{ischange},'0',#{createBy},SYSDATE
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE CANCER_HISTORY SET
+		cancer_name = #{cancerName},age = #{age},
+		hospital_code = #{hospitalCode},hospital_name = #{hospitalName},
+		ischange = #{ischange},update_by = #{updateBy},update_date = SYSDATE
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    DELETE FROM  CANCER_HISTORY
+	    WHERE id = #{id}
+	</update>
+
+	<update id="deleteByManageIdAndYear">
+	    UPDATE CANCER_HISTORY SET del_flag = '1'
+	    WHERE manageid = #{manageId}
+	    and check_year = #{checkYear}
+	</update>
+
+	<update id="changeIschange">
+		UPDATE CANCER_HISTORY SET ischange='1' where manageid=#{manageId} and del_flag='0' and check_year=#{checkYear}
+	</update>
+</mapper>

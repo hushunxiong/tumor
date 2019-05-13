@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>dao</name>
+	<fileName>${ClassName}Dao.java</fileName>
+	<content><![CDATA[
+/**
+ * 
+ */
+package ${packageName}.${moduleName}.dao;
+
+import ${packageName}.common.model.BaseDao;
+import ${packageName}.${moduleName}.entity.${ClassName};
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+/**
+ * ${functionName}DAO接口
+ * @author ${functionAuthor}
+ */
+@Mapper
+@Repository
+public interface ${ClassName}Dao extends BaseDao<${ClassName}> {
+	<#if (table.columnPks?size > 1)></#if>
+	public ${ClassName} get(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>@Param("${p.javaField}") ${p.javaType} ${p.javaField}</#list>);
+
+    public int delete(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>@Param("${p.javaField}") ${p.javaType} ${p.javaField}</#list>);
+
+}]]>
+	</content>
+</template>

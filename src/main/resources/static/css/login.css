@@ -1,0 +1,183 @@
+@charset "UTF-8";
+body, html {
+    border: none;
+}
+
+blockquote, body, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, img, input, li, object, ol, p, pre, table, td, textarea, th, ul {
+    margin: 0;
+    padding: 0;
+    list-style: none
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font: 14px/1.5 Helvetica, "微软雅黑", Arial, Tahoma;
+    line-height: 18px;
+    color: #333;
+    overflow: auto;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Microsoft YaHei
+}
+
+.head {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    overflow: hidden;
+    background: url("../images/img-tbg.png") no-repeat center center;
+}
+
+.head .head_left {
+    width: 430px;
+    height: 51px;
+    float: left;
+    margin-left: 30px;
+    letter-spacing: 0.5em;
+}
+
+.head .title {
+    font-size: 24px;
+    margin-top: 20px;
+    height: 60px;
+    line-height: 58px;
+    color: white;
+    font-family: 'Microsoft YaHei';
+    color: #fff;
+    text-shadow: none;
+    font-size: 18px;
+}
+
+.head .head_right {
+    height: 34px;
+    float: right;
+
+}
+
+.head .head_right li {
+    float: left;
+    font-size: 14px;
+    color: #fff;
+    line-height: 30px;
+    margin-left: 2px;
+    cursor: pointer
+}
+
+.head .head_right li img {
+    margin-right: 10px;
+    margin-top: 4px
+}
+
+.sidebar {
+    background: #25C0F0;
+    height:auto;
+    font-family: "微软雅黑";
+    font-size: 16px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-left: 10px;
+    width: 120px;
+
+}
+
+.sidebar > ul > li {
+    font-size: 16px;
+    position: relative;
+    margin-bottom: 2px;
+    border-right: none;
+    text-align: center;
+}
+
+.sidebar > ul.children > li.selected {
+    margin-right: -1px;
+}
+.sidebar > ul > li > a
+{
+    color: #fff;
+    text-decoration: none;
+    padding-top: 20px;
+    height: 76px;
+     width: 100%;
+    display: block;
+    border-bottom: 1px solid #03B3EA;
+
+}
+.sidebar > ul > li > a:hover {
+border-bottom: 1px  solid greenyellow;
+    color: greenyellow;
+}
+.sidebar > ul > li.selected
+{
+    background-color:#00B7EE ;
+    border-radius: 10px;
+
+}
+.sidebar > ul > li:last-child  a{  border:none;}
+
+.sidebar > ul > li > img {
+    display: block;
+}
+
+
+.fl {
+    float: left
+}
+
+.fr {
+    float: right
+}
+
+.mini-layout-border > div {
+    border: none;
+}
+
+
+/*2017-07-13*/
+.shortCut { min-width: 57px;width: auto; float:right; font-size: 10px; height: 24px;  line-height: 24px; margin-top: 30px; }
+.shortCut dt,.shortCut dd { float:left; width: auto;}
+.shortCut dt { width: auto;  height: 24px; text-align:right;padding-right:10px;}
+.shortCut dd {  height: 20px; line-height: 20px; margin-top:0px; text-align: center;margin-right: 20px;}
+.shortCut dd a {font-size: 10px;cursor: pointer;  color: white;  text-decoration: none; text-align: center;padding:2px 5px; }
+.shortCut dd:last-child{ border: 1px solid white;border-radius: 15px;}
+
+/*2017-10-23*/
+.wrap { min-width: 1024px;width: auto; margin: 0 auto;}
+.login_head { width: 100%; height: 79px; background: url("../images/header.png") no-repeat fixed #3591F4;}
+.login_container {  width: 80%;
+    margin: 80px auto 0px;
+    height: 479px;
+    background: url(../images/bg2.png) no-repeat;
+    background-size: contain;}
+.login_form { width: 320px; margin: 0px auto; background-color: #fff; border-radius: 5px; text-align: center; padding:22px 10px 5px;  }
+.login_form_h { margin-bottom: 30px;}
+.form_control { width: 90%; height: 46px; display: block; border: 1px solid #ccc; border-radius: 5px; text-align: left;line-height: 50px; overflow: hidden; margin: 15px 0px; margin-left: 20px;}
+.form_control i { width: 50px; line-height: 50px; display: inline-block; text-align: center; background-color:#F9F9F9;  height: 50px;}
+.form_control input { height: 30px;border: none; width: 74%; padding-left: 2%; overflow: hidden;}
+.login_form .submit {width: 90%;
+    margin: 10px 0px;
+    height: 50px;
+    color: white;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    border: 1px solid #3186e0;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px #3186e0;
+    box-shadow: 0px 5px 10px #3186e0;
+    background: -webkit-linear-gradient(#4ACFFA, #3798F5); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#4ACFFA, #3798F5); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#4ACFFA, #3798F5); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#4ACFFA, #3798F5); /* 标准的语法 */
+    background-color: #3798F5\9;
+}
+.login_form_b { height: 56px; line-height: 56px;}
+.login_form_b a { background: url("../images/icon_tongbu.png") no-repeat; width: 56px; height: 56px; display:inline-block; padding-left: 52px; float: left;}
+.login_form_b b { float: right; color:#B7B7B7; font-weight: normal;font-size: 12px;}
+.login_foot { position: absolute; bottom:0px; text-align: center; width: 100%;}
+/*2017-12-22*/
+.label-80 { width:80px;display:inline-block;height:20px; text-align:right; }

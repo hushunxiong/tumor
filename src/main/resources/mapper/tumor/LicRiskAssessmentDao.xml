@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.LicRiskAssessmentDao">
+    
+	<sql id="LicRiskAssessmentColumns">
+		a.id AS "id",a.lic_check_id AS "licCheckId",a.yigan AS "yigan",a.binggan AS "binggan",a.ganyinghua AS "ganyinghua",a.aizhengshi AS "aizhengshi",a.qinshu_aizhengshi AS "qinshuAizhengshi",a.assessment_result AS "assessmentResult",a.assessment_doc AS "assessmentDoc",a.assessment_doc_name AS "assessmentDocName",a.assessment_date AS "assessmentDate",a.risk_quality_flag AS "riskQualityFlag",a.upload_time AS "uploadTime",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.LicRiskAssessment">
+		SELECT 
+			<include refid="LicRiskAssessmentColumns"/>
+		FROM lic_risk_assessment a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByCheckid" resultType="com.wonders.health.tumor.tumor.entity.LicRiskAssessment">
+		SELECT
+		<include refid="LicRiskAssessmentColumns"/>
+		FROM lic_risk_assessment a
+		WHERE a.lic_check_id = #{checkid} and a.del_flag='0'
+	</select>
+
+	<insert id="insert">
+		INSERT INTO lic_risk_assessment(
+		id,lic_check_id,yigan,binggan,ganyinghua,aizhengshi,
+		qinshu_aizhengshi,
+		assessment_result,assessment_doc,assessment_doc_name,assessment_date,
+		risk_quality_flag,upload_time,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{licCheckId},#{yigan},#{binggan},#{ganyinghua},#{aizhengshi},
+		#{qinshuAizhengshi},#{assessmentResult},#{assessmentDoc},#{assessmentDocName},#{assessmentDate},
+		#{riskQualityFlag},#{uploadTime},'0',#{createBy},SYSDATE
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE lic_risk_assessment
+		SET
+		yigan = #{yigan},binggan = #{binggan},ganyinghua = #{ganyinghua},aizhengshi = #{aizhengshi},
+		qinshu_aizhengshi = #{qinshuAizhengshi},
+		assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},
+		assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LicRiskAssessment">
+		SELECT 
+			<include refid="LicRiskAssessmentColumns"/>
+		FROM lic_risk_assessment a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM lic_risk_assessment a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.LicRiskAssessment"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="LicRiskAssessmentColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert1">
+		INSERT INTO lic_risk_assessment(
+		id,lic_check_id,yigan,binggan,ganyinghua,aizhengshi,qinshu_aizhengshi,assessment_result,assessment_doc,assessment_doc_name,assessment_date,risk_quality_flag,upload_time,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{licCheckId},#{yigan},#{binggan},#{ganyinghua},#{aizhengshi},#{qinshuAizhengshi},#{assessmentResult},#{assessmentDoc},#{assessmentDocName},#{assessmentDate},#{riskQualityFlag},#{uploadTime},#{delFlag},#{createBy},#{createDate}
+		)
+	</insert>
+	
+	<update id="update1">
+		UPDATE lic_risk_assessment SET
+		id = #{id},lic_check_id = #{licCheckId},yigan = #{yigan},binggan = #{binggan},ganyinghua = #{ganyinghua},aizhengshi = #{aizhengshi},qinshu_aizhengshi = #{qinshuAizhengshi},assessment_result = #{assessmentResult},assessment_doc = #{assessmentDoc},assessment_doc_name = #{assessmentDocName},assessment_date = #{assessmentDate},risk_quality_flag = #{riskQualityFlag},upload_time = #{uploadTime},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE lic_risk_assessment SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	<update id="deleteByCheckId">
+	    UPDATE lic_risk_assessment SET del_flag = '1'
+	    WHERE lic_check_id = #{checkId}
+	</update>
+
+	
+</mapper>

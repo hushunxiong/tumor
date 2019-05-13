@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div th:fragment="xuhuiSelect">
+
+    <script type="text/javascript">
+
+        //增加行
+        function addXuhuiRow(data) {
+            if (data == null) {
+                data = {index: 0};
+            } else {
+                data.index = 0;
+            }
+
+            $('#xhBody tr').each(function (i, a) {
+
+                var idx = parseInt($(this).attr("index"));
+                if (data.index == undefined) {
+                    data.index = idx;
+                } else if (data.index <= idx) {
+                    data.index = idx + 1;
+                }
+
+            });
+
+            if (data.sort == undefined) {
+                data.sort = data.index + 1;
+            }
+            var tpl = $('#xhRowTpl').html();
+            var html = template.render(tpl, data);
+
+            $('#xhBody').append(html);
+            mini.parse();
+        }
+
+        //删除行
+        function delXuhuiRow(index) {
+            if(index == 0){
+                return;
+            }
+
+            $("#xhRow" + index).remove();
+        }
+
+    </script>
+
+    <script id="xhRowTpl" type="text/template" style="display: none;">
+        <tr id="xhRow{{index}}" index="{{index}}">
+            <td colspan="2" class="bg-white" style="padding:0px;">
+                <table class="table_new table_new6">
+                    <tr>
+                        <td class="bg-white" style="border: none;">
+                            <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="addXuhuiRow(null);">+</a>
+                            <a href="javascript:void(0);" style="text-decoration:none;" onclick="delXuhuiRow({{index}});">-</a>
+                        </td>
+                        <td>亲属关系</td>
+                        <td width="15%" class="bg-white">
+                            <input id="relationid{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].id" value="{{id}}" class="mini-hidden"/>
+                            <input id="xhrelation{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].relation" value="{{relation}}" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                   textField="name" valueField="code" valueFromSelect="true" th:data="${#dic.generals('60018')}"/>
+                        </td>
+
+                        <td>癌症种类</td>
+                        <td width="15%" class="bg-white">
+                            <input id="xhicd10{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].icd10" value="{{icd10}}"
+                                   class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                   th:data="${#dic.generals('60020')}"
+                                   textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+
+                        </td>
+                        <td>发病年龄</td>
+                        <td width="10%" class="bg-white">
+                            <input id="xhage{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].age" value="{{age}}" class="mini-textbox" width="100" vtype="int" />
+                        </td>
+                        <td>是否在世</td>
+                        <td width="20%" class="bg-white">
+                            <input id="xhlived{{index}}" name="lucFamilyCancerHistoryXHList[{{index}}].lived" value="{{lived}}" class="mini-radiobuttonlist"
+                                   textField="name" valueField="code" th:data="${#dic.generals('60019')}"/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </script>
+
+    <table id="xhTable" class="table_new table_new5 mt-10">
+        <tbody id="xhBody">
+        <tr>
+            <td width="20%">徐汇肺癌：一级亲属（父母、兄弟姐妹、子女）有无癌症史</td>
+            <td width="80%" class="text-l">
+                <input id="xhHistory" class="mini-radiobuttonlist"
+                       th:data="${#dic.generals('60007')}"  th:value="${lucFamilyCancerHistoryXHListFlag}"
+                       textField="name" valueField="code"
+                       onvaluechanged="xhChanged"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao">
+    
+	<sql id="CancerPersonInfoColumns">
+		a.id AS "id",a.personcard_type AS "personcardType",a.personcard AS "personcard",a.name AS "name",a.gender AS "gender",a.birth AS "birth",a.telephone AS "telephone",a.mobile AS "mobile",a.nation AS "nation",a.nation_other AS "nationOther",a.marriage AS "marriage",a.education AS "education",a.payment_situation AS "paymentSituation",a.profession AS "profession",a.other_profession AS "otherProfession",a.paddress_province AS "paddressProvince",a.paddress_city AS "paddressCity",a.paddress_county AS "paddressCounty",a.paddress_town AS "paddressTown",a.paddress_committee AS "paddressCommittee",a.paddress_detail AS "paddressDetail",a.address_province AS "addressProvince",a.address_city AS "addressCity",a.address_county AS "addressCounty",a.address_town AS "addressTown",a.address_committee AS "addressCommittee",a.address_detail AS "addressDetail",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.del_flag AS "delFlag",a.ischange AS "ischange",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+	</sql>
+
+	<sql id="CancerPersonInfoListColumns">
+		P . ID AS "id",
+		P . NAME AS "name",
+		P .GENDER AS "gender",
+		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+			crc.id  as  "crcCheckId",
+			crc.check_year as  "crcCheckYear",
+			1 as "crc",
+			crc.ID_NUMBER AS "idNumber",
+			crc.CHECK_RESULT AS "crcResult",
+			crcas.ASSESSMENT_RESULT AS "crcAssessmentResult",
+			fobt.FIRST_FOBT_RESULT AS "firstFobtResult",
+			fobt.SECOND_FOBT_RESULT AS "secondFobtResult",
+			fobt.fobt_result AS "fobtResult",
+		</if>
+		<if test=" licFlag !=null and licFlag !='' and licFlag=='1'.toString()" >
+			lic.id  as  "licCheckId",
+			lic.check_year as  "licCheckYear",
+			1 as "lic",
+			lic.CHECK_RESULT AS "licResult",
+			licas.ASSESSMENT_RESULT AS "licAssessmentResult",
+			licac.LIC_ASSIST_RESULT AS "licAssistResult",
+		</if>
+		<if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+			sc.id  as  "scCheckId",
+			sc.check_year as  "scCheckYear",
+			1 as "sc",
+			sc.CHECK_RESULT AS "scResult",
+		</if>
+		<if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+			luc.id  as  "lucCheckId",
+			luc.check_year as  "lucCheckYear",
+			1 as "luc",
+			luc.CHECK_RESULT AS "lucResult",
+		</if>
+		P .PERSONCARD AS "personCard"
+	</sql>
+
+	<select id="getById" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
+		SELECT
+		    P . ID AS "id",
+			P . NAME AS "name",
+			P .GENDER AS "gender",
+			crc.id  as  "crcCheckId",
+			crc.check_year as  "crcCheckYear",
+			1 as "crc",
+			crc.ID_NUMBER AS "idNumber",
+			crc.CHECK_RESULT AS "crcResult",
+			crcas.ASSESSMENT_RESULT AS "crcAssessmentResult",
+			fobt.FIRST_FOBT_RESULT AS "firstFobtResult",
+			fobt.SECOND_FOBT_RESULT AS "secondFobtResult",
+			fobt.fobt_result AS "fobtResult",
+			lic.id  as  "licCheckId",
+			lic.check_year as  "licCheckYear",
+			1 as "lic",
+			lic.CHECK_RESULT AS "licResult",
+			licas.ASSESSMENT_RESULT AS "licAssessmentResult",
+			licac.LIC_ASSIST_RESULT AS "licAssistResult",
+			sc.id  as  "scCheckId",
+			sc.check_year as  "scCheckYear",
+			1 as "sc",
+			sc.CHECK_RESULT AS "scResult",
+			luc.id  as  "lucCheckId",
+			luc.check_year as  "lucCheckYear",
+			1 as "luc",
+			luc.CHECK_RESULT AS "lucResult",
+			P .PERSONCARD AS "personCard"
+		FROM cancer_person_info p
+			LEFT JOIN CRC_REGCASE crc ON (crc.MANAGEID = P . ID)  AND crc.DEL_FLAG='0'  and  crc.check_year=#{csnf}
+			LEFT JOIN CRC_RISK_ASSESSMENT crcas ON (crc. ID = crcas.CRC_CHECK_ID) AND crcas.DEL_FLAG='0'
+			LEFT JOIN CRC_FOBT fobt ON (crc. ID = fobt.CRC_CHECK_ID) AND fobt.DEL_FLAG='0'
+			LEFT JOIN LIC_REGCASE lic ON (P . ID = lic.MANAGEID)  AND lic.DEL_FLAG='0'  and  lic.check_year=#{csnf}
+			LEFT JOIN LIC_RISK_ASSESSMENT licas ON (lic. ID = licas.LIC_CHECK_ID) AND licas.DEL_FLAG='0'
+			LEFT JOIN LIC_ASSIST_CHECK licac ON (lic. ID = licac.LIC_CHECK_ID) AND licac.DEL_FLAG='0'
+			LEFT JOIN SC_REGCASE sc ON (P . ID = sc.MANAGEID) AND sc.DEL_FLAG='0' 	and  sc.check_year=#{csnf}
+			LEFT JOIN LUC_REGCASE luc ON (P . ID = luc.MANAGEID) AND luc.DEL_FLAG='0'  and  luc.check_year=#{csnf}
+		WHERE
+			P .DEL_FLAG = '0'
+			and  p.id = #{id}
+	</select>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
+		SELECT 
+			<include refid="CancerPersonInfoColumns"/>
+		FROM cancer_person_info a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByCardnoAndYType" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
+		SELECT
+		<include refid="CancerPersonInfoColumns"/>
+		FROM cancer_person_info a
+		WHERE
+		a.personcard_type = #{type}
+		and a.personcard = #{personcardno}
+		and a.del_flag='0'
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
+		SELECT 
+			<include refid="CancerPersonInfoColumns"/>
+		FROM cancer_person_info a
+		<where>
+			a.del_flag = '0'
+		</where>		
+			ORDER BY a.update_date DESC
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM cancer_person_info P
+
+		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+			LEFT JOIN CRC_REGCASE crc ON (crc.MANAGEID = P . ID) AND crc.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   crc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   crc.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  crc.check_year=#{csnf}
+            </if>
+			<if test="beginDateFrom !=null and beginDateFrom !=''">
+				and  crc.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
+			</if>
+			<if test="endDateFrom !=null and endDateFrom !=''">
+				AND  crc.regdate &lt; to_date(#{endDateFrom},'yyyy-MM-dd HH:mi:ss')+1
+			</if>
+			LEFT JOIN CRC_RISK_ASSESSMENT crcas ON (crc. ID = crcas.CRC_CHECK_ID) AND crcas.DEL_FLAG='0'
+			LEFT JOIN CRC_FOBT fobt ON (crc. ID = fobt.CRC_CHECK_ID) AND fobt.DEL_FLAG='0'
+		</if>
+		<if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
+			LEFT JOIN LIC_REGCASE lic ON (P . ID = lic.MANAGEID) AND lic.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   lic.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   lic.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  lic.check_year=#{csnf}
+            </if>
+			<if test="beginDateFrom !=null and beginDateFrom !=''">
+				and  lic.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
+			</if>
+			<if test="endDateFrom !=null and endDateFrom !=''">
+				AND  lic.regdate &lt; to_date(#{endDateFrom},'yyyy-MM-dd HH:mi:ss')+1
+			</if>
+			LEFT JOIN LIC_RISK_ASSESSMENT licas ON (lic. ID = licas.LIC_CHECK_ID) AND licas.DEL_FLAG='0'
+			LEFT JOIN LIC_ASSIST_CHECK licac ON (lic. ID = licac.LIC_CHECK_ID) AND licac.DEL_FLAG='0'
+		</if>
+		<if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+			LEFT JOIN SC_REGCASE sc ON (P . ID = sc.MANAGEID)  AND sc.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   sc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   sc.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  sc.check_year=#{csnf}
+            </if>
+			<if test="beginDateFrom !=null and beginDateFrom !=''">
+				and  sc.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
+			</if>
+			<if test="endDateFrom !=null and endDateFrom !=''">
+				AND  sc.regdate &lt; to_date(#{endDateFrom},'yyyy-MM-dd HH:mi:ss')+1
+			</if>
+		</if>
+		<if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+			LEFT JOIN LUC_REGCASE luc ON (P . ID = luc.MANAGEID)  AND luc.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   luc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   luc.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  luc.check_year=#{csnf}
+            </if>
+			<if test="beginDateFrom !=null and beginDateFrom !=''">
+				and  luc.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
+			</if>
+			<if test="endDateFrom !=null and endDateFrom !=''">
+				AND  luc.regdate &lt; to_date(#{endDateFrom},'yyyy-MM-dd HH:mi:ss')+1
+			</if>
+		</if>
+      <where>
+		  P .DEL_FLAG = '0'
+		  <if test=" id !=null and id !='' " >
+			  and p.id=#{id}
+		  </if>
+		  <if test="keyword!=null and keyword!='' ">
+			  AND (
+			  p.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+			  OR
+			  p.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+			  )
+		  </if>
+		  <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+
+			  <if test="crcAssessmentResult !=null and crcAssessmentResult !=''">
+				  and  crcas.assessment_result=#{crcAssessmentResult}
+			  </if>
+			  <if test="firstFobtResult !=null and firstFobtResult !=''">
+				  and  fobt.first_fobt_result=#{firstFobtResult}
+			  </if>
+			  <if test="secondFobtResult !=null and secondFobtResult !=''">
+				  and  fobt.second_fobt_result=#{secondFobtResult}
+			  </if>
+			  <if test="fobtResult !=null and fobtResult !=''">
+				  and  fobt.fobt_result=#{fobtResult}
+			  </if>
+			  <if test="crcResult !=null and crcResult !=''">
+				  and  crc.check_result=#{crcResult}
+			  </if>
+		  </if>
+		  <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
+
+			  <if test="licAssessmentResult !=null and licAssessmentResult !=''">
+				  and  licas.assessment_result=#{licAssessmentResult}
+			  </if>
+			  <if test="licAssistResult !=null and licAssistResult !=''">
+				  and  licac.lic_assist_result=#{licAssistResult}
+			  </if>
+			  <if test="licResult !=null and licResult !=''">
+				  and lic.check_result=#{licResult}
+			  </if>
+		  </if>
+		  <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+
+			  <if test="scResult !=null and scResult !=''">
+				  and  sc.check_result=#{scResult}
+			  </if>
+		  </if>
+		  <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+
+			  <if test="lucResult !=null and lucResult !=''">
+				  and  luc.check_result=#{lucResult}
+			  </if>
+		  </if>
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CancerPersonInfoListColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+				ORDER BY p.id DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO cancer_person_info(
+		id,personcard_type,personcard,name,gender,birth,telephone,mobile,nation,nation_other,marriage,education,payment_situation,profession,other_profession,paddress_province,paddress_city,paddress_county,paddress_town,paddress_committee,paddress_detail,address_province,address_city,address_county,address_town,address_committee,address_detail,regorg,regdoc,regdate,del_flag,ischange,create_by,create_date,update_by,update_date
+		) VALUES (
+		#{id},#{personcardType},#{personcard},#{name},#{gender},#{birth},#{telephone},#{mobile},#{nation},#{nationOther},#{marriage},#{education},#{paymentSituation},#{profession},#{otherProfession},#{paddressProvince},#{paddressCity},#{paddressCounty},#{paddressTown},#{paddressCommittee},#{paddressDetail},#{addressProvince},#{addressCity},#{addressCounty},#{addressTown},#{addressCommittee},#{addressDetail},#{regorg},#{regdoc},#{regdate},#{delFlag},#{ischange},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cancer_person_info SET
+		id = #{id},personcard_type = #{personcardType},personcard = #{personcard},name = #{name},gender = #{gender},birth = #{birth},telephone = #{telephone},mobile = #{mobile},nation = #{nation},nation_other = #{nationOther},marriage = #{marriage},education = #{education},payment_situation = #{paymentSituation},profession = #{profession},other_profession = #{otherProfession},paddress_province = #{paddressProvince},paddress_city = #{paddressCity},paddress_county = #{paddressCounty},paddress_town = #{paddressTown},paddress_committee = #{paddressCommittee},paddress_detail = #{paddressDetail},address_province = #{addressProvince},address_city = #{addressCity},address_county = #{addressCounty},address_town = #{addressTown},address_committee = #{addressCommittee},address_detail = #{addressDetail},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},del_flag = #{delFlag},ischange = #{ischange},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE cancer_person_info SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	<update id="updateChange">
+		UPDATE cancer_person_info
+		SET
+		ischange='1'
+		WHERE id = #{id} and del_flag='0'
+	</update>
+	
+</mapper>

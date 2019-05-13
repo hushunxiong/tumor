@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<fileName>${ClassName}Service.java</fileName>
+	<content><![CDATA[
+/**
+ * 
+ */
+package ${packageName}.${moduleName}.service;
+
+import ${packageName}.${moduleName}.dao.${ClassName}Dao;
+import ${packageName}.${moduleName}.entity.${ClassName};
+import ${packageName}.common.model.AjaxReturn;
+import ${packageName}.common.model.BaseEntity;
+import ${packageName}.common.utils.IdGen;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Map;
+
+<#if entityType == "tree">
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+<#else>
+import ${packageName}.common.model.DataGrid;
+import ${packageName}.common.model.DataGridSearch;
+</#if>
+
+/**
+ * ${functionName}Service
+ * @author ${functionAuthor}
+ */
+@Service
+@Transactional(readOnly = true)
+public class ${ClassName}Service {
+
+    @Autowired
+    private ${ClassName}Dao ${ClassName?uncap_first}Dao;
+
+	<#if entityType == "tree">
+	public List<${ClassName}> find${ClassName}sByTree() {
+        List<${ClassName}> list = ${ClassName?uncap_first}Dao.findAll();
+        List<${ClassName}> tree = convertTree(list);
+        List<${ClassName}> rs = Lists.newArrayList();
+        for (${ClassName} m : tree) {
+            convertList(rs, m);
+        }
+        return rs;
+    }
+
+    private List<${ClassName}> convertTree(List<${ClassName}> list) {
+        Map<String, ${ClassName}> map = Maps.newHashMap();
+        for (${ClassName} m : list) {
+            map.put(m.getId(), m);
+        }
+        List<${ClassName}> tree = Lists.newArrayList();
+        for (${ClassName} m : list) {
+            if (StringUtils.isBlank(m.getPid())) {
+                tree.add(m);
+            } else {
+                ${ClassName} p${ClassName} = map.get(m.getPid());
+                if (p${ClassName} == null) {
+                    tree.add(m);
+                } else {
+                    List<${ClassName}> children = p${ClassName}.getChildren();
+                    if (children == null) {
+                        children = Lists.newArrayList();
+                        p${ClassName}.setChildren(children);
+                    }
+                    children.add(m);
+                }
+            }
+        }
+        return tree;
+    }
+
+    private void convertList(List<${ClassName}> list, ${ClassName} m) {
+        list.add(m);
+        if (m.getChildren() != null && m.getChildren().size() > 0) {
+            for (${ClassName} tmp : m.getChildren()) {
+                convertList(list, tmp);
+            }
+        }
+    }
+	<#else>
+	public DataGrid<${ClassName}> findPage(DataGridSearch search) {
+        Integer count = ${ClassName?uncap_first}Dao.pageCount(search);
+        List<${ClassName}> list = null;
+        if (count > 0) {
+        	list = ${ClassName?uncap_first}Dao.pageList(search);
+        }
+        return new DataGrid<${ClassName}>(count,list);
+    }
+	</#if>
+
+    public ${ClassName} findById(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaType} ${p.javaField}</#list>) {
+        return ${ClassName?uncap_first}Dao.get(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaField}</#list>);
+    }
+
+    @Transactional(readOnly = false)
+    public AjaxReturn<Map<String, String>> saveOrUpdate(${ClassName} vo, String userId) {
+        <#if table.pkIsId>
+        if (vo != null<#list table.columnPks as p> && StringUtils.isNotBlank(vo.${p.methodGet()}())</#list>) { //修改
+            ${ClassName} po = ${ClassName?uncap_first}Dao.get(<#list table.columnPks as p><#if (p_index > 0)>, </#if>vo.${p.methodGet()}()</#list>);
+            if (po != null) {
+                BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
+                po.initByUpdate(userId);
+                ${ClassName?uncap_first}Dao.update(po);
+                return new AjaxReturn<Map<String, String>>(true, "修改成功");
+            } else {
+                return new AjaxReturn<Map<String, String>>(false, "传入ID无法找到记录");
+            }
+        } else { //新增
+            vo.setId(IdGen.uuid());
+            vo.init(userId);
+            ${ClassName?uncap_first}Dao.insert(vo);
+            return new AjaxReturn<Map<String, String>>(true, "保存成功");
+        }
+        <#else>
+        if (vo != null<#list table.columnPks as p> && StringUtils.isNotBlank(vo.${p.methodGet()}())</#list>) { //修改
+            ${ClassName} po = ${ClassName?uncap_first}Dao.get(<#list table.columnPks as p><#if (p_index > 0)>, </#if>vo.${p.methodGet()}()</#list>);
+            if (po != null) {
+                BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
+                po.initByUpdate(userId);
+                ${ClassName?uncap_first}Dao.update(po);
+                return new AjaxReturn<Map<String, String>>(true, "修改成功");
+            } else {
+				vo.init(userId);
+				${ClassName?uncap_first}Dao.insert(vo);
+				return new AjaxReturn<Map<String, String>>(true, "保存成功");
+            }
+        }
+        return new AjaxReturn<Map<String, String>>(false, "联合主键需要传入");
+        </#if>
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteById(<#list table.columnPks as p><#if (p_index > 0)>,</#if>${p.javaType} ${p.javaField}</#list>) {
+        ${ClassName?uncap_first}Dao.delete(<#list table.columnPks as p><#if (p_index > 0)>,</#if>${p.javaField}</#list>);
+    }
+
+}]]>
+	</content>
+</template>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>list</name>
+	<fileName>${ClassName?uncap_first}List.jsp</fileName>
+	<content><![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/include/taglib.jsp" %>
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<%@include file="/WEB-INF/include/head.jsp" %>
+	<title>${functionName}列表</title>
+</head>
+<body style="height:100%;">
+<div id="listDiv" class="mini-tabs" activeIndex="0" style="width:100%;height:100%;" bodyStyle="padding:0;border:0;">
+	<div name="list" title="菜单列表" bodyStyle="padding:0px 10px 0px 20px;">
+		<a class="mini-button" iconCls="icon-add" onclick="addRow()" plain="true">增加</a>
+		<a class="mini-button" iconCls="icon-reload" onclick="loadData()" plain="true">刷新</a>
+		<div id="treeGrid" class="mini-treegrid" style="width: 100%;"
+			url="${"$"}{ctx}/${ClassName?uncap_first}/data" idField="id" parentField="pid" treeColumn="name" resultAsTree="false" expandOnLoad="true">
+			<div property="columns">
+				<div type="indexcolumn"></div>
+				<#list table.columns as c>
+				<#if c.list?? && c.list == "1">
+				<#if c.showType == "select" || c.showType == "radio" || c.showType == "checkbox" || c.showType == "user" || c.showType == "organ">
+				<div name="${c.javaField}" field="${c.javaField}" renderer="${c.javaField}Renderer" headerAlign="center" ><#if c.comments??>${c.comments}</#if></div>
+				<#elseif c.showType == "date">
+				<div name="${c.javaField}" field="${c.javaField}" dateFormat="yyyy-MM-dd" headerAlign="center" ><#if c.comments??>${c.comments}</#if></div>
+				<#elseif c.showType == "datetime">
+				<div name="${c.javaField}" field="${c.javaField}" dateFormat="yyyy-MM-dd HH:mm:ss" headerAlign="center" ><#if c.comments??>${c.comments}</#if></div>
+				<#else>
+				<div name="${c.javaField}" field="${c.javaField}" headerAlign="center" ><#if c.comments??>${c.comments}</#if></div>
+				</#if>
+				</#if>
+				</#list>
+				<div field="action" renderer="actionRenderer" headerAlign="center" width="180">操作</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	mini.parse();
+	var tabs = mini.get("listDiv");
+	var treeGrid = mini.get("treeGrid");
+    function actionRenderer(e) {
+        var r = e.record;
+        var h = '';
+		<shiro:hasPermission name="${moduleName}:${ClassName?uncap_first}:save">
+		h += '<a onclick="editRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>\'' + r.${p.javaField} + '\'</#list>)" class="grid-button" >修改</a> '
+		h += '<a onclick="addMenu(\'' + r.id + '\')" class="grid-button" >新增子菜单</a> ';
+		</shiro:hasPermission>
+		<shiro:hasPermission name="${moduleName}:${ClassName?uncap_first}:del">
+        h += '<a onclick="deleteRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>\'' + r.${p.javaField} + '\'</#list>)" class="grid-button" >删除</a> ';
+		</shiro:hasPermission>
+        return h;
+    }
+<#list table.columns as c>
+<#if c.list == "1">
+<#if c.showType == "select" || c.showType == "radio">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))};
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        return ${c.javaField}Data[r.${c.javaField}];
+    }
+
+<#elseif c.showType == "checkbox">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))};
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        var arr = r.${c.javaField}.split(',');
+        var rs = "";
+        for(var i = 0;i<arr.length;i++){
+        	if (${c.javaField}Data[arr[i]] != undefined){
+				if(rs.length > 0){
+					rs +=",";
+				}
+				rs += ${c.javaField}Data[arr[i]];
+        	}
+        }
+        return rs;
+    }
+
+<#elseif c.showType == "user">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:getOfficeUser())};
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        return ${c.javaField}Data[r.${c.javaField}];
+    }
+
+<#elseif c.showType == "organ">
+    var ${c.javaField}Data = {};
+	try{
+		${c.javaField}Data = ${"$"}{fns:toObject(fns:getOffices())}
+    }catch (e){
+    }
+	function ${c.javaField}Renderer(e) {
+        var r = e.record;
+        return ${c.javaField}Data[r.${c.javaField}];
+    }
+</#if>
+</#if>
+</#list>
+
+	function loadData(){
+        treeGrid.load("${"$"}{ctx}/${ClassName?uncap_first}/data");
+    }
+
+    function loadList(){
+        var tab = tabs.getActiveTab();
+        if (tab) {
+            tabs.removeTab(tab);
+        }
+        loadData();
+    }
+
+	function addRow(id){
+    	var param = "";
+        var tab = {title: "${functionName}表单",url:'${"$"}{ctx}/${ClassName?uncap_first}/form?pid='+id};
+        tab = tabs.addTab(tab);
+        tabs.activeTab(tab);
+    }
+
+	function editRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaField}</#list>){
+    	var param = "";
+        <#list table.columnPks as p>
+    	if (${p.javaField} != undefined) {
+			if (param.length > 0){
+				param += "&";
+			}
+        	param += "${p.javaField}="+${p.javaField};
+        }
+    	</#list>
+        var tab = {title: "${functionName}表单",url:'${"$"}{ctx}/${ClassName?uncap_first}/form?'+param};
+        tab = tabs.addTab(tab);
+        tabs.activeTab(tab);
+    }
+
+    function deleteRow(<#list table.columnPks as p><#if (p_index > 0)> ,</#if>${p.javaField}</#list>) {
+    	var data = {};
+    	<#list table.columnPks as p>
+    	if (${p.javaField} == undefined) {
+            data['${p.javaField}'] = "";
+        } else {
+        	data['${p.javaField}'] = ${p.javaField};
+        }
+    	</#list>
+        mini.confirm("确定删除记录？", "确定？",
+                function (action) {
+                    if (action == "ok") {
+                        $.ajax({
+							url: "${"$"}{ctx}/${ClassName?uncap_first}/del",
+                            data: data,
+                            dataType: "json",
+                            success: function (res) {
+                                if (res.ok) {
+                                    search();
+                                    mini.showTips({
+                                        content: res.msg,
+                                        state: "success",
+                                        x: "center",
+                                        y: "top",
+                                        timeout: 3000
+                                    });
+                                } else {
+                                    mini.showTips({
+                                        content: res.msg,
+                                        state: "warning",
+                                        x: "center",
+                                        y: "top",
+                                        timeout: 3000
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+        );
+    }
+
+</script>
+</body>
+</html>
+]]>
+	</content>
+</template>

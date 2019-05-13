@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.LicRegcaseDao">
+    
+	<sql id="LicRegcaseColumns">
+		a.id AS "id",a.manageid AS "manageid",a.check_year AS "checkYear",a.check_result AS "checkResult",a.fzjc_date AS "fzjcDate",a.region_code AS "regionCode",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.submits_status AS "submitsStatus",a.submit_date AS "submitDate",a.trans_date AS "transDate",a.print_date AS "printDate",a.close_status AS "closeStatus",a.close_date AS "closeDate",a.close_result AS "closeResult",a.check_quality_flag AS "checkQualityFlag",a.checkresult_quality_flag AS "checkresultQualityFlag",a.upload_time AS "uploadTime",a.source_id AS "sourceId",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase">
+		SELECT 
+			<include refid="LicRegcaseColumns"/>
+		FROM lic_regcase a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase">
+		SELECT
+		<include refid="LicRegcaseColumns"/>
+		FROM lic_regcase a
+		WHERE a.manageid = #{manageid}
+		and a.del_flag='0'
+		and a.check_year=#{checkyear}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase">
+		SELECT 
+			<include refid="LicRegcaseColumns"/>
+		FROM lic_regcase a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM lic_regcase a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.LicRegcase"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="LicRegcaseColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO lic_regcase(
+		id,manageid,check_year,check_result,fzjc_date,region_code,regorg,regdoc,regdate,submits_status,submit_date,
+		trans_date,print_date,close_status,close_date,close_result,check_quality_flag,checkresult_quality_flag,upload_time,
+		del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{manageid},#{checkYear},#{checkResult},#{fzjcDate},#{regionCode},#{regorg},#{regdoc},#{regdate},#{submitsStatus},#{submitDate},
+		#{transDate},#{printDate},#{closeStatus},#{closeDate},#{closeResult},#{checkQualityFlag},#{checkresultQualityFlag},#{uploadTime},
+		'0',#{createBy},SYSDATE
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE lic_regcase SET
+		<if test="regorg !=null and regorg!=''">
+			regorg = #{regorg},
+		</if>
+		<if test="regdoc !=null and regdoc!=''">
+			regdoc = #{regdoc},
+		</if>
+		<if test="regdate !=null">
+			regdate = #{regdate},
+		</if>
+		check_result = #{checkResult},fzjc_date = #{fzjcDate}
+		WHERE id=#{id} and del_flag='0'
+	</update>
+
+	<update id="delete">
+	    UPDATE lic_regcase SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>

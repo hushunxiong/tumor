@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>entity</name>
+	<fileName>${ClassName}.java</fileName>
+	<content><![CDATA[
+/**
+ * 
+ */
+package ${packageName}.${moduleName}.entity;
+
+<#list table.entityIm as i>
+import ${i};
+</#list>
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+<#if entityType == "tree">
+import java.util.List;
+</#if>
+
+import ${packageName}.common.model.BaseEntity;
+
+/**
+ * ${functionName}实体
+ * @author ${functionAuthor}
+ */
+public class ${ClassName} extends BaseEntity {
+	
+	private static final long serialVersionUID = 1L;
+	<#-- 生成字段属性 -->
+	<#list table.columns as c>
+		<#-- 如果不是基类属性 -->
+		<#if c.isNotBaseField>
+
+	<#list c.validatorArr as a>
+	${a}
+	</#list>
+	private ${c.javaType} ${c.javaField};	<#if c.comments??>// ${c.comments}</#if>
+		</#if>
+	</#list>
+
+	<#if entityType == "tree">
+	//子记录
+    private List<${ClassName}> children;
+	</#if>
+
+	<#-- 构造方法 -->
+	public ${ClassName}() {
+		super();
+	}
+
+	<#-- 生成get和set方法 -->
+	<#list table.columns as c>
+		<#-- 如果不是基类属性 -->
+		<#if c.isNotBaseField>
+	<#if c.showType == "date">
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	<#elseif c.showType == "datetime">
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	</#if>
+	@JsonProperty("${c.javaField}")
+	public ${c.javaType} ${c.methodGet()}() {
+		return ${c.javaField};
+	}
+
+	public void ${c.methodSet()}(${c.javaType} ${c.javaField}) {
+		this.${c.javaField} = ${c.javaField};
+	}
+
+		</#if>
+	</#list>
+
+	<#if entityType == "tree">
+    public List<${ClassName}> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<${ClassName}> children) {
+        this.children = children;
+    }
+	</#if>
+}]]>
+	</content>
+</template>
