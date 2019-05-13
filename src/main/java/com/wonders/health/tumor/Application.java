@@ -6,14 +6,16 @@ import com.wonders.health.tumor.common.utils.SpringContextHolder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 
 @SpringBootApplication
-public class Application {
+public class Application extends SpringBootServletInitializer {
 
     @Bean
     public SpringContextHolder springContextHolder() {
@@ -38,7 +40,12 @@ public class Application {
         return new AuthServiceForHttp(baseUrl);
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(Application.class);
     }
+
+//    public static void main(String[] args) {
+//        SpringApplication.run(Application.class, args);
+//    }
 }
