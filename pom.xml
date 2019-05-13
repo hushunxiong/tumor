@@ -6,7 +6,7 @@
     <groupId>com.wonders.health</groupId>
     <artifactId>tumor</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -146,11 +146,5 @@
     </repositories>
     <build>
         <finalName>tumor</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
     </build>
 </project>

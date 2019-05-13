@@ -46,7 +46,6 @@ spring:
 #        connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
 
 server:
-  port: 7001
   servlet:
     context-path: /tumor
 mybatis:
@@ -86,7 +85,7 @@ spring:
       password: ZLZFX
 health_base_url: http://10.1.93.111/health
 casServerUrlPrefix: http://10.1.93.111/cas
-shiroServerUrlPrefix: http://localhost:7001
+shiroServerUrlPrefix: http://localhost:8080
 
 #初筛诊断(crc_switch_flag：大肠癌 luc_switch_flag：肝癌   lic_switch_flag：肺癌  sc_switch_flag：胃癌 )
 crc_switch_flag: 1
