@@ -179,7 +179,7 @@
                     <div field="gender" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60023')}"/></div>
-                    <div field="idNumber" type="comboboxcolumn" autoShowPopup="true"  width="100px"  headerAlign="center" align="center"  allowSort="false" th:if="${crcFlag==1?true:false}">大肠癌初筛ID</div>
+                    <div field="idNumber" autoShowPopup="true"  width="100px"  headerAlign="center" align="center"  allowSort="false" th:if="${crcFlag==1?true:false}">大肠癌初筛ID</div>
                     <div field="crcAssessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" th:if="${crcFlag==1?true:false}">大肠癌危险评估结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>

@@ -952,7 +952,7 @@
                     <td width="10%">大肠癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input id="crRegcasemid" name="crcRegcase.manageid" class="mini-hidden" th:value="${crcRegcase.manageid}"/>
-                        <input id="checkResultName1" class="mini-textbox" allowInput="false" th:value="${crcRegcase.checkResult}"/>
+                        <input id="checkResultName1" class="mini-textbox" name="crcRegcase.checkResult" allowInput="false" th:value="${crcRegcase.checkResult}"/>
                         <input id="checkResult1" name="crcRegcase.checkResult" class="mini-hidden"  th:value="${crcRegcase.checkResult}"/>
                     </td>
                 </tr>
@@ -960,7 +960,7 @@
                     <td width="10%">肝癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input name="licRegcase.manageid" class="mini-hidden" th:value="${licRegcase.manageid}"/>
-                        <input id="checkResultName2" class="mini-textbox" allowInput="false"  th:value="${licRegcase.checkResult}"/>
+                        <input id="checkResultName2" class="mini-textbox"  name="licRegcase.checkResult" allowInput="false"  th:value="${licRegcase.checkResult}"/>
                         <input id="checkResult2" name="licRegcase.checkResult" class="mini-hidden" th:value="${licRegcase.checkResult}"/>
                     </td>
                 </tr>
@@ -968,7 +968,7 @@
                     <td width="10%">胃癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input name="scRegcase.manageid" class="mini-hidden" th:value="${scRegcase.manageid}"/>
-                        <input id="checkResultName3" class="mini-textbox" allowInput="false" th:value="${scRegcase.checkResult}"/>
+                        <input id="checkResultName3" class="mini-textbox" name="scRegcase.checkResult" allowInput="false" th:value="${scRegcase.checkResult}"/>
                         <input id="checkResult3" name="scRegcase.checkResult" class="mini-hidden" th:value="${scRegcase.checkResult}"/>
                     </td>
                 </tr>
@@ -976,7 +976,7 @@
                     <td width="10%">肺癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input id="luRegcaseid" name="lucRegcase.manageid" class="mini-hidden" th:value="${lucRegcase.manageid}"/>
-                        <input id="checkResultName4" class="mini-textbox" allowInput="false" th:value="${lucRegcase.checkResult}"/>
+                        <input id="checkResultName4" class="mini-textbox" name="lucRegcase.checkResult" allowInput="false" th:value="${lucRegcase.checkResult}"/>
                         <input id="checkResult4" name="lucRegcase.checkResult" class="mini-hidden" th:value="${lucRegcase.checkResult}"/>
                     </td>
                 </tr>
@@ -1649,7 +1649,6 @@
 
     //危险度评估结果计算
     function makeResult() {
-        debugger;
         notDoneFlag=0;
 
         var areaCode='${areaCode}';
@@ -1965,6 +1964,7 @@
         }
     }
     function makeChushaiResult(){
+        makeResult();
         var dcpinggu= $("#crcRiskResult").text();//大肠癌危险度评估结果
         var gapinggu= $("#licRiskResult").text();//肝癌危险度评估结果
         var wapinggu= $("#scRiskResult").text();//胃癌危险度评估结果
@@ -1976,33 +1976,45 @@
         //大肠癌初筛结果：问卷为阳性即为阳性；问卷为阴性，便隐血检查结果为阳性即为阳性；问卷为阴性，便隐血检查结果为阴性即为阴性
         if(dcpinggu=="阳性"){
             mini.get("checkResultName1").setValue("阳性");
+            mini.get("checkResult1").setValue("阳性");
         }else{
             if(byxresult=="阳性"){
                 mini.get("checkResultName1").setValue("阳性");
+                mini.get("checkResult1").setValue("阳性");
             }else if(byxresult=="阴性"){
                 mini.get("checkResultName1").setValue("阴性");
+                mini.get("checkResult1").setValue("阴性");
             }
         }
 
         //肝癌初筛结果：问卷为阳性即为阳性；问卷为阴性，辅助检查结果为阳性即为阳性；问卷为阴性，辅助检查结果为阴性即为阴性。
         if(gapinggu=="阳性"){
             mini.get("checkResultName2").setValue("阳性");
+            mini.get("checkResult2").setValue("阳性");
         }else{
             if(licResult=="阳性"){
                 mini.get("checkResultName2").setValue("阳性");
+                mini.get("checkResult2").setValue("阳性");
             }else if(licResult=="阴性"){
                 mini.get("checkResultName2").setValue("阴性");
+                mini.get("checkResult2").setValue("阴性");
             }
         }
+
         if(wapinggu=="阳性"){
             mini.get("checkResultName3").setValue("阳性");
+            mini.get("checkResult3").setValue("阳性");
         }else if(wapinggu=="阴性"){
             mini.get("checkResultName3").setValue("阴性");
+            mini.get("checkResult3").setValue("阴性");
         }
+
         if(fapinggu=="阳性"){
             mini.get("checkResultName4").setValue("阳性");
+            mini.get("checkResult4").setValue("阳性");
         }else if(fapinggu=="阴性"){
             mini.get("checkResultName4").setValue("阴性");
+            mini.get("checkResult4").setValue("阴性");
         }
 
     }

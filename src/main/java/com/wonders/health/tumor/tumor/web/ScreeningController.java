@@ -323,7 +323,7 @@ public class ScreeningController extends BaseController {
             if(crcRegcase!=null){
                 if(crcRegcase.getCheckResult()=="1" || "1".equals(crcRegcase.getCheckResult())){
                     crcRegcase.setCheckResult("阴性");
-                }else{
+                }else if(crcRegcase.getCheckResult()=="2" || "2".equals(crcRegcase.getCheckResult())){
                     crcRegcase.setCheckResult("阳性");
                 }
                 screeningVo.setCrcRegcase(crcRegcase);
@@ -332,7 +332,7 @@ public class ScreeningController extends BaseController {
                 if(crcRiskAssessment!=null){
                     if(crcRiskAssessment.getAssessmentResult()=="1" || "1".equals(crcRiskAssessment.getAssessmentResult())){
                         crcRiskAssessment.setAssessmentResult("阴性");
-                    }else{
+                    }else if(crcRiskAssessment.getAssessmentResult()=="2" || "2".equals(crcRiskAssessment.getAssessmentResult())){
                         crcRiskAssessment.setAssessmentResult("阳性");
                     }
                     screeningVo.setCrcRisk(crcRiskAssessment);
@@ -346,7 +346,7 @@ public class ScreeningController extends BaseController {
             if(licRegcase!=null){
                 if(licRegcase.getCheckResult()=="1" || "1".equals(licRegcase.getCheckResult())){
                     licRegcase.setCheckResult("阴性");
-                }else{
+                }else if(licRegcase.getCheckResult()=="2" || "2".equals(licRegcase.getCheckResult())){
                     licRegcase.setCheckResult("阳性");
                 }
                 screeningVo.setLicRegcase(licRegcase);
@@ -355,7 +355,7 @@ public class ScreeningController extends BaseController {
                 if(licRiskAssessment!=null){
                     if(licRiskAssessment.getAssessmentResult()=="1" || "1".equals(licRiskAssessment.getAssessmentResult())){
                         licRiskAssessment.setAssessmentResult("阴性");
-                    }else{
+                    }else if(licRiskAssessment.getAssessmentResult()=="2" || "2".equals(licRiskAssessment.getAssessmentResult())){
                         licRiskAssessment.setAssessmentResult("阳性");
                     }
                     screeningVo.setLicRisk(licRiskAssessment);
@@ -369,7 +369,7 @@ public class ScreeningController extends BaseController {
             if(scRegcase!=null){
                 if(scRegcase.getCheckResult()=="1" || "1".equals(scRegcase.getCheckResult())){
                     scRegcase.setCheckResult("阴性");
-                }else{
+                }else if(scRegcase.getCheckResult()=="2" || "2".equals(scRegcase.getCheckResult())){
                     scRegcase.setCheckResult("阳性");
                 }
                 screeningVo.setScRegcase(scRegcase);
@@ -377,7 +377,7 @@ public class ScreeningController extends BaseController {
                 if(scRiskAssessment!=null){
                     if(scRiskAssessment.getAssessmentResult()=="1" || "1".equals(scRiskAssessment.getAssessmentResult())){
                         scRiskAssessment.setAssessmentResult("阴性");
-                    }else{
+                    }else if(scRiskAssessment.getAssessmentResult()=="2" || "2".equals(scRiskAssessment.getAssessmentResult())){
                         scRiskAssessment.setAssessmentResult("阳性");
                     }
                     screeningVo.setScRisk(scRiskAssessment);
@@ -391,7 +391,7 @@ public class ScreeningController extends BaseController {
             if(lucRegcase!=null){
                 if(lucRegcase.getCheckResult()=="1" || "1".equals(lucRegcase.getCheckResult())){
                     lucRegcase.setCheckResult("阴性");
-                }else{
+                }else if(lucRegcase.getCheckResult()=="2" || "2".equals(lucRegcase.getCheckResult())){
                     lucRegcase.setCheckResult("阳性");
                 }
                 screeningVo.setLucRegcase(lucRegcase);
@@ -399,7 +399,7 @@ public class ScreeningController extends BaseController {
                 if(lucRiskAssessment!=null){
                     if(lucRiskAssessment.getAssessmentResult()=="1" || "1".equals(lucRiskAssessment.getAssessmentResult())){
                         lucRiskAssessment.setAssessmentResult("阴性");
-                    }else{
+                    }else if(lucRiskAssessment.getAssessmentResult()=="2" || "2".equals(lucRiskAssessment.getAssessmentResult())){
                         lucRiskAssessment.setAssessmentResult("阳性");
                     }
                     screeningVo.setLucRisk(lucRiskAssessment);
@@ -574,6 +574,7 @@ public class ScreeningController extends BaseController {
         if(isOpen(crcFlag)){
             CrcRegcase crcRegcase=screeningVo.getCrcRegcase();
             if(crcRegcase!=null  && !checkObjAllFieldsIsNull(crcRegcase)){
+                crcRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 if(crcRegcase.getCheckResult()=="阴性" || "阴性".equals(crcRegcase.getCheckResult())){
                     crcRegcase.setCheckResult("1");
                 }else  if(crcRegcase.getCheckResult()=="阳性" || "阳性".equals(crcRegcase.getCheckResult())){
@@ -585,7 +586,6 @@ public class ScreeningController extends BaseController {
                 }else{
                     crcRegcase.setId(IdGen.uuid());
                     crcRegcase.setManageid(personInfo.getId());
-                    crcRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     crcRegcase.setRegionCode(areaCode);
                     crcRegcase.setRegorg(user.getOrgCode());
                     crcRegcase.setRegdoc(user.getId());
@@ -622,6 +622,7 @@ public class ScreeningController extends BaseController {
         if(isOpen(licFlag)){
             LicRegcase licRegcase=screeningVo.getLicRegcase();
             if(licRegcase!=null && !checkObjAllFieldsIsNull(licRegcase)){
+                licRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 if(licRegcase.getCheckResult()=="阴性" || "阴性".equals(licRegcase.getCheckResult())){
                     licRegcase.setCheckResult("1");
                 }else  if(licRegcase.getCheckResult()=="阳性" || "阳性".equals(licRegcase.getCheckResult())){
@@ -632,7 +633,6 @@ public class ScreeningController extends BaseController {
                 }else{
                     licRegcase.setId(IdGen.uuid());
                     licRegcase.setManageid(personInfo.getId());
-                    licRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     licRegcase.setRegionCode(areaCode);
                     licRegcase.setRegorg(user.getOrgCode());
                     licRegcase.setRegdoc(user.getId());
@@ -667,6 +667,7 @@ public class ScreeningController extends BaseController {
         }
         if(isOpen(lucFlag)){
             LucRegcase lucRegcase=screeningVo.getLucRegcase();
+            lucRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
             if(lucRegcase!=null  && !checkObjAllFieldsIsNull(lucRegcase)){
                 if(lucRegcase.getCheckResult()=="阴性" || "阴性".equals(lucRegcase.getCheckResult())){
                     lucRegcase.setCheckResult("1");
@@ -678,7 +679,6 @@ public class ScreeningController extends BaseController {
                 }else{
                     lucRegcase.setId(IdGen.uuid());
                     lucRegcase.setManageid(personInfo.getId());
-                    lucRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     lucRegcase.setRegionCode(areaCode);
                     lucRegcase.setRegorg(user.getOrgCode());
                     lucRegcase.setRegdoc(user.getId());
@@ -714,6 +714,7 @@ public class ScreeningController extends BaseController {
         if(isOpen(scFlag)){
             ScRegcase scRegcase=screeningVo.getScRegcase();
             if(scRegcase!=null && !checkObjAllFieldsIsNull(scRegcase) ){
+                scRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 if(scRegcase.getCheckResult()=="阴性" || "阴性".equals(scRegcase.getCheckResult())){
                     scRegcase.setCheckResult("1");
                 }else if(scRegcase.getCheckResult()=="阳性" || "阳性".equals(scRegcase.getCheckResult())){
@@ -724,7 +725,6 @@ public class ScreeningController extends BaseController {
                 }else{
                     scRegcase.setId(IdGen.uuid());
                     scRegcase.setManageid(personInfo.getId());
-                    scRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     scRegcase.setRegionCode(areaCode);
                     scRegcase.setRegorg(user.getOrgCode());
                     scRegcase.setRegdoc(user.getId());
