@@ -1,6 +1,5 @@
 package com.wonders.health.tumor.tumor.web;
 
-
 import com.google.common.collect.Lists;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
@@ -11,8 +10,6 @@ import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.*;
 import com.wonders.health.tumor.tumor.service.*;
 import com.wonders.health.tumor.tumor.vo.ScreeningVo;
-import com.wonders.healthcloud.archive.client.entity.PersonInfo;
-import freemarker.template.utility.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,7 @@ import java.util.Optional;
 
 /**
  * 新增筛查登记Controller
+ * welcome to the moutain of sh*t
  * @author menglianghai
  */
 @Controller
@@ -59,7 +57,6 @@ public class ScreeningController extends BaseController {
 
     @Autowired
     private CancerPersonInfoService cancerPersonInfoService;
-
     @Autowired
     private CrcRegcaseService crcRegcaseService;
     @Autowired
@@ -68,7 +65,6 @@ public class ScreeningController extends BaseController {
     private LucRegcaseService lucRegcaseService;
     @Autowired
     private ScRegcaseService scRegcaseService;
-
     @Autowired
     private CrcRiskAssessmentService crcRiskAssessmentService;
     @Autowired
@@ -77,12 +73,10 @@ public class ScreeningController extends BaseController {
     private LucRiskAssessmentService lucRiskAssessmentService;
     @Autowired
     private ScRiskAssessmentService scRiskAssessmentService;
-
     private static CrcRegcaseDao crcRegcaseDao = SpringContextHolder.getBean(CrcRegcaseDao.class);
     private static LicRegcaseDao licRegcaseDao = SpringContextHolder.getBean(LicRegcaseDao.class);
     private static LucRegcaseDao lucRegcaseDao = SpringContextHolder.getBean(LucRegcaseDao.class);
     private static ScRegcaseDao scRegcaseDao = SpringContextHolder.getBean(ScRegcaseDao.class);
-
     private static CrcRiskAssessmentDao crcRiskAssessmentDao = SpringContextHolder.getBean(CrcRiskAssessmentDao.class);
     private static LicRiskAssessmentDao licRiskAssessmentDao = SpringContextHolder.getBean(LicRiskAssessmentDao.class);
     private static LucRiskAssessmentDao lucRiskAssessmentDao = SpringContextHolder.getBean(LucRiskAssessmentDao.class);
@@ -92,29 +86,17 @@ public class ScreeningController extends BaseController {
     private CrcFobtService crcFobtService;
     @Autowired
     private LicAssistCheckService licAssistCheckService;
-
     @Autowired
     private CancerHistoryService cancerHistoryService;
     @Autowired
     private  FamilyCancerHistoryService familyCancerHistoryService;
     @Autowired
     private LucFamilyCancerHistoryXHService lucFamilyCancerHistoryXHService;
-
     private static CrcFobtDao crcFobtDao = SpringContextHolder.getBean(CrcFobtDao.class);
     private static LicAssistCheckDao licAssistCheckDao = SpringContextHolder.getBean(LicAssistCheckDao.class);
-
     private static CancerHistoryDao cancerHistoryDao = SpringContextHolder.getBean(CancerHistoryDao.class);
     private static FamilyCancerHistoryDao familyCancerHistoryDao = SpringContextHolder.getBean(FamilyCancerHistoryDao.class);
     private static LucFamilyCancerHistoryXHDao lucFamilyCancerHistoryXHDao = SpringContextHolder.getBean(LucFamilyCancerHistoryXHDao.class);
-
-
-    private Boolean isOpen(String flag){
-        if(flag.equals("1")|| "1"==flag){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear) {
@@ -238,222 +220,6 @@ public class ScreeningController extends BaseController {
             sc.setPersonInfo(cancerPersonInfo.get());
             return new AjaxReturn(true,"",sc);
         }
-    }
-
-    //新增时检查完身份证号以后重新刷新页面一次
-    @RequestMapping(value = {"", "reform"}, method = RequestMethod.GET)
-    public String reform(Model model, String manageId, String checkYear,String type,String personcardno) {
-
-        User user=getSessionUser();
-        List<DataOption> years = Lists.newArrayList();
-        for (int i = 0; i < 5; i++) {
-            DataOption option = new DataOption();
-            String year = DateUtils.formatDate(DateUtils.addYears(new Date(),i), "yyyy");
-            option.setId(year);
-            option.setText(year);
-            years.add(option);
-        }
-        model.addAttribute("years", AuthUtils.toJson(years));
-        model.addAttribute("checkYear", checkYear);
-
-        //个人管理编号
-
-        CancerPersonInfo personInfo=screeningService.getBaseInfoByCardnoAndType(personcardno,type);
-
-        personInfo.setRegdoc(user.getId());
-        personInfo.setRegorg(user.getOrgCode());
-        personInfo.setRegdate(new Date());
-        personInfo.setPersoncardType(type);
-        personInfo.setPersoncard(personcardno);
-
-        model.addAttribute("personInfo", personInfo);
-//
-//        if(manageId==null || manageId=="null" ||"null".equals(manageId)||"".equals(manageId)){
-//            manageId=personInfo.getId();
-//        }else
-        if(manageId!=null && manageId!="null" &&!"null".equals(manageId)&&!"".equals(manageId)){
-            ScreeningVo screeningVo=getDetail(manageId,checkYear);
-            model.addAttribute("lucRisk", screeningVo.getLucRisk());
-            model.addAttribute("scRisk", screeningVo.getScRisk());
-            model.addAttribute("crcRisk", screeningVo.getCrcRisk());
-            model.addAttribute("licRisk", screeningVo.getLicRisk());
-
-            model.addAttribute("flag", "2"); //2:修改
-            //各癌症数据库存在标志
-            model.addAttribute("crcDbflag", "2"); //数据库状态  1：新增 2：修改
-            model.addAttribute("licDbflag", "2"); //数据库状态  1：新增 2：修改
-            model.addAttribute("scDbflag", "2");  //数据库状态  1：新增 2：修改
-            model.addAttribute("lucDbflag", "2"); //数据库状态  1：新增 2：修改
-            model.addAttribute("idNumber", personInfo.getIdNumber());
-        }else{
-            model.addAttribute("lucRisk", new LucRiskAssessment());
-            model.addAttribute("scRisk", new ScRiskAssessment());
-            model.addAttribute("crcRisk", new CrcRiskAssessment());
-            model.addAttribute("licRisk", new LicRiskAssessment());
-
-            model.addAttribute("flag", "1"); //1：新增
-            //各癌症数据库存在标志
-            model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
-            model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
-            model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
-            model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
-            model.addAttribute("idNumber", "");
-        }
-
-        model.addAttribute("crcFlag", crcFlag);
-        model.addAttribute("licFlag", licFlag);
-        model.addAttribute("scFlag", scFlag);
-        model.addAttribute("lucFlag", lucFlag);
-        return "/register/form";
-    }
-
-
-    public ScreeningVo getDetail(String manageid, String year){
-        ScreeningVo screeningVo=new ScreeningVo();
-        String crccheckid="";
-        String liccheckid="";
-        CancerPersonInfo cancerPersonInfo=cancerPersonInfoService.findById(manageid);
-        if(cancerPersonInfo!=null){
-            screeningVo.setPersonInfo(cancerPersonInfo);
-        }
-
-        //大肠癌
-        if(isOpen(crcFlag)){
-            CrcRegcase crcRegcase=(CrcRegcase)crcRegcaseService.getByManageidAndYear(crcRegcaseDao,manageid,year);
-            if(crcRegcase!=null){
-                if(crcRegcase.getCheckResult()=="1" || "1".equals(crcRegcase.getCheckResult())){
-                    crcRegcase.setCheckResult("阴性");
-                }else if(crcRegcase.getCheckResult()=="2" || "2".equals(crcRegcase.getCheckResult())){
-                    crcRegcase.setCheckResult("阳性");
-                }
-                screeningVo.setCrcRegcase(crcRegcase);
-                crccheckid=crcRegcase.getId();
-                CrcRiskAssessment crcRiskAssessment=(CrcRiskAssessment)crcRiskAssessmentService.getByCheckid(crcRiskAssessmentDao,crccheckid);
-                if(crcRiskAssessment!=null){
-                    if(crcRiskAssessment.getAssessmentResult()=="1" || "1".equals(crcRiskAssessment.getAssessmentResult())){
-                        crcRiskAssessment.setAssessmentResult("阴性");
-                    }else if(crcRiskAssessment.getAssessmentResult()=="2" || "2".equals(crcRiskAssessment.getAssessmentResult())){
-                        crcRiskAssessment.setAssessmentResult("阳性");
-                    }
-                    screeningVo.setCrcRisk(crcRiskAssessment);
-                }
-            }
-        }
-
-        //肝癌
-        if(isOpen(licFlag)){
-            LicRegcase licRegcase=(LicRegcase)licRegcaseService.getByManageidAndYear(licRegcaseDao,manageid,year);
-            if(licRegcase!=null){
-                if(licRegcase.getCheckResult()=="1" || "1".equals(licRegcase.getCheckResult())){
-                    licRegcase.setCheckResult("阴性");
-                }else if(licRegcase.getCheckResult()=="2" || "2".equals(licRegcase.getCheckResult())){
-                    licRegcase.setCheckResult("阳性");
-                }
-                screeningVo.setLicRegcase(licRegcase);
-                liccheckid=licRegcase.getId();
-                LicRiskAssessment licRiskAssessment=(LicRiskAssessment)licRiskAssessmentService.getByCheckid(licRiskAssessmentDao,liccheckid);
-                if(licRiskAssessment!=null){
-                    if(licRiskAssessment.getAssessmentResult()=="1" || "1".equals(licRiskAssessment.getAssessmentResult())){
-                        licRiskAssessment.setAssessmentResult("阴性");
-                    }else if(licRiskAssessment.getAssessmentResult()=="2" || "2".equals(licRiskAssessment.getAssessmentResult())){
-                        licRiskAssessment.setAssessmentResult("阳性");
-                    }
-                    screeningVo.setLicRisk(licRiskAssessment);
-                }
-            }
-        }
-
-        //胃癌
-        if(isOpen(scFlag)){
-            ScRegcase scRegcase=(ScRegcase)scRegcaseService.getByManageidAndYear(scRegcaseDao,manageid,year);
-            if(scRegcase!=null){
-                if(scRegcase.getCheckResult()=="1" || "1".equals(scRegcase.getCheckResult())){
-                    scRegcase.setCheckResult("阴性");
-                }else if(scRegcase.getCheckResult()=="2" || "2".equals(scRegcase.getCheckResult())){
-                    scRegcase.setCheckResult("阳性");
-                }
-                screeningVo.setScRegcase(scRegcase);
-                ScRiskAssessment scRiskAssessment=(ScRiskAssessment)scRiskAssessmentService.getByCheckid(scRiskAssessmentDao,scRegcase.getId());
-                if(scRiskAssessment!=null){
-                    if(scRiskAssessment.getAssessmentResult()=="1" || "1".equals(scRiskAssessment.getAssessmentResult())){
-                        scRiskAssessment.setAssessmentResult("阴性");
-                    }else if(scRiskAssessment.getAssessmentResult()=="2" || "2".equals(scRiskAssessment.getAssessmentResult())){
-                        scRiskAssessment.setAssessmentResult("阳性");
-                    }
-                    screeningVo.setScRisk(scRiskAssessment);
-                }
-            }
-        }
-
-        //肺癌
-        if(isOpen(lucFlag)){
-            LucRegcase lucRegcase=(LucRegcase)lucRegcaseService.getByManageidAndYear(lucRegcaseDao,manageid,year);
-            if(lucRegcase!=null){
-                if(lucRegcase.getCheckResult()=="1" || "1".equals(lucRegcase.getCheckResult())){
-                    lucRegcase.setCheckResult("阴性");
-                }else if(lucRegcase.getCheckResult()=="2" || "2".equals(lucRegcase.getCheckResult())){
-                    lucRegcase.setCheckResult("阳性");
-                }
-                screeningVo.setLucRegcase(lucRegcase);
-                LucRiskAssessment lucRiskAssessment=(LucRiskAssessment)lucRiskAssessmentService.getByCheckid(lucRiskAssessmentDao,lucRegcase.getId());
-                if(lucRiskAssessment!=null){
-                    if(lucRiskAssessment.getAssessmentResult()=="1" || "1".equals(lucRiskAssessment.getAssessmentResult())){
-                        lucRiskAssessment.setAssessmentResult("阴性");
-                    }else if(lucRiskAssessment.getAssessmentResult()=="2" || "2".equals(lucRiskAssessment.getAssessmentResult())){
-                        lucRiskAssessment.setAssessmentResult("阳性");
-                    }
-                    screeningVo.setLucRisk(lucRiskAssessment);
-                }
-            }
-        }
-
-        //大肠癌便隐血检查表
-        if(StringUtils.isNotBlank(crccheckid)){
-            CrcFobt crcFobt=(CrcFobt)crcFobtService.getByCheckid(crcFobtDao,crccheckid);
-            if(crcFobt==null){
-                crcFobt=new CrcFobt(getSessionUser());
-            }else{
-                if(crcFobt.getFobtResult()=="2" || "2".equals(crcFobt.getFobtResult())){
-                    crcFobt.setFobtResult("阳性");
-                }else if(crcFobt.getFobtResult()=="1" || "1".equals(crcFobt.getFobtResult())){
-                    crcFobt.setFobtResult("阴性");
-                }
-            }
-            screeningVo.setCrcFobt(crcFobt);
-        }
-        if(StringUtils.isNotBlank(liccheckid)){
-            //肝癌辅助检查表
-            LicAssistCheck licAssistCheck=(LicAssistCheck)licAssistCheckService.getByCheckid(licAssistCheckDao,liccheckid);
-            if(licAssistCheck==null){
-                licAssistCheck=new LicAssistCheck(getSessionUser());
-            }else{
-                if(licAssistCheck.getLicAssistResult() =="2" || "2".equals(licAssistCheck.getLicAssistResult())){
-                    licAssistCheck.setLicAssistResult("阳性");
-                }else if(licAssistCheck.getLicAssistResult()=="1" || "1".equals(licAssistCheck.getLicAssistResult())){
-                    licAssistCheck.setLicAssistResult("阴性");
-                }
-            }
-            screeningVo.setLicCheck(licAssistCheck);
-        }
-
-        //危险度评估-癌症史表
-        List<CancerHistory>cancerHistoryList=cancerHistoryService.getListByManageidAndYear(cancerHistoryDao,manageid,year);
-        if(cancerHistoryList.size()>0){
-            screeningVo.setHistoryList(cancerHistoryList);
-        }
-        //一级亲癌症史表
-        List<FamilyCancerHistory>familyCancerHistoryList=familyCancerHistoryService.getListByPersonId(familyCancerHistoryDao,cancerPersonInfo.getId());
-        if(familyCancerHistoryList.size()>0){
-            screeningVo.setFamilyCancerHistoryList(familyCancerHistoryList);
-        }
-
-        //一级亲癌症史表徐汇肺癌
-        List<LucFamilyCancerHistoryXH>lucFamilyCancerHistoryXHList=lucFamilyCancerHistoryXHService.getListByPersonId(lucFamilyCancerHistoryXHDao,cancerPersonInfo.getId());
-        if(lucFamilyCancerHistoryXHList.size()>0){
-            screeningVo.setLucFamilyCancerHistoryXHList(lucFamilyCancerHistoryXHList);
-        }
-
-        return screeningVo;
     }
 
     /**
@@ -840,11 +606,171 @@ public class ScreeningController extends BaseController {
         }
 
     }
+
+    //简化计算flag成boolean
+    private Boolean isOpen(String flag){
+        if(flag.equals("1")|| "1"==flag){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //获取实体对象数据
+    public ScreeningVo getDetail(String manageid, String year){
+        ScreeningVo screeningVo=new ScreeningVo();
+        String crccheckid="";
+        String liccheckid="";
+        CancerPersonInfo cancerPersonInfo=cancerPersonInfoService.findById(manageid);
+        if(cancerPersonInfo!=null){
+            screeningVo.setPersonInfo(cancerPersonInfo);
+        }
+
+        //大肠癌
+        if(isOpen(crcFlag)){
+            CrcRegcase crcRegcase=(CrcRegcase)crcRegcaseService.getByManageidAndYear(crcRegcaseDao,manageid,year);
+            if(crcRegcase!=null){
+                if(crcRegcase.getCheckResult()=="1" || "1".equals(crcRegcase.getCheckResult())){
+                    crcRegcase.setCheckResult("阴性");
+                }else if(crcRegcase.getCheckResult()=="2" || "2".equals(crcRegcase.getCheckResult())){
+                    crcRegcase.setCheckResult("阳性");
+                }
+                screeningVo.setCrcRegcase(crcRegcase);
+                crccheckid=crcRegcase.getId();
+                CrcRiskAssessment crcRiskAssessment=(CrcRiskAssessment)crcRiskAssessmentService.getByCheckid(crcRiskAssessmentDao,crccheckid);
+                if(crcRiskAssessment!=null){
+                    if(crcRiskAssessment.getAssessmentResult()=="1" || "1".equals(crcRiskAssessment.getAssessmentResult())){
+                        crcRiskAssessment.setAssessmentResult("阴性");
+                    }else if(crcRiskAssessment.getAssessmentResult()=="2" || "2".equals(crcRiskAssessment.getAssessmentResult())){
+                        crcRiskAssessment.setAssessmentResult("阳性");
+                    }
+                    screeningVo.setCrcRisk(crcRiskAssessment);
+                }
+            }
+        }
+
+        //肝癌
+        if(isOpen(licFlag)){
+            LicRegcase licRegcase=(LicRegcase)licRegcaseService.getByManageidAndYear(licRegcaseDao,manageid,year);
+            if(licRegcase!=null){
+                if(licRegcase.getCheckResult()=="1" || "1".equals(licRegcase.getCheckResult())){
+                    licRegcase.setCheckResult("阴性");
+                }else if(licRegcase.getCheckResult()=="2" || "2".equals(licRegcase.getCheckResult())){
+                    licRegcase.setCheckResult("阳性");
+                }
+                screeningVo.setLicRegcase(licRegcase);
+                liccheckid=licRegcase.getId();
+                LicRiskAssessment licRiskAssessment=(LicRiskAssessment)licRiskAssessmentService.getByCheckid(licRiskAssessmentDao,liccheckid);
+                if(licRiskAssessment!=null){
+                    if(licRiskAssessment.getAssessmentResult()=="1" || "1".equals(licRiskAssessment.getAssessmentResult())){
+                        licRiskAssessment.setAssessmentResult("阴性");
+                    }else if(licRiskAssessment.getAssessmentResult()=="2" || "2".equals(licRiskAssessment.getAssessmentResult())){
+                        licRiskAssessment.setAssessmentResult("阳性");
+                    }
+                    screeningVo.setLicRisk(licRiskAssessment);
+                }
+            }
+        }
+
+        //胃癌
+        if(isOpen(scFlag)){
+            ScRegcase scRegcase=(ScRegcase)scRegcaseService.getByManageidAndYear(scRegcaseDao,manageid,year);
+            if(scRegcase!=null){
+                if(scRegcase.getCheckResult()=="1" || "1".equals(scRegcase.getCheckResult())){
+                    scRegcase.setCheckResult("阴性");
+                }else if(scRegcase.getCheckResult()=="2" || "2".equals(scRegcase.getCheckResult())){
+                    scRegcase.setCheckResult("阳性");
+                }
+                screeningVo.setScRegcase(scRegcase);
+                ScRiskAssessment scRiskAssessment=(ScRiskAssessment)scRiskAssessmentService.getByCheckid(scRiskAssessmentDao,scRegcase.getId());
+                if(scRiskAssessment!=null){
+                    if(scRiskAssessment.getAssessmentResult()=="1" || "1".equals(scRiskAssessment.getAssessmentResult())){
+                        scRiskAssessment.setAssessmentResult("阴性");
+                    }else if(scRiskAssessment.getAssessmentResult()=="2" || "2".equals(scRiskAssessment.getAssessmentResult())){
+                        scRiskAssessment.setAssessmentResult("阳性");
+                    }
+                    screeningVo.setScRisk(scRiskAssessment);
+                }
+            }
+        }
+
+        //肺癌
+        if(isOpen(lucFlag)){
+            LucRegcase lucRegcase=(LucRegcase)lucRegcaseService.getByManageidAndYear(lucRegcaseDao,manageid,year);
+            if(lucRegcase!=null){
+                if(lucRegcase.getCheckResult()=="1" || "1".equals(lucRegcase.getCheckResult())){
+                    lucRegcase.setCheckResult("阴性");
+                }else if(lucRegcase.getCheckResult()=="2" || "2".equals(lucRegcase.getCheckResult())){
+                    lucRegcase.setCheckResult("阳性");
+                }
+                screeningVo.setLucRegcase(lucRegcase);
+                LucRiskAssessment lucRiskAssessment=(LucRiskAssessment)lucRiskAssessmentService.getByCheckid(lucRiskAssessmentDao,lucRegcase.getId());
+                if(lucRiskAssessment!=null){
+                    if(lucRiskAssessment.getAssessmentResult()=="1" || "1".equals(lucRiskAssessment.getAssessmentResult())){
+                        lucRiskAssessment.setAssessmentResult("阴性");
+                    }else if(lucRiskAssessment.getAssessmentResult()=="2" || "2".equals(lucRiskAssessment.getAssessmentResult())){
+                        lucRiskAssessment.setAssessmentResult("阳性");
+                    }
+                    screeningVo.setLucRisk(lucRiskAssessment);
+                }
+            }
+        }
+
+        //大肠癌便隐血检查表
+        if(StringUtils.isNotBlank(crccheckid)){
+            CrcFobt crcFobt=(CrcFobt)crcFobtService.getByCheckid(crcFobtDao,crccheckid);
+            if(crcFobt==null){
+                crcFobt=new CrcFobt(getSessionUser());
+            }else{
+                if(crcFobt.getFobtResult()=="2" || "2".equals(crcFobt.getFobtResult())){
+                    crcFobt.setFobtResult("阳性");
+                }else if(crcFobt.getFobtResult()=="1" || "1".equals(crcFobt.getFobtResult())){
+                    crcFobt.setFobtResult("阴性");
+                }
+            }
+            screeningVo.setCrcFobt(crcFobt);
+        }
+        if(StringUtils.isNotBlank(liccheckid)){
+            //肝癌辅助检查表
+            LicAssistCheck licAssistCheck=(LicAssistCheck)licAssistCheckService.getByCheckid(licAssistCheckDao,liccheckid);
+            if(licAssistCheck==null){
+                licAssistCheck=new LicAssistCheck(getSessionUser());
+            }else{
+                if(licAssistCheck.getLicAssistResult() =="2" || "2".equals(licAssistCheck.getLicAssistResult())){
+                    licAssistCheck.setLicAssistResult("阳性");
+                }else if(licAssistCheck.getLicAssistResult()=="1" || "1".equals(licAssistCheck.getLicAssistResult())){
+                    licAssistCheck.setLicAssistResult("阴性");
+                }
+            }
+            screeningVo.setLicCheck(licAssistCheck);
+        }
+
+        //危险度评估-癌症史表
+        List<CancerHistory>cancerHistoryList=cancerHistoryService.getListByManageidAndYear(cancerHistoryDao,manageid,year);
+        if(cancerHistoryList.size()>0){
+            screeningVo.setHistoryList(cancerHistoryList);
+        }
+        //一级亲癌症史表
+        List<FamilyCancerHistory>familyCancerHistoryList=familyCancerHistoryService.getListByPersonId(familyCancerHistoryDao,cancerPersonInfo.getId());
+        if(familyCancerHistoryList.size()>0){
+            screeningVo.setFamilyCancerHistoryList(familyCancerHistoryList);
+        }
+
+        //一级亲癌症史表徐汇肺癌
+        List<LucFamilyCancerHistoryXH>lucFamilyCancerHistoryXHList=lucFamilyCancerHistoryXHService.getListByPersonId(lucFamilyCancerHistoryXHDao,cancerPersonInfo.getId());
+        if(lucFamilyCancerHistoryXHList.size()>0){
+            screeningVo.setLucFamilyCancerHistoryXHList(lucFamilyCancerHistoryXHList);
+        }
+
+        return screeningVo;
+    }
+
     //根据字典表 id 获取癌症名称
     private String getCancerName(String cancerType,String dicCode){
        return DictUtils.generalForMap(dicCode).get(cancerType).getName();
     }
 
+    //判断对象是否所有属性都为空
     public static boolean checkObjAllFieldsIsNull(Object object) {
         if (null == object) {
             return true;

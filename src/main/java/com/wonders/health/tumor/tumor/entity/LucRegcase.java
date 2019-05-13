@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 import java.lang.Integer;
 import org.hibernate.validator.constraints.Length;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
