@@ -187,6 +187,7 @@
                     <server>tomcat-jenkins</server>
                     <username>jenkins</username>
                     <password>jenkins_password</password>
+                    <update>true</update>
                     <path>/tumor</path>
                 </configuration>
             </plugin>
