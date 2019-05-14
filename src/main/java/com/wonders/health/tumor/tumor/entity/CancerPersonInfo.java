@@ -6,9 +6,7 @@ package com.wonders.health.tumor.tumor.entity;
 import java.util.Date;
 import java.lang.String;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 

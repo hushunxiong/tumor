@@ -3,15 +3,11 @@
  */
 package com.wonders.health.tumor.tumor.service;
 
-import com.google.common.collect.Maps;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
-import com.wonders.health.tumor.common.model.DataGrid;
-import com.wonders.health.tumor.common.model.DataGridSearch;
 import com.wonders.health.tumor.common.utils.IdGen;
 import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
-import com.wonders.health.tumor.tumor.entity.LicRegcase;
 import com.wonders.healthcloud.archive.client.entity.PersonAddress;
 import com.wonders.healthcloud.archive.client.entity.PersonInfo;
 import com.wonders.healthcloud.archive.client.util.ArchiveUtil;
@@ -22,11 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 新增筛查登记Service

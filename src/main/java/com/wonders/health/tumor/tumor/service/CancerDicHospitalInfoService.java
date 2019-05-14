@@ -7,7 +7,6 @@ import com.wonders.health.tumor.tumor.dao.CancerDicHospitalInfoDao;
 import com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
-import com.wonders.health.tumor.common.utils.IdGen;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

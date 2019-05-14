@@ -9,15 +9,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 import java.lang.Integer;
 
-import com.wonders.health.tumor.common.utils.IdGen;
 import org.hibernate.validator.constraints.Length;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 import com.wonders.health.tumor.common.model.BaseEntity;
 
-import static com.wonders.health.tumor.common.controller.BaseController.getSessionUser;
 
 /**
  * 大肠癌初筛信息登记实体

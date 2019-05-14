@@ -4,8 +4,6 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.wonders.health.tumor.common.controller.BaseController;
-import com.wonders.health.tumor.common.model.BaseDao;
-import com.wonders.health.tumor.common.service.DictService;
 import com.wonders.health.tumor.common.utils.SpringContextHolder;
 import com.wonders.health.tumor.tumor.dao.CrcRegcaseDao;
 import com.wonders.health.tumor.tumor.entity.CrcRegcase;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
-import com.wonders.health.tumor.common.model.DataGridSearch;
 
 import javax.validation.Valid;
 import java.util.List;
