@@ -44,9 +44,9 @@
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
                 </td>
                 <td width="10%"><span class="red-span">*</span>出生日期</td>
-                <td>
+                <td style="text-align: left">
                     <input id="birth" name="personInfo.birth" class="mini-datepicker"
-                           th:value="${personInfo.birth}" allowInput="false" style="width: 30%;" required="true" />
+                           th:value="${personInfo.birth}" allowInput="false" style="width: 30%;text-align: left;margin-left: 20px" required="true" />
                 </td>
             </tr>
             <tr>
@@ -407,12 +407,12 @@
                         <table class="table_new table_new6">
                             <tr>
                                 <td width="20%">结节大小：</td>
-                                <td width="30%">
+                                <td width="30%"  style="text-align: left">
                                     <input id="jiejiedaxiao" name="lucRisk.jiejiedaxiao" class="mini-textbox"
                                            width="100" th:value="${lucRisk.jiejiedaxiao}" maxlength="50"/>
                                 </td>
                                 <td width="20%">结节形状：</td>
-                                <td width="30%">
+                                <td width="30%"  style="text-align: left">
 
                                     <input id="jiejiexingtai" name="lucRisk.jiejiexingtai" class="mini-textbox"
                                            width="100" th:value="${lucRisk.jiejiexingtai}" maxlength="100"/>
@@ -1215,11 +1215,16 @@
                         y: "center",
                         timeout: 2000
                     });
-                    return;
                 }else{//没检查过，返回值为个人身份信息
                     mini.unmask(document.body);
                     var form = new mini.Form("#baseForm");
                     form.setData(res.value,false);
+
+                    mini.get("personcard").setValue(zjhm);
+                    var infos = getBirthDayAndSex(zjhm);
+                    mini.get("gender").setValue(infos.sex);
+                    mini.get("birth").setValue(infos.birthday);
+
                     mini.get("checkYear").setValue(checkyear);
 
                     var obj = res.value.personInfo;
