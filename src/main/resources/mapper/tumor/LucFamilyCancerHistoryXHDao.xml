@@ -86,7 +86,7 @@
 	
 	<update id="update">
 		UPDATE luc_family_cancer_history_XH SET
-		check_id = #{checkId},relation = #{relation},icd10 = #{icd10},
+		relation = #{relation},icd10 = #{icd10},
 		cancer_name = #{cancerName},age = #{age},lived = #{lived},
 		update_by = #{updateBy},update_date =SYSDATE
 		WHERE id = #{id}
