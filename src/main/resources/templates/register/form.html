@@ -1482,7 +1482,6 @@
         var form = new mini.Form("#form1");
         form.validate();
         if (form.isValid() == false){
-            console.log($(".mini-error:first"))
             miniErrorLocation();
             mini.showTips({
                 content: "页面有项目未正确填写",
@@ -1513,8 +1512,6 @@
                 }
             }
 
-            console.log(icds)
-            console.log(new Set(icds))
             if(icds.length>0){
                 if((new Set(icds)).size != icds.length){
                     mini.alert("癌症史不能有两条相同癌症名称!")
@@ -1712,7 +1709,7 @@
             if (areaCode =='310104000000') {    //徐汇区单独判断
                 crcFamilyFlag=getXhAizheng("大肠癌");//a.一级亲属有大肠癌病史；
             }else{
-                crcFamilyFlag= mini.get("xhHistory").getValue(); //a.一级亲属有大肠癌病史；
+                crcFamilyFlag= mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
             }
 
             var azsHistoryFlag = mini.get("azsHistory").getValue();//b.本人有癌症史；
