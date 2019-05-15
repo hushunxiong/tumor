@@ -112,6 +112,12 @@
 	    WHERE id = #{id}
 	</update>
 
+
+	<delete id="deleteAllByPersonId">
+	    DELETE FROM  family_cancer_history
+	    WHERE CHECK_ID = #{personId}
+	</delete>
+
 	<update id="deleteByCheckId">
 	    UPDATE family_cancer_history SET del_flag = '1'
 	    WHERE check_id = #{checkId}

@@ -135,19 +135,19 @@
                             <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="47%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-3" th:if="${licFlag==1?true:false}">
+                        <div class="mini-col-3" th:if="${lucFlag==1?true:false}">
                             <label class="mr-5">肺癌判定结果：</label>
                             <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="42%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
-                        <div class="mini-col-3" th:if="${lucFlag==1?true:false}">
+                        <div class="mini-col-3" th:if="${licFlag==1?true:false}">
                             <label class="mr-5">肝癌判定结果：</label>
                             <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="39%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                     </div>
 
-                    <div class="mini-row" th:if="${lucFlag==1?true:false}">
+                    <div class="mini-row" th:if="${licFlag==1?true:false}">
                         <div class="mini-col-3" >
                             <label class="mr-5">肝癌危险评估结果：</label>
                             <input id="licAssessmentResult" name="licAssessmentResult" showNullItem="true" class="mini-combobox" width="42%"
@@ -195,19 +195,19 @@
                     <div field="crcResult" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false" th:if="${crcFlag==1?true:false}">大肠癌判定结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="licAssessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" th:if="${lucFlag==1?true:false}">肝癌危险评估结果
+                    <div field="licAssessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" th:if="${licFlag==1?true:false}">肝癌危险评估结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="licAssistResult" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center" allowSort="false" th:if="${lucFlag==1?true:false}">肝癌初筛辅助检查结果
+                    <div field="licAssistResult" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center" allowSort="false" th:if="${licFlag==1?true:false}">肝癌初筛辅助检查结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="licResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" th:if="${lucFlag==1?true:false}">肝癌判定结果
+                    <div field="licResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" th:if="${licFlag==1?true:false}">肝癌判定结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
                     <div field="scResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center"  allowSort="false" th:if="${scFlag==1?true:false}">胃癌判定结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="lucResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" th:if="${licFlag==1?true:false}">肺癌判定结果
+                    <div field="lucResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" th:if="${lucFlag==1?true:false}">肺癌判定结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
                     <div type="action" renderer="actionRenderer" style="width:100%;"  width="150px" headerAlign="center" align="center" allowSort="false">操作</div>

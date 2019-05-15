@@ -102,6 +102,12 @@
 	    WHERE id = #{id}
 	</update>
 
+	<delete id="deleteAllByPersonId">
+	    DELETE FROM  CANCER_HISTORY
+	    WHERE MANAGEID = #{personId}
+	</delete>
+
+
 	<update id="deleteByManageIdAndYear">
 	    UPDATE CANCER_HISTORY SET del_flag = '1'
 	    WHERE manageid = #{manageId}

@@ -39,4 +39,8 @@ public interface BaseService {
         baseDao.update(baseEntity);
     }
 
+    default void deleteAllByPersonId(BaseDao baseDao, String id){
+        baseDao.deleteAllByPersonId(id);
+    }
+
 }

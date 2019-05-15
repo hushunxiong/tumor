@@ -34,4 +34,6 @@ public interface BaseDao<T> {
     public String checkIdnumber(@Param("manageid") String manageid, @Param("idnumber") String idnumber);
 
     public List<T> getListByPersonId(@Param("personId")String personId);
+
+    public void deleteAllByPersonId(@Param("personId")String personId);
 }
