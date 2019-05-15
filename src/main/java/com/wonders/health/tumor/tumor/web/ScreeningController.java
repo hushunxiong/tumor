@@ -236,6 +236,10 @@ public class ScreeningController extends BaseController {
                 cancerPerson.setIsNew("1");
                 cancerPerson.setId(personcard);
                 cancerPerson.setPersoncardType(type);
+                cancerPerson.setPaddressProvince("310000000000");
+                cancerPerson.setPaddressCity("310100000000");
+                cancerPerson.setPaddressCounty(areaCode);
+
             }
             sc.setPersonInfo(cancerPerson);
             return new AjaxReturn(true,"",sc);
@@ -362,8 +366,9 @@ public class ScreeningController extends BaseController {
                     lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
                 }else{                                      //插入亲属历史表-徐汇
                     luc.setId(IdGen.uuid());
-                    luc.setCheckId(user.getId());
+                    luc.setCheckId(personInfo.getId());
                     luc.setCreateBy(user.getId());
+                    luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
                     lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
                 }
 

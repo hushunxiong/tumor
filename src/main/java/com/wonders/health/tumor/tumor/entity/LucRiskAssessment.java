@@ -33,8 +33,7 @@ public class LucRiskAssessment extends BaseEntity {
 	private String lucCheckId;	// 肺癌初筛信息登记id
 
 	@Length(max=1)
-	private String chufangyouyan;	// 长期厨房油烟接触 cdc_dic_personinfo id=60012 c ode=1：每周<1次；code=2：每周1～3次；code=3：每周>3次；code=4：每天
-
+	private String chufangyouyan;	// 长期厨房油烟接触 cdc_dic_personinfo id=60012
 	@Length(max=1)
 	private String youyanjiechupinlv;	// 油烟接触频率 cdc_dic_personinfo id=60009code=1：从不；code=2：很少（<2次/周）；code=3：经常（>=2次/周）
 
@@ -214,6 +213,28 @@ public class LucRiskAssessment extends BaseEntity {
 		this.assessmentDocName=user.getName();
 		this.assessmentDoc=user.getId();
 		this.assessmentDate=new Date();
+		this.chufangyouyan="2";
+		this.chouyouyanji="2";
+		this.xiyan="1";
+		this.beidongxiyan="4";
+		this.zhiyezhiaiwuzhi="2";
+		this.xiaochuan="2";
+		this.zhiqiguanyan="2";
+		this.feiqizhong="2";
+		this.feijiehe="2";
+		this.guichenzhuo="2";
+		this.xianweihua="2";
+		this.manzufei="2";
+		this.qitafeibing="2";
+		this.ganke="2";
+		this.tanzhongdaixue="2";
+		this.qiji="2";
+		this.xiongmen="2";
+		this.xiongtong="2";
+		this.shengyinsiya="2";
+		this.tongbuweifeiyan="2";
+		this.feijiejie="2";
+		this.maoboli="2";
 	}
 
 	@JsonProperty("id")

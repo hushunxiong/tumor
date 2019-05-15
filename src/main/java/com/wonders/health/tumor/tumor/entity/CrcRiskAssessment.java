@@ -103,6 +103,16 @@ public class CrcRiskAssessment extends BaseEntity {
 		this.assessmentDocName=user.getName();
 		this.assessmentDoc=user.getId();
 		this.assessmentDate=new Date();
+
+		this.manxingfuxie="2";
+		this.manxingbianmi="2";
+		this.nianyexuebian="2";
+		this.lanweiyan="2";
+		this.dannangyan="2";
+		this.jingshenchuangshang="2";
+		this.xiyan="1";
+		this.changxirou="2";
+		this.xuexichong="2";
 	}
 
 	@JsonProperty("id")
