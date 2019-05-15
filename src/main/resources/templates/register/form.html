@@ -1015,9 +1015,8 @@
     var licDbflag = [[${licDbflag}]];
     var scDbflag = [[${scDbflag}]];
     var lucDbflag = [[${lucDbflag}]];
-    var flag='${flag}';
-    var nowDate='${nowDate}';
-
+    var flag=[[${flag}]];
+    var areaCode=[[${areaCode}]];
     //危险度评估结果
     var crcRiskResult=false;    //大肠癌危险度评估结果
     var licRiskResult=false;    //肝癌危险度评估结果
@@ -1112,31 +1111,6 @@
                     mini.get("hospitalCode"+n).setText(hos.hospitalName);
                 })
             }
-            var famList=[[${familyCancerHistoryList}]];
-            mini.get("crcFamilyFlag").setValue("2");
-            mini.get("licFamilyFlag").setValue("2");
-            mini.get("scFamilyFlag").setValue("2");
-            mini.get("lucFamilyFlag").setValue("2");
-            if(famList!=null){
-                $.each(famList,function(n,fam){
-                    if(fam.cancerType=="1"){
-                        mini.get("crcFamilyFlag").setValue("1");
-                        addFamilyRow(fam,"crcFamilyBody");
-                    }else if(fam.cancerType=="2"){
-                        mini.get("licFamilyFlag").setValue("1");
-                        addFamilyRow(fam,"licFamilyBody");
-                    }else if(fam.cancerType=="3"){
-                        mini.get("scFamilyFlag").setValue("1");
-                        addFamilyRow(fam,"scFamilyBody");
-                    }else if(fam.cancerType=="4"){
-                        mini.get("lucFamilyFlag").setValue("1");
-                        addFamilyRow(fam,"lucFamilyBody");
-                    }
-
-                })
-            }
-
-            var areaCode='${areaCode}';
             if (areaCode =='310104000000') {
                 var xhList=[[${lucFamilyCancerHistoryXHList}]];
                 if(xhList!=null){
@@ -1147,6 +1121,31 @@
                 }else{
                     mini.get("xhHistory").setValue("2")
                 }
+            }else{
+                var famList=[[${familyCancerHistoryList}]];
+                mini.get("crcFamilyFlag").setValue("2");
+                mini.get("licFamilyFlag").setValue("2");
+                mini.get("scFamilyFlag").setValue("2");
+                mini.get("lucFamilyFlag").setValue("2");
+                if(famList!=null){
+                    $.each(famList,function(n,fam){
+                        if(fam.cancerType=="1"){
+                            mini.get("crcFamilyFlag").setValue("1");
+                            addFamilyRow(fam,"crcFamilyBody");
+                        }else if(fam.cancerType=="2"){
+                            mini.get("licFamilyFlag").setValue("1");
+                            addFamilyRow(fam,"licFamilyBody");
+                        }else if(fam.cancerType=="3"){
+                            mini.get("scFamilyFlag").setValue("1");
+                            addFamilyRow(fam,"scFamilyBody");
+                        }else if(fam.cancerType=="4"){
+                            mini.get("lucFamilyFlag").setValue("1");
+                            addFamilyRow(fam,"lucFamilyBody");
+                        }
+
+                    })
+                }
+
             }
 
             yyjcChange();
@@ -1158,12 +1157,13 @@
             sfzdhjlChange();
             xxcChange();
         }else{
-            mini.get("crcFamilyFlag").setValue("2");
-            mini.get("licFamilyFlag").setValue("2");
-            mini.get("scFamilyFlag").setValue("2");
-            mini.get("lucFamilyFlag").setValue("2");
             if (areaCode =='310104000000') {
                 mini.get("xhHistory").setValue("2")
+            }else{
+                mini.get("crcFamilyFlag").setValue("2");
+                mini.get("licFamilyFlag").setValue("2");
+                mini.get("scFamilyFlag").setValue("2");
+                mini.get("lucFamilyFlag").setValue("2");
             }
         }
 
@@ -1272,8 +1272,8 @@
 
     //同户籍地址
     function sameChange(e) {
-		var flag = mini.get("sameFlag").getChecked();
-		if (flag) {
+		var flagSame = mini.get("sameFlag").getChecked();
+		if (flagSame) {
 			var hjdProvince = mini.get("hjdprovince").getValue();
 			var hjdCity = mini.get("hjdcity").getValue();
 			var hjdCounty = mini.get("hjdcounty").getValue();
@@ -1541,10 +1541,9 @@
                         var zjhm = mini.get("personcard").getValue();
                         var zjlx = mini.get("personcardType").getValue();
                         var checkYear = mini.get("checkYear").getValue();
-                        // $("#id").val();
                         mini.get("id").setValue(res.value)
                         setTimeout(function(){
-                            // window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
+                            window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
                         },2000)
 
                     }else{
@@ -1681,7 +1680,7 @@
 
     //徐汇专用 判断是否做过亲属癌症登记，传递参数为中文癌症汉字
     function getXhAizheng(aizheng){
-        var flag=2;
+        var xhazflag=2;
         var trList = $("#xhBody").children("tr");
 
         for (var i=1;i<trList.length;i++) {
@@ -1689,18 +1688,17 @@
             var aizhengzhonglei=tdArr.eq(5).find('input').val();
 
             if(aizhengzhonglei==aizheng){
-                flag= 1;
+                xhazflag= 1;
             }
 
         }
-        return flag;
+        return xhazflag;
     }
 
     //危险度评估结果计算
     function makeResult() {
         notDoneFlag=0;
 
-        var areaCode='${areaCode}';
         var docName="${#auth.getUserById(personInfo.regdoc).name}";
 
 

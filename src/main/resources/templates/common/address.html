@@ -29,13 +29,13 @@
             </td>
             <td class="bg-white">居委（村）</td>
             <td colspan="3">
-                <div th:replace="/common/address :: committee(${prefix},${committeeName},${townValue},${committeeValue},false,true)"></div>
+                <div th:replace="/common/address :: committee(${prefix},${committeeName},${townValue},${committeeValue},true,true)"></div>
             </td>
         </tr>
         <tr>
             <td class="bg-white text-l">详细地址</td>
             <td colspan="5">
-                <input class="mini-textbox" th:id="${prefix} + 'detail'"
+                <input class="mini-textbox" th:id="${prefix} + 'detail'" required="required"
                        th:name="${detailName}" th:value="${detailValue}" style="width:47%" maxlength="100"/>
             </td>
         </tr>

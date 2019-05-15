@@ -246,7 +246,7 @@ public class ShiroConfiguration {
         LogoutFilter logoutFilter = new LogoutFilter();
         logoutFilter.setName("logoutFilter");
         logoutFilter.setEnabled(true);
-        logoutFilter.setRedirectUrl(defaultCasServerUrl + "/logout?service=" + defaultSysServerUrl);
+        logoutFilter.setRedirectUrl(casServerUrlPrefix + "/logout?service=" + casServerUrlPrefix);
         logoutFilter.setAuthService(authService);
         logoutFilter.setDefaultCasServerUrl(defaultCasServerUrl);
 
