@@ -217,7 +217,13 @@ public class ScreeningController extends BaseController {
             //根据证件号码证件类型获取个人基本信息，有可能从健康档案接口获取
             Optional<CancerPersonInfo> cancerPersonInfo=Optional.of(screeningService.getBaseInfoByCardnoAndType(personcard,type));
             ScreeningVo sc=new ScreeningVo();
-            sc.setPersonInfo(cancerPersonInfo.get());
+            CancerPersonInfo cancerPerson=cancerPersonInfo.get();
+            if(cancerPerson==null){
+                cancerPerson=new CancerPersonInfo();
+                cancerPerson.setId(personcard);
+                cancerPerson.setPersoncardType(type);
+            }
+            sc.setPersonInfo(cancerPerson);
             return new AjaxReturn(true,"",sc);
         }
     }

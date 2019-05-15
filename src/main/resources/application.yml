@@ -122,7 +122,7 @@ sc_switch_flag: 1
 luc_switch_flag: 1
 
 #区域代码
-area_code: '310106000000'
+area_code: '310104000000'
 
 #最近n年
 yearNum: 10
