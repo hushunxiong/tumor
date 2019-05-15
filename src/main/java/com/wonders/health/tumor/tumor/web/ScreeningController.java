@@ -10,8 +10,12 @@ import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.*;
 import com.wonders.health.tumor.tumor.service.*;
 import com.wonders.health.tumor.tumor.vo.ScreeningVo;
+import com.wonders.healthcloud.archive.client.entity.PersonAddress;
+import com.wonders.healthcloud.archive.client.entity.PersonInfo;
+import com.wonders.healthcloud.archive.client.util.ArchiveUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +57,10 @@ public class ScreeningController extends BaseController {
 
     @Value("${area_code}")
     private String areaCode;
+
+
+    @Value("${healthArchive}")
+    private String healthArchive;
 
     @Autowired
     private ScreeningService screeningService;
@@ -122,6 +132,9 @@ public class ScreeningController extends BaseController {
             personInfo.setRegdoc(user.getId());
             personInfo.setRegorg(user.getOrgCode());
             personInfo.setRegdate(new Date());
+            personInfo.setPersoncardType("01");
+            personInfo.setAddressCounty(areaCode);
+            personInfo.setPaddressCounty(areaCode);
 
             model.addAttribute("personInfo", personInfo);
             model.addAttribute("lucRisk", new LucRiskAssessment(getSessionUser()));
@@ -218,8 +231,9 @@ public class ScreeningController extends BaseController {
             Optional<CancerPersonInfo> cancerPersonInfo=Optional.of(screeningService.getBaseInfoByCardnoAndType(personcard,type));
             ScreeningVo sc=new ScreeningVo();
             CancerPersonInfo cancerPerson=cancerPersonInfo.get();
-            if(cancerPerson==null){
+            if(StringUtils.isBlank(cancerPerson.getPersoncard())){
                 cancerPerson=new CancerPersonInfo();
+                cancerPerson.setIsNew("1");
                 cancerPerson.setId(personcard);
                 cancerPerson.setPersoncardType(type);
             }
@@ -261,6 +275,37 @@ public class ScreeningController extends BaseController {
             personInfo.setId(personInfoBase.getId());
         }
         if(personInfo.getId()==null){   //新增
+            String isNew=personInfo.getIsNew();
+            if(StringUtils.isNotBlank(isNew)){  //这个人应该调用健康档案接口
+                PersonInfo person=new PersonInfo();
+
+                BeanUtils.copyProperties(personInfo, person);
+                person.setPersoncardNo(personInfo.getPersoncard());
+                person.setPhone(personInfo.getTelephone());
+                person.setMobilePhone(personInfo.getMobile());
+                person.setNationOther(personInfo.getNationOther());
+
+                person.setMarriage(personInfo.getMarriage());
+                person.setEducation(personInfo.getEducation());
+                person.setMedicalPaymentcode(personInfo.getPaymentSituation());
+                person.setPaddressOther(personInfo.getPaddressDetail());
+
+                List<PersonAddress> personAddressList = new ArrayList<>();
+                if(personAddressList!=null && personAddressList.size() > 0 ){
+                    //居住地址
+                    personAddressList.stream().filter((personAddress) -> "1".equals(personAddress.getIscurrentuse()))
+                            .forEach(personAddress -> {
+                                personAddress.setProvince(personInfo.getAddressProvince());
+                                personAddress.setCity(personInfo.getAddressCity());
+                                personAddress.setCounty(personInfo.getAddressCounty());
+                                personAddress.setTown(personInfo.getAddressTown());
+                                personAddress.setCommittee(personInfo.getAddressCommittee());
+                                personAddress.setOther(personInfo.getAddressDetail());
+                            });
+                }
+                person.setAddresses(personAddressList);
+                ArchiveUtil.submitArchive(healthArchive + "/api/submit", person);
+            }
             personInfo.init(user.getId());
             cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
         }else{                          //修改

@@ -154,6 +154,7 @@ public class CancerPersonInfo extends BaseEntity {
     private String lucCheckYear;
 
 
+    private String isNew;	//检查是否为健康档案及表以外的新增信息
 
 
 	public CancerPersonInfo() {
@@ -648,5 +649,13 @@ public class CancerPersonInfo extends BaseEntity {
 
 	public void setDelRecordsFlag(Integer delRecordsFlag) {
 		this.delRecordsFlag = delRecordsFlag;
+	}
+
+	public String getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(String isNew) {
+		this.isNew = isNew;
 	}
 }

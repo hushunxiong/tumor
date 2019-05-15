@@ -39,7 +39,7 @@
         <tr>
             <td width="20%" th:text="${title}"></td>
             <td width="80%" class="text-l">
-                <input th:id="${id}" class="mini-radiobuttonlist"
+                <input th:id="${id}" class="mini-radiobuttonlist" required="true"
                        th:data="${#dic.generals('60007')}"
                        textField="name" valueField="code"
                        th:attr="onvaluechanged='showFamily(\''+${id}+'\', \''+${bodyId}+'\');'"/>
