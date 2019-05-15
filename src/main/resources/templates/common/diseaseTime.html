@@ -22,7 +22,7 @@
 
                 <input th:id="${id}" th:name="${name}" class="mini-radiobuttonlist"
                        th:data="${#dic.generals('60007')}" th:value="${value}"
-                       textField="name" valueField="code"
+                       textField="name" valueField="code" required="true"
                        th:attr="onvaluechanged='showTime(\''+${id}+'\');'"/>
             </td>
             <td width="10%" th:if="${value} eq '1'" class="diseaseDym">
