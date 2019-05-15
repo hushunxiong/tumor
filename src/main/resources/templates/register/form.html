@@ -1361,6 +1361,10 @@
         } else {
             $("#yyTable").children(":first").children(":gt(0)").hide();
             mini.get("chouyouyanji").setValue("0");
+            mini.get("youyanjiechunianshu").setValue("");
+            mini.get("youyanjiechupinlv").setValue("");
+            mini.get("chouyouyanji").setValue("");
+            mini.get("chouyouyanjinianshu").setValue("");
         }
     }
 
@@ -1386,11 +1390,15 @@
         //不吸烟
         if (xiyan == "1") {
             $("#xyTable").children(":first").children(":gt(0)").hide();
+            mini.get("zuihouyicxiyan").setValue("");
+            mini.get("kaishixiyannianling").setValue("");
+            mini.get("meitianxiyanliang").setValue("");
         //过去吸，现在不吸
         } else if (xiyan == "2") {
             $("#xyTable").children(":first").children(":gt(0)").show();
         //现在吸
         } else {
+            mini.get("zuihouyicxiyan").setValue("");
             $("#xyTable").children(":first").children(":eq(1)").hide();
             $("#xyTable").children(":first").children(":gt(1)").show();
         }
@@ -1406,6 +1414,8 @@
         //被动吸烟:否
         if (beidongxiyan == "4") {
             $("#bdxyTable").children(":first").children(":gt(0)").hide();
+            mini.get("beidongxiyanduixiang").setValue("");
+            mini.get("beidongxiyannianshu").setValue("");
         } else {
             $("#bdxyTable").children(":first").children(":gt(0)").show();
         }
@@ -1420,6 +1430,8 @@
             //无
         } else {
             $("#zawzTable").children(":first").children(":gt(0)").hide();
+            mini.get("zhiaiwuzhileixing").setValue("");
+            mini.get("zhiaiwuzhinianshu").setValue("");
         }
     }
 
