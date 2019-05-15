@@ -885,7 +885,7 @@
                 </td>
                 <td>便隐血检验员</td>
                 <td>
-                    <input id="fobtDocName" class="mini-textbox" allowInput="false"  th:value="${crcFobt.fobtDocName}"/>
+                    <input id="fobtDocName" class="mini-textbox" allowInput="false" style="width: 100%" th:value="${crcFobt.fobtDocName}"/>
                     <input id="fobtDoc" name="crcFobt.fobtDoc" class="mini-hidden" th:value="${crcFobt.fobtDoc}"/>
                 </td>
                 <td colspan="2" class="bg-white"></td>
@@ -986,18 +986,18 @@
         <table class="table_new table_new5 mt-10">
             <tr>
                 <td>登记机构</td>
-                <td class="bg-white" width="20%">
-                    <input id="regorgName" class="mini-textbox" th:value="${#auth.getHospitalByCode(personInfo.regorg).name}" allowInput="false"/>
+                <td class="bg-white" width="20%" style="text-align: center">
+                    <input id="regorgName" class="mini-textbox" style="width: 100%;" th:value="${#auth.getHospitalByCode(personInfo.regorg).name}" allowInput="false"/>
                     <input id="regorg" name="personInfo.regorg" th:value="${personInfo.regorg}" class="mini-hidden"/>
                 </td>
                 <td>登记人</td>
                 <td class="bg-white" width="20%">
-                    <input id="regdocName" class="mini-textbox" th:value="${#auth.getUserById(personInfo.regdoc).name}" allowInput="false"/>
+                    <input id="regdocName" class="mini-textbox"  style="width: 100%;" th:value="${#auth.getUserById(personInfo.regdoc).name}" allowInput="false"/>
                     <input id="regdoc" name="personInfo.regdoc" th:value="${personInfo.regdoc}" class="mini-hidden"/>
                 </td>
                 <td>登记日期</td>
                 <td class="bg-white" width="20%">
-                    <input id="regdate" name="personInfo.regdate" th:value="${#dates.format(personInfo.regdate,'yyyy-MM-dd')}" class="mini-textbox" allowInput="false"/>
+                    <input id="regdate" name="personInfo.regdate"  style="width: 100%;" th:value="${#dates.format(personInfo.regdate,'yyyy-MM-dd')}" class="mini-textbox" allowInput="false"/>
                 </td>
             </tr>
         </table>
@@ -1157,6 +1157,14 @@
             hejiuChange();
             sfzdhjlChange();
             xxcChange();
+        }else{
+            mini.get("crcFamilyFlag").setValue("2");
+            mini.get("licFamilyFlag").setValue("2");
+            mini.get("scFamilyFlag").setValue("2");
+            mini.get("lucFamilyFlag").setValue("2");
+            if (areaCode =='310104000000') {
+                mini.get("xhHistory").setValue("2")
+            }
         }
 
 
@@ -1704,7 +1712,7 @@
             if (areaCode =='310104000000') {    //徐汇区单独判断
                 crcFamilyFlag=getXhAizheng("大肠癌");//a.一级亲属有大肠癌病史；
             }else{
-                crcFamilyFlag= mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
+                crcFamilyFlag= mini.get("xhHistory").getValue(); //a.一级亲属有大肠癌病史；
             }
 
             var azsHistoryFlag = mini.get("azsHistory").getValue();//b.本人有癌症史；

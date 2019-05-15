@@ -78,6 +78,9 @@ public class LicRiskAssessment extends BaseEntity {
 		this.assessmentDocName=user.getName();
 		this.assessmentDoc=user.getId();
 		this.assessmentDate=new Date();
+		this.yigan="2";
+		this.binggan="2";
+		this.ganyinghua="2";
 	}
 
 	@JsonProperty("id")

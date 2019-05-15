@@ -118,6 +118,15 @@ public class ScRiskAssessment extends BaseEntity {
 		this.assessmentDocName=user.getName();
 		this.assessmentDoc=user.getId();
 		this.assessmentDate=new Date();
+		this.hejiu="2";
+		this.weisuoxingweiyan="2";
+		this.shierzhichangkuiyang="2";
+		this.weichuxue="2";
+		this.shiguanyan="2";
+		this.weixirou="2";
+		this.canwei="2";
+		this.pinxue="2";
+		this.aizhengshi="2";
 	}
 	@JsonProperty("id")
 	public String getId() {
