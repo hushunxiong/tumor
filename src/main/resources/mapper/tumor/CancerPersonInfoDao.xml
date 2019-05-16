@@ -128,6 +128,9 @@
             <if test="csnf !=null and csnf !='' ">
                 and  crc.check_year=#{csnf}
             </if>
+			<if test="status !=null and status !='' ">
+				and  crc.close_status=#{status}
+			</if>
 			<if test="beginDateFrom !=null and beginDateFrom !=''">
 				and  crc.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
 			</if>
@@ -148,6 +151,9 @@
             <if test="csnf !=null and csnf !='' ">
                 and  lic.check_year=#{csnf}
             </if>
+			<if test="status !=null and status !='' ">
+				and  lic.close_status=#{status}
+			</if>
 			<if test="beginDateFrom !=null and beginDateFrom !=''">
 				and  lic.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
 			</if>
@@ -165,6 +171,9 @@
             <if test="regorg != null and regorg!='' ">
                 and   sc.regorg=#{regorg}
             </if>
+			<if test="status !=null and status !='' ">
+				and  sc.close_status=#{status}
+			</if>
             <if test="csnf !=null and csnf !='' ">
                 and  sc.check_year=#{csnf}
             </if>
@@ -186,6 +195,9 @@
             <if test="csnf !=null and csnf !='' ">
                 and  luc.check_year=#{csnf}
             </if>
+			<if test="status !=null and status !='' ">
+				and  luc.close_status=#{status}
+			</if>
 			<if test="beginDateFrom !=null and beginDateFrom !=''">
 				and  luc.regdate>=to_date(#{beginDateFrom},'yyyy-MM-dd HH:mi:ss')
 			</if>
