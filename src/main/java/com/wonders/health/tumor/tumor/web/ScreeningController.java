@@ -340,10 +340,13 @@ public class ScreeningController extends BaseController {
         List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();  //亲属历史表-徐汇
         List<FamilyCancerHistory> familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();                 //亲属历史表  不需做额外处理
 
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
-            lucFamilyCancerHistoryXHList.stream().forEach(family->{
-                family.setCancerName(getCancerName(family.getIcd10(),"60020"));
-            });
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+            if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
+                lucFamilyCancerHistoryXHList.stream().forEach(family->{
+                    family.setCancerName(getCancerName(family.getIcd10(),"60020"));
+                });
+            }
+
         }
 
 
@@ -371,7 +374,7 @@ public class ScreeningController extends BaseController {
         }
 
         if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
-            if(lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
+            if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
                 lucFamilyCancerHistoryXHList.stream().forEach(luc->{
                     if(StringUtils.isNotBlank(luc.getId())){    //修改亲属历史表-徐汇
                         luc.setUpdateBy(user.getId());
