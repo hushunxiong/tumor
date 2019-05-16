@@ -1,5 +1,6 @@
 package com.wonders.health.tumor.common.shiro;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.google.common.collect.Maps;
 import com.wonders.health.auth.client.AuthServiceI;
 import com.wonders.shiro.cas.MyShiroCasRealm;
@@ -53,6 +54,11 @@ public class ShiroConfiguration {
         return manager;
     }
 
+    @Bean(name = "shiroDialect")
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
+    }
+
     @Bean
     public EhCacheManager getEhCacheManager(CacheManager manager) {
         EhCacheManager em = new EhCacheManager();
@@ -77,7 +83,7 @@ public class ShiroConfiguration {
         realm.setDefaultSysServerUrl(defaultsysServerUrl);
         realm.setDefaultCasServerUrl(defaultCasServerUrl);
         realm.setAuthService(authService);
-        realm.setSystemName("ZNZFX");
+        realm.setSystemName("ZLZFX");
         return realm;
     }
 
