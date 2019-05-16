@@ -55,6 +55,9 @@ public class ScreeningController extends BaseController {
     @Value("${luc_switch_flag}")
     private String lucFlag;
 
+    @Value("${archieve_add_flag}")
+    private String archieveAddFlag;
+
     @Value("${area_code}")
     private String areaCode;
 
@@ -149,6 +152,8 @@ public class ScreeningController extends BaseController {
             model.addAttribute("lucRegcase", new LucRegcase());
             model.addAttribute("scRegcase", new ScRegcase());
 
+            model.addAttribute("historyListFlag", "2");
+
             model.addAttribute("idNumber", "");
             model.addAttribute("flag", "1"); //1：新增
         } else {
@@ -192,8 +197,10 @@ public class ScreeningController extends BaseController {
             model.addAttribute("licDbflag", "2"); //数据库状态  1：新增 2：修改
             model.addAttribute("scDbflag", "2");  //数据库状态  1：新增 2：修改
             model.addAttribute("lucDbflag", "2"); //数据库状态  1：新增 2：修改
-            if(StringUtils.isNotBlank(screeningVo.getCrcRegcase().getIdNumber())){
-                model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
+            if(screeningVo.getCrcRegcase()!=null){
+                if(StringUtils.isNotBlank(screeningVo.getCrcRegcase().getIdNumber())){
+                    model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
+                }
             }
             model.addAttribute("flag", "2"); //2：修改
         }
@@ -308,7 +315,9 @@ public class ScreeningController extends BaseController {
                             });
                 }
                 person.setAddresses(personAddressList);
-                ArchiveUtil.submitArchive(healthArchive + "/api/submit", person);
+                if(archieveAddFlag=="1"|| "1".equals(archieveAddFlag)){
+                    ArchiveUtil.submitArchive(healthArchive + "/api/submit", person);
+                }
             }
             personInfo.init(user.getId());
             cancerPersonInfoService.saveOrUpdate(personInfo,user.getId());
@@ -331,10 +340,13 @@ public class ScreeningController extends BaseController {
         List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();  //亲属历史表-徐汇
         List<FamilyCancerHistory> familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();                 //亲属历史表  不需做额外处理
 
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
-            lucFamilyCancerHistoryXHList.stream().forEach(family->{
-                family.setCancerName(getCancerName(family.getIcd10(),"60020"));
-            });
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+            if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
+                lucFamilyCancerHistoryXHList.stream().forEach(family->{
+                    family.setCancerName(getCancerName(family.getIcd10(),"60020"));
+                });
+            }
+
         }
 
 
@@ -357,22 +369,27 @@ public class ScreeningController extends BaseController {
                     cancerHistoryService.insert(cancerHistoryDao,history);
                 }
             });
+        }else{      //全删本人癌症史数据
+            cancerHistoryService.deleteAllByPersonId(cancerHistoryDao,personInfo.getId());
         }
 
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))&&lucFamilyCancerHistoryXHList.size()>0&&lucFamilyCancerHistoryXHList!=null){
-            lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                if(StringUtils.isNotBlank(luc.getId())){    //修改亲属历史表-徐汇
-                    luc.setUpdateBy(user.getId());
-                    lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
-                }else{                                      //插入亲属历史表-徐汇
-                    luc.setId(IdGen.uuid());
-                    luc.setCheckId(personInfo.getId());
-                    luc.setCreateBy(user.getId());
-                    luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
-                    lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
-                }
-
-            });
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+            if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
+                lucFamilyCancerHistoryXHList.stream().forEach(luc->{
+                    if(StringUtils.isNotBlank(luc.getId())){    //修改亲属历史表-徐汇
+                        luc.setUpdateBy(user.getId());
+                        lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
+                    }else{                                      //插入亲属历史表-徐汇
+                        luc.setId(IdGen.uuid());
+                        luc.setCheckId(personInfo.getId());
+                        luc.setCreateBy(user.getId());
+                        luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
+                        lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
+                    }
+                });
+            }else{
+                lucFamilyCancerHistoryXHService.deleteAllByPersonId(lucFamilyCancerHistoryXHDao,personInfo.getId());
+            }
         }else{
             if(familyCancerHistoryList!=null){
                 familyCancerHistoryList.stream().forEach(family->{
@@ -390,6 +407,8 @@ public class ScreeningController extends BaseController {
                         familyCancerHistoryService.insert(familyCancerHistoryDao,family);
                     }
                 });
+            }else{
+                familyCancerHistoryService.deleteAllByPersonId(familyCancerHistoryDao,personInfo.getId());
             }
         }
 
@@ -420,6 +439,7 @@ public class ScreeningController extends BaseController {
                     crcRegcaseService.insert(crcRegcaseDao,crcRegcase);
                 }
             }
+
             CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
             if(crcrisk!=null && !checkObjAllFieldsIsNull(crcrisk)){
                 crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
@@ -438,7 +458,6 @@ public class ScreeningController extends BaseController {
                     crcrisk.init();
                     crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
                 }
-
             }
         }
         if(isOpen(licFlag)){
@@ -643,7 +662,6 @@ public class ScreeningController extends BaseController {
         }catch (Exception e){
             return "2";
         }
-
     }
 
     @RequestMapping(value = {"", "deleteFamHistory"}, method = RequestMethod.GET)

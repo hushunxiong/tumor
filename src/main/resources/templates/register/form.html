@@ -170,7 +170,7 @@
                 </tbody>
             </table>
 
-            <table id="xyTable" class="table_new table_new5 mt-10">
+            <table id="xyTable" class="table_new table_new5">
                 <tbody>
                 <tr>
                     <td width="20%">肺癌：现在的吸烟状况</td>
@@ -204,7 +204,7 @@
                 </tbody>
             </table>
 
-            <table id="bdxyTable" class="table_new table_new5 mt-10">
+            <table id="bdxyTable" class="table_new table_new5">
                 <tbody>
                 <tr>
                     <td width="20%">肺癌：被动吸烟情况</td>
@@ -232,7 +232,7 @@
                 </tbody>
             </table>
 
-            <table id="zawzTable" class="table_new table_new5 mt-10">
+            <table id="zawzTable" class="table_new table_new5">
                 <tbody>
                 <tr>
                     <td width="20%">肺癌：职业致癌物质接触</td>
@@ -260,7 +260,7 @@
                 </tbody>
             </table>
 
-            <table class="table_new table_new5 mt-10">
+            <table class="table_new table_new5">
                 <tbody>
                 <tr>
                     <td width="20%">肺癌：是否有哮喘</td>
@@ -485,7 +485,7 @@
                 </tbody>
             </table>
 
-            <table id="hjTable" class="table_new table_new5 mt-10">
+            <table id="hjTable" class="table_new table_new5">
                 <tbody>
                 <tr>
                     <td width="20%">胃癌：近12个月内，喝过酒吗？</td>
@@ -534,7 +534,7 @@
                 </tbody>
             </table>
 
-            <table class="table_new table_new5 mt-10">
+            <table class="table_new table_new5">
                 <tbody>
                 <tr>
                     <input id="scssid" name="licRisk.scCheckId" th:value="${scRisk.scCheckId}" class="mini-hidden"/>
@@ -756,7 +756,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr th:if="${crcFlag} eq '1'">
-                <td width="10%">大肠癌危险度评估结果</td>
+                <td style="width:20%!important;">大肠癌危险度评估结果</td>
                 <td class="text-l">
                     <input id="crcRiskResult" class="mini-textbox" th:value="${crcRisk.assessmentResult}" allowInput="false"/>
                     <input id="assessmentResult1" name="crcRisk.assessmentResult" th:value="${crcRisk.assessmentResult}" class="mini-hidden" />
@@ -835,7 +835,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr>
-                <td>大肠癌初筛辅助检查结果</td>
+                <td style="width:20%!important;">大肠癌初筛辅助检查结果</td>
             </tr>
             <tr>
                 <td width="10%">第一次便隐血检查结果</td>
@@ -898,7 +898,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr>
-                <td>肝癌初筛辅助检查结果</td>
+                <td style="width:20%!important;">肝癌初筛辅助检查结果</td>
             </tr>
             <tr>
                 <td width="10%">GTP</td>
@@ -949,7 +949,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
                 <tr th:if="${crcFlag} eq '1'">
-                    <td width="10%">大肠癌初筛结果判定</td>
+                    <td style="width:20%!important;">大肠癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input id="crRegcasemid" name="crcRegcase.manageid" class="mini-hidden" th:value="${crcRegcase.manageid}"/>
                         <input id="checkResultName1" class="mini-textbox" name="crcRegcase.checkResult" allowInput="false" th:value="${crcRegcase.checkResult}"/>
@@ -985,7 +985,7 @@
 
         <table class="table_new table_new5 mt-10">
             <tr>
-                <td>登记机构</td>
+                <td style="width:20%!important;">登记机构</td>
                 <td class="bg-white" width="20%" style="text-align: center">
                     <input id="regorgName" class="mini-textbox" style="width: 100%;" th:value="${#auth.getHospitalByCode(personInfo.regorg).name}" allowInput="false"/>
                     <input id="regorg" name="personInfo.regorg" th:value="${personInfo.regorg}" class="mini-hidden"/>
@@ -1017,6 +1017,12 @@
     var lucDbflag = [[${lucDbflag}]];
     var flag=[[${flag}]];
     var areaCode=[[${areaCode}]];
+
+    var crcFlag = [[${crcFlag}]];
+    var licFlag = [[${licFlag}]];
+    var scFlag = [[${scFlag}]];
+    var lucFlag = [[${lucFlag}]];
+
     //危险度评估结果
     var crcRiskResult=false;    //大肠癌危险度评估结果
     var licRiskResult=false;    //肝癌危险度评估结果
@@ -1123,10 +1129,19 @@
                 }
             }else{
                 var famList=[[${familyCancerHistoryList}]];
-                mini.get("crcFamilyFlag").setValue("2");
-                mini.get("licFamilyFlag").setValue("2");
-                mini.get("scFamilyFlag").setValue("2");
-                mini.get("lucFamilyFlag").setValue("2");
+                if(crcFlag=="1"){
+                    mini.get("crcFamilyFlag").setValue("2");
+                }
+                if(licFlag =="1"){
+                    mini.get("licFamilyFlag").setValue("2");
+                }
+                if(scFlag =="1"){
+                    mini.get("scFamilyFlag").setValue("2");
+                }
+                if(lucFlag =="1"){
+                    mini.get("lucFamilyFlag").setValue("2");
+                }
+
                 if(famList!=null){
                     $.each(famList,function(n,fam){
                         if(fam.cancerType=="1"){
@@ -1145,25 +1160,40 @@
 
                     })
                 }
-
             }
 
-            yyjcChange();
-            xiyanChange();
-            bdxyChange();
-            zawzChange();
-            fjjChange();
-            hejiuChange();
-            sfzdhjlChange();
-            xxcChange();
+            if(crcFlag=="1"){
+                xxcChange();
+            }
+            if(scFlag =="1"){
+                hejiuChange()
+                sfzdhjlChange();
+            }
+            if(lucFlag =="1"){
+                yyjcChange();
+                xiyanChange();
+                bdxyChange();
+                zawzChange();
+                fjjChange();
+            }
+
+
         }else{
             if (areaCode =='310104000000') {
                 mini.get("xhHistory").setValue("2")
             }else{
-                mini.get("crcFamilyFlag").setValue("2");
-                mini.get("licFamilyFlag").setValue("2");
-                mini.get("scFamilyFlag").setValue("2");
-                mini.get("lucFamilyFlag").setValue("2");
+                if(crcFlag=="1"){
+                    mini.get("crcFamilyFlag").setValue("2");
+                }
+                if(licFlag =="1"){
+                    mini.get("licFamilyFlag").setValue("2");
+                }
+                if(scFlag =="1"){
+                    mini.get("scFamilyFlag").setValue("2");
+                }
+                if(lucFlag =="1"){
+                    mini.get("lucFamilyFlag").setValue("2");
+                }
             }
         }
 
@@ -1331,6 +1361,10 @@
         } else {
             $("#yyTable").children(":first").children(":gt(0)").hide();
             mini.get("chouyouyanji").setValue("0");
+            mini.get("youyanjiechunianshu").setValue("");
+            mini.get("youyanjiechupinlv").setValue("");
+            mini.get("chouyouyanji").setValue("");
+            mini.get("chouyouyanjinianshu").setValue("");
         }
     }
 
@@ -1356,11 +1390,15 @@
         //不吸烟
         if (xiyan == "1") {
             $("#xyTable").children(":first").children(":gt(0)").hide();
+            mini.get("zuihouyicxiyan").setValue("");
+            mini.get("kaishixiyannianling").setValue("");
+            mini.get("meitianxiyanliang").setValue("");
         //过去吸，现在不吸
         } else if (xiyan == "2") {
             $("#xyTable").children(":first").children(":gt(0)").show();
         //现在吸
         } else {
+            mini.get("zuihouyicxiyan").setValue("");
             $("#xyTable").children(":first").children(":eq(1)").hide();
             $("#xyTable").children(":first").children(":gt(1)").show();
         }
@@ -1376,6 +1414,8 @@
         //被动吸烟:否
         if (beidongxiyan == "4") {
             $("#bdxyTable").children(":first").children(":gt(0)").hide();
+            mini.get("beidongxiyanduixiang").setValue("");
+            mini.get("beidongxiyannianshu").setValue("");
         } else {
             $("#bdxyTable").children(":first").children(":gt(0)").show();
         }
@@ -1390,6 +1430,8 @@
             //无
         } else {
             $("#zawzTable").children(":first").children(":gt(0)").hide();
+            mini.get("zhiaiwuzhileixing").setValue("");
+            mini.get("zhiaiwuzhinianshu").setValue("");
         }
     }
 
@@ -1698,19 +1740,17 @@
     //危险度评估结果计算
     function makeResult() {
         notDoneFlag=0;
-
-        var docName="${#auth.getUserById(personInfo.regdoc).name}";
-
-
+        var azsHistoryFlag = mini.get("azsHistory").getValue();//b.本人有癌症史；
 //2-1 大肠癌危险的评估条件，满足下列条件任意一项者，危险度评估结果为 阳性。
-            var crcFamilyFlag =2;
-            if (areaCode =='310104000000') {    //徐汇区单独判断
-                crcFamilyFlag=getXhAizheng("大肠癌");//a.一级亲属有大肠癌病史；
-            }else{
-                crcFamilyFlag= mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
+        if(crcFlag=="1") {
+            var crcFamilyFlag = 2;
+            if (areaCode == '310104000000') {    //徐汇区单独判断
+                crcFamilyFlag = getXhAizheng("大肠癌");//a.一级亲属有大肠癌病史；
+            } else {
+                crcFamilyFlag = mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
             }
 
-            var azsHistoryFlag = mini.get("azsHistory").getValue();//b.本人有癌症史；
+
             var changxirouFlag = mini.get("changxirou").getValue(); //c.本人有肠道息肉史
 
             //d.同时具有以下两项或两项以上者：
@@ -1721,18 +1761,18 @@
             var lanweiyan = mini.get("lanweiyan").getValue(); //慢性阑尾炎或阑尾切除史
             var dannangyan = mini.get("dannangyan").getValue(); //慢性胆道疾病史或胆囊切除史
 
-            var liangxiang=0;
-            if(eval(parseIntPlus(manxingfuxie)+parseIntPlus(manxingbianmi)+parseIntPlus(nianyexuebian)+parseIntPlus(jingshenchuangshang)+
-                parseIntPlus(lanweiyan)+parseIntPlus(dannangyan))>=2){
-                liangxiang=1;
+            var liangxiang = 0;
+            if (eval(parseIntPlus(manxingfuxie) + parseIntPlus(manxingbianmi) + parseIntPlus(nianyexuebian) + parseIntPlus(jingshenchuangshang) +
+                parseIntPlus(lanweiyan) + parseIntPlus(dannangyan)) >= 2) {
+                liangxiang = 1;
             }
 
-            if(eval(parseIntPlus(crcFamilyFlag)+parseIntPlus(azsHistoryFlag)+parseIntPlus(changxirouFlag)+liangxiang)>=1){
-                    crcRiskResult=true;
-                    $("#crcRiskResult").text("阳性");
-                    $("#assessmentResult1").val("2");
-            }else{
-                if(notDoneFlag==1){
+            if (eval(parseIntPlus(crcFamilyFlag) + parseIntPlus(azsHistoryFlag) + parseIntPlus(changxirouFlag) + liangxiang) >= 1) {
+                crcRiskResult = true;
+                $("#crcRiskResult").text("阳性");
+                $("#assessmentResult1").val("2");
+            } else {
+                if (notDoneFlag == 1) {
                     mini.showTips({
                         content: "参与计算的选项有未填",
                         state: "warning",
@@ -1746,32 +1786,33 @@
                 $("#crcRiskResult").text("阴性");
                 $("#assessmentResult1").val("1");
             }
-
+        }
 //2-2 肝癌危险的评估条件，满足下列a项以及b～f任一项者，危险度评估结果为 阳性。
             //a.35-64岁的男性居民和45-64岁的女性居民；
-            var ageGenderFlag=0;
+
+            var ageGenderFlag = 0;
             var gender = mini.get("gender").getValue();
             var birth = mini.get("birth").getValue();
-            var start=new Date(birth);
+            var start = new Date(birth);
 
             var myDate = new Date();
             var month = myDate.getMonth() + 1;
             var day = myDate.getDate();
             var age = myDate.getFullYear() - start.getFullYear() - 1;   //年龄
 
-            if (start.getMonth() < month ||start.getMonth()  == month && start.getDate() <= day) {
+            if (start.getMonth() < month || start.getMonth() == month && start.getDate() <= day) {
                 age++;
             }
-            if(gender==1){
-                if(age>=35 &&age<=64){
-                    ageGenderFlag=1;
+            if (gender == 1) {
+                if (age >= 35 && age <= 64) {
+                    ageGenderFlag = 1;
                 }
-            }else{
-                if(age>=45 &&age<=64){
-                    ageGenderFlag=1;
+            } else {
+                if (age >= 45 && age <= 64) {
+                    ageGenderFlag = 1;
                 }
             }
-
+        if(licFlag =="1") {
             var yiganFlag = mini.get("yigan").getValue();  //b.乙型肝炎
 
             var bingganFlag = mini.get("binggan").getValue();  // c.丙型肝炎
@@ -1779,19 +1820,19 @@
             var ganyinghuaFlag = mini.get("ganyinghua").getValue();  // d.肝硬化
 
             var licFamilyFlag = 2;
-            if (areaCode =='310104000000') {        //徐汇区单独判断
-                licFamilyFlag=getXhAizheng("肝癌");//f.一级亲属有肝癌病史；
-            }else{
-                licFamilyFlag= mini.get("licFamilyFlag").getValue(); //f.一级亲属有肝癌病史；
+            if (areaCode == '310104000000') {        //徐汇区单独判断
+                licFamilyFlag = getXhAizheng("肝癌");//f.一级亲属有肝癌病史；
+            } else {
+                licFamilyFlag = mini.get("licFamilyFlag").getValue(); //f.一级亲属有肝癌病史；
             }
 
-            if((eval(parseIntPlus(yiganFlag)+parseIntPlus(bingganFlag)+parseIntPlus(ganyinghuaFlag)+parseIntPlus(azsHistoryFlag)
-                +parseIntPlus(licFamilyFlag))>=1)&&(ageGenderFlag==1)){
-                    licRiskResult=true;
-                    $("#licRiskResult").text("阳性");
-                    $("#assessmentResult2").val("2");
-            }else{
-                if(notDoneFlag==1){
+            if ((eval(parseIntPlus(yiganFlag) + parseIntPlus(bingganFlag) + parseIntPlus(ganyinghuaFlag) + parseIntPlus(azsHistoryFlag)
+                + parseIntPlus(licFamilyFlag)) >= 1) && (ageGenderFlag == 1)) {
+                licRiskResult = true;
+                $("#licRiskResult").text("阳性");
+                $("#assessmentResult2").val("2");
+            } else {
+                if (notDoneFlag == 1) {
                     mini.showTips({
                         content: "参与计算的选项有未填",
                         state: "warning",
@@ -1804,10 +1845,10 @@
                 $("#licRiskResult").text("阴性");
                 $("#assessmentResult2").val("1");
             }
-
+        }
 // 2-3 胃癌危险的评估条件，满足下列a项以及b～m任一项者，危险度评估结果为 阳性。
             // a.年龄40岁以上，男女不限
-
+        if(scFlag =="1") {
             var weisuoxingweiyanFlag = mini.get("weisuoxingweiyan").getValue();  //b.慢性萎缩性胃炎或肥厚性胃炎
             var shierzhichangkuiyangFlag = mini.get("shierzhichangkuiyang").getValue();  //c.胃、十二指肠溃疡
             var weichuxueFlag = mini.get("weichuxue").getValue();  //d.胃出血
@@ -1816,42 +1857,42 @@
             var canweiFlag = mini.get("canwei").getValue();  //g.手术后残胃
             var pinxueFlag = mini.get("pinxue").getValue();  //h.恶性贫血
 
-            var jiagongrouleiFlag=0;// i.加工肉类选择“很少”或“经常”
+            var jiagongrouleiFlag = 0;// i.加工肉类选择“很少”或“经常”
             var jiagongroulei = mini.get("jiagongroulei").getValue();
-            if(jiagongroulei==2 ||jiagongroulei==3){
-                jiagongrouleiFlag=1;
+            if (jiagongroulei == 2 || jiagongroulei == 3) {
+                jiagongrouleiFlag = 1;
             }
 
-            var meibianshiwuFlag=0;//j.霉变食物选择“很少”或“经常”
+            var meibianshiwuFlag = 0;//j.霉变食物选择“很少”或“经常”
             var meibianshiwu = mini.get("meibianshiwu").getValue();
-            if(meibianshiwu==2 ||meibianshiwu==3){
-                meibianshiwuFlag=1;
+            if (meibianshiwu == 2 || meibianshiwu == 3) {
+                meibianshiwuFlag = 1;
             }
 
-            var hejiuFlag=0; //k.饮酒频率选择“每天”、“1～2天/每周”、“3～4天/每周”、“5～6天/每周”
+            var hejiuFlag = 0; //k.饮酒频率选择“每天”、“1～2天/每周”、“3～4天/每周”、“5～6天/每周”
             var hejiu = mini.get("hejiu").getValue();
-            if(hejiu==1){
+            if (hejiu == 1) {
                 var hejiupinlv = mini.get("hejiupinlv").getValue();
-                if(hejiupinlv==1 ||hejiupinlv==2 ||hejiupinlv==3||hejiupinlv==4){
-                    hejiuFlag=1;
+                if (hejiupinlv == 1 || hejiupinlv == 2 || hejiupinlv == 3 || hejiupinlv == 4) {
+                    hejiuFlag = 1;
                 }
             }
             // l.本人有癌症史；
             var scFamilyFlag = 2;
-            if (areaCode =='310104000000') {        //徐汇区单独判断
-                scFamilyFlag=getXhAizheng("胃癌"); //m.一级亲属有胃癌病史；
-            }else{
-                scFamilyFlag= mini.get("scFamilyFlag").getValue();  //m.一级亲属有胃癌病史；
+            if (areaCode == '310104000000') {        //徐汇区单独判断
+                scFamilyFlag = getXhAizheng("胃癌"); //m.一级亲属有胃癌病史；
+            } else {
+                scFamilyFlag = mini.get("scFamilyFlag").getValue();  //m.一级亲属有胃癌病史；
             }
-            if((eval(parseIntPlus(weisuoxingweiyanFlag)+parseIntPlus(shierzhichangkuiyangFlag)+parseIntPlus(weichuxueFlag)+parseIntPlus(shiguanyanFlag)
-                +parseIntPlus(weixirouFlag)+parseIntPlus(canweiFlag)+parseIntPlus(pinxueFlag)
-                +parseIntPlus(jiagongrouleiFlag)+parseIntPlus(meibianshiwuFlag)+parseIntPlus(hejiuFlag+azsHistoryFlag)
-                +parseIntPlus(scFamilyFlag))>=1)&&(age>40)){
-                    scRiskResult=true;
-                    $("#scRiskResult").text("阳性");
-                    $("#assessmentResult3").val("2");
-            }else{
-                if(notDoneFlag==1){
+            if ((eval(parseIntPlus(weisuoxingweiyanFlag) + parseIntPlus(shierzhichangkuiyangFlag) + parseIntPlus(weichuxueFlag) + parseIntPlus(shiguanyanFlag)
+                + parseIntPlus(weixirouFlag) + parseIntPlus(canweiFlag) + parseIntPlus(pinxueFlag)
+                + parseIntPlus(jiagongrouleiFlag) + parseIntPlus(meibianshiwuFlag) + parseIntPlus(hejiuFlag) + parseIntPlus(azsHistoryFlag)
+                + parseIntPlus(scFamilyFlag)) >= 1) && (age > 40)) {
+                scRiskResult = true;
+                $("#scRiskResult").text("阳性");
+                $("#assessmentResult3").val("2");
+            } else {
+                if (notDoneFlag == 1) {
                     mini.showTips({
                         content: "参与计算的选项有未填",
                         state: "warning",
@@ -1864,63 +1905,63 @@
                 $("#scRiskResult").text("阴性");
                 $("#assessmentResult3").val("1");
             }
-
-// 2-4 肺癌危险的评估条件，满足下列a项以及b～m任一项者，危险度评估结果为 阳性。
-
-            var xiyanFlag=0;    // b.目前吸烟且指数400年支以上（20支/包）
-            var jieyanFlag=0;   // c.戒烟 <= 15年
+        }
+// 2-4 肺癌危险的评估条件，满足下列a项以及b～m任一项者，危险度评估结果为 阳性
+        if(lucFlag =="1") {
+            var xiyanFlag = 0;    // b.目前吸烟且指数400年支以上（20支/包）
+            var jieyanFlag = 0;   // c.戒烟 <= 15年
             var xiyan = mini.get("xiyan").getValue();
-            if(xiyan==3){
+            if (xiyan == 3) {
                 var meitianxiyanliang = mini.get("meitianxiyanliang").getValue();
-                if(eval(meitianxiyanliang*365>=400)){
-                    xiyanFlag=1;
+                if (eval(meitianxiyanliang * 365 >= 400)) {
+                    xiyanFlag = 1;
                 }
-            }else if(xiyan==2){
+            } else if (xiyan == 2) {
                 var zuihouyicxiyan = mini.get("zuihouyicxiyan").getValue();
-                if(zuihouyicxiyan<=15){
-                    jieyanFlag=1;
+                if (zuihouyicxiyan <= 15) {
+                    jieyanFlag = 1;
                 }
             }
 
-            var changqiFlag=0;   // d.长期厨房油烟接触频 选择“每天”
-            var leijiFlag=0;     // e.累计厨房油烟接触>=10年
+            var changqiFlag = 0;   // d.长期厨房油烟接触频 选择“每天”
+            var leijiFlag = 0;     // e.累计厨房油烟接触>=10年
 
             var chufangyouyan = mini.get("chufangyouyan").getValue();
-            if(chufangyouyan==1){
+            if (chufangyouyan == 1) {
                 var youyanjiechupinlv = mini.get("youyanjiechupinlv").getValue();
-                if(youyanjiechupinlv==4){
-                    changqiFlag=1;
+                if (youyanjiechupinlv == 4) {
+                    changqiFlag = 1;
                 }
 
                 var youyanjiechunianshu = mini.get("youyanjiechunianshu").getValue();
-                if(youyanjiechunianshu>10){
-                    leijiFlag=1;
+                if (youyanjiechunianshu >= 10) {
+                    leijiFlag = 1;
                 }
             }
-            var beidongFlag=0;  //f.被动吸烟选择“>2小时/天”
-            var leijibeidongFlag=0; //g.累计被动吸烟>=10年
+            var beidongFlag = 0;  //f.被动吸烟选择“>2小时/天”
+            var leijibeidongFlag = 0; //g.累计被动吸烟>=10年
             var beidongxiyan = mini.get("beidongxiyan").getValue();
-            if(beidongxiyan!=4){
-                if(beidongxiyan==3){
-                    beidongFlag=1;
-                }else{
+            if (beidongxiyan != 4) {
+                if (beidongxiyan == 3) {
+                    beidongFlag = 1;
+                } else {
                     var beidongxiyannianshu = mini.get("beidongxiyannianshu").getValue();
-                    if(beidongxiyannianshu>=10){
-                        leijibeidongFlag=1;
+                    if (beidongxiyannianshu >= 10) {
+                        leijibeidongFlag = 1;
                     }
                 }
             }
 
-            var zhiaiwuzhiFlag=0; //h.致癌物质暴露史>=5年
+            var zhiaiwuzhiFlag = 0; //h.致癌物质暴露史>=5年
             var zhiyezhiaiwuzhi = mini.get("zhiyezhiaiwuzhi").getValue();
-            if(zhiyezhiaiwuzhi==1){
+            if (zhiyezhiaiwuzhi == 1) {
                 var zhiaiwuzhinianshu = mini.get("zhiaiwuzhinianshu").getValue();
-                if(zhiaiwuzhinianshu>=5){
-                    zhiaiwuzhiFlag=1;
+                if (zhiaiwuzhinianshu >= 5) {
+                    zhiaiwuzhiFlag = 1;
                 }
             }
 
-            var jibingFlag=0; // i.患有下列任意一疾病
+            var jibingFlag = 0; // i.患有下列任意一疾病
             var xiaochuan = mini.get("xiaochuan").getValue();
             var zhiqiguanyan = mini.get("zhiqiguanyan").getValue();
             var feiqizhong = mini.get("feiqizhong").getValue();
@@ -1929,25 +1970,25 @@
             var xianweihua = mini.get("xianweihua").getValue();
             var manzufei = mini.get("manzufei").getValue();
             var qitafeibing = mini.get("qitafeibing").getValue();
-            if(eval(parseIntPlus(xiaochuan)+parseIntPlus(zhiqiguanyan)+parseIntPlus(feiqizhong)+parseIntPlus(feijiehe)+parseIntPlus(guichenzhuo)
-                +parseIntPlus(xianweihua)+parseIntPlus(manzufei)+parseIntPlus(qitafeibing))>=1){
-                jibingFlag=1;
+            if (eval(parseIntPlus(xiaochuan) + parseIntPlus(zhiqiguanyan) + parseIntPlus(feiqizhong) + parseIntPlus(feijiehe) + parseIntPlus(guichenzhuo)
+                + parseIntPlus(xianweihua) + parseIntPlus(manzufei) + parseIntPlus(qitafeibing)) >= 1) {
+                jibingFlag = 1;
             }
             var lucFamilyFlag = 2;
-            if (areaCode =='310104000000') {        //徐汇区单独判断
-                lucFamilyFlag=getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
-            }else{
-                lucFamilyFlag= mini.get("lucFamilyFlag").getValue();  //m.一级亲属有肺癌病史；
+            if (areaCode == '310104000000') {        //徐汇区单独判断
+                lucFamilyFlag = getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
+            } else {
+                lucFamilyFlag = mini.get("lucFamilyFlag").getValue();  //m.一级亲属有肺癌病史；
             }
 
-            if((eval(parseIntPlus(xiyanFlag)+parseIntPlus(jieyanFlag)+parseIntPlus(changqiFlag)+parseIntPlus(leijiFlag)+parseIntPlus(beidongFlag)
-                +parseIntPlus(leijibeidongFlag)+parseIntPlus(zhiaiwuzhiFlag)+parseIntPlus(jibingFlag)+parseIntPlus(azsHistoryFlag)
-                +parseIntPlus(lucFamilyFlag))>=1)&&(age>45)){
-                    lucRiskResult=true;
-                    $("#lucRiskResult").text("阳性");
-                    $("#assessmentResult4").val("2");
-            }else{
-                if(notDoneFlag==1){
+            if ((eval(parseIntPlus(xiyanFlag) + parseIntPlus(jieyanFlag) + parseIntPlus(changqiFlag) + parseIntPlus(leijiFlag) + parseIntPlus(beidongFlag)
+                + parseIntPlus(leijibeidongFlag) + parseIntPlus(zhiaiwuzhiFlag) + parseIntPlus(jibingFlag) + parseIntPlus(azsHistoryFlag)
+                + parseIntPlus(lucFamilyFlag)) >= 1) && (age > 45)) {
+                lucRiskResult = true;
+                $("#lucRiskResult").text("阳性");
+                $("#assessmentResult4").val("2");
+            } else {
+                if (notDoneFlag == 1) {
                     mini.showTips({
                         content: "参与计算的选项有未填",
                         state: "warning",
@@ -1960,6 +2001,7 @@
                 $("#lucRiskResult").text("阴性");
                 $("#assessmentResult4").val("1");
             }
+        }
     }
     //辅助检查结果计算
     function makeByxResult(){
@@ -1997,63 +2039,68 @@
     }
     function makeChushaiResult(){
         makeResult();
-        var dcpinggu= $("#crcRiskResult").text();//大肠癌危险度评估结果
-        var gapinggu= $("#licRiskResult").text();//肝癌危险度评估结果
-        var wapinggu= $("#scRiskResult").text();//胃癌危险度评估结果
-        var fapinggu= $("#lucRiskResult").text();//肺癌危险度评估结果
-
-        var byxresult=mini.get("byxResult").getValue();//便隐血辅助检查结果
-        var licResult=mini.get("licResult").getValue();//肝癌辅助检查结果
-
-        //大肠癌初筛结果：问卷为阳性即为阳性；问卷为阴性，便隐血检查结果为阳性即为阳性；问卷为阴性，便隐血检查结果为阴性即为阴性
-        if(dcpinggu=="阳性"){
-            mini.get("checkResultName1").setValue("阳性");
-            mini.get("checkResult1").setValue("阳性");
-        }else{
-            if(byxresult=="阳性"){
+        if(crcFlag=="1"){
+            var dcpinggu= $("#crcRiskResult").text();//大肠癌危险度评估结果
+            var byxresult=mini.get("byxResult").getValue();//便隐血辅助检查结果\
+            //大肠癌初筛结果：问卷为阳性即为阳性；问卷为阴性，便隐血检查结果为阳性即为阳性；问卷为阴性，便隐血检查结果为阴性即为阴性
+            if(dcpinggu=="阳性"){
                 mini.get("checkResultName1").setValue("阳性");
                 mini.get("checkResult1").setValue("阳性");
-            }else if(byxresult=="阴性"){
-                mini.get("checkResultName1").setValue("阴性");
-                mini.get("checkResult1").setValue("阴性");
             }else{
-                mini.get("checkResultName1").setValue("");
-                mini.get("checkResult1").setValue("");
+                if(byxresult=="阳性"){
+                    mini.get("checkResultName1").setValue("阳性");
+                    mini.get("checkResult1").setValue("阳性");
+                }else if(byxresult=="阴性"){
+                    mini.get("checkResultName1").setValue("阴性");
+                    mini.get("checkResult1").setValue("阴性");
+                }else{
+                    mini.get("checkResultName1").setValue("");
+                    mini.get("checkResult1").setValue("");
+                }
             }
         }
-
-        //肝癌初筛结果：问卷为阳性即为阳性；问卷为阴性，辅助检查结果为阳性即为阳性；问卷为阴性，辅助检查结果为阴性即为阴性。
-        if(gapinggu=="阳性"){
-            mini.get("checkResultName2").setValue("阳性");
-            mini.get("checkResult2").setValue("阳性");
-        }else{
-            if(licResult=="阳性"){
+        if(licFlag =="1"){
+            var gapinggu= $("#licRiskResult").text();//肝癌危险度评估结果
+            var licResult=mini.get("licResult").getValue();//肝癌辅助检查结果
+            //肝癌初筛结果：问卷为阳性即为阳性；问卷为阴性，辅助检查结果为阳性即为阳性；问卷为阴性，辅助检查结果为阴性即为阴性。
+            if(gapinggu=="阳性"){
                 mini.get("checkResultName2").setValue("阳性");
                 mini.get("checkResult2").setValue("阳性");
-            }else if(licResult=="阴性"){
-                mini.get("checkResultName2").setValue("阴性");
-                mini.get("checkResult2").setValue("阴性");
             }else{
-                mini.get("checkResultName2").setValue("");
-                mini.get("checkResult2").setValue("");
+                if(licResult=="阳性"){
+                    mini.get("checkResultName2").setValue("阳性");
+                    mini.get("checkResult2").setValue("阳性");
+                }else if(licResult=="阴性"){
+                    mini.get("checkResultName2").setValue("阴性");
+                    mini.get("checkResult2").setValue("阴性");
+                }else{
+                    mini.get("checkResultName2").setValue("");
+                    mini.get("checkResult2").setValue("");
+                }
+            }
+        }
+        if(scFlag =="1"){
+            var wapinggu= $("#scRiskResult").text();//胃癌危险度评估结果
+
+            if(wapinggu=="阳性"){
+                mini.get("checkResultName3").setValue("阳性");
+                mini.get("checkResult3").setValue("阳性");
+            }else if(wapinggu=="阴性"){
+                mini.get("checkResultName3").setValue("阴性");
+                mini.get("checkResult3").setValue("阴性");
+            }
+        }
+        if(lucFlag =="1"){
+            var fapinggu= $("#lucRiskResult").text();//肺癌危险度评估结果
+            if(fapinggu=="阳性"){
+                mini.get("checkResultName4").setValue("阳性");
+                mini.get("checkResult4").setValue("阳性");
+            }else if(fapinggu=="阴性"){
+                mini.get("checkResultName4").setValue("阴性");
+                mini.get("checkResult4").setValue("阴性");
             }
         }
 
-        if(wapinggu=="阳性"){
-            mini.get("checkResultName3").setValue("阳性");
-            mini.get("checkResult3").setValue("阳性");
-        }else if(wapinggu=="阴性"){
-            mini.get("checkResultName3").setValue("阴性");
-            mini.get("checkResult3").setValue("阴性");
-        }
-
-        if(fapinggu=="阳性"){
-            mini.get("checkResultName4").setValue("阳性");
-            mini.get("checkResult4").setValue("阳性");
-        }else if(fapinggu=="阴性"){
-            mini.get("checkResultName4").setValue("阴性");
-            mini.get("checkResult4").setValue("阴性");
-        }
 
     }
 
