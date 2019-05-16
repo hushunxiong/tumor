@@ -1519,7 +1519,9 @@
 
         var params={};
         if(flag==1){
-            crcNumerChange();//单独再验证一次大肠癌id
+            if(crcFlag=="1"){
+                crcNumerChange();//单独再验证一次大肠癌id
+            }
         }
         var form = new mini.Form("#form1");
         form.validate();
