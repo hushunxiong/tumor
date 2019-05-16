@@ -228,7 +228,11 @@ public class ScreeningController extends BaseController {
     @ResponseBody
     public AjaxReturn checkHadDone(String year, String type, String personcard){
         String[] cancers={crcFlag,licFlag,scFlag,lucFlag};
-        String hadDone=screeningService.checkHadDone(year,type,personcard,cancers);    //true-做过  false-没做过
+        Boolean xhFlag=false;
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+            xhFlag=true;
+        }
+        String hadDone=screeningService.checkHadDone(year,type,personcard,cancers,xhFlag);    //true-做过  false-没做过
 
         if(hadDone=="done"||"done".equals(hadDone)){
             return new AjaxReturn(false,"此人本年度已经进行过筛查");

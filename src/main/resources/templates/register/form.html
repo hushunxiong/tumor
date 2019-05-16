@@ -1292,6 +1292,8 @@
                     mini.get("checkYear").setValue(checkyear);
 
                     var obj = res.value.personInfo;
+                    mini.get("id").setValue(obj.id);
+
                     mini.get("personcardType").setValue(obj.personcardType);
 
                     mini.get("hjdprovince").setValue(obj.paddressProvince);
@@ -1367,8 +1369,6 @@
         }
 
         var jgCode=[[${jgCode}]];
-        alert(jgCode)
-
 
 
         $.ajax({
@@ -1709,14 +1709,14 @@
                 }
             })
 
-            if(crcFlag=="1"){
-                crcNumerChange();//单独再验证一次大肠癌id
-            }
+
         }
         if(idFlag){
             return;
         }else{
-
+            if(crcFlag=="1"){
+                crcNumerChange();//单独再验证一次大肠癌id
+            }
             var form = new mini.Form("#form1");
             form.validate();
             if (form.isValid() == false){
@@ -2201,7 +2201,7 @@
     }
 
     function closeWindow(){
-       window.location.href='../../cancerPersonInfo/list';
+        window.location.href='/tumor/cancerPersonInfo/list';
     }
 </script>
 </html>

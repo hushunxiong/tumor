@@ -88,7 +88,7 @@ public class ScreeningService {
     }
 
     //根据检查年、证件类型、证件号码检查有没有本年度做过登记
-    public String checkHadDone(String year, String type, String personcard,String[]cancers){
+    public String checkHadDone(String year, String type, String personcard,String[]cancers,Boolean xuFlag){
         Boolean hadDone=false;
         String msg="notdone";
 
@@ -99,37 +99,47 @@ public class ScreeningService {
             return msg;
         }else{
             CancerPersonInfo person=personOp.get();
-            //cancers={crcFlag,licFlag,scFlag,lucFlag};
-            if(cancers[0].equals("1")){
-                if(crcRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+            if(xuFlag){
+                if(lucRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
                     hadDone=true;
                     msg="done";
                 }
-            }
-            if(!hadDone){   //crc没做过
-                if(cancers[1].equals("1")){//lic是否做过
-                    if(licRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+            }else{
+
+                //cancers={crcFlag,licFlag,scFlag,lucFlag};
+                if(cancers[0].equals("1")){
+                    if(crcRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
                         hadDone=true;
                         msg="done";
                     }
                 }
-                if(!hadDone){//lic没做过
-                    if(cancers[2].equals("1")){
-                        if(scRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+                if(!hadDone){   //crc没做过
+                    if(cancers[1].equals("1")){//lic是否做过
+                        if(licRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
                             hadDone=true;
                             msg="done";
                         }
-                        if(hadDone){
-                            if(cancers[3].equals("1")){
-                                if(lucRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
-                                    hadDone=true;
-                                    msg="done";
+                    }
+                    if(!hadDone){//lic没做过
+                        if(cancers[2].equals("1")){
+                            if(scRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+                                hadDone=true;
+                                msg="done";
+                            }
+                            if(hadDone){
+                                if(cancers[3].equals("1")){
+                                    if(lucRegcaseDao.getByManageidAndYear(person.getId(),year)!=null){
+                                        hadDone=true;
+                                        msg="done";
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
+
         }
 
         return msg;
