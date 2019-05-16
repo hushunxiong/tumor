@@ -217,6 +217,8 @@ public class ScreeningController extends BaseController {
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("areaCode", areaCode);
 
+        model.addAttribute("jgCode", user.getOrgCode());
+
         model.addAttribute("nowDate",DateUtils.formatDate(new Date(),"yyyy-mm-dd"));
         return "/register/form";
     }
@@ -353,71 +355,67 @@ public class ScreeningController extends BaseController {
                     }
                 });
             }
-
         }
 
-
+        cancerHistoryService.deleteAllByPersonId(cancerHistoryDao,personInfo.getId()); //全删本人癌症史数据
         if(historyList!=null){
+            screeningVo.getLucRisk().setAizhengshi("1");
+            screeningVo.getCrcRisk().setAizhengshi("1");
+            screeningVo.getLicRisk().setAizhengshi("1");
+            screeningVo.getScRisk().setAizhengshi("1");
+
             historyList.stream().forEach(history->{
-                if(StringUtils.isNotBlank(history.getId())){ //修改历史癌症表
-                    history.setUpdateBy(user.getId());
-                    if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
-                        if(isOpen(crcFlag)){
-                            history.setIschange("1");
-                        }
-                    }
-                    cancerHistoryService.update(cancerHistoryDao,history);
-                }else{                                        //插入历史癌症表
+                if(history!=null){                                        //插入历史癌症表
                     history.setId(IdGen.uuid());
                     history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+                        if(isOpen(crcFlag)){
+                            if(personInfo.getId()!=null){
+                                history.setIschange("2");
+                            }else{
+                                history.setIschange("1");
+                            }
+                        }
+                    }
                     history.setManageid(personInfo.getId());
                     history.setCreateBy(user.getId());
-                    history.setIschange("2");
+                    history.setUpdateBy(user.getId());
                     cancerHistoryService.insert(cancerHistoryDao,history);
                 }
             });
-        }else{      //全删本人癌症史数据
-            cancerHistoryService.deleteAllByPersonId(cancerHistoryDao,personInfo.getId());
         }
 
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){//插入亲属历史表-徐汇
+            lucFamilyCancerHistoryXHService.deleteAllByPersonId(lucFamilyCancerHistoryXHDao,personInfo.getId());
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
                 lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                    if(StringUtils.isNotBlank(luc.getId())){    //修改亲属历史表-徐汇
-                        luc.setUpdateBy(user.getId());
-                        lucFamilyCancerHistoryXHService.update(lucFamilyCancerHistoryXHDao,luc);
-                    }else{                                      //插入亲属历史表-徐汇
+                    if(luc!=null){
                         luc.setId(IdGen.uuid());
                         luc.setCheckId(personInfo.getId());
                         luc.setCreateBy(user.getId());
+                        if(personInfo.getId()!=null){
+                            luc.setUpdateBy(user.getId());
+                        }
                         if(StringUtils.isNotBlank(luc.getIcd10())){
                             luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
                         }
                         lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
                     }
                 });
-            }else{
-                lucFamilyCancerHistoryXHService.deleteAllByPersonId(lucFamilyCancerHistoryXHDao,personInfo.getId());
             }
-        }else{
+        }else{                                                              //插入亲属历史表-非徐汇
+            familyCancerHistoryService.deleteAllByPersonId(familyCancerHistoryDao,personInfo.getId());
             if(familyCancerHistoryList!=null){
                 familyCancerHistoryList.stream().forEach(family->{
-                    if(StringUtils.isNotBlank(family.getId())){ //修改亲属历史表
-                        family.setUpdateBy(user.getId());
-                        if(isOpen(crcFlag)){
-                            family.setIschange("1");
-                        }
-                        familyCancerHistoryService.update(familyCancerHistoryDao,family);
-                    }else{                                      //插入亲属历史表
+                    if(family!=null){ //插入亲属历史表
                         family.setId(IdGen.uuid());
                         family.setCheckId(personInfo.getId());
                         family.setCreateBy(user.getId());
                         family.setIschange("2");
+                        family.setUpdateBy(user.getId());
                         familyCancerHistoryService.insert(familyCancerHistoryDao,family);
                     }
                 });
-            }else{
-                familyCancerHistoryService.deleteAllByPersonId(familyCancerHistoryDao,personInfo.getId());
             }
         }
 
@@ -431,7 +429,11 @@ public class ScreeningController extends BaseController {
                     crcRegcase.setCheckResult("2");
                 }
                 if(StringUtils.isNotBlank(crcRegcase.getId())){
-                    crcRegcase.setIschange("1");
+                    if(personInfo.getId()!=null){
+                        crcRegcase.setIschange("2");
+                    }else{
+                        crcRegcase.setIschange("1");
+                    }
                     crcRegcaseService.update(crcRegcaseDao,crcRegcase);
                 }else{
                     crcRegcase.setId(IdGen.uuid());

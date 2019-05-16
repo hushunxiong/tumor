@@ -727,22 +727,22 @@
         </div>
 
         <div th:if="${crcFlag} eq '1' and ${areaCode} ne '310104000000'">
-            <div th:replace="/common/familyCancer :: familySelect('crcFamilyTable', 'crcFamilyBody', 'crcFamilyFlag', '大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史')">
+            <div th:replace="/common/familyCancer :: familySelect('crcFamilyTable', 'crcFamilyBody', 'crcFamilyFlag','大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史')">
             </div>
         </div>
 
         <div th:if="${licFlag} eq '1' and ${areaCode} ne '310104000000'">
-            <div th:replace="/common/familyCancer :: familySelect('licFamilyTable', 'licFamilyBody', 'licFamilyFlag', '肝癌：一级亲属（父母、兄弟姐妹、子女）有无肝癌史')">
+            <div th:replace="/common/familyCancer :: familySelect('licFamilyTable', 'licFamilyBody', 'licFamilyFlag','肝癌：一级亲属（父母、兄弟姐妹、子女）有无肝癌史')">
             </div>
         </div>
 
         <div th:if="${scFlag} eq '1' and ${areaCode} ne '310104000000'">
-            <div th:replace="/common/familyCancer :: familySelect('scFamilyTable', 'scFamilyBody', 'scFamilyFlag', '胃癌：一级亲属（父母、兄弟姐妹、子女）有无胃癌史')">
+            <div th:replace="/common/familyCancer :: familySelect('scFamilyTable', 'scFamilyBody', 'scFamilyFlag','胃癌：一级亲属（父母、兄弟姐妹、子女）有无胃癌史')">
             </div>
         </div>
 
         <div th:if="${lucFlag} eq '1' and ${areaCode} ne '310104000000'">
-            <div th:replace="/common/familyCancer :: familySelect('lucFamilyTable', 'lucFamilyBody', 'lucFamilyFlag', '肺癌：一级亲属（父母、兄弟姐妹、子女）有无肺癌史')">
+            <div th:replace="/common/familyCancer :: familySelect('lucFamilyTable', 'lucFamilyBody', 'lucFamilyFlag','肺癌：一级亲属（父母、兄弟姐妹、子女）有无肺癌史')">
             </div>
         </div>
 
@@ -946,10 +946,16 @@
         </table>
         </div>
 
+        <input id="riskAssessment1" name="crcRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+        <input id="riskAssessment2" name="licRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+        <input id="riskAssessment3" name="scRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+        <input id="riskAssessment4" name="lucRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+
         <div class="title_tip mt-30">初筛结果判定<button class="my-btn my-btn-blue mr-20" onclick="makeChushaiResult()">计算初筛结果</button></div>
         <table class="table_new table_new5 mt-10">
             <tbody>
                 <tr th:if="${crcFlag} eq '1'">
+                    <input id="riskAssessmentQ1" name="crcRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${crcRisk.qinshuAizhengshi}"/>
                     <td style="width:20%!important;">大肠癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input id="crRegcasemid" name="crcRegcase.manageid" class="mini-hidden" th:value="${crcRegcase.manageid}"/>
@@ -958,6 +964,7 @@
                     </td>
                 </tr>
                 <tr th:if="${licFlag} eq '1'">
+                    <input id="riskAssessmentQ2" name="licRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${licRisk.qinshuAizhengshi}"/>
                     <td width="10%">肝癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input name="licRegcase.manageid" class="mini-hidden" th:value="${licRegcase.manageid}"/>
@@ -966,6 +973,7 @@
                     </td>
                 </tr>
                 <tr th:if="${scFlag} eq '1'">
+                    <input id="riskAssessmentQ3" name="scRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${scRisk.qinshuAizhengshi}"/>
                     <td width="10%">胃癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input name="scRegcase.manageid" class="mini-hidden" th:value="${scRegcase.manageid}"/>
@@ -974,6 +982,7 @@
                     </td>
                 </tr>
                 <tr th:if="${lucFlag} eq '1'">
+                    <input id="riskAssessmentQ4" name="lucRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${lucRisk.qinshuAizhengshi}"/>
                     <td width="10%">肺癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input id="luRegcaseid" name="lucRegcase.manageid" class="mini-hidden" th:value="${lucRegcase.manageid}"/>
@@ -1008,6 +1017,9 @@
         <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
         <button class="my-btn my-btn-blue mr-20">打印转诊单</button>
     </div>
+
+
+
 </div>
 </body>
 <script type="text/javascript" th:inline="javascript">
@@ -1129,33 +1141,40 @@
                     mini.get("xhHistory").setValue("2")
                 }
             }else{
-                var famList=[[${familyCancerHistoryList}]];
                 if(crcFlag=="1"){
                     mini.get("crcFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ1").setValue("2");
                 }
                 if(licFlag =="1"){
                     mini.get("licFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ2").setValue("2");
                 }
                 if(scFlag =="1"){
                     mini.get("scFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ3").setValue("2");
                 }
                 if(lucFlag =="1"){
                     mini.get("lucFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ4").setValue("2");
                 }
-
+                var famList=[[${familyCancerHistoryList}]];
                 if(famList!=null){
                     $.each(famList,function(n,fam){
                         if(fam.cancerType=="1"){
                             mini.get("crcFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ1").setValue("1");
                             addFamilyRow(fam,"crcFamilyBody");
                         }else if(fam.cancerType=="2"){
                             mini.get("licFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ2").setValue("1");
                             addFamilyRow(fam,"licFamilyBody");
                         }else if(fam.cancerType=="3"){
                             mini.get("scFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ3").setValue("1");
                             addFamilyRow(fam,"scFamilyBody");
                         }else if(fam.cancerType=="4"){
                             mini.get("lucFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ4").setValue("1");
                             addFamilyRow(fam,"lucFamilyBody");
                         }
 
@@ -1338,6 +1357,20 @@
     function crcNumerChange(){
         var id=mini.get("id").getValue();
         var crcNum=mini.get("idNumber").getValue();
+
+        var yearCheck=crcNum.substring(0,2);    //前两位校验年份
+        var jgCheck=crcNum.substring(2,5);      //3-7位校验机构代码
+
+        var year=mini.get("checkYear").getValue().substring(2,2);
+        if(yearCheck!=year){
+            mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID前两位应为年份编码"});
+        }
+
+        var jgCode=[[${jgCode}]];
+        alert(jgCode)
+
+
+
         $.ajax({
             url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
             type:'get',
@@ -1490,6 +1523,10 @@
         var azsHistory = mini.get("azsHistory").getValue();
         //有
         if (azsHistory == "1") {
+            mini.get("riskAssessment1").setValue("1");
+            mini.get("riskAssessment2").setValue("1");
+            mini.get("riskAssessment3").setValue("1");
+            mini.get("riskAssessment4").setValue("1");
             addSelfRow(null);
         } else {
             $("#azsTable").children(":first").children(":gt(0)").remove();
@@ -1514,99 +1551,6 @@
         return false;
     }
 
-    //保存
-    function save(){
-        var id=mini.get("id").getValue();  //个人管理编号
-
-        var params={};
-        if(flag==1){
-            if(crcFlag=="1"){
-                crcNumerChange();//单独再验证一次大肠癌id
-            }
-        }
-        var form = new mini.Form("#form1");
-        form.validate();
-        if (form.isValid() == false){
-            miniErrorLocation();
-            mini.showTips({
-                content: "页面有项目未正确填写",
-                state: "error",
-                x: "center",
-                y: "center",
-                timeout: 3000
-            });
-            return;
-        }else{
-            makeResult();
-            makeChushaiResult();
-            params=form.getData(true, false);
-            params.id=id;
-
-            var icds=[];
-            icds[0]=params["historyList[0].icd10"];
-            icds[1]=params["historyList[1].icd10"];
-            icds[2]=params["historyList[2].icd10"];
-            icds[3]=params["historyList[3].icd10"];
-            icds[4]=params["historyList[4].icd10"];
-
-            for(var i = 0; i < icds.length; i++) {
-                if(icds[i] == undefined) {
-                    icds.splice(i,1);
-                    i = i - 1; // i - 1 ,因为空元素在数组下标 2 位置，删除空之后，后面的元素要向前补位，
-                    // 这样才能真正去掉空元素,觉得这句可以删掉的连续为空试试，然后思考其中逻辑
-                }
-            }
-
-            if(icds.length>0){
-                if((new Set(icds)).size != icds.length){
-                    mini.alert("癌症史不能有两条相同癌症名称!")
-                    return;
-                }
-            }
-            mini.mask({
-                el: document.body,
-                cls: 'mini-mask-loading',
-                html: '保存中...'
-            });
-            $.ajax({
-                url:"/tumor/screening/save",
-                data:params,
-                type:"POST",
-                dataType: "json",
-                success:function(res){
-                    mini.unmask(document.body);
-                    if(res.ok){ //保存成功
-                        mini.showTips({
-                            content: res.msg,
-                            state: "success",
-                            x: "center",
-                            y: "center",
-                            timeout: 2000
-                        });
-                        var zjhm = mini.get("personcard").getValue();
-                        var zjlx = mini.get("personcardType").getValue();
-                        var checkYear = mini.get("checkYear").getValue();
-                        mini.get("id").setValue(res.value)
-                        setTimeout(function(){
-                            window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
-                        },2000)
-
-                    }else{
-                        mini.showTips({
-                            content: res.msg,
-                            state: "success",
-                            x: "center",
-                            y: "center",
-                            timeout: 2000
-                        });
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    mini.unmask(document.body);
-                }
-            })
-        }
-    }
 
     //显示亲属癌症行
     function showFamily(id, bodyId) {
@@ -1617,6 +1561,33 @@
         } else {
             $('#' + bodyId).children(":gt(0)").remove();
         }
+
+        if(id=="crcFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ1").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ1").setValue("2");
+            }
+        }else if(id=="licFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ2").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ2").setValue("2");
+            }
+        }else if(id=="scFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ3").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ3").setValue("2");
+            }
+        }else if(id=="lucFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ4").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ4").setValue("2");
+            }
+        }
+
     }
 
     //增加一级亲属癌症行
@@ -1682,28 +1653,152 @@
         if ($('#' + bodyId).children().length == 2) {
             return;
         }
-        var id=mini.get("relationid"+index).getValue();//后台删除记录
-        if(id!=null && id!=''){
-            var personid=mini.get("id").getValue();
+        // var id=mini.get("relationid"+index).getValue();//后台删除记录
+        // if(id!=null && id!=''){
+        //     var personid=mini.get("id").getValue();
+        //     $.ajax({
+        //         url: "/tumor/screening/deleteFamHistory?id="+id+"&&checkId="+personid,
+        //         type:'get',
+        //         dataType:'text',
+        //         success:function(res) {
+        //             if (res=="2") { //删除失败
+        //                 mini.showTips({
+        //                     content: '删除癌症史失败',
+        //                     state: "warning",
+        //                     x: "center",
+        //                     y: "center",
+        //                     timeout: 2000
+        //                 });
+        //                 return;
+        //             }
+        //         }
+        //     })
+        // }
+        $("#familyRow" + index).remove();
+    }
+
+    //保存
+    function save(){
+        var id=mini.get("id").getValue();  //个人管理编号
+
+        var idFlag=false;
+
+        var params={};
+        if(flag==1){
+            //新增时校验是否已做过
+            var checkyear=mini.get("checkYear").getValue();
+            var zjhm=mini.get("personcard").getValue();
+            var zjlx=mini.get("personcardType").getValue();
+
             $.ajax({
-                url: "/tumor/screening/deleteFamHistory?id="+id+"&&checkId="+personid,
+                url: "/tumor/screening/checkHadDone?year="+checkyear+"&&type="+zjlx+"&&personcard="+zjhm,
                 type:'get',
-                dataType:'text',
-                success:function(res) {
-                    if (res=="2") { //删除失败
+                dataType:'json',
+                success:function(res){
+                    mini.unmask(document.body);
+                    if(!res.ok){ //检查过
                         mini.showTips({
-                            content: '删除癌症史失败',
+                            content: res.msg,
                             state: "warning",
                             x: "center",
                             y: "center",
                             timeout: 2000
                         });
-                        return;
+                        idFlag=true;
                     }
                 }
             })
+
+            if(crcFlag=="1"){
+                crcNumerChange();//单独再验证一次大肠癌id
+            }
         }
-        $("#familyRow" + index).remove();
+        if(idFlag){
+            return;
+        }else{
+
+            var form = new mini.Form("#form1");
+            form.validate();
+            if (form.isValid() == false){
+                miniErrorLocation();
+                mini.showTips({
+                    content: "页面有项目未正确填写",
+                    state: "error",
+                    x: "center",
+                    y: "center",
+                    timeout: 3000
+                });
+                return;
+            }else{
+                makeResult();
+                makeChushaiResult();
+                params=form.getData(true, false);
+                params.id=id;
+                var icds=[];
+                icds[0]=params["historyList[0].icd10"];
+                icds[1]=params["historyList[1].icd10"];
+                icds[2]=params["historyList[2].icd10"];
+                icds[3]=params["historyList[3].icd10"];
+                icds[4]=params["historyList[4].icd10"];
+
+                for(var i = 0; i < icds.length; i++) {
+                    if(icds[i] == undefined) {
+                        icds.splice(i,1);
+                        i = i - 1; // i - 1 ,因为空元素在数组下标 2 位置，删除空之后，后面的元素要向前补位，
+                        // 这样才能真正去掉空元素,觉得这句可以删掉的连续为空试试，然后思考其中逻辑
+                    }
+                }
+
+                if(icds.length>0){
+                    if((new Set(icds)).size != icds.length){
+                        mini.alert("癌症史不能有两条相同癌症名称!")
+                        return;
+                    }
+                }
+                mini.mask({
+                    el: document.body,
+                    cls: 'mini-mask-loading',
+                    html: '保存中...'
+                });
+                $.ajax({
+                    url:"/tumor/screening/save",
+                    data:params,
+                    type:"POST",
+                    dataType: "json",
+                    success:function(res){
+                        mini.unmask(document.body);
+                        if(res.ok){ //保存成功
+                            mini.showTips({
+                                content: res.msg,
+                                state: "success",
+                                x: "center",
+                                y: "center",
+                                timeout: 2000
+                            });
+                            var zjhm = mini.get("personcard").getValue();
+                            var zjlx = mini.get("personcardType").getValue();
+                            var checkYear = mini.get("checkYear").getValue();
+                            mini.get("id").setValue(res.value)
+                            setTimeout(function(){
+                                window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
+                            },2000)
+
+                        }else{
+                            mini.showTips({
+                                content: res.msg,
+                                state: "success",
+                                x: "center",
+                                y: "center",
+                                timeout: 2000
+                            });
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        mini.unmask(document.body);
+                    }
+                })
+            }
+        }
     }
 
 
@@ -2103,12 +2198,10 @@
                 mini.get("checkResult4").setValue("阴性");
             }
         }
-
-
     }
 
     function closeWindow(){
-        window.history.go(-1);
+       window.location.href='../../cancerPersonInfo/list';
     }
 </script>
 </html>

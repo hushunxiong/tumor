@@ -43,29 +43,29 @@
                 return;
             }
 
-            var id=mini.get("historyId"+index).getValue();//后台删除记录
-
-            if(id!=null && id!=''){
-                var personid=mini.get("id").getValue();
-                var checkYear=mini.get("checkYear").getValue();
-                $.ajax({
-                    url: "/tumor/screening/deleteSelfHistory?id="+id+"&&checkId="+personid+"&&checkYear="+checkYear,
-                    type:'get',
-                    dataType:'text',
-                    success:function(res) {
-                        if (res=="2") { //删除失败
-                            mini.showTips({
-                                content: '删除癌症史失败',
-                                state: "warning",
-                                x: "center",
-                                y: "center",
-                                timeout: 2000
-                            });
-                            return;
-                        }
-                    }
-                })
-            }
+            // var id=mini.get("historyId"+index).getValue();//后台删除记录
+            //
+            // if(id!=null && id!=''){
+            //     var personid=mini.get("id").getValue();
+            //     var checkYear=mini.get("checkYear").getValue();
+            //     $.ajax({
+            //         url: "/tumor/screening/deleteSelfHistory?id="+id+"&&checkId="+personid+"&&checkYear="+checkYear,
+            //         type:'get',
+            //         dataType:'text',
+            //         success:function(res) {
+            //             if (res=="2") { //删除失败
+            //                 mini.showTips({
+            //                     content: '删除癌症史失败',
+            //                     state: "warning",
+            //                     x: "center",
+            //                     y: "center",
+            //                     timeout: 2000
+            //                 });
+            //                 return;
+            //             }
+            //         }
+            //     })
+            // }
 
             $("#selfRow" + index).remove();
         }

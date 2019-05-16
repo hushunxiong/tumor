@@ -32,7 +32,7 @@ public class PinYinUtil {
 				try {
 					String[] temp = PinyinHelper.toHanyuPinyinStringArray(
 							arr[i], defaultFormat);
-					if (temp != null) {
+					if (temp != null && temp.length>0) {
 						pybf.append(temp[0].charAt(0));
 					}
 				} catch (BadHanyuPinyinOutputFormatCombination e) {

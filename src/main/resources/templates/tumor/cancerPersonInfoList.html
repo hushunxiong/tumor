@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:fragment="head(title,links,scripts)">
     <meta charset="UTF-8">
     <!--<title th:replace="${title}">肿瘤早发现</title>-->
@@ -160,17 +161,15 @@
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                     </div>
-                    <div class="mini-row">
+                    <div class="mini-row" >
                         <div class="mini-col-4">
-                            <button class="my-btn my-btn-blue" onclick="goto('','')">新增初筛登记</button>
+                            <button  class="my-btn my-btn-blue" onclick="goto('','')">新增初筛登记</button>
                         </div>
                     </div>
 
                 </div>
 
             </div>
-
-
             <div id="datagrid" url="../cancerPersonInfo/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
@@ -256,10 +255,9 @@
             h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
             h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
             if(r.delRecordsFlag>1){
-                h += '<a onclick="deleteRecords(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+                h += '<a  onclick="deleteRecords(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
             }else{
-
-                h += '<a onclick="deleteRecord(\'' +r.id + '\',\''+ r.csnf + '\',\''+ r.crcCheckId +'\',\''+ r.lurCheckId +'\',\''+ r.licCheckId +'\',\''+ r.scCheckId +'\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+                h += '<a  onclick="deleteRecord(\'' +r.id + '\',\''+ r.csnf + '\',\''+ r.crcCheckId +'\',\''+ r.lucCheckId +'\',\''+ r.licCheckId +'\',\''+ r.scCheckId +'\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
             }
         }
         return h;
@@ -342,12 +340,12 @@
     }
 
 
-    function deleteRecord(id,csnf,crcCheckId,lurCheckId,licCheckId,scCheckId) {
+    function deleteRecord(id,csnf,crcCheckId,lucCheckId,licCheckId,scCheckId) {
         var data={};
         data.id=id;
         data.csnf=csnf;
         data.crcCheckId=crcCheckId;
-        data.lurCheckId=lurCheckId;
+        data.lucCheckId=lucCheckId;
         data.licCheckId=licCheckId;
         data.scCheckId=scCheckId;
         data.historyDelflag=0;
