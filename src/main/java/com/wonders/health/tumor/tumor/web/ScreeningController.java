@@ -332,8 +332,13 @@ public class ScreeningController extends BaseController {
         if(historyList!=null&& historyList.size()>0){
             historyList.stream().forEach(history->{
                 history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                history.setCancerName(getCancerName(history.getIcd10(),"60020"));
-                history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
+                if(StringUtils.isNotBlank(history.getIcd10())){
+                    history.setCancerName(getCancerName(history.getIcd10(),"60020"));
+                }
+                if(StringUtils.isNotBlank(history.getHospitalCode())){
+                    history.setHospitalName(AuthUtils.getHospitalByCode(history.getHospitalCode()).getName());
+                }
+
             });
         }
 
@@ -343,7 +348,9 @@ public class ScreeningController extends BaseController {
         if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
                 lucFamilyCancerHistoryXHList.stream().forEach(family->{
-                    family.setCancerName(getCancerName(family.getIcd10(),"60020"));
+                    if(StringUtils.isNotBlank(family.getIcd10())){
+                        family.setCancerName(getCancerName(family.getIcd10(),"60020"));
+                    }
                 });
             }
 
@@ -383,7 +390,9 @@ public class ScreeningController extends BaseController {
                         luc.setId(IdGen.uuid());
                         luc.setCheckId(personInfo.getId());
                         luc.setCreateBy(user.getId());
-                        luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
+                        if(StringUtils.isNotBlank(luc.getIcd10())){
+                            luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
+                        }
                         lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
                     }
                 });
