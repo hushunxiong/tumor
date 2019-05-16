@@ -353,6 +353,7 @@ public class ScreeningController extends BaseController {
 
         if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
+                screeningVo.getLucRisk().setQinshuAizhengshi("1");
                 lucFamilyCancerHistoryXHList.stream().forEach(family->{
                     if(family!=null && family.getLived()!=null){
                         if(StringUtils.isNotBlank(family.getIcd10())){
@@ -360,6 +361,8 @@ public class ScreeningController extends BaseController {
                         }
                     }
                 });
+            }else{
+                screeningVo.getLucRisk().setQinshuAizhengshi("2");
             }
         }
 

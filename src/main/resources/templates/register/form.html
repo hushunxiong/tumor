@@ -2074,9 +2074,18 @@
             }
             var lucFamilyFlag = 2;
             if (areaCode == '310104000000') {        //徐汇区单独判断
-                lucFamilyFlag = getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
+                lucFamilyFlag = mini.get("xhHistory").getValue();
+                    // getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
             } else {
-                lucFamilyFlag = mini.get("lucFamilyFlag").getValue();  //m.一级亲属有肺癌病史；
+                //m.一级亲属有肺癌病史；
+                lucFamilyFlag = 2;
+                var iscrc=mini.get("crcFamilyFlag").getValue();
+                var islic=mini.get("licFamilyFlag").getValue();
+                var issc=mini.get("scFamilyFlag").getValue();
+                var isluc=mini.get("lucFamilyFlag").getValue();
+                if(eval(parseIntPlus(iscrc)+parseIntPlus(islic)+parseIntPlus(issc)+parseIntPlus(isluc))>=1){
+                    lucFamilyFlag=1;
+                }
             }
 
             if ((eval(parseIntPlus(xiyanFlag) + parseIntPlus(jieyanFlag) + parseIntPlus(changqiFlag) + parseIntPlus(leijiFlag) + parseIntPlus(beidongFlag)
