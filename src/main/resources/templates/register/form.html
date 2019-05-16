@@ -756,7 +756,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr th:if="${crcFlag} eq '1'">
-                <td width="10%">大肠癌危险度评估结果</td>
+                <td style="width:20%!important;">大肠癌危险度评估结果</td>
                 <td class="text-l">
                     <input id="crcRiskResult" class="mini-textbox" th:value="${crcRisk.assessmentResult}" allowInput="false"/>
                     <input id="assessmentResult1" name="crcRisk.assessmentResult" th:value="${crcRisk.assessmentResult}" class="mini-hidden" />
@@ -835,7 +835,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr>
-                <td>大肠癌初筛辅助检查结果</td>
+                <td style="width:20%!important;">大肠癌初筛辅助检查结果</td>
             </tr>
             <tr>
                 <td width="10%">第一次便隐血检查结果</td>
@@ -898,7 +898,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr>
-                <td>肝癌初筛辅助检查结果</td>
+                <td style="width:20%!important;">肝癌初筛辅助检查结果</td>
             </tr>
             <tr>
                 <td width="10%">GTP</td>
@@ -949,7 +949,7 @@
         <table class="table_new table_new5 mt-10">
             <tbody>
                 <tr th:if="${crcFlag} eq '1'">
-                    <td width="10%">大肠癌初筛结果判定</td>
+                    <td style="width:20%!important;">大肠癌初筛结果判定</td>
                     <td width="90%" class="text-l">
                         <input id="crRegcasemid" name="crcRegcase.manageid" class="mini-hidden" th:value="${crcRegcase.manageid}"/>
                         <input id="checkResultName1" class="mini-textbox" name="crcRegcase.checkResult" allowInput="false" th:value="${crcRegcase.checkResult}"/>
@@ -985,7 +985,7 @@
 
         <table class="table_new table_new5 mt-10">
             <tr>
-                <td>登记机构</td>
+                <td style="width:20%!important;">登记机构</td>
                 <td class="bg-white" width="20%" style="text-align: center">
                     <input id="regorgName" class="mini-textbox" style="width: 100%;" th:value="${#auth.getHospitalByCode(personInfo.regorg).name}" allowInput="false"/>
                     <input id="regorg" name="personInfo.regorg" th:value="${personInfo.regorg}" class="mini-hidden"/>
