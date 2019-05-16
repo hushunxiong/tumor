@@ -350,8 +350,10 @@ public class ScreeningController extends BaseController {
         if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
                 lucFamilyCancerHistoryXHList.stream().forEach(family->{
-                    if(StringUtils.isNotBlank(family.getIcd10())){
-                        family.setCancerName(getCancerName(family.getIcd10(),"60020"));
+                    if(family!=null && family.getLived()!=null){
+                        if(StringUtils.isNotBlank(family.getIcd10())){
+                            family.setCancerName(getCancerName(family.getIcd10(),"60020"));
+                        }
                     }
                 });
             }
@@ -389,7 +391,7 @@ public class ScreeningController extends BaseController {
             lucFamilyCancerHistoryXHService.deleteAllByPersonId(lucFamilyCancerHistoryXHDao,personInfo.getId());
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
                 lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                    if(luc!=null){
+                    if(luc!=null && luc.getLived()!=null){
                         luc.setId(IdGen.uuid());
                         luc.setCheckId(personInfo.getId());
                         luc.setCreateBy(user.getId());
@@ -407,7 +409,7 @@ public class ScreeningController extends BaseController {
             familyCancerHistoryService.deleteAllByPersonId(familyCancerHistoryDao,personInfo.getId());
             if(familyCancerHistoryList!=null){
                 familyCancerHistoryList.stream().forEach(family->{
-                    if(family!=null){ //插入亲属历史表
+                    if(family!=null && family.getLived()!=null){ //插入亲属历史表
                         family.setId(IdGen.uuid());
                         family.setCheckId(personInfo.getId());
                         family.setCreateBy(user.getId());
