@@ -97,5 +97,10 @@
 	    WHERE id = #{id}
 	</update>
 
+	<delete id="deleteAllByPersonId">
+	    DELETE FROM luc_family_cancer_history_XH
+	    WHERE check_id = #{personId}
+	</delete>
+
 	
 </mapper>
