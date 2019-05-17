@@ -752,7 +752,7 @@
             </div>
         </div>
 
-        <div class="title_tip mt-30">危险度评估结果 <button class="my-btn my-btn-blue mr-20" onclick="makeResult()">计算危险度评估结果</button></div>
+        <div class="title_tip mt-30">危险度评估结果 <button class="my-btn my-btn-blue mr-20" onclick="makeResult()" id="weixiandubtn">计算危险度评估结果</button></div>
         <table class="table_new table_new5 mt-10">
             <tbody>
             <tr th:if="${crcFlag} eq '1'">
@@ -951,7 +951,7 @@
         <input id="riskAssessment3" name="scRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
         <input id="riskAssessment4" name="lucRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
 
-        <div class="title_tip mt-30">初筛结果判定<button class="my-btn my-btn-blue mr-20" onclick="makeChushaiResult()">计算初筛结果</button></div>
+        <div class="title_tip mt-30">初筛结果判定<button class="my-btn my-btn-blue mr-20" onclick="makeChushaiResult()" id="chushaibtn">计算初筛结果</button></div>
         <table class="table_new table_new5 mt-10">
             <tbody>
                 <tr th:if="${crcFlag} eq '1'">
@@ -1013,7 +1013,7 @@
         </table>
     </div>
     <div class="btn-list text-c mt-30">
-        <button class="my-btn my-btn-blue mr-20" onclick="save()">保存</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="save()" id="savebtn">保存</button>
         <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
         <button class="my-btn my-btn-blue mr-20">打印转诊单</button>
     </div>
@@ -1217,6 +1217,26 @@
             }
         }
 
+        // $('input').attr('disabled','disabled');
+        // $('input').attr('readOnly','readOnly');
+
+        var operation=[[${operation}]]; //操作flag
+        if(operation=='1'){ //查看
+            var form = new mini.Form("#baseForm");
+            var form1 = new mini.Form("#form1");
+
+            var controls=form.getFields();
+            $(controls).each(function(i,item){
+                item.setReadOnly(true);
+            })
+            var controls1=form1.getFields();
+            $(controls1).each(function(i,item){
+                item.setReadOnly(true);
+            })
+            $("#savebtn").remove();
+            $("#weixiandubtn").remove();
+            $("#chushaibtn").remove();
+        }
 
     });
 
@@ -1369,6 +1389,11 @@
         }
 
         var jgCode=[[${jgCode}]];
+        alert(jgCode)
+        var jgstr=jgCode.substring(0,5);
+        if(jgstr!=jgCheck){
+            mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID3-7位应为机构编码"});
+        }
 
 
         $.ajax({

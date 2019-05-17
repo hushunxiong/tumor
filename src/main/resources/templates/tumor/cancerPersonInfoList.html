@@ -267,7 +267,7 @@
         var r = e.record;
         var h = '';
         if(r.crc+r.luc+r.lic+r.sc>=1){
-            h += '<a onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
+            h += '<a onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\',\'' + '1'+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
             h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
             h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
             //存在删除权限
@@ -283,11 +283,11 @@
     }
 
 
-    function goto(id,csnf) {
+    function goto(id,csnf,operation) {
         if(id==null||id==''||id==undefined){
             csnf=$("#csnf").val();
         }
-        var url = "../screening/form/?manageId="+id+"&checkYear="+csnf;
+        var url = "../screening/form/?manageId="+id+"&checkYear="+csnf+"&&operation="+operation;
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',
