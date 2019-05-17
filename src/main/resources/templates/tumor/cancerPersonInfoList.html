@@ -163,7 +163,7 @@
                     </div>
                     <div class="mini-row" >
                         <div class="mini-col-4">
-                            <button shiro:hasPermission="tumor:cancerPersonInfo:save" class="my-btn my-btn-blue" onclick="goto('','')">新增初筛登记</button>
+                            <button shiro:hasPermission="tumor:cancerPersonInfo:save" class="my-btn my-btn-blue" onclick="goto('','','3')">新增初筛登记</button>
                             <!--初筛管理一览 删除权限  -->
                             <input id="hideInput" name="hideInput" shiro:hasPermission="tumor:cancerPersonInfo:del" value="1" class="mini-hidden"/>
                         </div>
@@ -266,7 +266,7 @@
         var h = '';
         if(r.crc+r.luc+r.lic+r.sc>=1){
             h += '<a onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\',\'' + '1'+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
-            h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
+            h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\',\'' + '2'+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
             //存在删除权限
             if (hideValue=='1'){
                 if(r.delRecordsFlag>1){
