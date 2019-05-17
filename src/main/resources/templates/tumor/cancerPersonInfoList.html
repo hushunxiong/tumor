@@ -41,7 +41,7 @@
                     <tr>
                         <td align="left">
                             <div class="keyword">
-                                <input id="keyword" name="keyword" class="radius" placeholder="可按照姓名或者身份证号模糊查询" data-tooltip="输入身份证号时至少6位" type="text">
+                                <input id="keyword" name="keyword" class="radius" placeholder="可按照姓名或者证件号码模糊查询" data-tooltip="输入身份证号时至少6位" type="text">
                                 <div class="my-btn my-btn-blue" onclick="onSearch()">搜索</div>
                             </div>
                         </td>
@@ -164,16 +164,13 @@
                     <div class="mini-row" >
                         <div class="mini-col-4">
                             <button shiro:hasPermission="tumor:cancerPersonInfo:save" class="my-btn my-btn-blue" onclick="goto('','')">新增初筛登记</button>
+                            <!--初筛管理一览 删除权限  -->
+                            <input id="hideInput" name="hideInput" shiro:hasPermission="tumor:cancerPersonInfo:del" value="1" class="mini-hidden"/>
                         </div>
                     </div>
-
                 </div>
+            </div>
 
-            </div>
-            <div id="btns">
-                <!--初筛管理一览 删除权限  -->
-                <input id="hideInput" name="hideInput" shiro:hasPermission="tumor:cancerPersonInfo:del" value="1" class="mini-hidden"/>
-            </div>
             <div id="datagrid" url="../cancerPersonInfo/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
@@ -216,6 +213,7 @@
                     <div type="action" renderer="actionRenderer" style="width:100%;"  width="150px" headerAlign="center" align="center" allowSort="false">操作</div>
                 </div>
                 </div>
+
             </div>
 
         </div>
@@ -320,7 +318,7 @@
                 }
             }
             if(!flag) {
-                mini.showTips({content: "按照身份证查询，输入不能小于六位", state: "success", x: "center", y: "center", timeout: "2000"});
+                mini.showTips({content: "按照证件号码查询，输入不能小于六位", state: "success", x: "center", y: "center", timeout: "2000"});
             }
             return flag;
         }
