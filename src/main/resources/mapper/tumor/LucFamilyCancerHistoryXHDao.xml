@@ -78,9 +78,9 @@
 	
 	<insert id="insert">
 		INSERT INTO luc_family_cancer_history_XH(
-		id,check_id,relation,icd10,cancer_name,age,lived,del_flag,create_by,create_date
+		id,check_id,relation,icd10,cancer_name,age,lived,del_flag,create_by,create_date,update_by,update_date
 		) VALUES (
-		#{id},#{checkId},#{relation},#{icd10},#{cancerName},#{age},#{lived},'0',#{createBy},SYSDATE
+		#{id},#{checkId},#{relation},#{icd10},#{cancerName},#{age},#{lived},'0',#{createBy},SYSDATE,#{updateBy},SYSDATE
 		)
 	</insert>
 	

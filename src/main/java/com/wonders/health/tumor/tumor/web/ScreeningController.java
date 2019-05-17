@@ -408,6 +408,7 @@ public class ScreeningController extends BaseController {
                         if(StringUtils.isNotBlank(luc.getIcd10())){
                             luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
                         }
+                        luc.setUpdateBy(user.getId());
                         lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
                     }
                 });
