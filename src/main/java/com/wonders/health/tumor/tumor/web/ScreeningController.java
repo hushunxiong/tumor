@@ -27,10 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 新增筛查登记Controller
@@ -248,12 +245,11 @@ public class ScreeningController extends BaseController {
             if(StringUtils.isBlank(cancerPerson.getPersoncard())){
                 cancerPerson=new CancerPersonInfo();
                 cancerPerson.setIsNew("1");
-                cancerPerson.setId(personcard);
+                cancerPerson.setPersoncard(personcard);
                 cancerPerson.setPersoncardType(type);
                 cancerPerson.setPaddressProvince("310000000000");
                 cancerPerson.setPaddressCity("310100000000");
                 cancerPerson.setPaddressCounty(areaCode);
-
             }
             sc.setPersonInfo(cancerPerson);
             return new AjaxReturn(true,"",sc);
@@ -294,9 +290,9 @@ public class ScreeningController extends BaseController {
                 personInfo.setId(personInfoBase.getId());
             }
         }
-        if(personInfo.getId()==null || personInfo.getPersoncardType()=="02"){   //新增
+        if(personInfo.getId()==null|| "".equals(personInfo.getId()) || personInfo.getPersoncardType()=="02" || "02".equals( personInfo.getPersoncardType())){   //新增
             String isNew=personInfo.getIsNew();
-            if(StringUtils.isNotBlank(isNew)){  //这个人应该调用健康档案接口
+            if(StringUtils.isNotBlank(isNew) && !("02".equals( personInfo.getPersoncardType()))){  //这个人应该调用健康档案接口
                 PersonInfo person=new PersonInfo();
 
                 BeanUtils.copyProperties(personInfo, person);
