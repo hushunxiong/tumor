@@ -82,7 +82,7 @@
                             <label class="mr-5">登记机构所属区：</label>
                             <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="47%"
                                    th:data="${#auth.getAreas(areaCode)}"
-                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sfy' ? '':areaCode}"  th:showNullItem="${role =='sfy' ? true:false}"  th:disabled="${role =='sfy' ? false:true}"/>
+                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
                         </div>
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构：</label>
@@ -170,6 +170,10 @@
                 </div>
 
             </div>
+            <div id="btns">
+                <!--初筛管理一览 删除权限  -->
+                <input id="hideInput" name="hideInput" shiro:hasPermission="tumor:cancerPersonInfo:del" value="1" class="mini-hidden"/>
+            </div>
             <div id="datagrid" url="../cancerPersonInfo/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
@@ -224,9 +228,21 @@
     var grid = mini.get("datagrid");
     var form = new mini.Form('#div1');
 
+    /**
+     * 判断是否有权限
+     * @type {string}
+     */
+    var hideValue="";
+
     $(function () {
         onSearch();
        getHospitals();
+        //获取权限标识 1--删除；
+        var els= mini.get("hideInput");
+        if(els!=null){
+            hideValue=els.value;
+        }
+
     });
 
     var ctxStatic ='..';
@@ -254,10 +270,13 @@
             h += '<a onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
             h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
             h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
-            if(r.delRecordsFlag>1){
-                h += '<a  onclick="deleteRecords(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
-            }else{
-                h += '<a  onclick="deleteRecord(\'' +r.id + '\',\''+ r.csnf + '\',\''+ r.crcCheckId +'\',\''+ r.lucCheckId +'\',\''+ r.licCheckId +'\',\''+ r.scCheckId +'\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+            //存在删除权限
+            if (hideValue=='1'){
+                if(r.delRecordsFlag>1){
+                    h += '<a  onclick="deleteRecords(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+                }else{
+                    h += '<a  onclick="deleteRecord(\'' +r.id + '\',\''+ r.csnf + '\',\''+ r.crcCheckId +'\',\''+ r.lucCheckId +'\',\''+ r.licCheckId +'\',\''+ r.scCheckId +'\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+                }
             }
         }
         return h;
