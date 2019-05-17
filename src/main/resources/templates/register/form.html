@@ -1015,7 +1015,7 @@
     <div class="btn-list text-c mt-30">
         <button class="my-btn my-btn-blue mr-20" onclick="save()" id="savebtn">保存</button>
         <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
-        <button class="my-btn my-btn-blue mr-20">打印转诊单</button>
+        <!--<button class="my-btn my-btn-blue mr-20">打印转诊单</button>-->
     </div>
 
 
@@ -1389,11 +1389,10 @@
         }
 
         var jgCode=[[${jgCode}]];
-        alert(jgCode)
         var jgstr=jgCode.substring(0,5);
-        if(jgstr!=jgCheck){
-            mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID3-7位应为机构编码"});
-        }
+        // if(jgstr!=jgCheck){
+        //     mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID3-7位应为机构编码"});
+        // }
 
 
         $.ajax({
@@ -1805,7 +1804,8 @@
                             var checkYear = mini.get("checkYear").getValue();
                             mini.get("id").setValue(res.value)
                             setTimeout(function(){
-                                window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
+                                // window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
+                                window.location.href='/tumor/cancerPersonInfo/list';
                             },2000)
 
                         }else{
