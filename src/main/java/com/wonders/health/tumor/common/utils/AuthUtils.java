@@ -7,11 +7,10 @@ import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.Menu;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.model.DataOption;
-import com.wonders.health.tumor.tumor.entity.DicHospitalInfo;
 import com.wonders.health.tumor.tumor.service.DicHospitalInfoService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Value;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -120,7 +119,7 @@ public class AuthUtils {
      * @return
      */
     public static String judgeRole(String yljgdm) {
-        if (org.apache.commons.lang3.StringUtils.isBlank(yljgdm)) {
+        if (StringUtils.isBlank(yljgdm)) {
             return null;
         }
         if ("31010502300".equals(yljgdm)) {
