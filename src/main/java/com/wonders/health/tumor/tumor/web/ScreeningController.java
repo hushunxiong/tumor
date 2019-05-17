@@ -112,7 +112,7 @@ public class ScreeningController extends BaseController {
     private static LucFamilyCancerHistoryXHDao lucFamilyCancerHistoryXHDao = SpringContextHolder.getBean(LucFamilyCancerHistoryXHDao.class);
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
-    public String form(Model model, String manageId, String checkYear) {
+    public String form(Model model, String manageId, String checkYear,String operation) {
         User user=getSessionUser();
         if(StringUtils.isBlank(checkYear)){
             checkYear= DateUtils.getYear();
@@ -128,6 +128,7 @@ public class ScreeningController extends BaseController {
         }
         model.addAttribute("years", AuthUtils.toJson(years));
         model.addAttribute("checkYear", checkYear);
+        model.addAttribute("operation", operation);
 
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
