@@ -269,7 +269,6 @@
         if(r.crc+r.luc+r.lic+r.sc>=1){
             h += '<a onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\',\'' + '1'+ '\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
             h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
-            h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">历史</a>&nbsp;';
             //存在删除权限
             if (hideValue=='1'){
                 if(r.delRecordsFlag>1){
