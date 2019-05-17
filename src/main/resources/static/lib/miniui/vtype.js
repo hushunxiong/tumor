@@ -20,6 +20,16 @@ mini.VTypes["EnglishAndNumber"] = function (v) {
 }
 
 /**
+ * 校验军官证 备注：<input class="mini-textbox" vtype="Junguanzheng"/>
+ */
+mini.VTypes["JunguanzhengErrorText"] = "军官证号只能是数字和字母，长度必须在6到8之间";
+mini.VTypes["Junguanzheng"] = function (v) {
+    return $.trim(v) == "" || isJunguanzheng(v);
+}
+
+
+
+/**
  * 校验必须输入汉字 备注：<input class="mini-textbox" vtype="chinese"/>
  */
 mini.VTypes["chineseErrorText"] = "请输入汉字";
@@ -366,6 +376,11 @@ function IsIdCard(numberTmp) {
 function isEnglishAndNumber(v) {
     var re = new RegExp("^[0-9a-zA-Z\_]+$");
     if (re.test(v)) {return true};
+    return false;
+}
+function isJunguanzheng(v) {
+    var re = new RegExp("^[0-9a-zA-Z\_]+$");
+    if (re.test(v) && v.length>=6 &&v.length<=8) {return true};
     return false;
 }
 function CheckyyyyMMdd(dayString) {

@@ -288,11 +288,13 @@ public class ScreeningController extends BaseController {
 
         //基本信息处理
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
-        CancerPersonInfo personInfoBase=screeningService.getBaseInfoByCardnoAndType(personInfo.getPersoncard(),personInfo.getPersoncardType());
-        if(personInfoBase!=null){
-            personInfo.setId(personInfoBase.getId());
+        if(StringUtils.isBlank(personInfo.getId())){
+            CancerPersonInfo personInfoBase=screeningService.getBaseInfoByCardnoAndType(personInfo.getPersoncard(),personInfo.getPersoncardType());
+            if(StringUtils.isNotBlank(personInfoBase.getId())){
+                personInfo.setId(personInfoBase.getId());
+            }
         }
-        if(personInfo.getId()==null){   //新增
+        if(personInfo.getId()==null || personInfo.getPersoncardType()=="02"){   //新增
             String isNew=personInfo.getIsNew();
             if(StringUtils.isNotBlank(isNew)){  //这个人应该调用健康档案接口
                 PersonInfo person=new PersonInfo();

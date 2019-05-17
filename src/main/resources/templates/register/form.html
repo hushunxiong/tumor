@@ -1030,6 +1030,7 @@
     var lucDbflag = [[${lucDbflag}]];
     var flag=[[${flag}]];
     var areaCode=[[${areaCode}]];
+    var operation=[[${operation}]]; //操作flag 1-查看  2-修改 3-新增
 
     var crcFlag = [[${crcFlag}]];
     var licFlag = [[${licFlag}]];
@@ -1220,7 +1221,7 @@
         // $('input').attr('disabled','disabled');
         // $('input').attr('readOnly','readOnly');
 
-        var operation=[[${operation}]]; //操作flag
+
         if(operation=='1'){ //查看
             var form = new mini.Form("#baseForm");
             var form1 = new mini.Form("#form1");
@@ -1236,6 +1237,9 @@
             $("#savebtn").remove();
             $("#weixiandubtn").remove();
             $("#chushaibtn").remove();
+        }else if(operation=='2'){   //修改
+            mini.get("personcardType").setReadOnly(true);
+            mini.get("personcard").setReadOnly(true);
         }
 
     });
@@ -1253,9 +1257,10 @@
             });
         } else {
             zjhm.set({
-                vtype: "EnglishAndNumber"
+                vtype: "Junguanzheng"
             });
         }
+        mini.get("personcard").validate()
     }
 
     //证件号码
@@ -1271,7 +1276,6 @@
                 var res = getBirthDayAndSex(zjhm.getValue());
                 xb.setValue(res.sex);
                 mini.get("birth").setValue(res.birthday);
-
             }
             //唯一性检查
             uniquenessCheck(mini.get("checkYear").getValue(),zjlx.getValue(), zjhm.getValue());
@@ -1300,6 +1304,15 @@
                     });
                 }else{//没检查过，返回值为个人身份信息
                     mini.unmask(document.body);
+                    if(res.value.personInfo.isNew=="1"){
+                        mini.showTips({
+                            content: "系统暂无此人信息，请手动填写信息",
+                            state: "warning",
+                            x: "center",
+                            y: "center",
+                            timeout: 2000
+                        });
+                    }
                     var form = new mini.Form("#baseForm");
                     form.setData(res.value,false);
 
@@ -1739,7 +1752,9 @@
             return;
         }else{
             if(crcFlag=="1"){
-                crcNumerChange();//单独再验证一次大肠癌id
+                if(operation=='3'){
+                    crcNumerChange();//单独再验证一次大肠癌id
+                }
             }
             var form = new mini.Form("#form1");
             form.validate();
