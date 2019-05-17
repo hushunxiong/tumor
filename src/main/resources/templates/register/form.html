@@ -29,7 +29,7 @@
                 </td>
                 <td width="10%"><span class="red-span">*</span>证件号码</td>
                 <td>
-                    <input id="personcard" name="personInfo.personcard" class="mini-textbox" vtype="IdCard" emptyText="请输入" th:value="${personInfo.personcard}" maxLength="18" required="true" onvaluechanged="personcardChange" width="90%"/>
+                    <input id="personcard" name="personInfo.personcard" class="mini-textbox" emptyText="请输入" th:value="${personInfo.personcard}" maxLength="18" required="true" onvaluechanged="personcardChange" width="90%"/>
                 </td>
             </tr>
             <tr>
@@ -1044,7 +1044,6 @@
     var lucRiskResult=false;    //肺癌危险度评估结果
 
     $(function() {
-
         //大肠癌新增
         if (crcDbflag == "1") {
         	//血吸虫病
@@ -1265,6 +1264,7 @@
 
     //证件号码
     function personcardChange(e) {
+        personcardTypeChange();
         var zjhm = mini.get("personcard");
         var zjlx = mini.get("personcardType");
         var xb = mini.get("gender");
@@ -1277,8 +1277,11 @@
                 xb.setValue(res.sex);
                 mini.get("birth").setValue(res.birthday);
             }
-            //唯一性检查
-            uniquenessCheck(mini.get("checkYear").getValue(),zjlx.getValue(), zjhm.getValue());
+            mini.get("personcard").validate();
+            if(mini.get("personcard").isValid()){
+                //唯一性检查
+                uniquenessCheck(mini.get("checkYear").getValue(),zjlx.getValue(), zjhm.getValue());
+            }
         }
     }
 
@@ -1753,6 +1756,8 @@
         }else{
             if(crcFlag=="1"){
                 if(operation=='3'){
+                    personcardTypeChange();
+                    mini.get("personcard").validate();
                     crcNumerChange();//单独再验证一次大肠癌id
                 }
             }
