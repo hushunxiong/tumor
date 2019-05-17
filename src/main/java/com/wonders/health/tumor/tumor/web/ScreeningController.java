@@ -228,7 +228,11 @@ public class ScreeningController extends BaseController {
     @ResponseBody
     public AjaxReturn checkHadDone(String year, String type, String personcard){
         String[] cancers={crcFlag,licFlag,scFlag,lucFlag};
-        String hadDone=screeningService.checkHadDone(year,type,personcard,cancers);    //true-做过  false-没做过
+        Boolean xhFlag=false;
+        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
+            xhFlag=true;
+        }
+        String hadDone=screeningService.checkHadDone(year,type,personcard,cancers,xhFlag);    //true-做过  false-没做过
 
         if(hadDone=="done"||"done".equals(hadDone)){
             return new AjaxReturn(false,"此人本年度已经进行过筛查");
@@ -349,6 +353,7 @@ public class ScreeningController extends BaseController {
 
         if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
+                screeningVo.getLucRisk().setQinshuAizhengshi("1");
                 lucFamilyCancerHistoryXHList.stream().forEach(family->{
                     if(family!=null && family.getLived()!=null){
                         if(StringUtils.isNotBlank(family.getIcd10())){
@@ -356,6 +361,8 @@ public class ScreeningController extends BaseController {
                         }
                     }
                 });
+            }else{
+                screeningVo.getLucRisk().setQinshuAizhengshi("2");
             }
         }
 

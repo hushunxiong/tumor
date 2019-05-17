@@ -1292,6 +1292,8 @@
                     mini.get("checkYear").setValue(checkyear);
 
                     var obj = res.value.personInfo;
+                    mini.get("id").setValue(obj.id);
+
                     mini.get("personcardType").setValue(obj.personcardType);
 
                     mini.get("hjdprovince").setValue(obj.paddressProvince);
@@ -1367,8 +1369,6 @@
         }
 
         var jgCode=[[${jgCode}]];
-        alert(jgCode)
-
 
 
         $.ajax({
@@ -1709,14 +1709,14 @@
                 }
             })
 
-            if(crcFlag=="1"){
-                crcNumerChange();//单独再验证一次大肠癌id
-            }
+
         }
         if(idFlag){
             return;
         }else{
-
+            if(crcFlag=="1"){
+                crcNumerChange();//单独再验证一次大肠癌id
+            }
             var form = new mini.Form("#form1");
             form.validate();
             if (form.isValid() == false){
@@ -2074,9 +2074,18 @@
             }
             var lucFamilyFlag = 2;
             if (areaCode == '310104000000') {        //徐汇区单独判断
-                lucFamilyFlag = getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
+                lucFamilyFlag = mini.get("xhHistory").getValue();
+                    // getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
             } else {
-                lucFamilyFlag = mini.get("lucFamilyFlag").getValue();  //m.一级亲属有肺癌病史；
+                //m.一级亲属有肺癌病史；
+                lucFamilyFlag = 2;
+                var iscrc=mini.get("crcFamilyFlag").getValue();
+                var islic=mini.get("licFamilyFlag").getValue();
+                var issc=mini.get("scFamilyFlag").getValue();
+                var isluc=mini.get("lucFamilyFlag").getValue();
+                if(eval(parseIntPlus(iscrc)+parseIntPlus(islic)+parseIntPlus(issc)+parseIntPlus(isluc))>=1){
+                    lucFamilyFlag=1;
+                }
             }
 
             if ((eval(parseIntPlus(xiyanFlag) + parseIntPlus(jieyanFlag) + parseIntPlus(changqiFlag) + parseIntPlus(leijiFlag) + parseIntPlus(beidongFlag)
@@ -2201,7 +2210,7 @@
     }
 
     function closeWindow(){
-       window.location.href='../../cancerPersonInfo/list';
+        window.location.href='/tumor/cancerPersonInfo/list';
     }
 </script>
 </html>
