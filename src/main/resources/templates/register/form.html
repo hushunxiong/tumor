@@ -1718,6 +1718,7 @@
     }
 
     //保存
+    var saveFlag=0;
     function save(){
         var id=mini.get("id").getValue();  //个人管理编号
 
@@ -1749,7 +1750,6 @@
                 }
             })
 
-
         }
         if(idFlag){
             return;
@@ -1774,74 +1774,81 @@
                 });
                 return;
             }else{
-                makeResult();
-                makeChushaiResult();
-                params=form.getData(true, false);
-                params.id=id;
-                var icds=[];
-                icds[0]=params["historyList[0].icd10"];
-                icds[1]=params["historyList[1].icd10"];
-                icds[2]=params["historyList[2].icd10"];
-                icds[3]=params["historyList[3].icd10"];
-                icds[4]=params["historyList[4].icd10"];
+                if(saveFlag==0) {
+                   makeResult();
+                    makeChushaiResult();
+                    params=form.getData(true, false);
+                    params.id=id;
+                    var icds=[];
+                    icds[0]=params["historyList[0].icd10"];
+                    icds[1]=params["historyList[1].icd10"];
+                    icds[2]=params["historyList[2].icd10"];
+                    icds[3]=params["historyList[3].icd10"];
+                    icds[4]=params["historyList[4].icd10"];
 
-                for(var i = 0; i < icds.length; i++) {
-                    if(icds[i] == undefined) {
-                        icds.splice(i,1);
-                        i = i - 1; // i - 1 ,因为空元素在数组下标 2 位置，删除空之后，后面的元素要向前补位，
-                        // 这样才能真正去掉空元素,觉得这句可以删掉的连续为空试试，然后思考其中逻辑
-                    }
-                }
-
-                if(icds.length>0){
-                    if((new Set(icds)).size != icds.length){
-                        mini.alert("癌症史不能有两条相同癌症名称!")
-                        return;
-                    }
-                }
-                mini.mask({
-                    el: document.body,
-                    cls: 'mini-mask-loading',
-                    html: '保存中...'
-                });
-                $.ajax({
-                    url:"/tumor/screening/save",
-                    data:params,
-                    type:"POST",
-                    dataType: "json",
-                    success:function(res){
-                        mini.unmask(document.body);
-                        if(res.ok){ //保存成功
-                            mini.showTips({
-                                content: res.msg,
-                                state: "success",
-                                x: "center",
-                                y: "center",
-                                timeout: 2000
-                            });
-                            var zjhm = mini.get("personcard").getValue();
-                            var zjlx = mini.get("personcardType").getValue();
-                            var checkYear = mini.get("checkYear").getValue();
-                            mini.get("id").setValue(res.value)
-                            setTimeout(function(){
-                                // window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;
-                                window.location.href='/tumor/cancerPersonInfo/list';
-                            },2000)
-
-                        }else{
-                            mini.showTips({
-                                content: res.msg,
-                                state: "success",
-                                x: "center",
-                                y: "center",
-                                timeout: 2000
-                            });
+                    for(var i = 0; i < icds.length; i++) {
+                        if(icds[i] == undefined) {
+                            icds.splice(i,1);
+                            i = i - 1; // i - 1 ,因为空元素在数组下标 2 位置，删除空之后，后面的元素要向前补位，
+                            // 这样才能真正去掉空元素,觉得这句可以删掉的连续为空试试，然后思考其中逻辑
                         }
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        mini.unmask(document.body);
                     }
-                })
+
+                    if(icds.length>0){
+                        if((new Set(icds)).size != icds.length){
+                            mini.alert("癌症史不能有两条相同癌症名称!")
+                            return;
+                        }
+                    }
+                    mini.mask({
+                        el: document.body,
+                        cls: 'mini-mask-loading',
+                        html: '保存中...'
+                    });
+
+                    $.ajax({
+                        url: "/tumor/screening/save",
+                        data: params,
+                        type: "POST",
+                        dataType: "json",
+                        success: function (res) {
+
+                            if (res.ok) { //保存成功
+                                saveFlag=1;
+                                $("#savebtn").attr('disabled',true);
+                                mini.showTips({
+                                    content: res.msg,
+                                    state: "success",
+                                    x: "center",
+                                    y: "center",
+                                    timeout: 2000
+                                });
+                                mini.unmask(document.body);
+                                // var zjhm = mini.get("personcard").getValue();
+                                // var zjlx = mini.get("personcardType").getValue();
+                                // var checkYear = mini.get("checkYear").getValue();
+                                mini.get("id").setValue(res.value)
+                                setTimeout(function () {
+                                    // window.location.href='/tumor/screening/form?manageId='+res.value+"&&checkYear="+checkYear;   //跳转到查看form
+                                    window.location.href = '/tumor/cancerPersonInfo/list';
+                                }, 2000)
+
+                            } else {
+                                mini.showTips({
+                                    content: res.msg,
+                                    state: "success",
+                                    x: "center",
+                                    y: "center",
+                                    timeout: 2000
+                                });
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            mini.unmask(document.body);
+                        }
+                    })
+                }
+
             }
         }
     }
