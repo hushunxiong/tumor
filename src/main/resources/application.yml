@@ -119,15 +119,15 @@ casServerUrlPrefix: http://10.1.93.110/cas
 shiroServerUrlPrefix: http://10.1.93.110
 
 #初筛诊断(crc_switch_flag：大肠癌  lic_switch_flag：肝癌 sc_switch_flag：胃癌  luc_switch_flag：肺癌     )
-crc_switch_flag: 0
-lic_switch_flag: 0
-sc_switch_flag: 0
+crc_switch_flag: 1
+lic_switch_flag: 1
+sc_switch_flag: 1
 luc_switch_flag: 1
 #是否新增筛查时可以向健康档案插入个人信息
 archieve_add_flag: 1
 
 #区域代码
-area_code: '310104000000'
+area_code: '310107000000'
 
 #最近n年
 yearNum: 10
