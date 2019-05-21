@@ -87,7 +87,7 @@ public class CancerPersonInfoController extends BaseController {
     }
 
 
-    @RequestMapping(value = "form", method = RequestMethod.GET)
+    @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String id,String csnf) {
         if (StringUtils.isNotBlank(id)&&StringUtils.isNotBlank(csnf)) {
             CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findByInfoId(id,csnf);

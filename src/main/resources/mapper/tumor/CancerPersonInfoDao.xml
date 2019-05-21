@@ -115,9 +115,7 @@
 	</select>
 	<!-- 分页模块 -->
 	<sql id="pageFromAndWhere">
-
       FROM cancer_person_info P
-
 		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
 			LEFT JOIN CRC_REGCASE crc ON (crc.MANAGEID = P . ID) AND crc.DEL_FLAG='0'
             <if test="regarea !=null and regarea!=''">
@@ -263,28 +261,13 @@
 	  </where>
     </sql>
 
-    <select id="pageCount" resultType="java.lang.Integer"
-            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
-        select count(1)
-        <include refid="pageFromAndWhere"/>
-    </select>
 
-
-    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo"
-            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
-		<choose>
-			<when test="startRecord == 0">
+	<sql id="pageVo">
 		select * from (
-			</when>
-			<otherwise>
-		select * from ( select row_.*, rownum rownum_ from (
-			</otherwise>
-		</choose>
-		select * from (
-		select
-		<include refid="CancerPersonInfoListColumns"/>
-        <include refid="pageFromAndWhere"/>
-        ) t
+			select
+			<include refid="CancerPersonInfoListColumns"/>
+			<include refid="pageFromAndWhere"/>
+			) t
         where
            1=1 and (
 		  <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
@@ -300,6 +283,28 @@
 				 t.lucCheckYear is not null  or
 		  </if>
 		  1=2 )
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1) from (
+         <include refid="pageVo"/>
+         )
+
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+         <include refid="pageVo"/>
 		<choose>
 			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
 				ORDER BY ${sortField} ${sortOrder}

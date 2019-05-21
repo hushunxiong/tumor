@@ -14,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -71,16 +70,13 @@ public class CancerPersonInfoService {
 
 
     public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
-
-        List<CancerPersonInfo> list=cancerPersonInfoDao.pageList(search);
-        List<CancerPersonInfo>  gridList=new ArrayList<>();
+        List<CancerPersonInfo> list=null;
+        Integer count=cancerPersonInfoDao.pageCount(search);
+        if(count>0){
+            list=cancerPersonInfoDao.pageList(search);
+        }
         if(list!=null&&list.size()>0){
             for(CancerPersonInfo info:list){
-              /*  //四种筛查都没做的不显示
-                if(StringUtils.isBlank(info.getCrcCheckYear())&&StringUtils.isBlank(info.getLucCheckYear())
-                        &&StringUtils.isBlank(info.getLicCheckYear())&&StringUtils.isBlank(info.getScCheckYear())){
-                }else{*/
-                    //标识多选删除还是直接删除
                     Integer delRecordsFlag=0;
                     if(StringUtils.isNotBlank(info.getCrcCheckYear())){
                         info.setCsnf(info.getCrcCheckYear());
@@ -99,11 +95,9 @@ public class CancerPersonInfoService {
                         delRecordsFlag++;
                     }
                     info.setDelRecordsFlag(delRecordsFlag);
-                    gridList.add(info);
-
             }
         }
-        return new DataGrid<CancerPersonInfo>(gridList.size(),gridList);
+        return new DataGrid<CancerPersonInfo>(count,list);
     }
 
 
