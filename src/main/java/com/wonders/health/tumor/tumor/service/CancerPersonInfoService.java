@@ -76,10 +76,10 @@ public class CancerPersonInfoService {
         List<CancerPersonInfo>  gridList=new ArrayList<>();
         if(list!=null&&list.size()>0){
             for(CancerPersonInfo info:list){
-                //四种筛查都没做的不显示
+              /*  //四种筛查都没做的不显示
                 if(StringUtils.isBlank(info.getCrcCheckYear())&&StringUtils.isBlank(info.getLucCheckYear())
                         &&StringUtils.isBlank(info.getLicCheckYear())&&StringUtils.isBlank(info.getScCheckYear())){
-                }else{
+                }else{*/
                     //标识多选删除还是直接删除
                     Integer delRecordsFlag=0;
                     if(StringUtils.isNotBlank(info.getCrcCheckYear())){
@@ -100,7 +100,7 @@ public class CancerPersonInfoService {
                     }
                     info.setDelRecordsFlag(delRecordsFlag);
                     gridList.add(info);
-                }
+
             }
         }
         return new DataGrid<CancerPersonInfo>(gridList.size(),gridList);

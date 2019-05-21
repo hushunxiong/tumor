@@ -7,12 +7,12 @@
 	</sql>
 
 	<sql id="CancerPersonInfoListColumns">
-		P . ID AS "id",
+		P . ID AS id,
 		P . NAME AS "name",
 		P .GENDER AS "gender",
 		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
 			crc.id  as  "crcCheckId",
-			crc.check_year as  "crcCheckYear",
+			crc.check_year as  crcCheckYear,
 			1 as "crc",
 			crc.ID_NUMBER AS "idNumber",
 			crc.CHECK_RESULT AS "crcResult",
@@ -23,7 +23,7 @@
 		</if>
 		<if test=" licFlag !=null and licFlag !='' and licFlag=='1'.toString()" >
 			lic.id  as  "licCheckId",
-			lic.check_year as  "licCheckYear",
+			lic.check_year as  licCheckYear,
 			1 as "lic",
 			lic.CHECK_RESULT AS "licResult",
 			licas.ASSESSMENT_RESULT AS "licAssessmentResult",
@@ -31,13 +31,13 @@
 		</if>
 		<if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
 			sc.id  as  "scCheckId",
-			sc.check_year as  "scCheckYear",
+			sc.check_year as  scCheckYear,
 			1 as "sc",
 			sc.CHECK_RESULT AS "scResult",
 		</if>
 		<if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
 			luc.id  as  "lucCheckId",
-			luc.check_year as  "lucCheckYear",
+			luc.check_year as  lucCheckYear,
 			1 as "luc",
 			luc.CHECK_RESULT AS "lucResult",
 		</if>
@@ -115,6 +115,7 @@
 	</select>
 	<!-- 分页模块 -->
 	<sql id="pageFromAndWhere">
+
       FROM cancer_person_info P
 
 		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
@@ -279,15 +280,32 @@
 		select * from ( select row_.*, rownum rownum_ from (
 			</otherwise>
 		</choose>
-        select
-			<include refid="CancerPersonInfoListColumns"/>
+		select * from (
+		select
+		<include refid="CancerPersonInfoListColumns"/>
         <include refid="pageFromAndWhere"/>
+        ) t
+        where
+           1=1 and (
+		  <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+				 t.crcCheckYear is not null  or
+		  </if>
+		  <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
+				t.licCheckYear is not null or
+		  </if>
+		 <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+				 t.scCheckYear is not null  or
+		  </if>
+		  <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+				 t.lucCheckYear is not null  or
+		  </if>
+		  1=2 )
 		<choose>
 			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
 				ORDER BY ${sortField} ${sortOrder}
 			</when>
 			<otherwise>
-				ORDER BY p.id DESC
+				ORDER BY t.id DESC
 			</otherwise>
 		</choose>
 		<choose>
@@ -298,6 +316,7 @@
 		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
 			</otherwise>
 		</choose>
+
     </select>
 	
 	<insert id="insert">
