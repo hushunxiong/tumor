@@ -3,6 +3,7 @@ package com.wonders.health.tumor.tumor.web;
 import com.google.common.collect.Lists;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.*;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -107,6 +109,9 @@ public class ScreeningController extends BaseController {
     private static CancerHistoryDao cancerHistoryDao = SpringContextHolder.getBean(CancerHistoryDao.class);
     private static FamilyCancerHistoryDao familyCancerHistoryDao = SpringContextHolder.getBean(FamilyCancerHistoryDao.class);
     private static LucFamilyCancerHistoryXHDao lucFamilyCancerHistoryXHDao = SpringContextHolder.getBean(LucFamilyCancerHistoryXHDao.class);
+
+    @Autowired
+    private CrcRegcaseIdService crcRegcaseIdService;
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear,String operation) {
@@ -263,15 +268,32 @@ public class ScreeningController extends BaseController {
     @ResponseBody
     public AjaxReturn checkIdnumber(String manageid, String idnumber){
         AjaxReturn ajaxReturn=new AjaxReturn();
+        String msg="";
         Boolean isChecked=false;
-        String msg="该id已被占用！";
-        if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||"".equals(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber))){
-            isChecked=true;
+
+        String idyear=idnumber.substring(0,2);      //前两位为年份
+        String areacode=idnumber.substring(2,7);    //之后3位为107 2位社区代码
+
+        String now= String.valueOf(LocalDate.now().getYear());
+        String year=now.substring(2,4);
+
+        List<CrcRegcaseId>diclist=crcRegcaseIdService.getByAreacode(areaCode);
+
+        CrcRegcaseId testId=new CrcRegcaseId();
+        testId.setCode(areacode);
+
+        if((!(idyear.equals(year)))&&!(diclist.contains(testId))){
+            msg="该大肠癌id格式不正确！";
+        }else{
+            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||"".equals(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber))){
+                isChecked=true;
+            }else{
+                msg="该id已被占用！";
+            }
         }
         ajaxReturn.setOk(isChecked);
-        if(!isChecked){
-            ajaxReturn.setMsg(msg);
-        }
+        ajaxReturn.setMsg(msg);
+
         return ajaxReturn;
     }
 

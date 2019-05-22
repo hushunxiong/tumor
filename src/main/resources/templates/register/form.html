@@ -1395,34 +1395,19 @@
     function crcNumerChange(){
         var id=mini.get("id").getValue();
         var crcNum=mini.get("idNumber").getValue();
-
-        var yearCheck=crcNum.substring(0,2);    //前两位校验年份
-        var jgCheck=crcNum.substring(2,5);      //3-7位校验机构代码
-
-        var year=mini.get("checkYear").getValue().substring(2,2);
-        if(yearCheck!=year){
-            mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID前两位应为年份编码"});
-        }
-
-        var jgCode=[[${jgCode}]];
-        var jgstr=jgCode.substring(0,5);
-        // if(jgstr!=jgCheck){
-        //     mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID3-7位应为机构编码"});
-        // }
-
-
-        $.ajax({
-            url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
-            type:'get',
-            dataType:'json',
-            success:function(res){
-                if(!res.ok){ //重复
-                    mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID已被占用"});
-                    return;
+        if($.trim(crcNum) == "" || (crcNum.length == 12)){
+            $.ajax({
+                url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
+                type:'get',
+                dataType:'json',
+                success:function(res){
+                    if(!res.ok){ //重复
+                        mini.get("idNumber").set({isValid:false,errorText:res.msg});
+                        return;
+                    }
                 }
-            }
-        })
-
+            })
+        }
     }
 
     //长期厨房油烟接触变更
