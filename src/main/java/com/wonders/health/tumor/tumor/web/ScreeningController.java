@@ -282,7 +282,7 @@ public class ScreeningController extends BaseController {
         CrcRegcaseId testId=new CrcRegcaseId();
         testId.setCode(areacode);
 
-        if((!(idyear.equals(year)))&&!(diclist.contains(testId))){
+        if((!(idyear.equals(year)))||!(diclist.contains(testId))){
             msg="该大肠癌id格式不正确！";
         }else{
             if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||"".equals(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber))){
