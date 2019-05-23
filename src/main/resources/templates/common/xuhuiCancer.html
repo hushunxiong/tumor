@@ -36,11 +36,10 @@
 
         //删除行
         function delXuhuiRow(index) {
-            if(index == 0){
-                return;
-            }
-
             $("#xhRow" + index).remove();
+            if ($('#xhBody').children().length == 1) {
+                mini.get("xhHistory").setValue(2);
+            }
         }
 
     </script>

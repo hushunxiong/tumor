@@ -277,15 +277,15 @@ public class ScreeningController extends BaseController {
         String now= String.valueOf(LocalDate.now().getYear());
         String year=now.substring(2,4);
 
-        List<CrcRegcaseId>diclist=crcRegcaseIdService.getByAreacode(areaCode);
+//        List<CrcRegcaseId>diclist=crcRegcaseIdService.getByAreacode(areaCode);
 
-        CrcRegcaseId testId=new CrcRegcaseId();
-        testId.setCode(areacode);
+        CrcRegcaseId dic=crcRegcaseIdService.getByJgcode(getSessionUser().getOrgCode());
 
-        if((!(idyear.equals(year)))||!(diclist.contains(testId))){
+
+        if((!(idyear.equals(year)))||!(areacode.equals(dic.getCode()))){
             msg="该大肠癌id格式不正确！";
         }else{
-            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||"".equals(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber))){
+            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber).size()==0)){
                 isChecked=true;
             }else{
                 msg="该id已被占用！";
@@ -376,7 +376,7 @@ public class ScreeningController extends BaseController {
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
                 screeningVo.getLucRisk().setQinshuAizhengshi("1");
                 lucFamilyCancerHistoryXHList.stream().forEach(family->{
-                    if(family!=null && family.getLived()!=null){
+                    if(family!=null  &&(StringUtils.isNotBlank(family.getRelation())|| family.getAge()!=null || family.getLived()!=null )){
                         if(StringUtils.isNotBlank(family.getIcd10())){
                             family.setCancerName(getCancerName(family.getIcd10(),"60020"));
                         }
@@ -395,7 +395,8 @@ public class ScreeningController extends BaseController {
             screeningVo.getScRisk().setAizhengshi("1");
 
             historyList.stream().forEach(history->{
-                if(history!=null){                                        //插入历史癌症表
+                if(history!=null && (StringUtils.isNotBlank(history.getIcd10())||history.getAge()!=null
+                        || StringUtils.isNotBlank(history.getHospitalCode()))){                                        //插入历史癌症表
                     history.setId(IdGen.uuid());
                     history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
@@ -419,7 +420,8 @@ public class ScreeningController extends BaseController {
             lucFamilyCancerHistoryXHService.deleteAllByPersonId(lucFamilyCancerHistoryXHDao,personInfo.getId());
             if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
                 lucFamilyCancerHistoryXHList.stream().forEach(luc->{
-                    if(luc!=null && luc.getLived()!=null){
+
+                    if(luc!=null &&(StringUtils.isNotBlank(luc.getRelation())||luc.getAge()!=null ||luc.getLived()!=null )){
                         luc.setId(IdGen.uuid());
                         luc.setCheckId(personInfo.getId());
                         luc.setCreateBy(user.getId());
@@ -432,13 +434,14 @@ public class ScreeningController extends BaseController {
                         luc.setUpdateBy(user.getId());
                         lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
                     }
+
                 });
             }
         }else{                                                              //插入亲属历史表-非徐汇
             familyCancerHistoryService.deleteAllByPersonId(familyCancerHistoryDao,personInfo.getId());
             if(familyCancerHistoryList!=null){
                 familyCancerHistoryList.stream().forEach(family->{
-                    if(family!=null && family.getLived()!=null){ //插入亲属历史表
+                    if(family!=null &&(StringUtils.isNotBlank(family.getRelation())|| family.getAge()!=null || family.getLived()!=null )){ //插入亲属历史表
                         family.setId(IdGen.uuid());
                         family.setCheckId(personInfo.getId());
                         family.setCreateBy(user.getId());

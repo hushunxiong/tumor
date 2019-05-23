@@ -28,7 +28,7 @@ public interface BaseService {
     }
 
     //4个业务危险度评估表新增时查询idnumber是否已占用
-    default Object checkIdnumber(BaseDao baseDao,String manageid,String idnumber){
+    default List<Object> checkIdnumber(BaseDao baseDao,String manageid,String idnumber){
         return baseDao.checkIdnumber(manageid,idnumber);
     }
 

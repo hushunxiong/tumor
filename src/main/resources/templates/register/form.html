@@ -1163,19 +1163,19 @@
                         if(fam.cancerType=="1"){
                             mini.get("crcFamilyFlag").setValue("1");
                             mini.get("riskAssessmentQ1").setValue("1");
-                            addFamilyRow(fam,"crcFamilyBody");
+                            addFamilyRow(fam,"crcFamilyBody","crcFamilyFlag");
                         }else if(fam.cancerType=="2"){
                             mini.get("licFamilyFlag").setValue("1");
                             mini.get("riskAssessmentQ2").setValue("1");
-                            addFamilyRow(fam,"licFamilyBody");
+                            addFamilyRow(fam,"licFamilyBody","licFamilyFlag");
                         }else if(fam.cancerType=="3"){
                             mini.get("scFamilyFlag").setValue("1");
                             mini.get("riskAssessmentQ3").setValue("1");
-                            addFamilyRow(fam,"scFamilyBody");
+                            addFamilyRow(fam,"scFamilyBody","scFamilyFlag");
                         }else if(fam.cancerType=="4"){
                             mini.get("lucFamilyFlag").setValue("1");
                             mini.get("riskAssessmentQ4").setValue("1");
-                            addFamilyRow(fam,"lucFamilyBody");
+                            addFamilyRow(fam,"lucFamilyBody","lucFamilyFlag");
                         }
 
                     })
@@ -1582,7 +1582,7 @@
         var v = mini.get(id).getValue();
         var obj = mini.get(id).getEl();
         if (v == "1") {
-            addFamilyRow(null, bodyId);
+            addFamilyRow(null, bodyId, id);
         } else {
             $('#' + bodyId).children(":gt(0)").remove();
         }
@@ -1616,13 +1616,14 @@
     }
 
     //增加一级亲属癌症行
-    function addFamilyRow(data, bodyId) {
+    function addFamilyRow(data, bodyId, id) {
         if (data == null) {
             data = {index: 0};
         } else {
             data.index = 0;
         }
         data.bodyId = bodyId;
+        data.id = id;
 
         var max = -1;
         $('#crcFamilyBody tr').each(function (i, a) {
@@ -1674,10 +1675,8 @@
     }
 
     //删除一级亲属癌症行
-    function delFamilyRow(index, bodyId,e) {
-        if ($('#' + bodyId).children().length == 2) {
-            return;
-        }
+    function delFamilyRow(index, bodyId,inputId) {
+
         // var id=mini.get("relationid"+index).getValue();//后台删除记录
         // if(id!=null && id!=''){
         //     var personid=mini.get("id").getValue();
@@ -1700,6 +1699,9 @@
         //     })
         // }
         $("#familyRow" + index).remove();
+        if ($('#' + bodyId).children().length == 1) {
+            mini.get(inputId).setValue(2);
+        }
     }
 
     //保存
@@ -1739,11 +1741,29 @@
         if(idFlag){
             return;
         }else{
+            var crcValidateFlag=true;
+            var crcIdContent='';
             if(crcFlag=="1"){
-                if(operation=='3'){
-                    personcardTypeChange();
-                    mini.get("personcard").validate();
-                    crcNumerChange();//单独再验证一次大肠癌id
+                personcardTypeChange();
+                mini.get("personcard").validate();
+
+                //单独再验证一次大肠癌id
+                var id=mini.get("id").getValue();
+                var crcNum=mini.get("idNumber").getValue();
+                if($.trim(crcNum) == "" || (crcNum.length == 12)){
+                    $.ajax({
+                        url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
+                        type:'get',
+                        async:false,
+                        dataType:'json',
+                        success:function(res){
+                            if(!res.ok){ //重复
+                                crcIdContent=res.msg;
+                                crcValidateFlag=false;
+                                return;
+                            }
+                        }
+                    })
                 }
             }
             var form = new mini.Form("#form1");
@@ -1759,6 +1779,18 @@
                 });
                 return;
             }else{
+                if(crcValidateFlag==false){
+                    mini.get("idNumber").set({isValid:false,errorText:crcIdContent});
+                    miniErrorLocation();
+                    mini.showTips({
+                        content: "页面有项目未正确填写",
+                        state: "error",
+                        x: "center",
+                        y: "center",
+                        timeout: 3000
+                    });
+                    return;
+                }
                 if(saveFlag==0) {
                    makeResult();
                     makeChushaiResult();
@@ -1770,6 +1802,13 @@
                     icds[2]=params["historyList[2].icd10"];
                     icds[3]=params["historyList[3].icd10"];
                     icds[4]=params["historyList[4].icd10"];
+                    icds[5]=params["historyList[5].icd10"];
+                    icds[6]=params["historyList[6].icd10"];
+                    icds[7]=params["historyList[7].icd10"];
+                    icds[8]=params["historyList[8].icd10"];
+                    icds[9]=params["historyList[9].icd10"];
+                    icds[10]=params["historyList[10].icd10"];
+                    icds[11]=params["historyList[11].icd10"];
 
                     for(var i = 0; i < icds.length; i++) {
                         if(icds[i] == undefined) {

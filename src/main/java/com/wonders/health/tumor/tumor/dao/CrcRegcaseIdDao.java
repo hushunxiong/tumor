@@ -21,4 +21,6 @@ public interface CrcRegcaseIdDao extends BaseDao<CrcRegcaseId> {
 
     public List<CrcRegcaseId> getByAreacode(@Param("areaCode") String areaCode);
 
+    public CrcRegcaseId getByJgcode(@Param("jgCode") String areaCode);
+
 }

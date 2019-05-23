@@ -36,12 +36,12 @@
 
         //删除行
         function delSelfRow(index) {
-            if(index == 0){
-                return;
-            }
-            if ($('#azsBody').children().length == 2) {
-                return;
-            }
+            // if(index == 0){
+            //     return;
+            // }
+            // if ($('#azsBody').children().length == 2) {
+            //     return;
+            // }
 
             // var id=mini.get("historyId"+index).getValue();//后台删除记录
             //
@@ -66,8 +66,10 @@
             //         }
             //     })
             // }
-
             $("#selfRow" + index).remove();
+            if ($('#azsBody').children().length == 1) {
+                mini.get("azsHistory").setValue(2);
+            }
         }
 
     </script>
