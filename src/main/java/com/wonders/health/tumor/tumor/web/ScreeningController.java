@@ -277,8 +277,6 @@ public class ScreeningController extends BaseController {
         String now= String.valueOf(LocalDate.now().getYear());
         String year=now.substring(2,4);
 
-//        List<CrcRegcaseId>diclist=crcRegcaseIdService.getByAreacode(areaCode);
-
         CrcRegcaseId dic=crcRegcaseIdService.getByJgcode(getSessionUser().getOrgCode());
 
 
@@ -291,7 +289,6 @@ public class ScreeningController extends BaseController {
                 msg="该id已被占用！";
             }
         }
-        Thread.currentThread().sleep(200);//毫秒
         ajaxReturn.setOk(isChecked);
         ajaxReturn.setMsg(msg);
 

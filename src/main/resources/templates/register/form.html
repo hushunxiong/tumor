@@ -600,7 +600,7 @@
                     <td width="20%"><span class="red-span">*</span>大肠癌：大肠癌筛查ID</td>
                     <td width="80%" class="text-l">
                         <input id="idNumber" name="crcRegcase.idNumber" class="mini-textbox" th:value="${crcRegcase.idNumber}"
-                               width="100" maxlength="12" vtype="crcNumer" required="required" onvaluechanged="crcNumerChange"/>
+                               width="100" maxlength="12" required="required" onvalidation="crcNumerChange"/>
                     </td>
                 </tr>
                 <tr>
@@ -1386,28 +1386,34 @@
     /**
      * 校验大肠癌筛查ID
      */
-    mini.VTypes["crcNumerErrorText"] = "大肠癌筛查ID位数必须是12位";
-    mini.VTypes["crcNumer"] = function (value) {
-        var length = value.length;
-        return $.trim(value) == "" || (length == 12);
-    }
-
-    function crcNumerChange(){
+    function crcNumerChange(e){
+        var flag = true;
         var id=mini.get("id").getValue();
         var crcNum=mini.get("idNumber").getValue();
-        if($.trim(crcNum) == "" || (crcNum.length == 12)){
+
+        if($.trim(crcNum) != "" && (crcNum.length == 12)){
             $.ajax({
                 url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
                 type:'get',
                 dataType:'json',
+                async:false,
                 success:function(res){
                     if(!res.ok){ //重复
-                        mini.get("idNumber").set({isValid:false,errorText:res.msg});
-                        return;
+                        // mini.get("idNumber").set({isValid:false,errorText:res.msg});
+                        errorText=res.msg;
+                        flag=false;
                     }
                 }
             })
+        }else if($.trim(crcNum) == "" ){
+            errorText="不能为空";
+            flag=false;
+        }else{
+            errorText="大肠癌筛查ID位数必须是12位";
+            flag=false;
         }
+        e.errorText = errorText;
+        e.isValid = flag;
     }
 
     //长期厨房油烟接触变更
