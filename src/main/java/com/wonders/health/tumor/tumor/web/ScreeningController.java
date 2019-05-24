@@ -266,7 +266,7 @@ public class ScreeningController extends BaseController {
      **/
     @RequestMapping(value = {"", "checkIdnumber"}, method = RequestMethod.GET)
     @ResponseBody
-    public AjaxReturn checkIdnumber(String manageid, String idnumber){
+    public AjaxReturn checkIdnumber(String manageid, String idnumber)throws Exception{
         AjaxReturn ajaxReturn=new AjaxReturn();
         String msg="";
         Boolean isChecked=false;
@@ -276,8 +276,6 @@ public class ScreeningController extends BaseController {
 
         String now= String.valueOf(LocalDate.now().getYear());
         String year=now.substring(2,4);
-
-//        List<CrcRegcaseId>diclist=crcRegcaseIdService.getByAreacode(areaCode);
 
         CrcRegcaseId dic=crcRegcaseIdService.getByJgcode(getSessionUser().getOrgCode());
 
