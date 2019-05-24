@@ -266,7 +266,7 @@ public class ScreeningController extends BaseController {
      **/
     @RequestMapping(value = {"", "checkIdnumber"}, method = RequestMethod.GET)
     @ResponseBody
-    public AjaxReturn checkIdnumber(String manageid, String idnumber){
+    public AjaxReturn checkIdnumber(String manageid, String idnumber)throws Exception{
         AjaxReturn ajaxReturn=new AjaxReturn();
         String msg="";
         Boolean isChecked=false;
@@ -291,6 +291,7 @@ public class ScreeningController extends BaseController {
                 msg="该id已被占用！";
             }
         }
+        Thread.currentThread().sleep(200);//毫秒
         ajaxReturn.setOk(isChecked);
         ajaxReturn.setMsg(msg);
 
