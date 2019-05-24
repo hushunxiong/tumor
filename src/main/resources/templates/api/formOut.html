@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>肿瘤早发现初筛登记详情</title>
+    <link>
+    <script></script>
+</head>
+<body>
+<!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div id="form1">
+        <div class="title_tip mt-30">基本信息</div>
+        <span class="mini-hidden" id="id" name="personInfo.id" th:value="${personInfo.id}"></span>
+        <table class="table_new table_new5 mt-10" id="baseForm">
+            <tbody>
+            <tr>
+                <td width="10%"><span class="red-span">*</span>筛查年份</td>
+                <td width="20%">
+                    <input id="checkYear" name="checkYear" class="mini-combobox" showNullItem="true"  width="47%" emptyText="请选择"
+                           th:data="${years}" th:value="${checkYear}"
+                           textField="text" valueField="id" allowInput="true" valueFromSelect="true" required="true" />
+                </td>
+                <td width="10%"><span class="red-span">*</span>证件类型</td>
+                <td width="20%">
+                    <input id="personcardType" name="personInfo.personcardType" class="mini-combobox" showNullItem="true" width="47%" emptyText="请选择"
+                           th:data="${#dic.generals('60022')}" th:value="${personInfo.personcardType}"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true" onvaluechanged="personcardTypeChange"/>
+                </td>
+                <td width="10%"><span class="red-span">*</span>证件号码</td>
+                <td>
+                    <input id="personcard" name="personInfo.personcard" class="mini-textbox" emptyText="请输入" th:value="${personInfo.personcard}" maxLength="18" required="true" onvaluechanged="personcardChange" width="90%"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%"><span class="red-span">*</span>姓&nbsp;&nbsp;名</td>
+                <td width="20%">
+                    <input id="isNew" name="personInfo.isNew" class="mini-hidden"  th:value="${personInfo.isNew}"/>
+                    <input id="name" name="personInfo.name" class="mini-textbox" vtype="chinese" emptyText="请输入" th:value="${personInfo.name}" maxLength="20" required="true" />
+                </td>
+                <td width="10%"><span class="red-span">*</span>性&nbsp;&nbsp;别</td>
+                <td width="20%">
+                    <input id="gender" name="personInfo.gender" class="mini-combobox" showNullItem="true" width="47%" emptyText="请选择"
+                           th:data="${#dic.generals('60023')}" th:value="${personInfo.gender}"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
+                </td>
+                <td width="10%"><span class="red-span">*</span>出生日期</td>
+                <td style="text-align: left">
+                    <input id="birth" name="personInfo.birth" class="mini-datepicker"
+                           th:value="${personInfo.birth}" allowInput="false" style="width: 30%;text-align: left;margin-left: 20px" required="true" />
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">移动电话</td>
+                <td width="20%">
+                    <input id="mobile" name="personInfo.mobile" class="mini-textbox" vtype="mobile;group:mobile,telephone" emptyText="请输入" th:value="${personInfo.mobile}">
+                </td>
+                <td width="10%">固定电话</td>
+                <td width="20%">
+                    <input id="telephone" name="personInfo.telephone" class="mini-textbox" vtype="phone;group:mobile,telephone" emptyText="请输入" th:value="${personInfo.telephone}">
+                </td>
+                <td colspan="2" class="bg-white"></td>
+            </tr>
+            <tr>
+                <td width="10%"><span class="red-span">*</span>民族</td>
+                <td width="20%">
+                    <input id="nation" name="personInfo.nation" class="mini-combobox" showNullItem="true" width="70%" emptyText="请选择"
+                           th:data="${#dic.generals('60021')}" th:value="${personInfo.nation}" vtype="group:nation,nationOther"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
+                </td>
+                <td width="10%">其他民族</td>
+                <td width="20%">
+                    <input id="nationOther" name="personInfo.nationOther" class="mini-textbox" emptyText="请输入"  vtype="group:nation,nationOther" th:value="${personInfo.nationOther}" maxLength="8"/>
+                </td>
+                <td colspan="2" class="bg-white"></td>
+            </tr>
+            <tr>
+                <td width="10%"><span class="red-span">*</span>婚姻状况</td>
+                <td width="20%">
+                    <input id="marriage" name="personInfo.marriage" class="mini-combobox" showNullItem="true" width="70%" emptyText="请输入"
+                           th:data="${#dic.generals('60024')}" th:value="${personInfo.marriage}"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
+                </td>
+                <td width="10%"><span class="red-span">*</span>文化程度</td>
+                <td width="20%">
+                    <input id="education" name="personInfo.education" class="mini-combobox" showNullItem="true" width="70%" emptyText="请选择"
+                           th:data="${#dic.generals('60025')}" th:value="${personInfo.education}"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
+                </td>
+                <td width="10%"><span class="red-span">*</span>医疗保险类型</td>
+                <td>
+                    <input id="paymentSituation" name="personInfo.paymentSituation" class="mini-combobox" showNullItem="true" width="80%" emptyText="请选择"
+                           th:data="${#dic.generals('60027')}" th:value="${personInfo.paymentSituation}"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%"><span class="red-span">*</span>职业</td>
+                <td width="20%">
+                    <input id="profession" name="personInfo.profession" class="mini-combobox" showNullItem="true" width="100%" emptyText="请选择"
+                           th:data="${#dic.generals('60026')}" th:value="${personInfo.profession}"
+                          textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
+                </td>
+                <td width="10%">其他职业</td>
+                <td width="20%">
+                    <input id="otherProfession" name="personInfo.otherProfession" class="mini-textbox" emptyText="请输入" th:value="${personInfo.otherProfession}" maxLength="100"/>
+                </td>
+                <td colspan="2" class="bg-white"></td>
+            </tr>
+            <tr>
+                <td width="10%"><span class="red-span">*</span>户籍地址</td>
+                <td colspan="5" class="bg-white" style="padding:0px;">
+                    <div th:replace="/common/address :: address('hjd', 'personInfo.paddressProvince',${personInfo.paddressProvince == null ? '310000000000' : personInfo.paddressProvince}, 'personInfo.paddressCity', ${personInfo.paddressCity == null ? '310100000000' : personInfo.paddressCity}, 'personInfo.paddressCounty', ${personInfo.paddressCounty}, 'personInfo.paddressTown', ${personInfo.paddressTown}, 'personInfo.paddressCommittee',${personInfo.paddressCommittee},'personInfo.paddressDetail', ${personInfo.paddressDetail},false)">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%"><span class="red-span">*</span>居住地址</td>
+                <td colspan="5" class="bg-white" style="padding:0px;">
+                    <div th:replace="/common/address :: address('jzd', 'personInfo.addressProvince',${personInfo.addressProvince == null ? '310000000000' : personInfo.addressProvince}, 'personInfo.addressCity', ${personInfo.addressCity == null ? '310100000000' : personInfo.addressCity}, 'personInfo.addressCounty', ${personInfo.addressCounty}, 'personInfo.addressTown', ${personInfo.addressTown}, 'personInfo.addressCommittee',${personInfo.addressCommittee},'personInfo.addressDetail', ${personInfo.addressDetail},true)">
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="title_tip mt-30">危险度评估</div>
+        <div th:if="${lucFlag} eq '1'">
+            <table id="yyTable" class="table_new table_new5 mt-10">
+                <tbody>
+                <tr>
+                    <input id="lucRegcaseid" name="lucRegcase.id" class="mini-hidden" th:value="${lucRegcase.id}"/>
+                    <input id="lucriskid" name="lucRisk.id" class="mini-hidden" th:value="${lucRisk.id}"/>
+                    <td width="20%">肺癌：是否有长期厨房油烟接触（烹饪半小时以上）</td>
+                    <td width="80%" class="text-l">
+                        <input id="chufangyouyan" name="lucRisk.chufangyouyan" class="mini-radiobuttonlist" width="47%"
+                               th:data="${#dic.generals('60013')}" th:value="${lucRisk.chufangyouyan}"  required="true"
+                               textField="name" valueField="code" onvaluechanged="yyjcChange"/>
+                    </td>
+                <tr>
+                    <td width="20%">肺癌：长期厨房油烟接触频率</td>
+                    <td width="80%" class="text-l">
+                        <input id="youyanjiechupinlv" name="lucRisk.youyanjiechupinlv" class="mini-radiobuttonlist" width="47%"
+                               th:data="${#dic.generals('60012')}" th:value="${lucRisk.youyanjiechupinlv}"
+                               textField="name" valueField="code"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：累计厨房油烟接触年数</td>
+                    <td width="80%" class="text-l">
+                        <input id="youyanjiechunianshu" name="lucRisk.youyanjiechunianshu" class="mini-textbox"
+                               width="100" th:value="${lucRisk.youyanjiechunianshu}" vtype="int;maxLength:3"/>&nbsp;&nbsp;年
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：您做饭时是否会使用抽油烟机？</td>
+                    <td width="80%" class="text-l">
+                        <input id="chouyouyanji" name="lucRisk.chouyouyanji" class="mini-radiobuttonlist" width="47%"
+                               th:data="${#dic.generals('60013')}" th:value="${lucRisk.chouyouyanji}"
+                               textField="name" valueField="code" onvaluechanged="cyyjChange"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：使用抽油烟机年数</td>
+                    <td width="80%" class="text-l">
+                        <input id="chouyouyanjinianshu" name="lucRisk.chouyouyanjinianshu" class="mini-radiobuttonlist" width="47%"
+                               th:data="${#dic.generals('60014')}" th:value="${lucRisk.chouyouyanjinianshu}"
+                               textField="name" valueField="code"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table id="xyTable" class="table_new table_new5">
+                <tbody>
+                <tr>
+                    <td width="20%">肺癌：现在的吸烟状况</td>
+                    <td width="80%" class="text-l">
+                        <input id="xiyan" name="lucRisk.xiyan" class="mini-radiobuttonlist" width="47%"
+                               th:data="${#dic.generals('60008')}" th:value="${lucRisk.xiyan}" required="true"
+                               textField="name" valueField="code" onvaluechanged="xiyanChange"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：最后一次吸烟距今多少年</td>
+                    <td width="80%" class="text-l">
+                        <input id="zuihouyicxiyan" name="lucRisk.zuihouyicxiyan" class="mini-textbox"
+                               width="100" th:value="${lucRisk.zuihouyicxiyan}" vtype="int;maxLength:3"/>&nbsp;&nbsp;年
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：是从什么时候开始吸烟的</td>
+                    <td width="80%" class="text-l">
+                        <input id="kaishixiyannianling" name="lucRisk.kaishixiyannianling" class="mini-textbox"
+                               width="100" th:value="${lucRisk.kaishixiyannianling}" vtype="int;maxLength:3"/>&nbsp;&nbsp;周岁
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：吸烟的时候平均每天吸多少烟</td>
+                    <td width="80%" class="text-l">
+                        <input id="meitianxiyanliang" name="lucRisk.meitianxiyanliang" class="mini-textbox"
+                               width="100" th:value="${lucRisk.meitianxiyanliang}" vtype="int;maxLength:3"/>&nbsp;&nbsp;支/每天
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table id="bdxyTable" class="table_new table_new5">
+                <tbody>
+                <tr>
+                    <td width="20%">肺癌：被动吸烟情况</td>
+                    <td width="80%" class="text-l">
+                        <input id="beidongxiyan" name="lucRisk.beidongxiyan" class="mini-radiobuttonlist" width="70%"
+                               th:data="${#dic.generals('60015')}" th:value="${lucRisk.beidongxiyan}" required="true"
+                               textField="name" valueField="code" onvaluechanged="bdxyChange"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：被动吸烟对象</td>
+                    <td width="80%" class="text-l bg-white">
+                        <input id="beidongxiyanduixiang" name="lucRisk.beidongxiyanduixiang" class="mini-checkboxlist"
+                               th:data="${#dic.generals('60016')}" th:value="${lucRisk.beidongxiyanduixiang}"
+                               textField="name" valueField="code" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：被动吸烟累计年数</td>
+                    <td width="80%" class="text-l">
+                        <input id="beidongxiyannianshu" name="lucRisk.beidongxiyannianshu" class="mini-textbox"
+                               width="100" th:value="${lucRisk.beidongxiyannianshu}" vtype="int;maxLength:3"/>&nbsp;&nbsp;年
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table id="zawzTable" class="table_new table_new5">
+                <tbody>
+                <tr>
+                    <td width="20%">肺癌：职业致癌物质接触</td>
+                    <td width="80%" class="text-l">
+                        <input id="zhiyezhiaiwuzhi" name="lucRisk.zhiyezhiaiwuzhi" class="mini-radiobuttonlist" width="47%"
+                               th:data="${#dic.generals('60007')}" th:value="${lucRisk.zhiyezhiaiwuzhi}" required="true"
+                               textField="name" valueField="code" onvaluechanged="zawzChange"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：致癌物类型</td>
+                    <td width="80%" class="text-l bg-white">
+                        <input id="zhiaiwuzhileixing" name="lucRisk.zhiaiwuzhileixing" class="mini-checkboxlist"
+                               th:data="${#dic.generals('60017')}" th:value="${lucRisk.zhiaiwuzhileixing}"
+                               textField="name" valueField="code" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：致癌物质累计接触年数</td>
+                    <td width="80%" class="text-l">
+                        <input id="zhiaiwuzhinianshu" name="lucRisk.zhiaiwuzhiNianshu" class="mini-textbox"
+                               width="100" th:value="${lucRisk.zhiaiwuzhiNianshu}" vtype="int;maxLength:3"/>&nbsp;&nbsp;年
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table_new table_new5">
+                <tbody>
+                <tr>
+                    <td width="20%">肺癌：是否有哮喘</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'xiaochuan','lucRisk.xiaochuan',${lucRisk.xiaochuan},'xiaochuanNianshu','lucRisk.xiaochuanNianshu',${lucRisk.xiaochuanNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：是否有慢性支气管炎</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'zhiqiguanyan','lucRisk.zhiqiguanyan',${lucRisk.xiaochuan},'zhiqiguanyanNianshu','lucRisk.zhiqiguanyanNianshu',${lucRisk.zhiqiguanyanNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：是否有肺气肿</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'feiqizhong','lucRisk.feiqizhong',${lucRisk.feiqizhong},'feiqizhongNianshu','lucRisk.feiqizhongNianshu',${lucRisk.feiqizhongNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td width="20%">肺癌：是否有肺结核</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'feijiehe','lucRisk.feijiehe',${lucRisk.feijiehe},'feijieheNianshu','lucRisk.feijieheNianshu',${lucRisk.feijieheNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：是否有硅沉着病</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'guichenzhuo','lucRisk.guichenzhuo',${lucRisk.guichenzhuo},'guichenzhuoNianshu','lucRisk.guichenzhuoNianshu',${lucRisk.guichenzhuoNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：是否有肺间质纤维化</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'xianweihua','lucRisk.xianweihua',${lucRisk.xianweihua},'xianweihuaNianshu','lucRisk.xianweihuaNianshu',${lucRisk.xianweihuaNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：是否有慢性阻塞性肺炎</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'manzufei','lucRisk.manzufei',${lucRisk.manzufei},'manzufeiNianshu','lucRisk.manzufeiNianshu',${lucRisk.manzufeiNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：是否有患有其他肺部疾病</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('year', 'qitafeibing','lucRisk.qitafeibing',${lucRisk.qitafeibing},'qitafeibingNianshu','lucRisk.qitafeibingNianshu',${lucRisk.qitafeibingNianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：近期是否有持续性干咳</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('day', 'ganke','lucRisk.ganke',${lucRisk.ganke},'gankeTianshu','lucRisk.gankeTianshu',${lucRisk.gankeTianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：近期是否有痰中带血</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('day', 'tanzhongdaixue','lucRisk.tanzhongdaixue',${lucRisk.tanzhongdaixue},'tanzhongdaixTianshu','lucRisk.tanzhongdaixTianshu',${lucRisk.tanzhongdaixTianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：近期是否有活动后气急</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('day', 'qiji','lucRisk.qiji',${lucRisk.qiji},'qijiTianshu','lucRisk.qijiTianshu',${lucRisk.qijiTianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：近期是否有胸闷</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('day', 'xiongmen','lucRisk.xiongmen',${lucRisk.xiongmen},'xiongmenTianshu','lucRisk.xiongmenTianshu',${lucRisk.xiongmenTianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：近期有胸痛</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/diseaseTime :: selectTime('day', 'xiongtong','lucRisk.xiongtong',${lucRisk.xiongtong},'xiongtongTianshu','lucRisk.xiongtongTianshu',${lucRisk.xiongtongTianshu})">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%">肺癌：近期有声音嘶哑</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('shengyinsiya','lucRisk.shengyinsiya',${lucRisk.shengyinsiya})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：近期反复同部位的肺炎</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('tongbuweifeiyan','lucRisk.tongbuweifeiyan',${lucRisk.tongbuweifeiyan})">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table id="fjjTable" class="table_new table_new5">
+                <tbody>
+                <tr>
+                    <td width="20%">肺癌：既往放射性检查或诊疗是否发现肺部结节</td>
+                    <td width="80%" class="text-l">
+                        <div>
+                        <table class="table_new table_new6">
+                            <tr>
+                                <td width="100%" class="text-l bg-white">
+                                    <input id="feijiejie" name="lucRisk.feijiejie" class="mini-radiobuttonlist" required="true"
+                                           th:data="${#dic.generals('60007')}" th:value="${lucRisk.feijiejie}"
+                                           textField="name" valueField="code" onvaluechanged="fjjChange"/>
+                               </td>
+                            </tr>
+                       </table>
+                       </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：肺部结节情况</td>
+                    <td width="80%" class="text-l">
+                        <table class="table_new table_new6">
+                            <tr>
+                                <td width="20%">结节大小：</td>
+                                <td width="30%"  style="text-align: left">
+                                    <input id="jiejiedaxiao" name="lucRisk.jiejiedaxiao" class="mini-textbox"
+                                           width="100" th:value="${lucRisk.jiejiedaxiao}" maxlength="50"/>
+                                </td>
+                                <td width="20%">结节形状：</td>
+                                <td width="30%"  style="text-align: left">
+                                    <input id="jiejiexingtai" name="lucRisk.jiejiexingtai" class="mini-textbox"
+                                           width="100" th:value="${lucRisk.jiejiexingtai}" maxlength="100"/>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：有无毛玻璃样改变</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('maoboli','lucRisk.maoboli',${lucRisk.maoboli})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肺癌：有无实性结节</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('shixingjiejie','lucRisk.shixingjiejie',${lucRisk.shixingjiejie})">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${scFlag} eq '1'">
+            <table class="table_new table_new5 mt-10">
+                <tbody>
+                <tr>
+                    <input id="scRegcaseid" name="scRegcase.id" class="mini-hidden" th:value="${scRegcase.id}"/>
+                    <input id="scriskid" name="scRisk.id" class="mini-hidden" th:value="${scRisk.id}"/>
+                    <td width="20%" rowspan="2">胃癌：常吃下列食物吗？</td>
+                    <td width="15%" class="bg-white">a. 新鲜蔬菜</td>
+                    <td class="bg-white">
+                        <input id="xinxianshucai" name="scRisk.xinxianshucai" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
+                               th:data="${#dic.generals('60009')}" th:value="${scRisk.xinxianshucai}" required="true"
+                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                    </td>
+                    <td width="15%" class="bg-white">b. 新鲜水果</td>
+                    <td class="bg-white">
+                        <input id="xinxianshuiguo" name="scRisk.xinxianshuiguo" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
+                               th:data="${#dic.generals('60009')}" th:value="${scRisk.xinxianshuiguo}" required="true"
+                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                    </td>
+                    <td width="15%" class="bg-white">c. 新鲜肉类</td>
+                    <td class="bg-white">
+                        <input id="xinxianroulei" name="scRisk.xinxianroulei" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
+                               th:data="${#dic.generals('60009')}" th:value="${scRisk.xinxianroulei}" required="true"
+                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="3" class="bg-white">d. 加工肉类（火腿、香肠、腊肉、腌肉）</td>
+                    <td class="bg-white">
+                        <input id="jiagongroulei" name="scRisk.jiagongroulei" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
+                               th:data="${#dic.generals('60009')}" th:value="${scRisk.jiagongroulei}" required="true"
+                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                    </td>
+                    <td class="bg-white">e. 霉变食品</td>
+                    <td class="bg-white">
+                        <input id="meibianshiwu" name="scRisk.meibianshiwu" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
+                               th:data="${#dic.generals('60009')}" th:value="${scRisk.meibianshiwu}" required="true"
+                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table id="hjTable" class="table_new table_new5">
+                <tbody>
+                <tr>
+                    <td width="20%">胃癌：近12个月内，喝过酒吗？</td>
+                    <td width="80%" class="text-l">
+                        <div>
+                            <table class="table_new table_new6">
+                                <tr>
+                                    <td width="100%" class="text-l bg-white">
+                                        <input id="hejiu" name="scRisk.hejiu" class="mini-radiobuttonlist" required="true"
+                                               th:data="${#dic.generals('60007')}" th:value="${scRisk.hejiu}"
+                                               textField="name" valueField="code" onvaluechanged="hejiuChange"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：过去12个月里，饮酒的频率是怎样的？</td>
+                    <td width="80%" class="text-l">
+                        <input id="hejiupinlv" name="scRisk.hejiupinlv" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                               th:data="${#dic.generals('60010')}" th:value="${scRisk.hejiupinlv}"
+                               textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：过去12个月饮酒的日子里，平均每天的饮酒量是？</td>
+                    <td width="80%" class="text-l">
+                        <table id="yjlTable">
+                        <tbody>
+                            <tr>
+                                <td width="20%" class="bg-white">
+                                    <input id="shifouzhidaohejiuliang" name="scRisk.shifouzhidaohejiuliang" class="mini-radiobuttonlist"
+                                           th:data="${#dic.generals('60011')}" th:value="${scRisk.shifouzhidaohejiuliang}"
+                                           textField="name" valueField="code" onvaluechanged="sfzdhjlChange"/>
+                                </td>
+                                <td class="bg-white">
+                                    <input id="hejiuliang" name="scRisk.hejiuliang" class="mini-textbox"
+                                           width="100" th:value="${scRisk.hejiuliang}" vtype="int"/>&nbsp;饮酒单位
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table_new table_new5">
+                <tbody>
+                <tr>
+                    <input id="scssid" name="licRisk.scCheckId" th:value="${scRisk.scCheckId}" class="mini-hidden"/>
+                    <td width="20%">胃癌：有无慢性萎缩性胃炎或肥厚性胃炎</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('weisuoxingweiyan','scRisk.weisuoxingweiyan',${scRisk.weisuoxingweiyan})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：有无胃、十二指肠溃疡</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('shierzhichangkuiyang','scRisk.shierzhichangkuiyang',${scRisk.shierzhichangkuiyang})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：有无胃出血</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('weichuxue','scRisk.weichuxue',${scRisk.weichuxue})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：有无食管炎</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('shiguanyan','scRisk.shiguanyan',${scRisk.shiguanyan})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：有无胃息肉</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('weixirou','scRisk.weixirou',${scRisk.weixirou})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：有无手术后残胃</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('canwei','scRisk.canwei',${scRisk.canwei})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">胃癌：有无恶性贫血</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('pinxue','scRisk.pinxue',${scRisk.pinxue})">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${crcFlag} eq '1'">
+            <table class="table_new table_new5 mt-10">
+                <tbody>
+                <tr>
+                    <input id="crcid" name="crcRegcase.id" th:value="${crcRegcase.id}" class="mini-hidden"/>
+                    <input id="crcRiskid" name="crcRisk.id" th:value="${crcRisk.id}" class="mini-hidden"/>
+                    <input id="crcCheckId" name="crcRisk.crcCheckId" th:value="${crcRisk.crcCheckId}" class="mini-hidden"/>
+                    <td width="20%"><span class="red-span">*</span>大肠癌：大肠癌筛查ID</td>
+                    <td width="80%" class="text-l">
+                        <input id="idNumber" name="crcRegcase.idNumber" class="mini-textbox" th:value="${crcRegcase.idNumber}"
+                               width="100" maxlength="12" vtype="crcNumer" required="required" onvaluechanged="crcNumerChange"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：现在的吸烟状况</td>
+                    <td width="80%" class="text-l">
+                        <div>
+                            <table class="table_new table_new6">
+                                <tr>
+                                    <td width="100%" class="text-l bg-white">
+                                        <input id="crcxiyan" name="crcRisk.xiyan" class="mini-radiobuttonlist"
+                                               th:data="${#dic.generals('60008')}" th:value="${crcRisk.xiyan}" required="true"
+                                               textField="name" valueField="code" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：有无肠息肉史</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('changxirou','crcRisk.changxirou',${crcRisk.changxirou})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：有无慢性阑尾炎或阑尾切除史</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('lanweiyan','crcRisk.lanweiyan',${crcRisk.lanweiyan})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：有无慢性胆囊炎或胆囊切除史</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('dannangyan','crcRisk.dannangyan',${crcRisk.dannangyan})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：有无血吸虫病</td>
+                    <td width="80%" class="text-l">
+                        <table id="xxcTable" class="table_new table_new6">
+                            <tbody>
+                            <tr>
+                                <td width="70%" class="text-l bg-white">
+                                    <input id="xuexichong" name="crcRisk.xuexichong" class="mini-radiobuttonlist"
+                                           th:data="${#dic.generals('60007')}" th:value="${crcRisk.xuexichong}" required="true"
+                                           textField="name" valueField="code" onvaluechanged="xxcChange"/>
+                                </td>
+                                <td width="10%">感染年份：</td>
+                                <td width="10%">
+                                    <input id="ganrannian" name="crcRisk.ganrannian" class="mini-textbox"
+                                           width="100" th:value="${crcRisk.ganrannian}" vtype="int"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：有无慢性腹泻史</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('manxingfuxie','crcRisk.manxingfuxie',${crcRisk.manxingfuxie})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：有无慢性便秘史</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('manxingbianmi','crcRisk.manxingbianmi',${crcRisk.manxingbianmi})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：有无粘液便或血便史</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('nianyexuebian','crcRisk.nianyexuebian',${crcRisk.nianyexuebian})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">大肠癌：近10年来有无经历对精神造成较大创伤或痛苦的事件</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('jingshenchuangshang','crcRisk.jingshenchuangshang',${crcRisk.jingshenchuangshang})">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${licFlag} eq '1'">
+            <table class="table_new table_new5 mt-10">
+                <tbody>
+                <tr>
+                    <input id="licRegcaseid" name="licRegcase.id" class="mini-hidden" th:value="${licRegcase.id}"/>
+                    <input id="licssid" name="licRisk.id" th:value="${licRisk.id}" class="mini-hidden"/>
+                    <td width="20%">肝癌：有无乙型肝炎</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('yigan','licRisk.yigan',${licRisk.yigan})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肝癌：有无丙型肝炎</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('binggan','licRisk.binggan',${licRisk.binggan})">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20%">肝癌：有无肝硬化</td>
+                    <td width="80%" class="text-l">
+                        <div th:replace="/common/existSelect :: select('ganyinghua','licRisk.ganyinghua',${licRisk.ganyinghua})">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:replace="/common/selfCancer :: selfSelect">
+        </div>
+
+        <div th:if="${crcFlag} eq '1' and ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('crcFamilyTable', 'crcFamilyBody', 'crcFamilyFlag','大肠癌：一级亲属（父母、兄弟姐妹、子女）有无大肠癌史')">
+            </div>
+        </div>
+
+        <div th:if="${licFlag} eq '1' and ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('licFamilyTable', 'licFamilyBody', 'licFamilyFlag','肝癌：一级亲属（父母、兄弟姐妹、子女）有无肝癌史')">
+            </div>
+        </div>
+
+        <div th:if="${scFlag} eq '1' and ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('scFamilyTable', 'scFamilyBody', 'scFamilyFlag','胃癌：一级亲属（父母、兄弟姐妹、子女）有无胃癌史')">
+            </div>
+        </div>
+
+        <div th:if="${lucFlag} eq '1' and ${areaCode} ne '310104000000'">
+            <div th:replace="/common/familyCancer :: familySelect('lucFamilyTable', 'lucFamilyBody', 'lucFamilyFlag','肺癌：一级亲属（父母、兄弟姐妹、子女）有无肺癌史')">
+            </div>
+        </div>
+
+
+        <div th:if="${areaCode} eq '310104000000'">
+            <div th:replace="/common/xuhuiCancer :: xuhuiSelect">
+            </div>
+        </div>
+
+        <div class="title_tip mt-30">危险度评估结果 <button class="my-btn my-btn-blue mr-20" onclick="makeResult()" id="weixiandubtn">计算危险度评估结果</button></div>
+        <table class="table_new table_new5 mt-10">
+            <tbody>
+            <tr th:if="${crcFlag} eq '1'">
+                <td style="width:20%!important;">大肠癌危险度评估结果</td>
+                <td class="text-l">
+                    <input id="crcRiskResult" class="mini-textbox" th:value="${crcRisk.assessmentResult}" allowInput="false"/>
+                    <input id="assessmentResult1" name="crcRisk.assessmentResult" th:value="${crcRisk.assessmentResult}" class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估人员</td>
+                <td class="text-l">
+                    <input id="assessmentDocName1" class="mini-textbox" th:value="${crcRisk.assessmentDocName}" allowInput="false"/>
+                    <input id="assessmentDoc1" name="crcRisk.assessmentDoc" th:value="${crcRisk.assessmentDoc}"  class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估日期</td>
+                <td class="text-l">
+                    <input id="assessmentDate1" name="crcRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(crcRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
+                </td>
+            </tr>
+            <tr th:if="${licFlag} eq '1'">
+                <td width="10%">肝癌危险度评估结果</td>
+                <td class="text-l">
+                    <input id="licRiskResult" class="mini-textbox" th:value="${licRisk.assessmentResult}"  allowInput="false"/>
+                    <input id="assessmentResult2" name="licRisk.assessmentResult" th:value="${licRisk.assessmentResult}"  class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估人员</td>
+                <td class="text-l">
+                    <input id="assessmentDocName2" class="mini-textbox" th:value="${licRisk.assessmentDocName}" allowInput="false" />
+                    <input id="assessmentDoc2" name="licRisk.assessmentDoc" th:value="${licRisk.assessmentDoc}" class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估日期</td>
+                <td class="text-l">
+                    <input id="assessmentDate2" name="licRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(licRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
+                </td>
+            </tr>
+            <tr th:if="${scFlag} eq '1'">
+                <td width="10%">胃癌危险度评估结果</td>
+                <td class="text-l">
+                    <input id="scRiskResult" class="mini-textbox" th:value="${scRisk.assessmentResult}" allowInput="false" />
+                    <input id="assessmentResult3" name="scRisk.assessmentResult" th:value="${scRisk.assessmentResult}" class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估人员</td>
+                <td class="text-l">
+                    <input id="assessmentDocName3" class="mini-textbox" th:value="${scRisk.assessmentDocName}" allowInput="false"/>
+                    <input id="assessmentDoc3" name="scRisk.assessmentDoc"  th:value="${scRisk.assessmentDoc}" class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估日期</td>
+                <td class="text-l">
+                    <input id="assessmentDate3" name="scRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(scRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
+                </td>
+            </tr>
+            <tr th:if="${lucFlag} eq '1'">
+                <td width="10%">肺癌危险度评估结果</td>
+                <td class="text-l">
+                    <input id="lucRiskResult" class="mini-textbox"  th:value="${lucRisk.assessmentResult}" allowInput="false" />
+                    <input id="assessmentResult4" name="lucRisk.assessmentResult"  th:value="${lucRisk.assessmentResult}"  class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估人员</td>
+                <td class="text-l">
+                    <input id="assessmentDocName4" class="mini-textbox"  th:value="${lucRisk.assessmentDocName}" allowInput="false" />
+                    <input id="assessmentDoc4" name="lucRisk.assessmentDoc"  th:value="${lucRisk.assessmentDoc}" class="mini-hidden" />
+                </td>
+                <td width="10%">危险度评估日期</td>
+                <td class="text-l">
+                    <input id="assessmentDate4" name="lucRisk.assessmentDate" class="mini-datepicker"
+                           th:value="${#dates.format(lucRisk.assessmentDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div th:if="${crcFlag} eq '1'">
+         <div class="title_tip mt-30">辅助检查结果</div>
+        <table class="table_new table_new5 mt-10">
+            <tbody>
+            <tr>
+                <td style="width:20%!important;">大肠癌初筛辅助检查结果</td>
+            </tr>
+            <tr>
+                <td width="10%">第一次便隐血检查结果</td>
+                <td class="text-l">
+                    <input id="crcfobtid" name="crcFobt.id" class="mini-hidden" th:value="${crcFobt.id}"/>
+                    <input id="firstFobtResult" name="crcFobt.firstFobtResult" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.firstFobtResult}" onvaluechanged="makeByxResult()"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                </td>
+                <td width="10%">第一次采便器交回时间</td>
+                <td class="text-l">
+                    <input id="cbqReturnDate1" name="crcRegcase.cbqReturnDate1" class="mini-datepicker" required="true"
+                           th:value="${#dates.format(crcRegcase.cbqReturnDate1,'yyyy-MM-dd')}"
+                           width="70%" allowInput="false"/>
+                </td>
+                <td width="10%">第一次便隐血检查时间</td>
+                <td class="text-l">
+                    <input id="firstFobtDate" name="crcFobt.firstFobtDate" class="mini-datepicker" required="true"
+                           th:value="${#dates.format(crcFobt.firstFobtDate,'yyyy-MM-dd')}"
+                           width="70%" allowInput="false"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">第二次便隐血检查结果</td>
+                <td class="text-l">
+                    <input id="secondFobtResult" name="crcFobt.secondFobtResult" class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                           th:data="${#dic.generals('60001')}" th:value="${crcFobt.secondFobtResult}" onvaluechanged="makeByxResult()"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                </td>
+                <td width="10%">第二次采便器交回时间</td>
+                <td class="text-l">
+                    <input id="cbqReturnDate2" name="crcRegcase.cbqReturnDate2" class="mini-datepicker" required="true"
+                           th:value="${#dates.format(crcRegcase.cbqReturnDate2,'yyyy-MM-dd')}"
+                           width="70%" allowInput="false"/>
+                </td>
+                <td width="10%">第二次便隐血检查时间</td>
+                <td class="text-l">
+                    <input id="secondFobtDate" name="crcFobt.secondFobtDate" class="mini-datepicker" required="true"
+                           th:value="${#dates.format(crcFobt.secondFobtDate,'yyyy-MM-dd')}"
+                           width="70%" allowInput="false" />
+            </tr>
+            <tr>
+                <td>便隐血检查结果</td>
+                <td>
+                    <input id="byxResult" class="mini-textbox" name="crcFobt.fobtResult" allowInput="false" th:value="${crcFobt.fobtResult}"/>
+                    <input id="fobtResult" name="crcFobt.fobtResult" class="mini-hidden"  th:value="${crcFobt.fobtResult}"/>
+                </td>
+                <td>便隐血检验员</td>
+                <td>
+                    <input id="fobtDocName" class="mini-textbox" allowInput="false" style="width: 100%" th:value="${crcFobt.fobtDocName}"/>
+                    <input id="fobtDoc" name="crcFobt.fobtDoc" class="mini-hidden" th:value="${crcFobt.fobtDoc}"/>
+                </td>
+                <td colspan="2" class="bg-white"></td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div th:if="${licFlag} eq '1'">
+        <table class="table_new table_new5 mt-10">
+            <tbody>
+            <tr>
+                <td style="width:20%!important;">肝癌初筛辅助检查结果</td>
+            </tr>
+            <tr>
+                <td width="10%">GTP</td>
+                <td class="text-l">
+                    <input id="licid" name="licCheck.id" class="mini-hidden" th:value="${licCheck.id}"/>
+                    <input id="gtp" name="licCheck.gtp" class="mini-textbox" th:value="${licCheck.gtp}" vtype="int"/>
+                </td>
+                <td width="10%">Hbeg</td>
+                <td class="text-l">
+                    <input id="hbeg" name="licCheck.hbeg" class="mini-textbox" th:value="${licCheck.hbeg}"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">AFP（ug/L）</td>
+                <td class="text-l">
+                    <input id="afp" name="licCheck.afp" class="mini-textbox" th:value="${licCheck.afp}" vtype="int" onvaluechanged="makeLicResult();"/>
+                </td>
+                <td width="10%">B超</td>
+                <td class="text-l">
+                    <input id="bus" name="licCheck.bus" class="mini-combobox" showNullItem="true" width="90%" emptyText="请选择"
+                           th:data="${#dic.generals('60001')}" th:value="${licCheck.bus}"  onvaluechanged="makeLicResult();"
+                           textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">肝癌辅助检查结果</td>
+                <td class="text-l">
+                    <input id="licResult" class="mini-textbox" allowInput="false" th:value="${licCheck.licAssistResult}"/>
+                    <input id="licAssistResult" name="licCheck.licAssistResult"  th:value="${licCheck.licAssistResult}" class="mini-hidden" />
+                </td>
+                <td width="10%">肝癌辅助检验人员</td>
+                <td class="text-l">
+                    <input id="licAssistDocName" class="mini-textbox" allowInput="false"  th:value="${licCheck.licAssistDocName}"/>
+                    <input id="licAssistDoc" name="licCheck.licAssistDoc" class="mini-hidden"  th:value="${licCheck.licAssistDoc}"/>
+                </td>
+                <td width="10%">肝癌辅助检验日期</td>
+                <td class="text-l">
+                    <input id="licAssistDate" name="licCheck.licAssistDate" class="mini-datepicker"
+                           th:value="${#dates.format(licCheck.licAssistDate,'yyyy-MM-dd')}"
+                           allowInput="false"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <input id="riskAssessment1" name="crcRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+        <input id="riskAssessment2" name="licRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+        <input id="riskAssessment3" name="scRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+        <input id="riskAssessment4" name="lucRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
+
+        <div class="title_tip mt-30">初筛结果判定<button class="my-btn my-btn-blue mr-20" onclick="makeChushaiResult()" id="chushaibtn">计算初筛结果</button></div>
+        <table class="table_new table_new5 mt-10">
+            <tbody>
+                <tr th:if="${crcFlag} eq '1'">
+                    <input id="riskAssessmentQ1" name="crcRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${crcRisk.qinshuAizhengshi}"/>
+                    <td style="width:20%!important;">大肠癌初筛结果判定</td>
+                    <td width="90%" class="text-l">
+                        <input id="crRegcasemid" name="crcRegcase.manageid" class="mini-hidden" th:value="${crcRegcase.manageid}"/>
+                        <input id="checkResultName1" class="mini-textbox" name="crcRegcase.checkResult" allowInput="false" th:value="${crcRegcase.checkResult}"/>
+                        <input id="checkResult1" name="crcRegcase.checkResult" class="mini-hidden"  th:value="${crcRegcase.checkResult}"/>
+                    </td>
+                </tr>
+                <tr th:if="${licFlag} eq '1'">
+                    <input id="riskAssessmentQ2" name="licRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${licRisk.qinshuAizhengshi}"/>
+                    <td width="10%">肝癌初筛结果判定</td>
+                    <td width="90%" class="text-l">
+                        <input name="licRegcase.manageid" class="mini-hidden" th:value="${licRegcase.manageid}"/>
+                        <input id="checkResultName2" class="mini-textbox"  name="licRegcase.checkResult" allowInput="false"  th:value="${licRegcase.checkResult}"/>
+                        <input id="checkResult2" name="licRegcase.checkResult" class="mini-hidden" th:value="${licRegcase.checkResult}"/>
+                    </td>
+                </tr>
+                <tr th:if="${scFlag} eq '1'">
+                    <input id="riskAssessmentQ3" name="scRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${scRisk.qinshuAizhengshi}"/>
+                    <td width="10%">胃癌初筛结果判定</td>
+                    <td width="90%" class="text-l">
+                        <input name="scRegcase.manageid" class="mini-hidden" th:value="${scRegcase.manageid}"/>
+                        <input id="checkResultName3" class="mini-textbox" name="scRegcase.checkResult" allowInput="false" th:value="${scRegcase.checkResult}"/>
+                        <input id="checkResult3" name="scRegcase.checkResult" class="mini-hidden" th:value="${scRegcase.checkResult}"/>
+                    </td>
+                </tr>
+                <tr th:if="${lucFlag} eq '1'">
+                    <input id="riskAssessmentQ4" name="lucRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${lucRisk.qinshuAizhengshi}"/>
+                    <td width="10%">肺癌初筛结果判定</td>
+                    <td width="90%" class="text-l">
+                        <input id="luRegcaseid" name="lucRegcase.manageid" class="mini-hidden" th:value="${lucRegcase.manageid}"/>
+                        <input id="checkResultName4" class="mini-textbox" name="lucRegcase.checkResult" allowInput="false" th:value="${lucRegcase.checkResult}"/>
+                        <input id="checkResult4" name="lucRegcase.checkResult" class="mini-hidden" th:value="${lucRegcase.checkResult}"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table_new table_new5 mt-10">
+            <tr>
+                <td style="width:20%!important;">登记机构</td>
+                <td class="bg-white" width="20%" style="text-align: center">
+                    <input id="regorgName" class="mini-textbox" style="width: 100%;" th:value="${#auth.getHospitalByCode(personInfo.regorg).name}" allowInput="false"/>
+                    <input id="regorg" name="personInfo.regorg" th:value="${personInfo.regorg}" class="mini-hidden"/>
+                </td>
+                <td>登记人</td>
+                <td class="bg-white" width="20%">
+                    <input id="regdocName" class="mini-textbox"  style="width: 100%;" th:value="${#auth.getUserById(personInfo.regdoc).name}" allowInput="false"/>
+                    <input id="regdoc" name="personInfo.regdoc" th:value="${personInfo.regdoc}" class="mini-hidden"/>
+                </td>
+                <td>登记日期</td>
+                <td class="bg-white" width="20%">
+                    <input id="regdate" name="personInfo.regdate"  style="width: 100%;" th:value="${#dates.format(personInfo.regdate,'yyyy-MM-dd')}" class="mini-textbox" allowInput="false"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="btn-list text-c mt-30">
+        <button class="my-btn my-btn-blue mr-20" onclick="save()" id="savebtn">保存</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
+        <!--<button class="my-btn my-btn-blue mr-20">打印转诊单</button>-->
+    </div>
+
+
+
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    mini.parse();
+
+    var crcDbflag = [[${crcDbflag}]];
+    var licDbflag = [[${licDbflag}]];
+    var scDbflag = [[${scDbflag}]];
+    var lucDbflag = [[${lucDbflag}]];
+    var flag=[[${flag}]];
+
+
+    var crcFlag = [[${crcFlag}]];
+    var licFlag = [[${licFlag}]];
+    var scFlag = [[${scFlag}]];
+    var lucFlag = [[${lucFlag}]];
+
+    //外接页面新字段
+    var ysgh=[[${ysgh}]];
+    var yljg=[[${yljg}]];
+    var areaCode=[[${areaCode}]];
+    var operation=[[${operation}]]; //操作flag 1-查看  2-修改 3-新增
+
+
+
+
+    //危险度评估结果
+    var crcRiskResult=false;    //大肠癌危险度评估结果
+    var licRiskResult=false;    //肝癌危险度评估结果
+    var scRiskResult=false;     //胃癌危险度评估结果
+    var lucRiskResult=false;    //肺癌危险度评估结果
+
+    $(function() {
+        //大肠癌新增
+        if (crcDbflag == "1") {
+        	//血吸虫病
+            $("#xxcTable").children(":first").children(":first").children(":gt(0)").hide();
+        } else {
+			var xuexichong = mini.get("xuexichong").getValue();
+			//无
+			if (xuexichong == "2") {
+				$("#xxcTable").children(":first").children(":first").children(":gt(0)").hide();
+			}
+        }
+        //胃癌新增
+        if (scDbflag == "1") {
+        	//喝酒
+            $("#hjTable").children(":first").children(":gt(0)").hide();
+        } else {
+        	var hejiu = mini.get("hejiu").getValue();
+			//喝酒无
+			if (hejiu == "2") {
+				$("#hjTable").children(":first").children(":gt(0)").hide();
+			}
+        }
+        
+        //肺癌新增
+        if (lucDbflag == "1") {
+        	//厨房油烟接触
+            $("#yyTable").children(":first").children(":gt(0)").hide();
+            //吸烟
+            $("#xyTable").children(":first").children(":gt(0)").hide();
+            //被动吸烟
+            $("#bdxyTable").children(":first").children(":gt(0)").hide();
+            //致癌物质
+            $("#zawzTable").children(":first").children(":gt(0)").hide();
+            //$(".diseaseDym").hide();
+            //肺部结节
+            $("#fjjTable").children(":first").children(":gt(0)").hide();
+
+        } else {
+        	//厨房油烟接触
+        	var chufangyouyan = mini.get("chufangyouyan").getValue();
+			//无
+			if (chufangyouyan == "2") {
+				$("#yyTable").children(":first").children(":gt(0)").hide();
+			}
+			//吸烟
+            var xiyan = mini.get("xiyan").getValue();
+			//从不吸
+			if (xiyan == "1") {
+				$("#xyTable").children(":first").children(":gt(0)").hide();
+			}
+			
+			//被动吸烟
+			var beidongxiyan = mini.get("beidongxiyan").getValue();
+			//否
+			if (beidongxiyan == "4") {
+				$("#bdxyTable").children(":first").children(":gt(0)").hide();
+			}
+			
+			//致癌物质
+			var zhiyezhiaiwuzhi = mini.get("zhiyezhiaiwuzhi").getValue();
+			//无
+			if (zhiyezhiaiwuzhi == "2") {
+				$("#zawzTable").children(":first").children(":gt(0)").hide();
+			}
+			
+			//肺部结节
+			var feijiejie = mini.get("feijiejie").getValue();
+			//无
+			if (feijiejie == "2") {
+				$("#fjjTable").children(":first").children(":gt(0)").hide();
+			}
+			
+            
+        }
+
+        var id=mini.get("id").getValue();
+
+        if(id!=null && id!=''){
+            var historyList = [[${historyList}]];
+            if(historyList!=null){
+                $.each(historyList,function(n,hos){
+                    addSelfRow(hos);
+                    mini.get("hospitalCode"+n).setValue(hos.hospitalCode);
+                    mini.get("hospitalCode"+n).setText(hos.hospitalName);
+                })
+            }
+            if (areaCode =='310104000000') {
+                var xhList=[[${lucFamilyCancerHistoryXHList}]];
+                if(xhList!=null){
+                    mini.get("xhHistory").setValue("1")
+                    $.each(xhList,function(n,xh){
+                        addXuhuiRow(xh);
+                    })
+                }else{
+                    mini.get("xhHistory").setValue("2")
+                }
+            }else{
+                if(crcFlag=="1"){
+                    mini.get("crcFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ1").setValue("2");
+                }
+                if(licFlag =="1"){
+                    mini.get("licFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ2").setValue("2");
+                }
+                if(scFlag =="1"){
+                    mini.get("scFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ3").setValue("2");
+                }
+                if(lucFlag =="1"){
+                    mini.get("lucFamilyFlag").setValue("2");
+                    mini.get("riskAssessmentQ4").setValue("2");
+                }
+                var famList=[[${familyCancerHistoryList}]];
+                if(famList!=null){
+                    $.each(famList,function(n,fam){
+                        if(fam.cancerType=="1"){
+                            mini.get("crcFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ1").setValue("1");
+                            addFamilyRow(fam,"crcFamilyBody");
+                        }else if(fam.cancerType=="2"){
+                            mini.get("licFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ2").setValue("1");
+                            addFamilyRow(fam,"licFamilyBody");
+                        }else if(fam.cancerType=="3"){
+                            mini.get("scFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ3").setValue("1");
+                            addFamilyRow(fam,"scFamilyBody");
+                        }else if(fam.cancerType=="4"){
+                            mini.get("lucFamilyFlag").setValue("1");
+                            mini.get("riskAssessmentQ4").setValue("1");
+                            addFamilyRow(fam,"lucFamilyBody");
+                        }
+
+                    })
+                }
+            }
+
+            if(crcFlag=="1"){
+                xxcChange();
+            }
+            if(scFlag =="1"){
+                hejiuChange()
+                sfzdhjlChange();
+            }
+            if(lucFlag =="1"){
+                yyjcChange();
+                xiyanChange();
+                bdxyChange();
+                zawzChange();
+                fjjChange();
+            }
+
+
+        }else{
+            if (areaCode =='310104000000') {
+                mini.get("xhHistory").setValue("2")
+            }else{
+                if(crcFlag=="1"){
+                    mini.get("crcFamilyFlag").setValue("2");
+                }
+                if(licFlag =="1"){
+                    mini.get("licFamilyFlag").setValue("2");
+                }
+                if(scFlag =="1"){
+                    mini.get("scFamilyFlag").setValue("2");
+                }
+                if(lucFlag =="1"){
+                    mini.get("lucFamilyFlag").setValue("2");
+                }
+            }
+        }
+
+        // $('input').attr('disabled','disabled');
+        // $('input').attr('readOnly','readOnly');
+
+
+        if(operation=='1'){ //查看
+            var form = new mini.Form("#baseForm");
+            var form1 = new mini.Form("#form1");
+
+            var controls=form.getFields();
+            $(controls).each(function(i,item){
+                item.setReadOnly(true);
+            })
+            var controls1=form1.getFields();
+            $(controls1).each(function(i,item){
+                item.setReadOnly(true);
+            })
+            $("#savebtn").remove();
+            $("#weixiandubtn").remove();
+            $("#chushaibtn").remove();
+        }else if(operation=='2'){   //修改
+            mini.get("personcardType").setReadOnly(true);
+            mini.get("personcard").setReadOnly(true);
+        }
+
+    });
+
+
+    //证件类型
+    function personcardTypeChange(e) {
+        var zjhm = mini.get("personcard");
+        var zjlx = mini.get("personcardType");
+        //清空证件号码
+        // zjhm.setValue('');
+        if(zjlx.getValue() == "01"){
+            zjhm.set({
+                vtype: "IdCard"
+            });
+        } else {
+            zjhm.set({
+                vtype: "Junguanzheng"
+            });
+        }
+        mini.get("personcard").validate()
+    }
+
+    //证件号码
+    function personcardChange(e) {
+        personcardTypeChange();
+        var zjhm = mini.get("personcard");
+        var zjlx = mini.get("personcardType");
+        var xb = mini.get("gender");
+        if(isNotEmpty(zjhm.getValue()) && isNotEmpty(zjlx.getValue())){
+            if (zjlx.getValue() == "01"){
+                if(!IsIdCard(zjhm.getValue())){
+                    return;
+                }
+                var res = getBirthDayAndSex(zjhm.getValue());
+                xb.setValue(res.sex);
+                mini.get("birth").setValue(res.birthday);
+            }
+            mini.get("personcard").validate();
+            if(mini.get("personcard").isValid()){
+                //唯一性检查
+                uniquenessCheck(mini.get("checkYear").getValue(),zjlx.getValue(), zjhm.getValue());
+            }
+        }
+    }
+
+    function uniquenessCheck(checkyear,zjlx,zjhm){
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载个人信息中...'
+        });
+        $.ajax({
+            url: "/tumor/api/screeningout/checkHadDone?year="+checkyear+"&&type="+zjlx+"&&personcard="+zjhm+"&&areaCode="+areaCode,
+            type:'get',
+            dataType:'json',
+            success:function(res){
+                mini.unmask(document.body);
+                if(!res.ok){ //检查过
+                    mini.showTips({
+                        content: res.msg,
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                }else{//没检查过，返回值为个人身份信息
+                    mini.unmask(document.body);
+                    if(res.value.personInfo.isNew=="1"){
+                        mini.showTips({
+                            content: "系统暂无此人信息，请手动填写信息",
+                            state: "warning",
+                            x: "center",
+                            y: "center",
+                            timeout: 2000
+                        });
+                    }
+                    var form = new mini.Form("#baseForm");
+                    form.setData(res.value,false);
+
+                    mini.get("personcard").setValue(zjhm);
+
+                    var infos = getBirthDayAndSex(zjhm);
+                    mini.get("gender").setValue(infos.sex);
+                    mini.get("birth").setValue(infos.birthday);
+
+                    mini.get("checkYear").setValue(checkyear);
+
+                    var obj = res.value.personInfo;
+                    mini.get("id").setValue(obj.id);
+
+                    mini.get("personcardType").setValue(obj.personcardType);
+
+                    mini.get("hjdprovince").setValue(obj.paddressProvince);
+                    Address.setAddressCity("hjd");
+                    mini.get("hjdcity").setValue(obj.paddressCity);
+                    Address.setAddressCounty("hjd");
+                    mini.get("hjdcounty").setValue(obj.paddressCounty);
+                    Address.setAddressTown("hjd");
+                    mini.get("hjdtown").setValue(obj.paddressTown);
+                    Address.setAddressCommittee("hjd");
+                    mini.get("hjdcommittee").setValue(obj.paddressCommittee);
+
+
+                    mini.get("jzdprovince").setValue(obj.addressProvince);
+                    Address.setAddressCity("jzd");
+                    mini.get("jzdcity").setValue(obj.addressCity);
+                    Address.setAddressCounty("jzd");
+                    mini.get("jzdcounty").setValue(obj.addressCounty);
+                    Address.setAddressTown("jzd");
+                    mini.get("jzdtown").setValue(obj.addressTown);
+                    Address.setAddressCommittee("jzd");
+                    mini.get("jzdcommittee").setValue(obj.addressCommittee);
+
+                }
+            }
+        })
+    }
+
+    //同户籍地址
+    function sameChange(e) {
+		var flagSame = mini.get("sameFlag").getChecked();
+		if (flagSame) {
+			var hjdProvince = mini.get("hjdprovince").getValue();
+			var hjdCity = mini.get("hjdcity").getValue();
+			var hjdCounty = mini.get("hjdcounty").getValue();
+			var hjdTown = mini.get("hjdtown").getValue();
+			var hjdCommittee = mini.get("hjdcommittee").getValue();
+			var hjdDetail = mini.get("hjddetail").getValue();
+			
+			
+			mini.get("jzdprovince").setValue(hjdProvince);
+			Address.setAddressCity("jzd");
+			mini.get("jzdcity").setValue(hjdCity);
+			Address.setAddressCounty("jzd");
+			mini.get("jzdcounty").setValue(hjdCounty);
+			Address.setAddressTown("jzd");
+			mini.get("jzdtown").setValue(hjdTown);
+			Address.setAddressCommittee("jzd");
+			mini.get("jzdcommittee").setValue(hjdCommittee);
+			mini.get("jzddetail").setValue(hjdDetail);
+		}
+    }
+
+    /**
+     * 校验大肠癌筛查ID
+     */
+    mini.VTypes["crcNumerErrorText"] = "大肠癌筛查ID位数必须是12位";
+    mini.VTypes["crcNumer"] = function (value) {
+        var length = value.length;
+        return $.trim(value) == "" || (length == 12);
+    }
+
+    function crcNumerChange(){
+        var id=mini.get("id").getValue();
+        var crcNum=mini.get("idNumber").getValue();
+        var url= "/tumor/api/screeningout/checkIdnumber?manageid="+id+"&idnumber="+crcNum+"&jgCode="+yljg;
+        console.log(url)
+        if($.trim(crcNum) == "" || (crcNum.length == 12)){
+            $.ajax({
+                url: "/tumor/api/screeningout/checkIdnumber?manageid="+id+"&idnumber="+crcNum+"&jgCode="+yljg,
+                type:'get',
+                dataType:'json',
+                cache:true,
+                success:function(res){
+                    if(!res.ok){ //重复
+                        mini.get("idNumber").set({isValid:false,errorText:"该大肠癌筛查ID已被占用"});
+                        return;
+                    }
+                }
+            })
+        }
+    }
+
+    //长期厨房油烟接触变更
+    function yyjcChange(e) {
+        var chufangyanyou = mini.get("chufangyouyan").getValue();
+        //是
+        if (chufangyanyou == "1") {
+            $("#yyTable").children(":first").children(":gt(0)").show();
+            showChouyouyanjiYear();
+        } else {
+            $("#yyTable").children(":first").children(":gt(0)").hide();
+            mini.get("chouyouyanji").setValue("0");
+            mini.get("youyanjiechunianshu").setValue("");
+            mini.get("youyanjiechupinlv").setValue("");
+            mini.get("chouyouyanji").setValue("");
+            mini.get("chouyouyanjinianshu").setValue("");
+        }
+    }
+
+    //抽油烟机使用变更
+    function cyyjChange(e) {
+        showChouyouyanjiYear();
+    }
+
+    //抽油烟机使用年数显示隐藏
+    function showChouyouyanjiYear() {
+        var chouyouyanji = mini.get("chouyouyanji").getValue();
+        //使用抽油烟机
+        if (chouyouyanji == "1") {
+            $("#yyTable").children(":first").children(":eq(4)").show();
+        } else {
+            $("#yyTable").children(":first").children(":eq(4)").hide();
+        }
+    }
+
+    //肺癌吸烟状况变更
+    function xiyanChange(e) {
+        var xiyan = mini.get("xiyan").getValue();
+        //不吸烟
+        if (xiyan == "1") {
+            $("#xyTable").children(":first").children(":gt(0)").hide();
+            mini.get("zuihouyicxiyan").setValue("");
+            mini.get("kaishixiyannianling").setValue("");
+            mini.get("meitianxiyanliang").setValue("");
+        //过去吸，现在不吸
+        } else if (xiyan == "2") {
+            $("#xyTable").children(":first").children(":gt(0)").show();
+        //现在吸
+        } else {
+            mini.get("zuihouyicxiyan").setValue("");
+            $("#xyTable").children(":first").children(":eq(1)").hide();
+            $("#xyTable").children(":first").children(":gt(1)").show();
+        }
+        var crcxiyan = mini.get("crcxiyan");
+        if (crcxiyan) {
+        	crcxiyan.setValue(xiyan);
+    	}
+    }
+
+    //被动吸烟情况变更
+    function bdxyChange(e) {
+        var beidongxiyan = mini.get("beidongxiyan").getValue();
+        //被动吸烟:否
+        if (beidongxiyan == "4") {
+            $("#bdxyTable").children(":first").children(":gt(0)").hide();
+            mini.get("beidongxiyanduixiang").setValue("");
+            mini.get("beidongxiyannianshu").setValue("");
+        } else {
+            $("#bdxyTable").children(":first").children(":gt(0)").show();
+        }
+    }
+
+    //职业致癌物质接触变更
+    function zawzChange(e) {
+        var zhiyezhiaiwuzhi = mini.get("zhiyezhiaiwuzhi").getValue();
+        //有
+        if (zhiyezhiaiwuzhi == "1") {
+            $("#zawzTable").children(":first").children(":gt(0)").show();
+            //无
+        } else {
+            $("#zawzTable").children(":first").children(":gt(0)").hide();
+            mini.get("zhiaiwuzhileixing").setValue("");
+            mini.get("zhiaiwuzhinianshu").setValue("");
+        }
+    }
+
+    //肺部结节变更
+    function fjjChange(e) {
+        var feijiejie = mini.get("feijiejie").getValue();
+        //有
+        if (feijiejie == "1") {
+            $("#fjjTable").children(":first").children(":gt(0)").show();
+            //无
+        } else {
+            $("#fjjTable").children(":first").children(":gt(0)").hide();
+        }
+    }
+
+    //是否喝酒变更
+    function hejiuChange(e) {
+        var hejiu = mini.get("hejiu").getValue();
+        //有
+        if (hejiu == "1") {
+            $("#hjTable").children(":first").children(":gt(0)").show();
+            //无
+        } else {
+            $("#hjTable").children(":first").children(":gt(0)").hide();
+        }
+    }
+
+    //知道饮酒量变更
+    function sfzdhjlChange(e) {
+        var shifouzhidaohejiuliang = mini.get("shifouzhidaohejiuliang").getValue();
+        //知道
+        if (shifouzhidaohejiuliang == "1") {
+            $("#yjlTable").children(":first").children(":first").children(":eq(1)").show();
+
+        } else {
+            $("#yjlTable").children(":first").children(":first").children(":eq(1)").hide();
+        }
+    }
+
+    //血吸虫病变更
+    function xxcChange(e) {
+        var xuexichong = mini.get("xuexichong").getValue();
+        //有
+        if (xuexichong == "1") {
+            $("#xxcTable").children(":first").children(":first").children(":gt(0)").show();
+
+        } else {
+            $("#xxcTable").children(":first").children(":first").children(":gt(0)").hide();
+        }
+    }
+
+
+    //癌症史变更
+    function azsChanged(e) {
+        var azsHistory = mini.get("azsHistory").getValue();
+        //有
+        if (azsHistory == "1") {
+            mini.get("riskAssessment1").setValue("1");
+            mini.get("riskAssessment2").setValue("1");
+            mini.get("riskAssessment3").setValue("1");
+            mini.get("riskAssessment4").setValue("1");
+            addSelfRow(null);
+        } else {
+            $("#azsTable").children(":first").children(":gt(0)").remove();
+        }
+    }
+
+    //徐汇肺癌变更
+    function xhChanged(e) {
+        var xhHistory = mini.get("xhHistory").getValue();
+        //有
+        if (xhHistory == "1") {
+            addXuhuiRow(null);
+        } else {
+            $("#xhTable").children(":first").children(":gt(0)").remove();
+        }
+    }
+
+    Array.prototype.contains = function ( needle ) {
+        for (i in this) {
+            if (this[i] == needle) return true;
+        }
+        return false;
+    }
+
+
+    //显示亲属癌症行
+    function showFamily(id, bodyId) {
+        var v = mini.get(id).getValue();
+        var obj = mini.get(id).getEl();
+        if (v == "1") {
+            addFamilyRow(null, bodyId);
+        } else {
+            $('#' + bodyId).children(":gt(0)").remove();
+        }
+
+        if(id=="crcFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ1").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ1").setValue("2");
+            }
+        }else if(id=="licFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ2").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ2").setValue("2");
+            }
+        }else if(id=="scFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ3").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ3").setValue("2");
+            }
+        }else if(id=="lucFamilyFlag"){
+            if (v == "1") {
+                mini.get("riskAssessmentQ4").setValue("1");
+            }else{
+                mini.get("riskAssessmentQ4").setValue("2");
+            }
+        }
+
+    }
+
+    //增加一级亲属癌症行
+    function addFamilyRow(data, bodyId) {
+        if (data == null) {
+            data = {index: 0};
+        } else {
+            data.index = 0;
+        }
+        data.bodyId = bodyId;
+
+        var max = -1;
+        $('#crcFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        $('#licFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        $('#scFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        $('#lucFamilyBody tr').each(function (i, a) {
+
+            var idx = parseInt($(this).attr("index"));
+            if (idx > max) {
+                max = idx;
+            }
+        });
+        max++;
+        data.index = max;
+
+        if (bodyId == "crcFamilyBody") {
+            data.cancerType = "1";
+        } else if (bodyId == "licFamilyBody") {
+            data.cancerType = "2";
+        } else if (bodyId == "scFamilyBody") {
+            data.cancerType = "3";
+        } else if (bodyId == "lucFamilyBody") {
+            data.cancerType = "4";
+        }
+
+        var tpl = $('#familyRowTpl').html();
+        var html = template.render(tpl, data);
+
+        $('#' + bodyId).append(html);
+        mini.parse();
+    }
+
+    //删除一级亲属癌症行
+    function delFamilyRow(index, bodyId,inputId) {
+
+        $("#familyRow" + index).remove();
+        if ($('#' + bodyId).children().length == 1) {
+            mini.get(inputId).setValue(2);
+        }
+    }
+
+    //保存
+    var saveFlag=0;
+    function save(){
+        var id=mini.get("id").getValue();  //个人管理编号
+
+        var idFlag=false;
+
+        var params={};
+        if(flag==1){
+            //新增时校验是否已做过
+            var checkyear=mini.get("checkYear").getValue();
+            var zjhm=mini.get("personcard").getValue();
+            var zjlx=mini.get("personcardType").getValue();
+
+            $.ajax({
+                url: "/tumor/api/screeningout/checkHadDone?year="+checkyear+"&&type="+zjlx+"&&personcard="+zjhm+"&&areaCode="+areaCode,
+                type:'get',
+                dataType:'json',
+                success:function(res){
+                    mini.unmask(document.body);
+                    if(!res.ok){ //检查过
+                        mini.showTips({
+                            content: res.msg,
+                            state: "warning",
+                            x: "center",
+                            y: "center",
+                            timeout: 2000
+                        });
+                        idFlag=true;
+                    }
+                }
+            })
+
+        }
+        if(idFlag){
+            return;
+        }else{
+            if(crcFlag=="1"){
+                if(operation=='3'){
+                    personcardTypeChange();
+                    mini.get("personcard").validate();
+                    crcNumerChange();//单独再验证一次大肠癌id
+                }
+            }
+            var form = new mini.Form("#form1");
+            form.validate();
+            if (form.isValid() == false){
+                miniErrorLocation();
+                mini.showTips({
+                    content: "页面有项目未正确填写",
+                    state: "error",
+                    x: "center",
+                    y: "center",
+                    timeout: 3000
+                });
+                return;
+            }else{
+                if(saveFlag==0) {
+                   makeResult();
+                    makeChushaiResult();
+                    params=form.getData(true, false);
+                    params.id=id;
+                    params.ysgh=ysgh;
+                    params.yljg=yljg;
+                    params.areaCode=areaCode;
+
+                    var icds=[];
+                    icds[0]=params["historyList[0].icd10"];
+                    icds[1]=params["historyList[1].icd10"];
+                    icds[2]=params["historyList[2].icd10"];
+                    icds[3]=params["historyList[3].icd10"];
+                    icds[4]=params["historyList[4].icd10"];
+
+                    for(var i = 0; i < icds.length; i++) {
+                        if(icds[i] == undefined) {
+                            icds.splice(i,1);
+                            i = i - 1; // i - 1 ,因为空元素在数组下标 2 位置，删除空之后，后面的元素要向前补位，
+                            // 这样才能真正去掉空元素,觉得这句可以删掉的连续为空试试，然后思考其中逻辑
+                        }
+                    }
+
+                    if(icds.length>0){
+                        if((new Set(icds)).size != icds.length){
+                            mini.alert("癌症史不能有两条相同癌症名称!")
+                            return;
+                        }
+                    }
+                    mini.mask({
+                        el: document.body,
+                        cls: 'mini-mask-loading',
+                        html: '保存中...'
+                    });
+
+                    $.ajax({
+                        url: "/tumor/api/screeningout/save",
+                        data: params,
+                        type: "POST",
+                        dataType: "json",
+                        success: function (res) {
+
+                            if (res.ok) { //保存成功
+                                saveFlag=1;
+                                $("#savebtn").attr('disabled',true);
+                                mini.showTips({
+                                    content: res.msg,
+                                    state: "success",
+                                    x: "center",
+                                    y: "center",
+                                    timeout: 2000
+                                });
+                                mini.unmask(document.body);
+                                // var zjhm = mini.get("personcard").getValue();
+                                // var zjlx = mini.get("personcardType").getValue();
+                                // var checkYear = mini.get("checkYear").getValue();
+                                mini.get("id").setValue(res.value);
+                                // setTimeout(function () {
+                                //     // window.location.href='/tumor/api/screeningout/form?manageId='+res.value+"&&checkYear="+checkYear;   //跳转到查看form
+                                //     // window.location.href = '/tumor/cancerPersonInfo/list';
+                                // }, 2000)
+
+                            } else {
+                                mini.showTips({
+                                    content: res.msg,
+                                    state: "success",
+                                    x: "center",
+                                    y: "center",
+                                    timeout: 2000
+                                });
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            mini.unmask(document.body);
+                        }
+                    })
+                }
+
+            }
+        }
+    }
+
+
+    var notDoneFlag=0;
+    function parseIntPlus(str){
+        if(str=='' || str.length==0){
+            notDoneFlag=1;
+            return 0;
+        }else{
+            notDoneFlag=0;
+            if(str=="1"){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+    }
+
+
+    //徐汇专用 判断是否做过亲属癌症登记，传递参数为中文癌症汉字
+    function getXhAizheng(aizheng){
+        var xhazflag=2;
+        var trList = $("#xhBody").children("tr");
+
+        for (var i=1;i<trList.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+            var aizhengzhonglei=tdArr.eq(5).find('input').val();
+
+            if(aizhengzhonglei==aizheng){
+                xhazflag= 1;
+            }
+
+        }
+        return xhazflag;
+    }
+
+    //危险度评估结果计算
+    function makeResult() {
+        notDoneFlag=0;
+        var azsHistoryFlag = mini.get("azsHistory").getValue();//b.本人有癌症史；
+//2-1 大肠癌危险的评估条件，满足下列条件任意一项者，危险度评估结果为 阳性。
+        if(crcFlag=="1") {
+            var crcFamilyFlag = 2;
+            if (areaCode == '310104000000') {    //徐汇区单独判断
+                crcFamilyFlag = getXhAizheng("大肠癌");//a.一级亲属有大肠癌病史；
+            } else {
+                crcFamilyFlag = mini.get("crcFamilyFlag").getValue(); //a.一级亲属有大肠癌病史；
+            }
+
+
+            var changxirouFlag = mini.get("changxirou").getValue(); //c.本人有肠道息肉史
+
+            //d.同时具有以下两项或两项以上者：
+            var manxingfuxie = mini.get("manxingfuxie").getValue(); //慢性腹泻
+            var manxingbianmi = mini.get("manxingbianmi").getValue(); //慢性腹泻
+            var nianyexuebian = mini.get("nianyexuebian").getValue(); //粘液血便
+            var jingshenchuangshang = mini.get("jingshenchuangshang").getValue(); //重大精神创伤或痛苦事件
+            var lanweiyan = mini.get("lanweiyan").getValue(); //慢性阑尾炎或阑尾切除史
+            var dannangyan = mini.get("dannangyan").getValue(); //慢性胆道疾病史或胆囊切除史
+
+            var liangxiang = 0;
+            if (eval(parseIntPlus(manxingfuxie) + parseIntPlus(manxingbianmi) + parseIntPlus(nianyexuebian) + parseIntPlus(jingshenchuangshang) +
+                parseIntPlus(lanweiyan) + parseIntPlus(dannangyan)) >= 2) {
+                liangxiang = 1;
+            }
+
+            if (eval(parseIntPlus(crcFamilyFlag) + parseIntPlus(azsHistoryFlag) + parseIntPlus(changxirouFlag) + liangxiang) >= 1) {
+                crcRiskResult = true;
+                $("#crcRiskResult").text("阳性");
+                $("#assessmentResult1").val("2");
+            } else {
+                if (notDoneFlag == 1) {
+                    mini.showTips({
+                        content: "参与计算的选项有未填",
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 3000
+                    });
+                    return;
+                }
+
+                $("#crcRiskResult").text("阴性");
+                $("#assessmentResult1").val("1");
+            }
+        }
+//2-2 肝癌危险的评估条件，满足下列a项以及b～f任一项者，危险度评估结果为 阳性。
+            //a.35-64岁的男性居民和45-64岁的女性居民；
+
+            var ageGenderFlag = 0;
+            var gender = mini.get("gender").getValue();
+            var birth = mini.get("birth").getValue();
+            var start = new Date(birth);
+
+            var myDate = new Date();
+            var month = myDate.getMonth() + 1;
+            var day = myDate.getDate();
+            var age = myDate.getFullYear() - start.getFullYear() - 1;   //年龄
+
+            if (start.getMonth() < month || start.getMonth() == month && start.getDate() <= day) {
+                age++;
+            }
+            if (gender == 1) {
+                if (age >= 35 && age <= 64) {
+                    ageGenderFlag = 1;
+                }
+            } else {
+                if (age >= 45 && age <= 64) {
+                    ageGenderFlag = 1;
+                }
+            }
+        if(licFlag =="1") {
+            var yiganFlag = mini.get("yigan").getValue();  //b.乙型肝炎
+
+            var bingganFlag = mini.get("binggan").getValue();  // c.丙型肝炎
+
+            var ganyinghuaFlag = mini.get("ganyinghua").getValue();  // d.肝硬化
+
+            var licFamilyFlag = 2;
+            if (areaCode == '310104000000') {        //徐汇区单独判断
+                licFamilyFlag = getXhAizheng("肝癌");//f.一级亲属有肝癌病史；
+            } else {
+                licFamilyFlag = mini.get("licFamilyFlag").getValue(); //f.一级亲属有肝癌病史；
+            }
+
+            if ((eval(parseIntPlus(yiganFlag) + parseIntPlus(bingganFlag) + parseIntPlus(ganyinghuaFlag) + parseIntPlus(azsHistoryFlag)
+                + parseIntPlus(licFamilyFlag)) >= 1) && (ageGenderFlag == 1)) {
+                licRiskResult = true;
+                $("#licRiskResult").text("阳性");
+                $("#assessmentResult2").val("2");
+            } else {
+                if (notDoneFlag == 1) {
+                    mini.showTips({
+                        content: "参与计算的选项有未填",
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 3000
+                    });
+                    return;
+                }
+                $("#licRiskResult").text("阴性");
+                $("#assessmentResult2").val("1");
+            }
+        }
+// 2-3 胃癌危险的评估条件，满足下列a项以及b～m任一项者，危险度评估结果为 阳性。
+            // a.年龄40岁以上，男女不限
+        if(scFlag =="1") {
+            var weisuoxingweiyanFlag = mini.get("weisuoxingweiyan").getValue();  //b.慢性萎缩性胃炎或肥厚性胃炎
+            var shierzhichangkuiyangFlag = mini.get("shierzhichangkuiyang").getValue();  //c.胃、十二指肠溃疡
+            var weichuxueFlag = mini.get("weichuxue").getValue();  //d.胃出血
+            var shiguanyanFlag = mini.get("shiguanyan").getValue();  //e.食管炎；
+            var weixirouFlag = mini.get("weixirou").getValue();  //f.胃息肉；
+            var canweiFlag = mini.get("canwei").getValue();  //g.手术后残胃
+            var pinxueFlag = mini.get("pinxue").getValue();  //h.恶性贫血
+
+            var jiagongrouleiFlag = 0;// i.加工肉类选择“很少”或“经常”
+            var jiagongroulei = mini.get("jiagongroulei").getValue();
+            if (jiagongroulei == 2 || jiagongroulei == 3) {
+                jiagongrouleiFlag = 1;
+            }
+
+            var meibianshiwuFlag = 0;//j.霉变食物选择“很少”或“经常”
+            var meibianshiwu = mini.get("meibianshiwu").getValue();
+            if (meibianshiwu == 2 || meibianshiwu == 3) {
+                meibianshiwuFlag = 1;
+            }
+
+            var hejiuFlag = 0; //k.饮酒频率选择“每天”、“1～2天/每周”、“3～4天/每周”、“5～6天/每周”
+            var hejiu = mini.get("hejiu").getValue();
+            if (hejiu == 1) {
+                var hejiupinlv = mini.get("hejiupinlv").getValue();
+                if (hejiupinlv == 1 || hejiupinlv == 2 || hejiupinlv == 3 || hejiupinlv == 4) {
+                    hejiuFlag = 1;
+                }
+            }
+            // l.本人有癌症史；
+            var scFamilyFlag = 2;
+            if (areaCode == '310104000000') {        //徐汇区单独判断
+                scFamilyFlag = getXhAizheng("胃癌"); //m.一级亲属有胃癌病史；
+            } else {
+                scFamilyFlag = mini.get("scFamilyFlag").getValue();  //m.一级亲属有胃癌病史；
+            }
+            if ((eval(parseIntPlus(weisuoxingweiyanFlag) + parseIntPlus(shierzhichangkuiyangFlag) + parseIntPlus(weichuxueFlag) + parseIntPlus(shiguanyanFlag)
+                + parseIntPlus(weixirouFlag) + parseIntPlus(canweiFlag) + parseIntPlus(pinxueFlag)
+                + parseIntPlus(jiagongrouleiFlag) + parseIntPlus(meibianshiwuFlag) + parseIntPlus(hejiuFlag) + parseIntPlus(azsHistoryFlag)
+                + parseIntPlus(scFamilyFlag)) >= 1) && (age > 40)) {
+                scRiskResult = true;
+                $("#scRiskResult").text("阳性");
+                $("#assessmentResult3").val("2");
+            } else {
+                if (notDoneFlag == 1) {
+                    mini.showTips({
+                        content: "参与计算的选项有未填",
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 3000
+                    });
+                    return;
+                }
+                $("#scRiskResult").text("阴性");
+                $("#assessmentResult3").val("1");
+            }
+        }
+// 2-4 肺癌危险的评估条件，满足下列a项以及b～m任一项者，危险度评估结果为 阳性
+        if(lucFlag =="1") {
+            var xiyanFlag = 0;    // b.目前吸烟且指数400年支以上（20支/包）
+            var jieyanFlag = 0;   // c.戒烟 <= 15年
+            var xiyan = mini.get("xiyan").getValue();
+            if (xiyan == 3) {
+                var meitianxiyanliang = mini.get("meitianxiyanliang").getValue();
+                if (eval(meitianxiyanliang * 365 >= 400)) {
+                    xiyanFlag = 1;
+                }
+            } else if (xiyan == 2) {
+                var zuihouyicxiyan = mini.get("zuihouyicxiyan").getValue();
+                if (zuihouyicxiyan <= 15) {
+                    jieyanFlag = 1;
+                }
+            }
+
+            var changqiFlag = 0;   // d.长期厨房油烟接触频 选择“每天”
+            var leijiFlag = 0;     // e.累计厨房油烟接触>=10年
+
+            var chufangyouyan = mini.get("chufangyouyan").getValue();
+            if (chufangyouyan == 1) {
+                var youyanjiechupinlv = mini.get("youyanjiechupinlv").getValue();
+                if (youyanjiechupinlv == 4) {
+                    changqiFlag = 1;
+                }
+
+                var youyanjiechunianshu = mini.get("youyanjiechunianshu").getValue();
+                if (youyanjiechunianshu >= 10) {
+                    leijiFlag = 1;
+                }
+            }
+            var beidongFlag = 0;  //f.被动吸烟选择“>2小时/天”
+            var leijibeidongFlag = 0; //g.累计被动吸烟>=10年
+            var beidongxiyan = mini.get("beidongxiyan").getValue();
+            if (beidongxiyan != 4) {
+                if (beidongxiyan == 3) {
+                    beidongFlag = 1;
+                } else {
+                    var beidongxiyannianshu = mini.get("beidongxiyannianshu").getValue();
+                    if (beidongxiyannianshu >= 10) {
+                        leijibeidongFlag = 1;
+                    }
+                }
+            }
+
+            var zhiaiwuzhiFlag = 0; //h.致癌物质暴露史>=5年
+            var zhiyezhiaiwuzhi = mini.get("zhiyezhiaiwuzhi").getValue();
+            if (zhiyezhiaiwuzhi == 1) {
+                var zhiaiwuzhinianshu = mini.get("zhiaiwuzhinianshu").getValue();
+                if (zhiaiwuzhinianshu >= 5) {
+                    zhiaiwuzhiFlag = 1;
+                }
+            }
+
+            var jibingFlag = 0; // i.患有下列任意一疾病
+            var xiaochuan = mini.get("xiaochuan").getValue();
+            var zhiqiguanyan = mini.get("zhiqiguanyan").getValue();
+            var feiqizhong = mini.get("feiqizhong").getValue();
+            var feijiehe = mini.get("feijiehe").getValue();
+            var guichenzhuo = mini.get("guichenzhuo").getValue();
+            var xianweihua = mini.get("xianweihua").getValue();
+            var manzufei = mini.get("manzufei").getValue();
+            var qitafeibing = mini.get("qitafeibing").getValue();
+            if (eval(parseIntPlus(xiaochuan) + parseIntPlus(zhiqiguanyan) + parseIntPlus(feiqizhong) + parseIntPlus(feijiehe) + parseIntPlus(guichenzhuo)
+                + parseIntPlus(xianweihua) + parseIntPlus(manzufei) + parseIntPlus(qitafeibing)) >= 1) {
+                jibingFlag = 1;
+            }
+            var lucFamilyFlag = 2;
+            if (areaCode == '310104000000') {        //徐汇区单独判断
+                lucFamilyFlag = mini.get("xhHistory").getValue();
+                    // getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
+            } else {
+                //m.一级亲属有肺癌病史；
+                lucFamilyFlag = 2;
+                var iscrc=mini.get("crcFamilyFlag").getValue();
+                var islic=mini.get("licFamilyFlag").getValue();
+                var issc=mini.get("scFamilyFlag").getValue();
+                var isluc=mini.get("lucFamilyFlag").getValue();
+                if(eval(parseIntPlus(iscrc)+parseIntPlus(islic)+parseIntPlus(issc)+parseIntPlus(isluc))>=1){
+                    lucFamilyFlag=1;
+                }
+            }
+
+            if ((eval(parseIntPlus(xiyanFlag) + parseIntPlus(jieyanFlag) + parseIntPlus(changqiFlag) + parseIntPlus(leijiFlag) + parseIntPlus(beidongFlag)
+                + parseIntPlus(leijibeidongFlag) + parseIntPlus(zhiaiwuzhiFlag) + parseIntPlus(jibingFlag) + parseIntPlus(azsHistoryFlag)
+                + parseIntPlus(lucFamilyFlag)) >= 1) && (age > 45)) {
+                lucRiskResult = true;
+                $("#lucRiskResult").text("阳性");
+                $("#assessmentResult4").val("2");
+            } else {
+                if (notDoneFlag == 1) {
+                    mini.showTips({
+                        content: "参与计算的选项有未填",
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 3000
+                    });
+                    return;
+                }
+                $("#lucRiskResult").text("阴性");
+                $("#assessmentResult4").val("1");
+            }
+        }
+    }
+    //辅助检查结果计算
+    function makeByxResult(){
+        var first=mini.get("firstFobtResult").getValue();
+        var seconde=mini.get("secondFobtResult").getValue();
+        if(first=='2'){ //第一次就阳性
+            mini.get("byxResult").setValue("阳性");
+            mini.get("fobtResult").setValue("2");
+        }else{              //第一次阴性
+            if(seconde=='2'){//第二次阳性
+                mini.get("byxResult").setValue("阳性");
+                mini.get("fobtResult").setValue("2");
+            } else{         //两次都阴性
+                mini.get("byxResult").setValue("阴性");
+                mini.get("fobtResult").setValue("1");
+            }
+        }
+    }
+    //肝癌辅助检查结果计算
+    function makeLicResult(){
+        var afp=mini.get("afp").getValue();
+        var bus=mini.get("bus").getValue();
+        if(afp>20){
+            mini.get("licResult").setValue("阳性");
+            mini.get("licAssistResult").setValue("2");
+        }else{
+            if(bus=='2'){
+                mini.get("licResult").setValue("阳性");
+                mini.get("licAssistResult").setValue("2");
+            }else{
+                mini.get("licResult").setValue("阴性");
+                mini.get("licAssistResult").setValue("1");
+            }
+        }
+    }
+    function makeChushaiResult(){
+        makeResult();
+        if(crcFlag=="1"){
+            var dcpinggu= $("#crcRiskResult").text();//大肠癌危险度评估结果
+            var byxresult=mini.get("byxResult").getValue();//便隐血辅助检查结果\
+            //大肠癌初筛结果：问卷为阳性即为阳性；问卷为阴性，便隐血检查结果为阳性即为阳性；问卷为阴性，便隐血检查结果为阴性即为阴性
+            if(dcpinggu=="阳性"){
+                mini.get("checkResultName1").setValue("阳性");
+                mini.get("checkResult1").setValue("阳性");
+            }else{
+                if(byxresult=="阳性"){
+                    mini.get("checkResultName1").setValue("阳性");
+                    mini.get("checkResult1").setValue("阳性");
+                }else if(byxresult=="阴性"){
+                    mini.get("checkResultName1").setValue("阴性");
+                    mini.get("checkResult1").setValue("阴性");
+                }else{
+                    mini.get("checkResultName1").setValue("");
+                    mini.get("checkResult1").setValue("");
+                }
+            }
+        }
+        if(licFlag =="1"){
+            var gapinggu= $("#licRiskResult").text();//肝癌危险度评估结果
+            var licResult=mini.get("licResult").getValue();//肝癌辅助检查结果
+            //肝癌初筛结果：问卷为阳性即为阳性；问卷为阴性，辅助检查结果为阳性即为阳性；问卷为阴性，辅助检查结果为阴性即为阴性。
+            if(gapinggu=="阳性"){
+                mini.get("checkResultName2").setValue("阳性");
+                mini.get("checkResult2").setValue("阳性");
+            }else{
+                if(licResult=="阳性"){
+                    mini.get("checkResultName2").setValue("阳性");
+                    mini.get("checkResult2").setValue("阳性");
+                }else if(licResult=="阴性"){
+                    mini.get("checkResultName2").setValue("阴性");
+                    mini.get("checkResult2").setValue("阴性");
+                }else{
+                    mini.get("checkResultName2").setValue("");
+                    mini.get("checkResult2").setValue("");
+                }
+            }
+        }
+        if(scFlag =="1"){
+            var wapinggu= $("#scRiskResult").text();//胃癌危险度评估结果
+
+            if(wapinggu=="阳性"){
+                mini.get("checkResultName3").setValue("阳性");
+                mini.get("checkResult3").setValue("阳性");
+            }else if(wapinggu=="阴性"){
+                mini.get("checkResultName3").setValue("阴性");
+                mini.get("checkResult3").setValue("阴性");
+            }
+        }
+        if(lucFlag =="1"){
+            var fapinggu= $("#lucRiskResult").text();//肺癌危险度评估结果
+            if(fapinggu=="阳性"){
+                mini.get("checkResultName4").setValue("阳性");
+                mini.get("checkResult4").setValue("阳性");
+            }else if(fapinggu=="阴性"){
+                mini.get("checkResultName4").setValue("阴性");
+                mini.get("checkResult4").setValue("阴性");
+            }
+        }
+    }
+
+    function closeWindow(){
+        window.history.go(-1);
+    }
+</script>
+</html>
