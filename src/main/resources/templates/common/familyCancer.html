@@ -6,11 +6,11 @@
     <script id="familyRowTpl" type="text/template" style="display: none;">
         <tr id="familyRow{{index}}" index="{{index}}">
             <td colspan="2" class="bg-white" style="padding:0px;">
-                <table class="table_new table_new6">
+                <table class="table_new table_new6 table_new_border">
                     <tr>
                         <td class="bg-white" style="border: none;">
-                            <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="addFamilyRow(null, '{{bodyId}}');">+</a>
-                            <a href="javascript:void(0);" style="text-decoration:none;" onclick="delFamilyRow({{index}}, '{{bodyId}}');">-</a>
+                            <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="addFamilyRow(null, '{{bodyId}}', '{{id}}');">+</a>
+                            <a href="javascript:void(0);" style="text-decoration:none;" onclick="delFamilyRow({{index}}, '{{bodyId}}','{{id}}');">-</a>
                         </td>
                         <td>亲属关系</td>
                         <td class="bg-white">

@@ -18,4 +18,8 @@ public class CrcRegcaseIdService {
         return crcRegcaseIdDao.getByAreacode(areaCode);
     }
 
+    public CrcRegcaseId getByJgcode(String jgCode){
+        return crcRegcaseIdDao.getByJgcode(jgCode);
+    }
+
 }

@@ -36,11 +36,10 @@
 
         //删除行
         function delXuhuiRow(index) {
-            if(index == 0){
-                return;
-            }
-
             $("#xhRow" + index).remove();
+            if ($('#xhBody').children().length == 1) {
+                mini.get("xhHistory").setValue(2);
+            }
         }
 
     </script>
@@ -48,7 +47,7 @@
     <script id="xhRowTpl" type="text/template" style="display: none;">
         <tr id="xhRow{{index}}" index="{{index}}">
             <td colspan="2" class="bg-white" style="padding:0px;">
-                <table class="table_new table_new6">
+                <table class="table_new table_new6 table_new_border">
                     <tr>
                         <td class="bg-white" style="border: none;">
                             <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="addXuhuiRow(null);">+</a>

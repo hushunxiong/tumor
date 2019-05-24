@@ -1,9 +1,10 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.google.common.collect.Lists;
+import com.wonders.health.auth.client.AuthService;
+import com.wonders.health.auth.client.AuthServiceI;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
-import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.*;
@@ -11,6 +12,7 @@ import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.*;
 import com.wonders.health.tumor.tumor.service.*;
 import com.wonders.health.tumor.tumor.vo.ScreeningVo;
+import com.wonders.health.tumor.tumor.vo.ScreeningVoOut;
 import com.wonders.healthcloud.archive.client.entity.PersonAddress;
 import com.wonders.healthcloud.archive.client.entity.PersonInfo;
 import com.wonders.healthcloud.archive.client.util.ArchiveUtil;
@@ -18,18 +20,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 新增筛查登记Controller
@@ -37,32 +41,25 @@ import java.util.*;
  * @author menglianghai
  */
 @Controller
-@RequestMapping("screening")
-public class ScreeningController extends BaseController {
+@RequestMapping("api")
+public class ScreeningOutController extends BaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(ScreeningController.class);
+    private static Logger logger = LoggerFactory.getLogger(ScreeningOutController.class);
 
-    @Value("${crc_switch_flag}")
-    private String crcFlag;
+    private static String crcFlag="1";
 
-    @Value("${lic_switch_flag}")
-    private String licFlag;
+    private static String licFlag="1";
 
-    @Value("${sc_switch_flag}")
-    private String scFlag;
+    private static String scFlag="1";
 
-    @Value("${luc_switch_flag}")
-    private String lucFlag;
+    private static String lucFlag="1";
 
-    @Value("${archieve_add_flag}")
-    private String archieveAddFlag;
+    private static String archieveAddFlag="1";
 
-    @Value("${area_code}")
-    private String areaCode;
+    private static String healthArchive="http://10.1.93.110/archive";
 
-
-    @Value("${healthArchive}")
-    private String healthArchive;
+    @Autowired
+    private AuthServiceI authService;
 
     @Autowired
     private ScreeningService screeningService;
@@ -109,15 +106,28 @@ public class ScreeningController extends BaseController {
     private static CancerHistoryDao cancerHistoryDao = SpringContextHolder.getBean(CancerHistoryDao.class);
     private static FamilyCancerHistoryDao familyCancerHistoryDao = SpringContextHolder.getBean(FamilyCancerHistoryDao.class);
     private static LucFamilyCancerHistoryXHDao lucFamilyCancerHistoryXHDao = SpringContextHolder.getBean(LucFamilyCancerHistoryXHDao.class);
-
     @Autowired
     private CrcRegcaseIdService crcRegcaseIdService;
 
-    @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
-    public String form(Model model, String manageId, String checkYear,String operation) {
-        User user=getSessionUser();
-        if(StringUtils.isBlank(checkYear)){
-            checkYear= DateUtils.getYear();
+    /**
+     * 外接页面form需要传参：页面录入身份证号，检查年份，操作类型（1-查看  2-修改 3-新增），登录人id，登录人姓名，登录区县编码，登录机构
+     *
+     * **/
+    @RequestMapping(value = {"", "/screeningout/form"}, method = RequestMethod.GET)
+    public String form(Model model,
+                       @RequestParam(value = "personcard", required = false) String personcard,
+                       @RequestParam(value = "personcardType", required = false) String personcardType,
+                       @RequestParam(value = "checkYear", required = true) String checkYear,
+                       @RequestParam(value = "operation", required = true) String operation,
+                       @RequestParam(value = "ysgh", required = true) String ysgh,
+                       @RequestParam(value = "yljg", required = true) String yljg,
+                       @RequestParam(value = "areaCode", required = true) String areaCode) {
+
+        User user = authService.findUserByOrgCodeAndJobNo(yljg, ysgh);
+
+        if(user == null){
+            model.addAttribute("errorMsg","医生信息有误!");
+            return "/api/400";
         }
 
         List<DataOption> years = Lists.newArrayList();
@@ -132,6 +142,24 @@ public class ScreeningController extends BaseController {
         model.addAttribute("checkYear", checkYear);
         model.addAttribute("operation", operation);
 
+        model.addAttribute("ysgh", ysgh);
+        model.addAttribute("yljg", yljg);
+        model.addAttribute("areaCode", areaCode);
+
+
+        if(StringUtils.isBlank(checkYear)){
+            checkYear= DateUtils.getYear();
+        }
+
+        CancerPersonInfo pp=new CancerPersonInfo();
+        if(StringUtils.isNotBlank(personcard)&&StringUtils.isNotBlank(personcardType)){
+            pp=screeningService.getBaseInfoByCardnoAndType(personcard,personcardType);
+        }
+        String manageId="";
+        if(pp!=null&&StringUtils.isNotBlank(pp.getId())){
+            manageId=pp.getId();
+        }
+
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
             CancerPersonInfo personInfo = new CancerPersonInfo();
@@ -143,12 +171,12 @@ public class ScreeningController extends BaseController {
             personInfo.setPaddressCounty(areaCode);
 
             model.addAttribute("personInfo", personInfo);
-            model.addAttribute("lucRisk", new LucRiskAssessment(getSessionUser()));
-            model.addAttribute("scRisk", new ScRiskAssessment(getSessionUser()));
-            model.addAttribute("crcRisk", new CrcRiskAssessment(getSessionUser()));
-            model.addAttribute("licRisk", new LicRiskAssessment(getSessionUser()));
-            model.addAttribute("crcFobt", new CrcFobt(getSessionUser()));
-            model.addAttribute("licCheck", new LicAssistCheck(getSessionUser()));
+            model.addAttribute("lucRisk", new LucRiskAssessment(user));
+            model.addAttribute("scRisk", new ScRiskAssessment(user));
+            model.addAttribute("crcRisk", new CrcRiskAssessment(user));
+            model.addAttribute("licRisk", new LicRiskAssessment(user));
+            model.addAttribute("crcFobt", new CrcFobt(user));
+            model.addAttribute("licCheck", new LicAssistCheck(user));
 
             model.addAttribute("crcRegcase", new CrcRegcase());
             model.addAttribute("licRegcase", new LicRegcase());
@@ -160,7 +188,7 @@ public class ScreeningController extends BaseController {
             model.addAttribute("idNumber", "");
             model.addAttribute("flag", "1"); //1：新增
         } else {
-            ScreeningVo screeningVo=getDetail(manageId,checkYear);
+            ScreeningVo screeningVo=getDetail(manageId,checkYear,user);
             model.addAttribute("personInfo", screeningVo.getPersonInfo());
             model.addAttribute("lucRisk", screeningVo.getLucRisk());
             model.addAttribute("scRisk", screeningVo.getScRisk());
@@ -218,23 +246,22 @@ public class ScreeningController extends BaseController {
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
         model.addAttribute("lucFlag", lucFlag);
-        model.addAttribute("areaCode", areaCode);
 
-        model.addAttribute("jgCode", user.getOrgCode());
+
 
         model.addAttribute("nowDate",DateUtils.formatDate(new Date(),"yyyy-mm-dd"));
-        return "/register/form";
+        return "/api/formOut";
     }
 
-
-    @RequestMapping(value = {"", "checkHadDone"}, method = RequestMethod.GET)
+    /**
+     * 外接页面需要多传一个areaCode
+     * */
+    @RequestMapping(value = {"", "/screeningout/checkHadDone"}, method = RequestMethod.GET)
     @ResponseBody
-    public AjaxReturn checkHadDone(String year, String type, String personcard){
+    public AjaxReturn checkHadDone(String year, String type, String personcard,String areaCode){
         String[] cancers={crcFlag,licFlag,scFlag,lucFlag};
         Boolean xhFlag=false;
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
-            xhFlag=true;
-        }
+
         String hadDone=screeningService.checkHadDone(year,type,personcard,cancers,xhFlag);    //true-做过  false-没做过
 
         if(hadDone=="done"||"done".equals(hadDone)){
@@ -261,12 +288,9 @@ public class ScreeningController extends BaseController {
         }
     }
 
-    /**
-     *新增时检查idnumber是否已经占用
-     **/
-    @RequestMapping(value = {"", "checkIdnumber"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/screeningout/checkIdnumber"}, method = RequestMethod.GET)
     @ResponseBody
-    public AjaxReturn checkIdnumber(String manageid, String idnumber){
+    public AjaxReturn checkIdnumber(String manageid, String idnumber,String jgCode){
         AjaxReturn ajaxReturn=new AjaxReturn();
         String msg="";
         Boolean isChecked=false;
@@ -277,32 +301,38 @@ public class ScreeningController extends BaseController {
         String now= String.valueOf(LocalDate.now().getYear());
         String year=now.substring(2,4);
 
-//        List<CrcRegcaseId>diclist=crcRegcaseIdService.getByAreacode(areaCode);
+        CrcRegcaseId dic=crcRegcaseIdService.getByJgcode(jgCode);
 
-        CrcRegcaseId dic=crcRegcaseIdService.getByJgcode(getSessionUser().getOrgCode());
-
-
-        if((!(idyear.equals(year)))||!(areacode.equals(dic.getCode()))){
-            msg="该大肠癌id格式不正确！";
+        if((!(idyear.equals(year)))){
+            msg="该大肠癌id格式[年份]不正确！";
         }else{
-            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber).size()==0)){
-                isChecked=true;
-            }else{
-                msg="该id已被占用！";
-            }
+            isChecked=true;
         }
+//        else{
+//            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber).size()==0)){
+//
+//            }else{
+//                msg="该id已被占用！";
+//            }
+//        }
         ajaxReturn.setOk(isChecked);
         ajaxReturn.setMsg(msg);
 
         return ajaxReturn;
     }
 
-
-    @RequestMapping(value = {"", "save"}, method = RequestMethod.POST)
+    /**
+     * 外接页面需要多用户id，机构code
+     * **/
+    @RequestMapping(value = {"", "/screeningout/save"}, method = RequestMethod.POST)
     @ResponseBody
     @Transactional(readOnly = true)
-    public AjaxReturn save(ScreeningVo screeningVo){
-        User user=getSessionUser();
+    public AjaxReturn save(ScreeningVoOut screeningVo){
+        String ysgh=screeningVo.getYsgh();
+        String yljg=screeningVo.getYljg();
+        String areaCode=screeningVo.getAreaCode();
+
+        User user = authService.findUserByOrgCodeAndJobNo(yljg, ysgh);
 
         //基本信息处理
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
@@ -369,23 +399,7 @@ public class ScreeningController extends BaseController {
             });
         }
 
-        List<LucFamilyCancerHistoryXH> lucFamilyCancerHistoryXHList=screeningVo.getLucFamilyCancerHistoryXHList();  //亲属历史表-徐汇
         List<FamilyCancerHistory> familyCancerHistoryList=screeningVo.getFamilyCancerHistoryList();                 //亲属历史表  不需做额外处理
-
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
-            if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
-                screeningVo.getLucRisk().setQinshuAizhengshi("1");
-                lucFamilyCancerHistoryXHList.stream().forEach(family->{
-                    if(family!=null  &&(StringUtils.isNotBlank(family.getRelation())|| family.getAge()!=null || family.getLived()!=null )){
-                        if(StringUtils.isNotBlank(family.getIcd10())){
-                            family.setCancerName(getCancerName(family.getIcd10(),"60020"));
-                        }
-                    }
-                });
-            }else{
-                screeningVo.getLucRisk().setQinshuAizhengshi("2");
-            }
-        }
 
         cancerHistoryService.deleteAllByPersonId(cancerHistoryDao,personInfo.getId()); //全删本人癌症史数据
         if(historyList!=null){
@@ -396,18 +410,9 @@ public class ScreeningController extends BaseController {
 
             historyList.stream().forEach(history->{
                 if(history!=null && (StringUtils.isNotBlank(history.getIcd10())||history.getAge()!=null
-                        || StringUtils.isNotBlank(history.getHospitalCode()))){                                        //插入历史癌症表
+                        || StringUtils.isNotBlank(history.getHospitalCode()))){                                               //插入历史癌症表
                     history.setId(IdGen.uuid());
                     history.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                    if((areaCode=="310104000000"||"310104000000".equals(areaCode))){
-                        if(isOpen(crcFlag)){
-                            if(personInfo.getId()!=null){
-                                history.setIschange("2");
-                            }else{
-                                history.setIschange("1");
-                            }
-                        }
-                    }
                     history.setManageid(personInfo.getId());
                     history.setCreateBy(user.getId());
                     history.setUpdateBy(user.getId());
@@ -416,41 +421,19 @@ public class ScreeningController extends BaseController {
             });
         }
 
-        if((areaCode=="310104000000"||"310104000000".equals(areaCode))){//插入亲属历史表-徐汇
-            lucFamilyCancerHistoryXHService.deleteAllByPersonId(lucFamilyCancerHistoryXHDao,personInfo.getId());
-            if(lucFamilyCancerHistoryXHList!=null&&lucFamilyCancerHistoryXHList.size()>0){
-                lucFamilyCancerHistoryXHList.stream().forEach(luc->{
 
-                    if(luc!=null &&(StringUtils.isNotBlank(luc.getRelation())||luc.getAge()!=null ||luc.getLived()!=null )){
-                        luc.setId(IdGen.uuid());
-                        luc.setCheckId(personInfo.getId());
-                        luc.setCreateBy(user.getId());
-                        if(personInfo.getId()!=null){
-                            luc.setUpdateBy(user.getId());
-                        }
-                        if(StringUtils.isNotBlank(luc.getIcd10())){
-                            luc.setCancerName(getCancerName(luc.getIcd10(),"60020"));
-                        }
-                        luc.setUpdateBy(user.getId());
-                        lucFamilyCancerHistoryXHService.insert(lucFamilyCancerHistoryXHDao,luc);
-                    }
-
-                });
-            }
-        }else{                                                              //插入亲属历史表-非徐汇
-            familyCancerHistoryService.deleteAllByPersonId(familyCancerHistoryDao,personInfo.getId());
-            if(familyCancerHistoryList!=null){
-                familyCancerHistoryList.stream().forEach(family->{
-                    if(family!=null &&(StringUtils.isNotBlank(family.getRelation())|| family.getAge()!=null || family.getLived()!=null )){ //插入亲属历史表
-                        family.setId(IdGen.uuid());
-                        family.setCheckId(personInfo.getId());
-                        family.setCreateBy(user.getId());
-                        family.setIschange("2");
-                        family.setUpdateBy(user.getId());
-                        familyCancerHistoryService.insert(familyCancerHistoryDao,family);
-                    }
-                });
-            }
+        familyCancerHistoryService.deleteAllByPersonId(familyCancerHistoryDao,personInfo.getId()); //插入亲属历史表-非徐汇
+        if(familyCancerHistoryList!=null){
+            familyCancerHistoryList.stream().forEach(family->{
+                if(family!=null &&(StringUtils.isNotBlank(family.getRelation())|| family.getAge()!=null || family.getLived()!=null )){  //插入亲属历史表
+                    family.setId(IdGen.uuid());
+                    family.setCheckId(personInfo.getId());
+                    family.setCreateBy(user.getId());
+                    family.setIschange("2");
+                    family.setUpdateBy(user.getId());
+                    familyCancerHistoryService.insert(familyCancerHistoryDao,family);
+                }
+            });
         }
 
         if(isOpen(crcFlag)){
@@ -693,38 +676,6 @@ public class ScreeningController extends BaseController {
         return new AjaxReturn(true,"保存成功",personInfo.getId());
     }
 
-    @RequestMapping(value = {"", "deleteSelfHistory"}, method = RequestMethod.GET)
-    @ResponseBody
-    public String deleteSelfHistory(String id,String manageId,String checkYear){
-        try{
-            if(StringUtils.isNotBlank(id)){
-                cancerHistoryService.deleteById(id);
-                if(StringUtils.isNotBlank(manageId)){
-                    cancerHistoryService.isChange(manageId,checkYear);
-                }
-            }
-            return "1";
-        }catch (Exception e){
-            return "2";
-        }
-    }
-
-    @RequestMapping(value = {"", "deleteFamHistory"}, method = RequestMethod.GET)
-    @ResponseBody
-    public String deleteFamHistory(String id,String checkId){
-        try{
-            if(StringUtils.isNotBlank(id)){
-                familyCancerHistoryService.deleteById(id);
-                if(StringUtils.isNotBlank(checkId)){
-                    familyCancerHistoryService.isChange(checkId);
-                }
-            }
-            return "1";
-        }catch (Exception e){
-            return "2";
-        }
-
-    }
 
     //简化计算flag成boolean
     private Boolean isOpen(String flag){
@@ -736,7 +687,7 @@ public class ScreeningController extends BaseController {
     }
 
     //获取实体对象数据
-    public ScreeningVo getDetail(String manageid, String year){
+    public ScreeningVo getDetail(String manageid, String year,User user){
         ScreeningVo screeningVo=new ScreeningVo();
         String crccheckid="";
         String liccheckid="";
@@ -839,7 +790,7 @@ public class ScreeningController extends BaseController {
         if(StringUtils.isNotBlank(crccheckid)){
             CrcFobt crcFobt=(CrcFobt)crcFobtService.getByCheckid(crcFobtDao,crccheckid);
             if(crcFobt==null){
-                crcFobt=new CrcFobt(getSessionUser());
+                crcFobt=new CrcFobt(user);
             }else{
                 if(crcFobt.getFobtResult()=="2" || "2".equals(crcFobt.getFobtResult())){
                     crcFobt.setFobtResult("阳性");
@@ -853,7 +804,7 @@ public class ScreeningController extends BaseController {
             //肝癌辅助检查表
             LicAssistCheck licAssistCheck=(LicAssistCheck)licAssistCheckService.getByCheckid(licAssistCheckDao,liccheckid);
             if(licAssistCheck==null){
-                licAssistCheck=new LicAssistCheck(getSessionUser());
+                licAssistCheck=new LicAssistCheck(user);
             }else{
                 if(licAssistCheck.getLicAssistResult() =="2" || "2".equals(licAssistCheck.getLicAssistResult())){
                     licAssistCheck.setLicAssistResult("阳性");

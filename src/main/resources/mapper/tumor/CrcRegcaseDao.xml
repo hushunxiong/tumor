@@ -41,7 +41,7 @@
 		WHERE
 		 a.del_flag='0'
 		<if test="manageid != null and manageid != ''">
-			and a.manageid = #{manageid}
+			and a.manageid != #{manageid}
 		 </if>
 		and a.Id_number=#{idnumber}
 	</select>
@@ -73,6 +73,9 @@
 	<update id="update">
 		UPDATE crc_regcase
 		SET
+		<if test="idNumber !=null and idNumber!=''">
+			Id_number = #{idNumber},
+		</if>
 		<if test="regorg !=null and regorg!=''">
 			regorg = #{regorg},
 		</if>
