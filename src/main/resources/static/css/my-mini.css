@@ -1140,3 +1140,4 @@ body .mini-error .mini-textbox-border, body .mini-error .mini-buttonedit-border,
 .mini-radiobuttonlist table td {  background-color: white!important; border: none;}
 .table_new6 td {border:none;}
 
+.table_new_border .mini-textbox-border,.table_new_border  .mini-buttonedit-border {border: 1px solid red!important; }
