@@ -115,7 +115,8 @@ public class ScreeningOutController extends BaseController {
      * **/
     @RequestMapping(value = {"", "/screeningout/form"}, method = RequestMethod.GET)
     public String form(Model model,
-                       @RequestParam(value = "manageId", required = false) String manageId,
+                       @RequestParam(value = "personcard", required = false) String personcard,
+                       @RequestParam(value = "personcardType", required = false) String personcardType,
                        @RequestParam(value = "checkYear", required = true) String checkYear,
                        @RequestParam(value = "operation", required = true) String operation,
                        @RequestParam(value = "ysgh", required = true) String ysgh,
@@ -127,10 +128,6 @@ public class ScreeningOutController extends BaseController {
         if(user == null){
             model.addAttribute("errorMsg","医生信息有误!");
             return "/api/400";
-        }
-
-        if(StringUtils.isBlank(checkYear)){
-            checkYear= DateUtils.getYear();
         }
 
         List<DataOption> years = Lists.newArrayList();
@@ -148,6 +145,20 @@ public class ScreeningOutController extends BaseController {
         model.addAttribute("ysgh", ysgh);
         model.addAttribute("yljg", yljg);
         model.addAttribute("areaCode", areaCode);
+
+
+        if(StringUtils.isBlank(checkYear)){
+            checkYear= DateUtils.getYear();
+        }
+
+        CancerPersonInfo pp=new CancerPersonInfo();
+        if(StringUtils.isNotBlank(personcard)&&StringUtils.isNotBlank(personcardType)){
+            pp=screeningService.getBaseInfoByCardnoAndType(personcard,personcardType);
+        }
+        String manageId="";
+        if(pp!=null&&StringUtils.isNotBlank(pp.getId())){
+            manageId=pp.getId();
+        }
 
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
