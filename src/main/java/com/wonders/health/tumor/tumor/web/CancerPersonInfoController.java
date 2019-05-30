@@ -72,7 +72,7 @@ public class CancerPersonInfoController extends BaseController {
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
-        return "/tumor/cancerPersonInfoList";
+        return "/register/cancerPersonInfoList";
     }
 
     @ResponseBody
@@ -100,7 +100,7 @@ public class CancerPersonInfoController extends BaseController {
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
-        return "/tumor/cancerPersonInfoForm";
+        return "/register/cancerPersonInfoForm";
     }
 
     @ResponseBody
