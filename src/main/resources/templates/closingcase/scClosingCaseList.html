@@ -32,7 +32,7 @@
 
 <div class="content pd-10" style="width:auto; overflow: hidden;">
     <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
-        <div title="肝癌结案一览">
+        <div title="胃癌结案一览">
             <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
             <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
             <div class="search-div-box mb-10">
@@ -41,7 +41,7 @@
                     <tr>
                         <td align="left">
                             <div class="keyword">
-                                <input id="keyword" name="keyword" class="radius" placeholder="可按照姓名或者证件号码模糊查询" data-tooltip="输入身份证号时至少6位" type="text">
+                                <input id="keyword" name="keyword" class="radius" placeholder="可按照姓名或者证件号码模糊查询" data-tooltip="输入证件号码时至少6位" type="text">
                                 <div class="my-btn my-btn-blue" onclick="onSearch()">搜索</div>
                             </div>
                         </td>
@@ -79,12 +79,12 @@
 
                     <div class="mini-row">
                         <div class="mini-col-3">
-                             <label class="mr-5">肝癌初筛判定结果：</label>
+                             <label class="mr-5">胃癌初筛判定结果：</label>
                             <input id="checkResult" name="checkResult"  showNullItem="true" class="mini-combobox" width="42%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
                         </div>
                         <div class="mini-col-3">
-                            <label class="mr-5">肝癌结案结果：</label>
+                            <label class="mr-5">胃癌结案结果：</label>
                             <input id="closeResult" name="closeResult"  showNullItem="true" class="mini-combobox" width="49%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60004')}"/>
                         </div>
