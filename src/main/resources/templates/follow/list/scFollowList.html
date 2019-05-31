@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>胃癌随访一览</title>
+    <link>
+    <script></script>
+</head>
+<body>
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div id="form1">
+        <div class="title_tip mt-30">基本信息</div>
+        <span class="mini-hidden" id="id" name="id"></span>
+        <table class="table_new table_new5 mt-10" id="baseForm">
+            <tbody>
+                <tr>
+                    <td><span class="red-span">*</span>筛查年份</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td><span class="red-span">*</span>证件类型</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td><span class="red-span">*</span>证件号码</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="red-span">*</span>姓&nbsp;&nbsp;名</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td><span class="red-span">*</span>性&nbsp;&nbsp;别</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td><span class="red-span">*</span>出生日期</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>移动电话</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td>固定电话</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td>居住地址</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>胃癌初筛登记日期</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td>胃癌判定结果</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                    <td>胃癌诊断状态</td>
+                    <td>
+                        <input class="mini-textbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <span>胃癌随访信息</span>
+                        <button style="float: right;">新增随访</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="btn-list text-c mt-30">
+        <button class="my-btn my-btn-blue mr-20">返回</button>
+    </div>
+</div>
+</body>
+</html>
