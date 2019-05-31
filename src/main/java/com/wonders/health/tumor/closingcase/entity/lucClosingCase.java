@@ -16,10 +16,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wonders.health.tumor.common.model.BaseEntity;
 
 /**
- * 胃癌结案实体
+ * 肺癌结案实体
  * @author zhaomeng
  */
-public class scClosingCase extends BaseEntity {
+public class lucClosingCase extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -94,9 +94,10 @@ public class scClosingCase extends BaseEntity {
 
 	private String gender;	// 性别
 
-	private String assessmentResult; //胃癌危险评估结果
+	private String assessmentResult; //危险评估结果
 
-	public scClosingCase() {
+
+	public lucClosingCase() {
 		super();
 	}
 
