@@ -16,10 +16,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wonders.health.tumor.common.model.BaseEntity;
 
 /**
- * 大肠癌结案实体
+ * 胃癌结案实体
  * @author zhaomeng
  */
-public class crcClosingCase extends BaseEntity {
+public class scClosingCase extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -30,21 +30,11 @@ public class crcClosingCase extends BaseEntity {
 	@NotNull
 	private String manageid;	// 个人管理编号
 
-	@Length(max=64)
-	@NotNull
-	private String idNumber;	// 大肠癌初筛ID：2位年份+5位机构编码+5位序号
-
 	@NotNull
 	private Integer checkYear;	// 初筛年度
 
 	@Length(max=1)
 	private String checkResult;	// 判定结果
-
-	
-	private Date cbqReturnDate1;	// 第一次采便器交回日期
-
-	
-	private Date cbqReturnDate2;	// 第二次采便器交回日期
 
 	@Length(max=32)
 	@NotNull
@@ -63,7 +53,7 @@ public class crcClosingCase extends BaseEntity {
 
 	@Length(max=1)
 	@NotNull
-	private String submitsStatus;	// 数据提交状态 
+	private String submitsStatus;	// 数据提交状态
 
 	
 	private Date submitDate;	// 数据提交日期
@@ -76,7 +66,7 @@ public class crcClosingCase extends BaseEntity {
 
 	@Length(max=1)
 	@NotNull
-	private String closeStatus;	// 结案状态 
+	private String closeStatus;	// 结案状态
 
 	
 	private Date closeDate;	// 结案日期
@@ -96,9 +86,6 @@ public class crcClosingCase extends BaseEntity {
 	@Length(max=32)
 	private String sourceId;	// 来源代码
 
-	@Length(max=1)
-	private String ischange;	// 更新标志
-
 	private String personcardType;	// 证件类型
 
 	private String personcard;	// 证件号码
@@ -107,11 +94,9 @@ public class crcClosingCase extends BaseEntity {
 
 	private String gender;	// 性别
 
-	private String assessmentResult; //大肠癌危险评估结果
+	private String assessmentResult; //肝癌危险评估结果
 
-	private String fobtResult; //便隐血检查结果
-
-	public crcClosingCase() {
+	public scClosingCase() {
 		super();
 	}
 
@@ -133,15 +118,6 @@ public class crcClosingCase extends BaseEntity {
 		this.manageid = manageid;
 	}
 
-	@JsonProperty("idNumber")
-	public String getIdNumber() {
-		return idNumber;
-	}
-
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
-	}
-
 	@JsonProperty("checkYear")
 	public Integer getCheckYear() {
 		return checkYear;
@@ -158,26 +134,6 @@ public class crcClosingCase extends BaseEntity {
 
 	public void setCheckResult(String checkResult) {
 		this.checkResult = checkResult;
-	}
-
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-	@JsonProperty("cbqReturnDate1")
-	public Date getCbqReturnDate1() {
-		return cbqReturnDate1;
-	}
-
-	public void setCbqReturnDate1(Date cbqReturnDate1) {
-		this.cbqReturnDate1 = cbqReturnDate1;
-	}
-
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-	@JsonProperty("cbqReturnDate2")
-	public Date getCbqReturnDate2() {
-		return cbqReturnDate2;
-	}
-
-	public void setCbqReturnDate2(Date cbqReturnDate2) {
-		this.cbqReturnDate2 = cbqReturnDate2;
 	}
 
 	@JsonProperty("regionCode")
@@ -321,15 +277,6 @@ public class crcClosingCase extends BaseEntity {
 		this.sourceId = sourceId;
 	}
 
-	@JsonProperty("ischange")
-	public String getIschange() {
-		return ischange;
-	}
-
-	public void setIschange(String ischange) {
-		this.ischange = ischange;
-	}
-
 	public String getPersoncardType() {
 		return personcardType;
 	}
@@ -368,13 +315,5 @@ public class crcClosingCase extends BaseEntity {
 
 	public void setAssessmentResult(String assessmentResult) {
 		this.assessmentResult = assessmentResult;
-	}
-
-	public String getFobtResult() {
-		return fobtResult;
-	}
-
-	public void setFobtResult(String fobtResult) {
-		this.fobtResult = fobtResult;
 	}
 }

@@ -93,10 +93,10 @@
                 </div>
             </div>
 
-            <div id="datagrid" url="../licClosingCase/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
+            <div id="datagrid" url="../scClosingCase/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
-                    <div field="checkYear" sortField="checkYear"  autoShowPopup="true"  width="120px"  headerAlign="center" align="center"  allowSort="true" >肝癌初筛年份</div>
+                    <div field="checkYear" sortField="checkYear"  autoShowPopup="true"  width="120px"  headerAlign="center" align="center"  allowSort="true" >胃癌初筛年份</div>
                     <div field="name"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
                     <div field="personcardType" type="comboboxcolumn" autoShowPopup="true"  width="70px" headerAlign="center" align="center"  allowSort="false" >证件类型
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
@@ -105,19 +105,16 @@
                     <div field="gender" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60023')}"/></div>
-                    <div field="assessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >肝癌危险评估结果
+                    <div field="assessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >胃癌危险评估结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="licAssistResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center"  allowSort="false" >肝癌辅助检查结果
+                    <div field="checkResult" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false" >胃癌判定结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="checkResult" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false" >肝癌判定结果
+                    <div field="closeStatus" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false" >胃癌结案状态
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="closeStatus" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false" >肝癌结案状态
-                        <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
-                               valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="closeResult" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false" >肝癌结案结果
+                    <div field="closeResult" type="comboboxcolumn" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false" >胃癌结案结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60004')}"/></div>
                 </div>
