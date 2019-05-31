@@ -25,6 +25,8 @@
 	<sql id="pageFromAndWhere">
       FROM crc_regcase a
       inner  join  cancer_person_info b on a.MANAGEID = b . ID
+	  LEFT JOIN CRC_RISK_ASSESSMENT cra ON (a. ID = cra.CRC_CHECK_ID) AND cra.DEL_FLAG='0'
+	  LEFT JOIN CRC_FOBT cf ON (a. ID = cf.CRC_CHECK_ID) AND cf.DEL_FLAG='0'
       <where>
 		a.del_flag = '0'
 		and   b.del_flag = '0'
@@ -44,11 +46,18 @@
 		  <if test="csnf !=null and csnf !='' ">
 			  and  a.check_year=#{csnf}
 		  </if>
-		  <if test="crcResult !=null and crcResult !=''">
-			  and  a.check_result=#{crcResult}
+		  <if test="checkResult !=null and checkResult !=''">
+			  <choose>
+				  <when test="checkResult == '3'.toString()">
+					  and  a.check_result is null
+				  </when>
+				  <otherwise>
+					  and  a.check_result=#{checkResult}
+				  </otherwise>
+			  </choose>
 		  </if>
-		  <if test="closeStatus !=null and closeStatus !='' ">
-			  and  a.close_status=#{closeStatus}
+		  <if test="closeResult !=null and closeResult !='' ">
+			  and  a.close_result=#{closeResult}
 		  </if>
 	  </where>
     </sql>
@@ -71,7 +80,12 @@
 			</otherwise>
 		</choose>
         select
-		    b.personcard_type AS "personcardType",b.personcard AS "personcard",b.name AS "name",b.gender AS "gender",
+		    b.personcard_type AS "personcardType",
+		    b.personcard AS "personcard",
+		    b.name AS "name",
+		    b.gender AS "gender",
+		    cra.ASSESSMENT_RESULT AS "assessmentResult",
+		    cf.fobt_result AS "fobtResult",
 			<include refid="crcClosingCaseColumns"/>
         <include refid="pageFromAndWhere"/>
 		<choose>
@@ -79,6 +93,7 @@
 				ORDER BY ${sortField} ${sortOrder}
 			</when>
 			<otherwise>
+				ORDER BY  a.regdate asc
 			</otherwise>
 		</choose>
 		<choose>
