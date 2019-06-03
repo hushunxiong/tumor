@@ -1,9 +1,11 @@
 package com.wonders.health.tumor.follow.web;
 
+import com.wonders.health.tumor.common.Contants;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
+import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.follow.service.FollowService;
 import com.wonders.health.tumor.follow.vo.FollowPersonInfoSearchVo;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
@@ -74,5 +76,41 @@ public class FollowController extends BaseController {
         DataGrid<CancerPersonInfo> grid = followService.findPage(search);
 
         return grid;
+    }
+
+    @RequestMapping(value = "person", method = RequestMethod.GET)
+    public String person(Model model, String manageId, String checkYear) {
+
+        if (crcFlag == 1) {
+            String crcResult = followService.getCrcResult(manageId, checkYear);
+            if (StringUtils.isNotBlank(crcResult)
+                    && StringUtils.equals(Contants.CHECKRESULT_YANG, crcResult)) {
+                model.addAttribute("crcFlag", "1");
+            }
+
+        }
+        if (licFlag == 1) {
+            String licResult = followService.getLicResult(manageId, checkYear);
+            if (StringUtils.isNotBlank(licResult)
+                    && StringUtils.equals(Contants.CHECKRESULT_YANG, licResult)) {
+                model.addAttribute("licFlag", "1");
+            }
+
+        }
+        if (lucFlag == 1) {
+            String lucResult = followService.getLucResult(manageId, checkYear);
+            if (StringUtils.isNotBlank(lucResult)
+                    && StringUtils.equals(Contants.CHECKRESULT_YANG, lucResult)) {
+                model.addAttribute("lucFlag", "1");
+            }
+        }
+        if (scFlag == 1) {
+            String scResult = followService.getScResult(manageId, checkYear);
+            if (StringUtils.isNotBlank(scResult)
+                    && StringUtils.equals(Contants.CHECKRESULT_YANG, scResult)) {
+                model.addAttribute("scFlag", "1");
+            }
+        }
+        return "/follow/followPerson";
     }
 }

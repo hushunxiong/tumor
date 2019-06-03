@@ -9,10 +9,18 @@
 <body>
 <div class="content pd-10" style="width:auto; overflow: hidden;">
     <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
-        <div title="随访对象一览">
+        <div title="大肠癌随访" th:if="${crcFlag} eq '1'">
 
         </div>
+        <div title="肝癌随访" th:if="${licFlag} eq '1'">
 
+        </div>
+        <div title="胃癌随访" th:if="${scFlag} eq '1'">
+
+        </div>
+        <div title="肺癌随访" th:if="${lucFlag} eq '1'">
+
+        </div>
     </div>
 </div>
 </body>

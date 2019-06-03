@@ -5,7 +5,11 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
 import com.wonders.health.tumor.common.service.AreaService;
 import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.follow.dao.FollowDao;
-import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.tumor.dao.CrcRegcaseDao;
+import com.wonders.health.tumor.tumor.dao.LicRegcaseDao;
+import com.wonders.health.tumor.tumor.dao.LucRegcaseDao;
+import com.wonders.health.tumor.tumor.dao.ScRegcaseDao;
+import com.wonders.health.tumor.tumor.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,15 @@ public class FollowService {
 
     @Autowired
     private FollowDao followDao;
+    @Autowired
+    private CrcRegcaseDao crcRegcaseDao;
+    @Autowired
+    private LicRegcaseDao licRegcaseDao;
+    @Autowired
+    private LucRegcaseDao lucRegcaseDao;
+    @Autowired
+    private ScRegcaseDao scRegcaseDao;
+
     @Autowired
     private AreaService areaService;
 
@@ -60,4 +73,55 @@ public class FollowService {
         return new DataGrid<CancerPersonInfo>(count,list);
     }
 
+    /**
+     * 根据年份和个人编号获取大肠癌初筛信息
+     * @return
+     */
+    public String getCrcResult(String manageId, String checkYear) {
+        CrcRegcase crcRegcase = crcRegcaseDao.getByManageidAndYear(manageId, checkYear);
+
+        if (crcRegcase != null) {
+            return crcRegcase.getCheckResult();
+        }
+        return "";
+    }
+
+    /**
+     * 根据年份和个人编号获取肝癌初筛信息
+     * @return
+     */
+    public String getLicResult(String manageId, String checkYear) {
+        LicRegcase licRegcase = licRegcaseDao.getByManageidAndYear(manageId, checkYear);
+
+        if (licRegcase != null) {
+            return licRegcase.getCheckResult();
+        }
+        return "";
+    }
+
+    /**
+     * 根据年份和个人编号获取肺癌初筛信息
+     * @return
+     */
+    public String getLucResult(String manageId, String checkYear) {
+        LucRegcase lucRegcase = lucRegcaseDao.getByManageidAndYear(manageId, checkYear);
+
+        if (lucRegcase != null) {
+            return lucRegcase.getCheckResult();
+        }
+        return "";
+    }
+
+    /**
+     * 根据年份和个人编号获取胃癌初筛信息
+     * @return
+     */
+    public String getScResult(String manageId, String checkYear) {
+        ScRegcase scRegcase = scRegcaseDao.getByManageidAndYear(manageId, checkYear);
+
+        if (scRegcase != null) {
+            return scRegcase.getCheckResult();
+        }
+        return "";
+    }
 }
