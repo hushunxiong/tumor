@@ -1028,7 +1028,6 @@
     var licDbflag = [[${licDbflag}]];
     var scDbflag = [[${scDbflag}]];
     var lucDbflag = [[${lucDbflag}]];
-    var flag=[[${flag}]];
     var areaCode=[[${areaCode}]];
     var operation=[[${operation}]]; //操作flag 1-查看  2-修改 3-新增
 
@@ -1575,14 +1574,6 @@
         }
     }
 
-    Array.prototype.contains = function ( needle ) {
-        for (i in this) {
-            if (this[i] == needle) return true;
-        }
-        return false;
-    }
-
-
     //显示亲属癌症行
     function showFamily(id, bodyId) {
         var v = mini.get(id).getValue();
@@ -1682,28 +1673,6 @@
 
     //删除一级亲属癌症行
     function delFamilyRow(index, bodyId,inputId) {
-
-        // var id=mini.get("relationid"+index).getValue();//后台删除记录
-        // if(id!=null && id!=''){
-        //     var personid=mini.get("id").getValue();
-        //     $.ajax({
-        //         url: "/tumor/screening/deleteFamHistory?id="+id+"&&checkId="+personid,
-        //         type:'get',
-        //         dataType:'text',
-        //         success:function(res) {
-        //             if (res=="2") { //删除失败
-        //                 mini.showTips({
-        //                     content: '删除癌症史失败',
-        //                     state: "warning",
-        //                     x: "center",
-        //                     y: "center",
-        //                     timeout: 2000
-        //                 });
-        //                 return;
-        //             }
-        //         }
-        //     })
-        // }
         $("#familyRow" + index).remove();
         if ($('#' + bodyId).children().length == 1) {
             mini.get(inputId).setValue(2);
@@ -1718,7 +1687,7 @@
         var idFlag=false;
 
         var params={};
-        if(flag==1){
+        if(operation==3){
             //新增时校验是否已做过
             var checkyear=mini.get("checkYear").getValue();
             var zjhm=mini.get("personcard").getValue();
@@ -1912,7 +1881,6 @@
             if(aizhengzhonglei==aizheng){
                 xhazflag= 1;
             }
-
         }
         return xhazflag;
     }
@@ -2157,7 +2125,7 @@
             var lucFamilyFlag = 2;
             if (areaCode == '310104000000') {        //徐汇区单独判断
                 lucFamilyFlag = mini.get("xhHistory").getValue();
-                    // getXhAizheng("肺癌"); //m.一级亲属有肺癌病史；
+                jibingFlag=2;
             } else {
                 //m.一级亲属有肺癌病史；
                 lucFamilyFlag = 2;

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -113,6 +114,22 @@ public class ScreeningController extends BaseController {
     @Autowired
     private CrcRegcaseIdService crcRegcaseIdService;
 
+    @Autowired
+    private CrcFobtRemindService crcFobtRemindService;
+
+    @Autowired
+    private CrcDiagCheckRemindService crcDiagCheckRemindService;
+
+    @Autowired
+    private LicDiagCheckRemindService licDiagCheckRemindService;
+
+    @Autowired
+    private ScDiagCheckRemindService scDiagCheckRemindService;
+    @Autowired
+    private LucDiagCheckRemindService lucDiagCheckRemindService;
+
+
+
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear,String operation) {
         User user=getSessionUser();
@@ -158,7 +175,6 @@ public class ScreeningController extends BaseController {
             model.addAttribute("historyListFlag", "2");
 
             model.addAttribute("idNumber", "");
-            model.addAttribute("flag", "1"); //1：新增
         } else {
             ScreeningVo screeningVo=getDetail(manageId,checkYear);
             model.addAttribute("personInfo", screeningVo.getPersonInfo());
@@ -194,7 +210,6 @@ public class ScreeningController extends BaseController {
                 model.addAttribute("familyCancerHistoryListFlag", "2"); //
             }
 
-            model.addAttribute("flag", "2"); //2:修改
             //各癌症数据库存在标志
             model.addAttribute("crcDbflag", "2"); //数据库状态  1：新增 2：修改
             model.addAttribute("licDbflag", "2"); //数据库状态  1：新增 2：修改
@@ -205,7 +220,6 @@ public class ScreeningController extends BaseController {
                     model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
                 }
             }
-            model.addAttribute("flag", "2"); //2：修改
         }
 
         //各癌症数据库存在标志
@@ -486,11 +500,13 @@ public class ScreeningController extends BaseController {
             CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
             if(crcrisk!=null && !checkObjAllFieldsIsNull(crcrisk)){
                 crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
+
                 if(crcrisk.getAssessmentResult()=="阴性" || "阴性".equals(crcrisk.getAssessmentResult())){
                     crcrisk.setAssessmentResult("1");
                 }else  if(crcrisk.getAssessmentResult()=="阳性" || "阳性".equals(crcrisk.getAssessmentResult())){
                     crcrisk.setAssessmentResult("2");
                 }
+
                 if(StringUtils.isNotBlank(crcrisk.getId())){
                     crcRiskAssessmentService.update(crcRiskAssessmentDao,crcrisk);
                 }else{
@@ -502,6 +518,7 @@ public class ScreeningController extends BaseController {
                     crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
                 }
             }
+
         }
         if(isOpen(licFlag)){
             LicRegcase licRegcase=screeningVo.getLicRegcase();
@@ -527,6 +544,19 @@ public class ScreeningController extends BaseController {
                     licRegcase.init();
                     licRegcaseService.insert(licRegcaseDao,licRegcase);
                 }
+
+                //处理新需求
+                if("2".equals(licRegcase.getCheckResult())||(licRegcase.getCheckResult()=="2")){
+                    LicDiagCheckRemind licDiagCheckRemind=new LicDiagCheckRemind();
+                    licDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    licDiagCheckRemind.setLicCheckId(licRegcase.getId());
+                    licDiagCheckRemind.setCreateDate(new Date());
+                    licDiagCheckRemind.setRemindStatus("01");
+                    licDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                    licDiagCheckRemind.init();
+                    licDiagCheckRemindService.saveOrUpdate(licDiagCheckRemind,user.getId());
+                }
+
             }
             LicRiskAssessment licrisk=screeningVo.getLicRisk();
             if(licrisk!=null && !checkObjAllFieldsIsNull(licrisk)){
@@ -593,6 +623,18 @@ public class ScreeningController extends BaseController {
                     lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
                 }
 
+                //处理肺癌新需求
+                if("2".equals(lucRegcase.getCheckResult())||(lucRegcase.getCheckResult()=="2")){
+                    LucDiagCheckRemind lucDiagCheckRemind=new LucDiagCheckRemind();
+                    lucDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    lucDiagCheckRemind.setLucCheckId(lucRegcase.getId());
+                    lucDiagCheckRemind.setCreateDate(new Date());
+                    lucDiagCheckRemind.setRemindStatus("01");
+                    lucDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                    lucDiagCheckRemind.init();
+                    lucDiagCheckRemindService.saveOrUpdate(lucDiagCheckRemind,user.getId());
+                }
+
             }
         }
         if(isOpen(scFlag)){
@@ -640,7 +682,20 @@ public class ScreeningController extends BaseController {
                     scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
                 }
             }
+            //处理胃癌新需求
+            if("2".equals(scRegcase.getCheckResult())||(scRegcase.getCheckResult()=="2")){
+                ScDiagCheckRemind scDiagCheckRemind=new ScDiagCheckRemind();
+                scDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                scDiagCheckRemind.setScCheckId(scRegcase.getId());
+                scDiagCheckRemind.setCreateDate(new Date());
+                scDiagCheckRemind.setRemindStatus("01");
+                scDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                scDiagCheckRemind.init();
+                scDiagCheckRemindService.saveOrUpdate(scDiagCheckRemind,user.getId());
+            }
         }
+
+
 
         CrcFobt crcFobt=screeningVo.getCrcFobt();
         if(!checkObjAllFieldsIsNull(crcFobt)){
@@ -663,7 +718,45 @@ public class ScreeningController extends BaseController {
                 crcFobtService.update(crcFobtDao,crcFobt);
             }
 
+            if(isOpen(crcFlag)){
+                //处理新需求  往大肠癌便隐血检查提醒表插入数据
+                CrcFobtRemind crcFobtRemind=new CrcFobtRemind();
+                crcFobtRemind.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                crcFobtRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                crcFobtRemind.setCreateDate(new Date());
+                if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isNotBlank(crcFobt.getSecondFobtResult()))){ //两次都做
+                    crcFobtRemind.setFobtRemindStatus("02");
+                    crcFobtRemindService.saveOrUpdate(crcFobtRemind,user.getId());  //提醒表插入数据
+
+                    if("2".equals(crcFobt.getFobtResult())){//若大肠癌初筛结果为阳性  大肠癌诊断结果提醒表插入数据
+                        CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
+                        cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                        cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                        cdcr.setCreateDate(new Date());
+                        cdcr.setRemindStatus("01");
+                        cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                        cdcr.init();
+                        crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
+                    }
+                }else{                //没有做便隐血检查 或 仅第一次
+                    crcFobtRemind.setFobtRemindStatus("01");
+                    crcFobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
+                    crcFobtRemindService.saveOrUpdate(crcFobtRemind,user.getId());
+                }
+            }
+
+        }else{  //为空,无便隐血检查结果  这里是为了防止没有做结果，一般不会使用
+            if(isOpen(crcFlag)){
+                CrcFobtRemind crcFobtRemind=new CrcFobtRemind();
+                crcFobtRemind.setCrcCheckId(screeningVo.getCrcRegcase().getIdNumber());
+                crcFobtRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                crcFobtRemind.setCreateDate(new Date());
+                crcFobtRemind.setFobtRemindStatus("01");
+                crcFobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
+                crcFobtRemindService.saveOrUpdate(crcFobtRemind,user.getId());
+            }
         }
+
 
         LicAssistCheck licAssistCheck=screeningVo.getLicCheck();
         if(!checkObjAllFieldsIsNull(licAssistCheck)){
