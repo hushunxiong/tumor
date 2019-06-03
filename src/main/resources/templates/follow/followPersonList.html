@@ -201,9 +201,20 @@
         var r = e.record;
         var h = '';
 
-        h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\',\'' + '2'+ '\')" style="color:blue;cursor:pointer">管理</a>';
+        h += '<a onclick="viewPerson(\'' + r.id + '\',\'' + r.csnf+ '\')" style="color:blue;cursor:pointer">管理</a>';
 
         return h;
+    }
+
+    //跳到筛查对象
+    function viewPerson(id, csnf) {
+        var url = "../crcFollow/list?manageId="+id+"&checkYear="+csnf;
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        window.location.href =url;
     }
 </script>
 </html>
