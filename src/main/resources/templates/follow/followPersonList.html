@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>肿瘤早发现随访对象一览</title>
+    <link>
+    <script></script>
+</head>
+<body>
+
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
+        <div title="随访对象一览">
+            <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+            <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+            <div class="search-div-box mb-10">
+                <table width="99%" border="0">
+                    <tbody>
+                    <tr>
+                        <td align="left">
+                            <div class="keyword">
+                                <input id="keyword" name="keyword" class="radius" placeholder="可按照姓名或者证件号码模糊查询" data-tooltip="输入身份证号时至少6位" type="text">
+                                <div class="my-btn my-btn-blue" onclick="onSearch()">搜索</div>
+                            </div>
+                        </td>
+                        <td width="100px" align="center">
+                            <a herf="#" onclick="toggleVisibility(div1)"><strong style="color:#3f93d4">高级搜索&nbsp;
+                                <img th:src="@{/images/pp_up.png}" src="../static/images/pp_up.png" id="pctid"></strong></a>
+                        </td>
+                        <td align="left"></td>
+                        <td style="width: 200px" align="right">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="div1" style="display: none;" class="mt-10">
+                    <div class="mini-row">
+                        <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
+                            <select id="csnf" name="csnf" class="select-default radius" style="width:55%">
+                                <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  ></option>
+                            </select>
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构所属区：</label>
+                            <input id="regarea" name="regarea" class="mini-combobox" width="47%"
+                                   th:data="${#auth.getAreas(areaCode)}"
+                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构：</label>
+                            <input id="regorg" name="regorg" class="mini-combobox" width="55%"
+                                   textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
+                        </div>
+
+                        <div class="mini-col-3">
+                            <label class="mr-5">初筛登记日期：</label>
+                            <input id="beginDate" name="beginDate" class="mini-datepicker"
+                                   value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
+
+                            -
+                            <input id="endDate" name="endDate" class="mini-datepicker"
+                                   value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
+                        </div>
+                    </div>
+
+                    <div class="mini-row">
+                        <div class="mini-col-3" th:if="${crcFlag==1?true:false}">
+                            <label class="mr-5">大肠癌判定结果：</label>
+                            <input id="crcResult" name="crcResult"  showNullItem="true" class="mini-combobox" width="46%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                        <div class="mini-col-3" th:if="${licFlag==1?true:false}">
+                            <label class="mr-5">肝癌判定结果：</label>
+                            <input id="licResult" name="licResult" showNullItem="true" class="mini-combobox" width="39%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                        <div class="mini-col-3" th:if="${scFlag==1?true:false}">
+                            <label class="mr-5">胃癌判定结果：</label>
+                            <input id="scResult" name="scResult" showNullItem="true" class="mini-combobox" width="47%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                        <div class="mini-col-3" th:if="${lucFlag==1?true:false}">
+                            <label class="mr-5">肺癌判定结果：</label>
+                            <input id="lucResult" name="lucResult" showNullItem="true" class="mini-combobox" width="42%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60001')}"/>
+                        </div>
+                    </div>
+
+                    <div class="mini-row">
+                        <div class="mini-col-3" th:if="${crcFlag==1?true:false}">
+                            <label class="mr-5">大肠癌随访状态：</label>
+                            <input id="crcStatus" name="crcStatus"  showNullItem="true" class="mini-combobox" width="46%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60013')}"/>
+                        </div>
+                        <div class="mini-col-3" th:if="${licFlag==1?true:false}">
+                            <label class="mr-5">肝癌随访状态：</label>
+                            <input id="licStatus" name="licStatus" showNullItem="true" class="mini-combobox" width="39%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60013')}"/>
+                        </div>
+                        <div class="mini-col-3" th:if="${scFlag==1?true:false}">
+                            <label class="mr-5">胃癌随访状态：</label>
+                            <input id="scStatus" name="scStatus" showNullItem="true" class="mini-combobox" width="47%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60013')}"/>
+                        </div>
+                        <div class="mini-col-3" th:if="${lucFlag==1?true:false}">
+                            <label class="mr-5">肺癌随访状态：</label>
+                            <input id="lucStatus" name="lucStatus" showNullItem="true" class="mini-combobox" width="42%"
+                                   emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60013')}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="datagrid" url="../follow/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
+                 sizeList="[10,20,50]" pageSize="20" idField="id">
+                <div property="columns" >
+                    <div field="name" width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
+                    <div field="personcardType" type="comboboxcolumn" width="100px" headerAlign="center" align="center" allowSort="false">证件类型
+                        <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                               valueField="code" th:data="${#dic.generals('60022')}"/></div>
+                    <div field="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">证件号码</div>
+                    <div field="gender" type="comboboxcolumn" width="50px" headerAlign="center" align="center" allowSort="false">性别
+                        <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                               valueField="code" th:data="${#dic.generals('60023')}"/></div>
+                    <div field="birth" sortField="birth" align="center" width="75px" headerAlign="center" dateFormat="yyyy-MM-dd" allowSort="true">出生日期</div>
+                    <div field="addressDetail" width="300px" headerAlign="center" align="center" allowSort="false">居住地址</div>
+                    <div field="telephone" width="300px" headerAlign="center" align="center" allowSort="false">联系电话</div>
+                    <div field="csnf" width="50px" headerAlign="center" align="center" allowSort="false">初筛年份</div>
+                    <div type="action" renderer="actionRenderer" style="width:100%;"  width="150px" headerAlign="center" align="center" allowSort="false">操作</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    mini.parse();
+    var grid = mini.get("datagrid");
+    var form = new mini.Form('#div1');
+
+    $(function () {
+        onSearch();
+        getHospitals();
+
+    });
+
+    var ctxStatic ='..';
+    function toggleVisibility(div1) {
+
+        if (div1.style.display == 'none'){
+            div1.style.display = 'block';
+            document.getElementById("pctid").src =ctxStatic+ '/images/pp_down.png';
+        } else if (div1.style.display == 'block') {
+            div1.style.display = 'none';
+            document.getElementById("pctid").src = ctxStatic+'/images/pp_up.png';
+        } else {
+            div1.style.display = 'block';
+            document.getElementById("pctid").src = ctxStatic+'/images/pp_down.png';
+        }
+    }
+
+    //区下级社区医院
+    function getHospitals(){
+        var regarea= mini.get("regarea").getValue();
+        var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
+        mini.get("regorg").setUrl(url);
+    }
+
+    //查询
+    function onSearch() {
+        var data = form.getData(true);
+        var keyword = $("#keyword").val();
+        if (!validateKey(keyword)) {
+            return;
+        }
+        data.keyword=keyword;
+        data.csnf= $("#csnf").val();
+        grid.load(data, gridLoadSuccess, gridLoadError);
+    }
+
+    function validateKey(key) {
+        if(key != null && key != undefined && key != '' && key.length < 6){
+            var flag = false;
+            for(var i = 0 ; i < key.length ; i++){
+                var c = key[i];
+                if(!((c >= '0' && c <= '9') || c == "x" || c == "X" || c == " ")){
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag) {
+                mini.showTips({content: "按照证件号码查询，输入不能小于六位", state: "warning", x: "center", y: "center", timeout: "2000"});
+            }
+            return flag;
+        }
+        return true;
+    }
+
+    //操作列
+    function actionRenderer(e) {
+        var r = e.record;
+        var h = '';
+
+        h += '<a onclick="goto(\'' + r.id + '\',\'' + r.csnf+ '\',\'' + '2'+ '\')" style="color:blue;cursor:pointer">管理</a>';
+
+        return h;
+    }
+</script>
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.follow.dao.CrcFollowDao">
+    
+	<sql id="CrcFollowColumns">
+		a.id AS "id",a.primary_mark AS "primaryMark",a.crc_check_id AS "crcCheckId",a.shifouquezhen AS "shifouquezhen",a.yingxiangxue_fangshi AS "yingxiangxueFangshi",a.changjing AS "changjing",a.buzuochangjing_yuanyin AS "buzuochangjingYuanyin",a.buzuochangjing_yuanyin_qita AS "buzuochangjingYuanyinQita",a.wutongchangjing AS "wutongchangjing",a.changjingbuwei AS "changjingbuwei",a.bingbianbuw AS "bingbianbuw",a.bingbianshu AS "bingbianshu",a.gangjuli AS "gangjuli",a.bingbiandaxiao AS "bingbiandaxiao",a.huojian AS "huojian",a.huojianjieguo AS "huojianjieguo",a.liubian AS "liubian",a.xirouxingzhuang AS "xirouxingzhuang",a.youwudi AS "youwudi",a.chuxueqingkuang AS "chuxueqingkuang",a.huojianriq AS "huojianriq",a.bingli AS "bingli",a.binglileixing AS "binglileixing",a.shifouzhiliao AS "shifouzhiliao",a.bingbianchuli AS "bingbianchuli",a.shoushufangshi AS "shoushufangshi",a.fuzhuzhiliao AS "fuzhuzhiliao",a.zhongliuleix AS "zhongliuleix",a.fenhuachengdu AS "fenhuachengdu",a.fenqiyiju AS "fenqiyiju",a.zhongliutnm_t AS "zhongliutnmT",a.zhongliutnm_n AS "zhongliutnmN",a.zhongliutnm_m AS "zhongliutnmM",a.linchuangfenqi AS "linchuangfenqi",a.linchuangfenqi_putuo AS "linchuangfenqiPutuo",a.tnmfenqilaiyuan AS "tnmfenqilaiyuan",a.zhuyuanhao AS "zhuyuanhao",a.shoushujigou_id AS "shoushujigouId",a.shoushujigou_name AS "shoushujigouName",a.shoushu_date AS "shoushuDate",a.fangliaojigou_id AS "fangliaojigouId",a.fangliaojigou_name AS "fangliaojigouName",a.fangliao_date AS "fangliaoDate",a.hualiaojigou_id AS "hualiaojigouId",a.hualiaojigou_name AS "hualiaojigouName",a.hualiao_date AS "hualiaoDate",a.changjingjigou_id AS "changjingjigouId",a.changjingjigou_name AS "changjingjigouName",a.changjing_date AS "changjingDate",a.changjing_yisheng AS "changjingYisheng",a.suifangjigou_id AS "suifangjigouId",a.suifangjigou_name AS "suifangjigouName",a.suifang_date AS "suifangDate",a.suifangyisheng_id AS "suifangyishengId",a.zhenduanjigou_id AS "zhenduanjigouId",a.zhenduanjigou_name AS "zhenduanjigouName",a.zhenduan_date AS "zhenduanDate",a.dengjijigou_id AS "dengjijigouId",a.dengji_date AS "dengjiDate",a.dengji_id AS "dengjiId",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.follow.entity.CrcFollow">
+		SELECT 
+			<include refid="CrcFollowColumns"/>
+		FROM CRC_FOLLOW a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.follow.entity.CrcFollow">
+		SELECT 
+			<include refid="CrcFollowColumns"/>
+		FROM CRC_FOLLOW a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM CRC_FOLLOW a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.follow.entity.CrcFollow"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CrcFollowColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO CRC_FOLLOW(
+		id,primary_mark,crc_check_id,shifouquezhen,yingxiangxue_fangshi,changjing,buzuochangjing_yuanyin,buzuochangjing_yuanyin_qita,wutongchangjing,changjingbuwei,bingbianbuw,bingbianshu,gangjuli,bingbiandaxiao,huojian,huojianjieguo,liubian,xirouxingzhuang,youwudi,chuxueqingkuang,huojianriq,bingli,binglileixing,shifouzhiliao,bingbianchuli,shoushufangshi,fuzhuzhiliao,zhongliuleix,fenhuachengdu,fenqiyiju,zhongliutnm_t,zhongliutnm_n,zhongliutnm_m,linchuangfenqi,linchuangfenqi_putuo,tnmfenqilaiyuan,zhuyuanhao,shoushujigou_id,shoushujigou_name,shoushu_date,fangliaojigou_id,fangliaojigou_name,fangliao_date,hualiaojigou_id,hualiaojigou_name,hualiao_date,changjingjigou_id,changjingjigou_name,changjing_date,changjing_yisheng,suifangjigou_id,suifangjigou_name,suifang_date,suifangyisheng_id,zhenduanjigou_id,zhenduanjigou_name,zhenduan_date,dengjijigou_id,dengji_date,dengji_id,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{primaryMark},#{crcCheckId},#{shifouquezhen},#{yingxiangxueFangshi},#{changjing},#{buzuochangjingYuanyin},#{buzuochangjingYuanyinQita},#{wutongchangjing},#{changjingbuwei},#{bingbianbuw},#{bingbianshu},#{gangjuli},#{bingbiandaxiao},#{huojian},#{huojianjieguo},#{liubian},#{xirouxingzhuang},#{youwudi},#{chuxueqingkuang},#{huojianriq},#{bingli},#{binglileixing},#{shifouzhiliao},#{bingbianchuli},#{shoushufangshi},#{fuzhuzhiliao},#{zhongliuleix},#{fenhuachengdu},#{fenqiyiju},#{zhongliutnmT},#{zhongliutnmN},#{zhongliutnmM},#{linchuangfenqi},#{linchuangfenqiPutuo},#{tnmfenqilaiyuan},#{zhuyuanhao},#{shoushujigouId},#{shoushujigouName},#{shoushuDate},#{fangliaojigouId},#{fangliaojigouName},#{fangliaoDate},#{hualiaojigouId},#{hualiaojigouName},#{hualiaoDate},#{changjingjigouId},#{changjingjigouName},#{changjingDate},#{changjingYisheng},#{suifangjigouId},#{suifangjigouName},#{suifangDate},#{suifangyishengId},#{zhenduanjigouId},#{zhenduanjigouName},#{zhenduanDate},#{dengjijigouId},#{dengjiDate},#{dengjiId},#{delFlag},#{createBy},#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE CRC_FOLLOW SET
+		id = #{id},primary_mark = #{primaryMark},crc_check_id = #{crcCheckId},shifouquezhen = #{shifouquezhen},yingxiangxue_fangshi = #{yingxiangxueFangshi},changjing = #{changjing},buzuochangjing_yuanyin = #{buzuochangjingYuanyin},buzuochangjing_yuanyin_qita = #{buzuochangjingYuanyinQita},wutongchangjing = #{wutongchangjing},changjingbuwei = #{changjingbuwei},bingbianbuw = #{bingbianbuw},bingbianshu = #{bingbianshu},gangjuli = #{gangjuli},bingbiandaxiao = #{bingbiandaxiao},huojian = #{huojian},huojianjieguo = #{huojianjieguo},liubian = #{liubian},xirouxingzhuang = #{xirouxingzhuang},youwudi = #{youwudi},chuxueqingkuang = #{chuxueqingkuang},huojianriq = #{huojianriq},bingli = #{bingli},binglileixing = #{binglileixing},shifouzhiliao = #{shifouzhiliao},bingbianchuli = #{bingbianchuli},shoushufangshi = #{shoushufangshi},fuzhuzhiliao = #{fuzhuzhiliao},zhongliuleix = #{zhongliuleix},fenhuachengdu = #{fenhuachengdu},fenqiyiju = #{fenqiyiju},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},linchuangfenqi = #{linchuangfenqi},linchuangfenqi_putuo = #{linchuangfenqiPutuo},tnmfenqilaiyuan = #{tnmfenqilaiyuan},zhuyuanhao = #{zhuyuanhao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},changjingjigou_id = #{changjingjigouId},changjingjigou_name = #{changjingjigouName},changjing_date = #{changjingDate},changjing_yisheng = #{changjingYisheng},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},zhenduan_date = #{zhenduanDate},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE CRC_FOLLOW SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>
