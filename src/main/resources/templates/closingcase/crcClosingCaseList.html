@@ -58,7 +58,8 @@
                 <div id="div1" style=" display: none;" class="mt-10">
                     <div class="mini-row">
                         <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
-                            <select id="csnf" name="csnf" class="select-default radius" style="width:55%">
+                            <select id="csnf" name="csnf" class="select-default radius" style="width:51%" >
+                                <option value="">请选择</option>
                                 <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  ></option>
                             </select>
                         </div>
@@ -71,7 +72,7 @@
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构：</label>
 
-                            <input id="regorg" name="regorg"  class="mini-combobox" width="66%"
+                            <input id="regorg" name="regorg"  class="mini-combobox" width="65%"
                                    textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                         </div>
 
@@ -89,7 +90,7 @@
                         </div>
                         <div class="mini-col-3">
                             <label class="mr-5">大肠癌结案结果：</label>
-                            <input id="closeResult" name="closeResult"  showNullItem="true" class="mini-combobox" width="54%"
+                            <input id="closeResult" name="closeResult"  showNullItem="true" class="mini-combobox" width="56%"
                                    emptyText="请选择" textField="name" valueField="code"  th:data="${#dic.generals('60004')}"/>
                         </div>
                     </div>
@@ -100,7 +101,7 @@
             <div id="datagrid" url="../crcClosingCase/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
-                    <div field="idNumber" autoShowPopup="true"  width="120px"  headerAlign="center" align="center"  allowSort="false" >大肠癌初筛ID</div>
+                    <div field="idNumber" autoShowPopup="true"  width="120px"  headerAlign="center" align="center"  allowSort="true" >大肠癌初筛ID</div>
                     <div field="name"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
                     <div field="personcardType" type="comboboxcolumn" autoShowPopup="true"  width="70px" headerAlign="center" align="center"  allowSort="false" >证件类型
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"

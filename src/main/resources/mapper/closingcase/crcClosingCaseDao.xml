@@ -3,7 +3,7 @@
 <mapper namespace="com.wonders.health.tumor.closingcase.dao.crcClosingCaseDao">
     
 	<sql id="crcClosingCaseColumns">
-		a.id AS "id",a.manageid AS "manageid",a.id_number AS "idNumber",a.check_year AS "checkYear",a.check_result AS "checkResult",a.cbq_return_date1 AS "cbqReturnDate1",a.cbq_return_date2 AS "cbqReturnDate2",a.region_code AS "regionCode",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.submits_status AS "submitsStatus",a.submit_date AS "submitDate",a.trans_date AS "transDate",a.print_date AS "printDate",a.close_status AS "closeStatus",a.close_date AS "closeDate",a.close_result AS "closeResult",a.check_quality_flag AS "checkQualityFlag",a.checkresult_quality_flag AS "checkresultQualityFlag",a.upload_time AS "uploadTime",a.source_id AS "sourceId",a.ischange AS "ischange",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+		a.id AS "id",a.manageid AS "manageid",a.id_number AS idNumber,a.check_year AS checkYear,a.check_result AS "checkResult",a.cbq_return_date1 AS "cbqReturnDate1",a.cbq_return_date2 AS "cbqReturnDate2",a.region_code AS "regionCode",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.submits_status AS "submitsStatus",a.submit_date AS "submitDate",a.trans_date AS "transDate",a.print_date AS "printDate",a.close_status AS "closeStatus",a.close_date AS "closeDate",a.close_result AS "closeResult",a.check_quality_flag AS "checkQualityFlag",a.checkresult_quality_flag AS "checkresultQualityFlag",a.upload_time AS "uploadTime",a.source_id AS "sourceId",a.ischange AS "ischange",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
 	</sql>
 
 	<select id="get" resultType="com.wonders.health.tumor.closingcase.entity.crcClosingCase">
