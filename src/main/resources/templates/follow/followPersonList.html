@@ -35,24 +35,24 @@
                 </table>
                 <div id="div1" style="display: none;" class="mt-10">
                     <div class="mini-row">
-                        <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
+                        <div class="mini-col-2"><label class="mr-5">初筛年份：</label>
                             <select id="csnf" name="csnf" class="select-default radius" style="width:55%">
                                 <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  ></option>
                             </select>
                         </div>
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构所属区：</label>
-                            <input id="regarea" name="regarea" class="mini-combobox" width="47%"
+                            <input id="regarea" name="regarea" class="mini-combobox" width="40%"
                                    th:data="${#auth.getAreas(areaCode)}"
                                    textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
                         </div>
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构：</label>
-                            <input id="regorg" name="regorg" class="mini-combobox" width="55%"
+                            <input id="regorg" name="regorg" class="mini-combobox" width="70%"
                                    textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                         </div>
 
-                        <div class="mini-col-3">
+                        <div class="mini-col-4">
                             <label class="mr-5">初筛登记日期：</label>
                             <input id="beginDate" name="beginDate" class="mini-datepicker"
                                    value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
@@ -118,14 +118,14 @@
                     <div field="personcardType" type="comboboxcolumn" width="100px" headerAlign="center" align="center" allowSort="false">证件类型
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60022')}"/></div>
-                    <div field="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">证件号码</div>
+                    <div field="personcard" renderer="sfzhRenderer" width="200px" headerAlign="center" align="center" allowSort="false">证件号码</div>
                     <div field="gender" type="comboboxcolumn" width="50px" headerAlign="center" align="center" allowSort="false">性别
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60023')}"/></div>
-                    <div field="birth" sortField="birth" align="center" width="75px" headerAlign="center" dateFormat="yyyy-MM-dd" allowSort="true">出生日期</div>
-                    <div field="addressDetail" width="300px" headerAlign="center" align="center" allowSort="false">居住地址</div>
-                    <div field="telephone" width="300px" headerAlign="center" align="center" allowSort="false">联系电话</div>
-                    <div field="csnf" width="50px" headerAlign="center" align="center" allowSort="false">初筛年份</div>
+                    <div field="birth" sortField="birth" align="center" width="100px" headerAlign="center" dateFormat="yyyy-MM-dd" allowSort="true">出生日期</div>
+                    <div field="addressDetail" width="350px" headerAlign="center" align="center" allowSort="false">居住地址</div>
+                    <div field="mobile" width="150px" headerAlign="center" align="center" allowSort="false">联系电话</div>
+                    <div field="csnf" width="100px" headerAlign="center" align="center" allowSort="false">初筛年份</div>
                     <div type="action" renderer="actionRenderer" style="width:100%;"  width="150px" headerAlign="center" align="center" allowSort="false">操作</div>
                 </div>
             </div>

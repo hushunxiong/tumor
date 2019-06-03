@@ -170,7 +170,7 @@
     </select>
 
 
-    <select id="pageList" resultType="com.wonders.health.tumor.follow.entity.CrcFollow"
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo"
             parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
         <choose>
             <when test="startRecord == 0">
