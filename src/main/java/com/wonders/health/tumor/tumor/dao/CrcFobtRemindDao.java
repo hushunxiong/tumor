@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 public interface CrcFobtRemindDao extends BaseDao<CrcFobtRemind> {
 	public CrcFobtRemind get(@Param("id") String id);
 
+	public CrcFobtRemind getByCheckId(@Param("checkid") String checkid);
+
     public int delete(@Param("id") String id);
 
 }

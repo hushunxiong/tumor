@@ -43,6 +43,10 @@ public class LucDiagCheckRemindService {
         return lucDiagCheckRemindDao.get(id);
     }
 
+    public LucDiagCheckRemind findByCheckId(String checkid) {
+        return lucDiagCheckRemindDao.getByCheckId(checkid);
+    }
+
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(LucDiagCheckRemind vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改

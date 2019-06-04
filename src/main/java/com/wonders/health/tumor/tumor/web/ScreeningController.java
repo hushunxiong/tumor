@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.google.common.collect.Lists;
+import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.entity.CancerDic;
@@ -547,13 +548,16 @@ public class ScreeningController extends BaseController {
 
                 //处理新需求
                 if("2".equals(licRegcase.getCheckResult())||(licRegcase.getCheckResult()=="2")){
-                    LicDiagCheckRemind licDiagCheckRemind=new LicDiagCheckRemind();
+                    LicDiagCheckRemind licDiagCheckRemind=licDiagCheckRemindService.findByCheckId(licRegcase.getId());
+                    if(licDiagCheckRemind==null || StringUtils.isBlank(licDiagCheckRemind.getId())){    //新增时处理
+                        licDiagCheckRemind=new LicDiagCheckRemind();
+                        licDiagCheckRemind.init();
+                    }
                     licDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     licDiagCheckRemind.setLicCheckId(licRegcase.getId());
                     licDiagCheckRemind.setCreateDate(new Date());
                     licDiagCheckRemind.setRemindStatus("01");
                     licDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
-                    licDiagCheckRemind.init();
                     licDiagCheckRemindService.saveOrUpdate(licDiagCheckRemind,user.getId());
                 }
 
@@ -576,7 +580,6 @@ public class ScreeningController extends BaseController {
                     licrisk.init();
                     licRiskAssessmentService.insert(licRiskAssessmentDao,licrisk);
                 }
-
             }
         }
         if(isOpen(lucFlag)){
@@ -625,13 +628,17 @@ public class ScreeningController extends BaseController {
 
                 //处理肺癌新需求
                 if("2".equals(lucRegcase.getCheckResult())||(lucRegcase.getCheckResult()=="2")){
-                    LucDiagCheckRemind lucDiagCheckRemind=new LucDiagCheckRemind();
+                    LucDiagCheckRemind lucDiagCheckRemind=lucDiagCheckRemindService.findByCheckId(lucRegcase.getId());
+                    if(lucDiagCheckRemind==null || StringUtils.isBlank(lucDiagCheckRemind.getId())){
+                        lucDiagCheckRemind=new LucDiagCheckRemind();
+                        lucDiagCheckRemind.init();
+                    }
+
                     lucDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     lucDiagCheckRemind.setLucCheckId(lucRegcase.getId());
                     lucDiagCheckRemind.setCreateDate(new Date());
                     lucDiagCheckRemind.setRemindStatus("01");
                     lucDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
-                    lucDiagCheckRemind.init();
                     lucDiagCheckRemindService.saveOrUpdate(lucDiagCheckRemind,user.getId());
                 }
 
@@ -684,13 +691,16 @@ public class ScreeningController extends BaseController {
             }
             //处理胃癌新需求
             if("2".equals(scRegcase.getCheckResult())||(scRegcase.getCheckResult()=="2")){
-                ScDiagCheckRemind scDiagCheckRemind=new ScDiagCheckRemind();
+                ScDiagCheckRemind scDiagCheckRemind=scDiagCheckRemindService.findByCheckId(scRegcase.getId());
+                if(scDiagCheckRemind==null || StringUtils.isBlank(scDiagCheckRemind.getId())){
+                    scDiagCheckRemind=new ScDiagCheckRemind();
+                    scDiagCheckRemind.init();
+                }
                 scDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 scDiagCheckRemind.setScCheckId(scRegcase.getId());
                 scDiagCheckRemind.setCreateDate(new Date());
                 scDiagCheckRemind.setRemindStatus("01");
                 scDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
-                scDiagCheckRemind.init();
                 scDiagCheckRemindService.saveOrUpdate(scDiagCheckRemind,user.getId());
             }
         }
@@ -718,30 +728,60 @@ public class ScreeningController extends BaseController {
                 crcFobtService.update(crcFobtDao,crcFobt);
             }
 
-            if(isOpen(crcFlag)){
-                //处理新需求  往大肠癌便隐血检查提醒表插入数据
-                CrcFobtRemind crcFobtRemind=new CrcFobtRemind();
-                crcFobtRemind.setCrcCheckId(screeningVo.getCrcRegcase().getId());
-                crcFobtRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                crcFobtRemind.setCreateDate(new Date());
-                if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isNotBlank(crcFobt.getSecondFobtResult()))){ //两次都做
-                    crcFobtRemind.setFobtRemindStatus("02");
-                    crcFobtRemindService.saveOrUpdate(crcFobtRemind,user.getId());  //提醒表插入数据
 
-                    if("2".equals(crcFobt.getFobtResult())){//若大肠癌初筛结果为阳性  大肠癌诊断结果提醒表插入数据
-                        CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
-                        cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
-                        cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                        cdcr.setCreateDate(new Date());
-                        cdcr.setRemindStatus("01");
-                        cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
-                        cdcr.init();
-                        crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
+            //处理新需求  往大肠癌便隐血检查提醒表插入数
+            if(isOpen(crcFlag)){
+                CrcDiagCheckRemind crcCheckRemind=crcDiagCheckRemindService.findByCheckId(screeningVo.getCrcRegcase().getId()); //诊断检查提醒表记录
+                CrcFobtRemind fobtRemind=crcFobtRemindService.findByCheckId(screeningVo.getCrcRegcase().getId());   //大肠癌便隐血检查提醒表
+
+                //若大肠癌便隐血检查提醒表.提醒状态 != 完成提醒的场合
+                if( fobtRemind==null || fobtRemind.getFobtRemindStatus()!="04"){
+                    if(fobtRemind==null||StringUtils.isBlank(fobtRemind.getId())){
+                        fobtRemind=new CrcFobtRemind();
+                        fobtRemind.init();
                     }
-                }else{                //没有做便隐血检查 或 仅第一次
-                    crcFobtRemind.setFobtRemindStatus("01");
-                    crcFobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
-                    crcFobtRemindService.saveOrUpdate(crcFobtRemind,user.getId());
+                    fobtRemind.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                    fobtRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    fobtRemind.setCreateDate(new Date());
+                    if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isNotBlank(crcFobt.getSecondFobtResult()))){ //两次都做
+                        if("2".equals(crcFobt.getFobtResult())){//若大肠癌初筛结果为阳性  大肠癌诊断结果提醒表插入数据
+                            if(crcCheckRemind==null || StringUtils.isBlank(crcCheckRemind.getId())){//修改：提醒表中无记录  其实新增的时候也没有
+                                CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
+                                cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                                cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                                cdcr.setCreateDate(new Date());
+                                cdcr.setRemindStatus("01");
+                                cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                                cdcr.init();
+                                crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
+                            }else if(StringUtils.isBlank(fobtRemind.getId())){  //新增
+                                CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
+                                cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                                cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                                cdcr.setCreateDate(new Date());
+                                cdcr.setRemindStatus("01");
+                                cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                                cdcr.init();
+                                crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
+                            }
+                        }
+                        fobtRemind.setFobtRemindStatus("02");
+                        crcFobtRemindService.saveOrUpdate(fobtRemind,user.getId());  //提醒表插入数据
+                    }else if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isBlank(crcFobt.getSecondFobtResult()))){  //只做第一次 新增修改都一样
+                        fobtRemind.setFobtRemindStatus("01");
+                        fobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
+                        crcFobtRemindService.saveOrUpdate(fobtRemind,user.getId());
+                    }else{  //两次都没做
+                        if(fobtRemind!=null){
+                            fobtRemind.setFirstFobtRemindDate(null);
+                            fobtRemind.setFirstFobtRemindType(null);
+                            fobtRemind.setSecondFobtRemindDate(null);
+                            fobtRemind.setSecondFobtRemindType(null);
+                        }
+                        fobtRemind.setFobtRemindStatus("01");
+                        fobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
+                        crcFobtRemindService.saveOrUpdate(fobtRemind,user.getId());
+                    }
                 }
             }
 
@@ -814,8 +854,55 @@ public class ScreeningController extends BaseController {
         }catch (Exception e){
             return "2";
         }
+    }
+
+
+    @RequestMapping(value = {"", "printSuggest"}, method = RequestMethod.GET)
+    public String printSuggest(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
+        model.addAttribute("name",name);
+        model.addAttribute("byx",byx);
+        model.addAttribute("gtp",gtp);
+        model.addAttribute("hbs",hbs);
+        model.addAttribute("afp",afp);
+        model.addAttribute("bus",bus);
+        model.addAttribute("curtime",DateUtils.getDate("yyyy-mm-dd"));
+        String aizheng="";
+        if(StringUtils.isNotBlank(aizhengs)){
+            if(aizhengs.contains("1")){
+                aizheng+="大肠癌";
+            }
+            if(aizhengs.contains("2")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肝癌";
+            }
+            if(aizhengs.contains("3")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="胃癌";
+            }
+            if(aizhengs.contains("4")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肺癌";
+            }
+        }
+        model.addAttribute("aizheng",aizheng);
+        User user=getSessionUser();
+        Hospital hos=AuthUtils.getHospitalByCode(user.getOrgCode());
+
+        if(hos!=null){
+            model.addAttribute("hosName",hos.getName());
+        }
+
+        return "/register/printSuggest";
 
     }
+
+
 
     //简化计算flag成boolean
     private Boolean isOpen(String flag){

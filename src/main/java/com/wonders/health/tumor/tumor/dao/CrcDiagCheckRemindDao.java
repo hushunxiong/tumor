@@ -15,7 +15,10 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface CrcDiagCheckRemindDao extends BaseDao<CrcDiagCheckRemind> {
+
 	public CrcDiagCheckRemind get(@Param("id") String id);
+
+	public CrcDiagCheckRemind getByCheckid(@Param("checkid") String checkid);
 
     public int delete(@Param("id") String id);
 

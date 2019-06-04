@@ -42,6 +42,9 @@ public class ScDiagCheckRemindService {
     public ScDiagCheckRemind findById(String id) {
         return scDiagCheckRemindDao.get(id);
     }
+    public ScDiagCheckRemind findByCheckId(String checkid) {
+        return scDiagCheckRemindDao.getByCheckId(checkid);
+    }
 
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(ScDiagCheckRemind vo, String userId) {

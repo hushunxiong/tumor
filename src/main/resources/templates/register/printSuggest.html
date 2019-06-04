@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>打印诊断建议书</title>
+    <link>
+    <script></script>
+</head>
+<body>
+<style>
+    .content {width: 170mm; margin: 0 auto;text-align: center;}
+    *{  line-height: 1.5em; font-family:'新宋体';}
+    .content h1 { font-size: 22px; margin:20px 0px;}
+    .content div,.content p { font-size: 18px;text-align: left!important;text-indent: 2em;line-height: 1.8em;}
+    .content p { text-indent: 0em;}
+    .wid-200{width:1000px}
+</style>
+<div class="content pd-10">
+    <h2>普陀区肿瘤早发现</h2>
+    <h1>肺部CT/胃镜/肠镜建议书</h1>
+<p>尊敬的<span id="namespan"></span> ：</p>
+    <div>感谢您参加普陀区肿瘤早发现项目！
+    </div>
+    <div>收到本建议书说明您的筛查结果为<b>阳性</b>，其中危险因素评估<BR>
+        显示您具有<span id="aizhengs"></span>危险因素，FOBT 检查结果为<span id="fobt"></span>，<BR>
+        GPT 检查结果为<span id="gpt"></span>，HBsAg 检查结果为<span id="hbs"></span>，AFP 检查结果<BR>
+        为<span id="afp"></span>， 肝脏B超检查结果为<span id="bus"></span>。有很多原因会<BR>
+        导致上述检查出现阳性结果，本结果并不意味着您已经患上了肿<BR>
+        瘤。为了明确您阳性结果原因，我们强烈建议您前往医院接受<BR>
+        肺部低剂量螺旋CT/胃镜/肠镜检查。
+
+    </div>
+    <div>
+        您居住地附近的<span style="width:100px;border-bottom:1px solid #333;display: inline-block;"></span>医院是普陀区肿瘤早发现项目<BR>
+        的指定医院，携带本建议书前往上述指定医院接受肺部CT/胃镜<BR>
+        /肠镜检查可享受便民措施，并可凭检查结果前往社区卫生服务<BR>
+        中心领取补贴，补贴标准：
+        <span style="background-color: yellow;">肺部CT80元；胃镜 100元；肠镜100<BR>元。您也可以选择去非指定医院就医。</span>
+    </div>
+<div>如果您对建议书上相关内容有任何疑问，请咨询社区卫生服<BR>
+    务中心的工作人员。</div>
+    <div><b>再次感谢您的参与！</b></div>
+    <div class="clearfix"><b class="fr">社区卫生服务中心！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></div>
+
+    <div class="fr" style="width: 200px;"><b>年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;日</b></div>
+    <p style="clear: both; width: 100%;"><b class="fl">地址：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b><b>电话：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    mini.parse();
+    var name=[[${name}]];
+    $("#namespan").html(name);
+
+    var aizhengs=[[${aizheng}]];
+    $("#aizhengs").html(aizhengs);
+
+    var fobt=[[${byx}]];
+    $("#fobt").html("&nbsp;"+fobt);
+
+    var gpt=[[${gtp}]];
+    $("#gpt").html("&nbsp;"+gpt+"&nbsp;&nbsp;");
+
+    var hbs=[[${hbs}]];
+    $("#hbs").html("&nbsp;"+hbs+"&nbsp;");
+
+    var afp=[[${afp}]];
+    $("#afp").html("&nbsp;&nbsp;&nbsp;"+afp+"&nbsp;&nbsp;&nbsp;");
+
+    var bus=[[${bus}]];
+    $("#bus").html("&nbsp;&nbsp;"+bus+"&nbsp;&nbsp;");
+
+</script>
+
+</body>
+</html>

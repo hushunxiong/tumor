@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 public interface LucDiagCheckRemindDao extends BaseDao<LucDiagCheckRemind> {
 	public LucDiagCheckRemind get(@Param("id") String id);
 
+	public LucDiagCheckRemind getByCheckId(@Param("checkid") String checkid);
+
     public int delete(@Param("id") String id);
 
 }

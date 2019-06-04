@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 public interface ScDiagCheckRemindDao extends BaseDao<ScDiagCheckRemind> {
 	public ScDiagCheckRemind get(@Param("id") String id);
 
+	public ScDiagCheckRemind getByCheckId(@Param("checkid") String checkid);
+
     public int delete(@Param("id") String id);
 
 }

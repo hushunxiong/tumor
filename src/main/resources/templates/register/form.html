@@ -1015,7 +1015,7 @@
     <div class="btn-list text-c mt-30">
         <button class="my-btn my-btn-blue mr-20" onclick="save()" id="savebtn">保存</button>
         <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
-        <!--<button class="my-btn my-btn-blue mr-20">打印转诊单</button>-->
+        <button class="my-btn my-btn-blue mr-20" onclick="printSuggest()">打印诊断建议书</button>
     </div>
 
 
@@ -1389,6 +1389,8 @@
         var flag = true;
         var id=mini.get("id").getValue();
         var crcNum=mini.get("idNumber").getValue();
+
+        var errorText='';
 
         if($.trim(crcNum) != "" && (crcNum.length == 12)){
             $.ajax({
@@ -1767,7 +1769,7 @@
                     return;
                 }
                 if(saveFlag==0) {
-                   makeResult();
+                    makeResult();
                     makeChushaiResult();
                     params=form.getData(true, false);
                     params.id=id;
@@ -2261,6 +2263,49 @@
 
     function closeWindow(){
         window.location.href='/tumor/cancerPersonInfo/list';
+    }
+
+    function printSuggest(){
+        //先计算结果
+        makeResult();
+        makeChushaiResult();
+        var name=mini.get("name").getValue();
+        var aizhengs='';
+        var byx='';
+        var gtp='';
+        var hbs='';
+        var afp='';
+        var bus='';
+
+        if (areaCode != '310104000000') {
+            if(crcFlag =="1") {
+                byx=mini.get("fobtResult").getValue();
+                if($("#assessmentResult1").val()=="2"){
+                    aizhengs+="1";
+                }
+            }
+            if(licFlag =="1") {
+                gtp=mini.get("gtp").getValue();
+                hbs=mini.get("hbeg").getValue();
+                afp=mini.get("afp").getValue();
+                bus=mini.get("bus").getValue();
+                alert(gtp)
+                if($("#assessmentResult2").val()=="2"){
+                    aizhengs+="2";
+                }
+            }
+            if(scFlag =="1") {
+                if($("#assessmentResult3").val()=="2"){
+                    aizhengs+="3";
+                }
+            }
+            if(lucFlag =="1") {
+                if($("#assessmentResult4").val()=="2"){
+                    aizhengs+="4";
+                }
+            }
+        }
+        window.location.href = '/tumor/screening/printSuggest?name='+name+'&aizhengs='+aizhengs+'&byx='+byx+'&gtp='+gtp+'&hbs='+hbs+'&afp='+afp+'&bus='+bus;
     }
 </script>
 </html>

@@ -43,6 +43,10 @@ public class LicDiagCheckRemindService {
         return licDiagCheckRemindDao.get(id);
     }
 
+    public LicDiagCheckRemind findByCheckId(String checkid) {
+        return licDiagCheckRemindDao.getByCheck(checkid);
+    }
+
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(LicDiagCheckRemind vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改

@@ -13,6 +13,13 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getByCheck" resultType="com.wonders.health.tumor.tumor.entity.LicDiagCheckRemind">
+		SELECT
+		<include refid="LicDiagCheckRemindColumns"/>
+		FROM lic_diag_check_remind a
+		WHERE a.lic_check_id = #{checkid}
+	</select>
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LicDiagCheckRemind">
 		SELECT 
 			<include refid="LicDiagCheckRemindColumns"/>

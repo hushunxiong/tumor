@@ -43,6 +43,10 @@ public class CrcFobtRemindService {
         return crcFobtRemindDao.get(id);
     }
 
+    public CrcFobtRemind findByCheckId(String checkid) {
+        return crcFobtRemindDao.getByCheckId(checkid);
+    }
+
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(CrcFobtRemind vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改

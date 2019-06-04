@@ -43,6 +43,10 @@ public class CrcDiagCheckRemindService {
         return crcDiagCheckRemindDao.get(id);
     }
 
+    public CrcDiagCheckRemind findByCheckId(String checkid) {
+        return crcDiagCheckRemindDao.getByCheckid(checkid);
+    }
+
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(CrcDiagCheckRemind vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
