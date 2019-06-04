@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:fragment="head(title,links,scripts)">
+    <meta charset="UTF-8">
+    <!--<title th:replace="${title}">肿瘤早发现</title>-->
+    <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
+    <script src="../static/js/common.js" th:src="@{/js/common.js}" type="text/javascript"></script>
+
+    <script src="../static/lib/miniui/miniui.js" th:src="@{/lib/miniui/miniui.js}" type="text/javascript"></script>
+    <link href="../static/lib/miniui/themes/icons.css" th:href="@{/lib/miniui/themes/icons.css}" rel="stylesheet" type="text/css" />
+    <link href="../static/lib/miniui/themes/default/miniui.css" th:href="@{/lib/miniui/themes/default/miniui.css}" rel="stylesheet" type="text/css" />
+
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" type="text/css" />
+    <link href="../static/css/my-mini.css" th:href="@{/css/my-mini.css}" rel="stylesheet" type="text/css" />
+
+    <!--[if lt IE 9]>
+    <script src="../js/html5shiv.min.js" th:src="@{/js/html5shiv.min.js}"></script>
+    <script src="../js/respond.js" th:src="@{/js/respond.js}"></script>
+    <![endif]-->
+    <!--[if lte IE 11]>
+    <script type="text/javascript" src="../static/js/flexie.js" th:src="@{/js/flexie.js}"></script>
+    <script type="text/javascript" src="../static/js/selectivizr.js" th:src="@{/js/selectivizr.js}"></script>
+    <script type="text/javascript" src="../static/js/PIE_IE678.js" th:src="@{/js/PIE_IE678.js}"></script>
+    <![endif]-->
+    <link href="../lib/font-awesome/css/font-awesome.min.css" th:href="@{/lib/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css" />
+
+    <meta charset="UTF-8">
+    <title>初筛信息汇总(阳性肝癌)</title>
+</head>
+<body>
+
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div align="center">初筛信息汇总(阳性肝癌)</div>
+    <div class="col-lg-12">
+
+        <div class="mini-clearfix">
+            <div class="tab-content">
+                <div class="secher">
+                    <div id="formsearch" class="row mt-10">
+                        <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+                        <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构所属区：</label>
+                            <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="46%"
+                                   th:data="${#auth.getAreas(areaCode)}"
+                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构：</label>
+
+                            <input id="regorg" name="regorg"  class="mini-combobox" width="66%"
+                                   textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-lg-3">日期范围
+                        <input id="csrqStart" name="csrqStart" class="mini-datepicker" tooltip="起始日期不能大于截止日期"
+                               allowInput="true" errorMode="border"  th:value="${tjRqStart}"
+                               onvalidation="dateValidation" style="width:115px;">至
+                        <input id="csrqEnd" name="csrqEnd" class="mini-datepicker" tooltip="截止日期不能小于起始日期"
+                               errorMode="border"
+                               allowInput="true"
+                               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                               onvalidation="dateValidation" style="width:115px;">
+                        <div id="js" class="my-btn my-btn-blue" onclick="onSearch()">检索</div>
+                        <div class="my-btn my-btn-blue" onclick="reset()">重置</div>
+
+                    </div>
+
+                    <div class="col-sm-2" align="right">
+                        <div class="my-btn my-btn-blue" onclick="exportData()">导出</div>
+                    </div>
+
+                    <script type="text/javascript" th:inline="javascript">
+                        function dateValidation(e) {
+                            var key = $('#keyword').val();
+                            if (key!=null && key!=''){
+                                return;
+                            }
+                            var sender = e.sender;
+                            var date = sender.value;
+                            if (date != undefined && typeof (date) != 'undefined' && date != '') {
+                                if (sender.id == 'csrqStart') {
+                                    var end = mini.get('csrqEnd').getValue();
+                                    if (end != undefined && typeof (end) != 'undefined' && end != '') {
+                                        date = new Date(date.format('yyyy-MM-dd'));
+                                        end = new Date(end.format('yyyy-MM-dd'));
+                                        if (date.getTime() - end.getTime() > 0) {
+                                            e.errorText = "起始日期不能大于截止日期";
+                                            e.isValid = false;
+                                        }
+                                    }
+                                } else if (sender.id == 'csrqEnd') {
+                                    var from = mini.get('csrqStart').getValue();
+                                    if (from != undefined && typeof (from) != 'undefined' && from != '') {
+                                        date = new Date(date.format('yyyy-MM-dd'));
+                                        from = new Date(from.format('yyyy-MM-dd'));
+                                        if (from.getTime() - date.getTime() > 0) {
+                                            e.errorText = "截至日期不能大于截止日期";
+                                            e.isValid = false;
+                                        }
+
+                                        date = new Date(date.format('yyyy-MM-dd'));
+
+                                        var nowDate = mini.get("nowDate").getValue();
+                                        nowDate =  new Date(nowDate.format('yyyy-MM-dd'));
+                                        if(date.getTime() - nowDate.getTime() > 0){
+
+                                            e.errorText = "截至日期不能大于当前日期";
+                                            e.isValid = false;
+                                        }
+
+                                    }
+                                }
+                            } else {
+                                if (sender.id == 'csrqStart') {
+                                    e.errorText = [[#{MSGERR-COM01-001('统计日期(开始)')}]];
+                                    e.isValid = false;
+                                    mini.get('csrqStart').setIsValid(false);
+                                } else if (sender.id == 'csrqEnd') {
+                                    e.errorText = [[#{MSGERR-COM01-001('统计日期(结束)')}]];
+                                    e.isValid = false;
+                                    mini.get('csrqEnd').setIsValid(false);
+                                }
+                            }
+                        }
+                    </script>
+
+                </div>
+                <div>
+                    <div id="datagrid" url="../statistics/licPositiveData" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto ;display: none;"
+                         showPageInfo="false" showPagerButtonText="false" showPagerButtonIcon="false" idField="id">
+                        <div property="columns" >
+                            <div field="xm"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
+                            <div field="xb" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60023')}"/></div>
+                            <div field="birthday" sortField="birthday"  format="yyyy-MM-dd"  width="150px" headerAlign="center" align="center" allowSort="false">出生日期</div>
+                            <div field="address" sortField="address"    width="150px" headerAlign="center" align="center" allowSort="false">居住地址</div>
+                            <div field="mobile" sortField="mobile"    width="150px" headerAlign="center" align="center" allowSort="false">移动电话</div>
+                            <div field="telephone" sortField="telephone"    width="150px" headerAlign="center" align="center" allowSort="false">固定电话</div>
+                            <div field="regorg" sortField="regorg"autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >筛查登记机构</div>
+                            <div field="assessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >危险度评估结果
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60001')}"/></div>
+
+                            <div field="GTP"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">GPT检查结果</div>
+                            <div field="Hbeg"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">Hbeg检查结果</div>
+                            <div field="AFP"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">AFP检查结果</div>
+                            <div field="Bus" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >肝脏B超检查结果
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60001')}"/></div>
+
+                            <div field="sfqz" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否确诊
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60013')}"/></div>
+                            <div field="sfzl" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否治疗
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60013')}"/></div>
+                            <div field="zlwz" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >肿瘤位置
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60031')}"/></div>
+                            <div field="zlqb" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >肿瘤期别
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60042')}"/></div>
+                            <div field="csrq" sortField="birthday"  format="yyyy-MM-dd"  width="150px" headerAlign="center" align="center" allowSort="false">初筛日期</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script type="text/javascript">
+
+                mini.parse();
+                var grid = mini.get("datagrid");
+
+                $(function () {
+                    getHospitals();
+                });
+                function onSearch() {
+                    var data={};
+                    data.regorg=mini.get("regorg").getValue();
+                    data.csrqStart=mini.get("csrqStart").getValue();
+                    data.csrqEnd=mini.get("csrqEnd").getValue();
+                    grid.load(data, gridLoadSuccess, gridLoadError);
+                    if (grid==null){
+                        $("datagrid").empty();
+                        return
+                    }
+                }
+
+                $(document).ready(function(){
+                    $("#js").click(function(){
+                        $("#datagrid").show();
+                    });
+                });
+
+                function getHospitals(){
+                    var regarea= mini.get("regarea").getValue();
+                    var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
+                    mini.get("regorg").setUrl(url);
+                }
+
+
+                //导出
+                function exportData(){
+                    /*if(isEmpty()){
+                        mini.alert("请选择统计年度");
+                        return;
+                    }
+                    var year = $("#year").val();
+                    var month = $("#month").val();
+                    var param ='?';
+                    param += 'year='+year;
+                    param += '&month='+month;*/
+                    window.location.href="${ctx}/doctor/healthassessment/exportHealthWorkload";
+                }
+
+            </script>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>
