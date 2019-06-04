@@ -5,10 +5,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
 import com.wonders.health.tumor.common.service.AreaService;
 import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.follow.dao.FollowDao;
-import com.wonders.health.tumor.tumor.dao.CrcRegcaseDao;
-import com.wonders.health.tumor.tumor.dao.LicRegcaseDao;
-import com.wonders.health.tumor.tumor.dao.LucRegcaseDao;
-import com.wonders.health.tumor.tumor.dao.ScRegcaseDao;
+import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +24,8 @@ public class FollowService {
     @Autowired
     private FollowDao followDao;
     @Autowired
+    private CancerPersonInfoDao cancerPersonInfoDao;
+    @Autowired
     private CrcRegcaseDao crcRegcaseDao;
     @Autowired
     private LicRegcaseDao licRegcaseDao;
@@ -34,6 +33,7 @@ public class FollowService {
     private LucRegcaseDao lucRegcaseDao;
     @Autowired
     private ScRegcaseDao scRegcaseDao;
+
 
     @Autowired
     private AreaService areaService;
@@ -71,6 +71,14 @@ public class FollowService {
         }
 
         return new DataGrid<CancerPersonInfo>(count,list);
+    }
+
+    /**
+     * 根据个人编号获取初筛对象信息
+     * @return
+     */
+    public CancerPersonInfo getPersonInfo(String manageId) {
+        return cancerPersonInfoDao.get(manageId);
     }
 
     /**

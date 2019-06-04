@@ -80,37 +80,12 @@ public class FollowController extends BaseController {
 
     @RequestMapping(value = "person", method = RequestMethod.GET)
     public String person(Model model, String manageId, String checkYear) {
-
-        if (crcFlag == 1) {
-            String crcResult = followService.getCrcResult(manageId, checkYear);
-            if (StringUtils.isNotBlank(crcResult)
-                    && StringUtils.equals(Contants.CHECKRESULT_YANG, crcResult)) {
-                model.addAttribute("crcFlag", "1");
-            }
-
-        }
-        if (licFlag == 1) {
-            String licResult = followService.getLicResult(manageId, checkYear);
-            if (StringUtils.isNotBlank(licResult)
-                    && StringUtils.equals(Contants.CHECKRESULT_YANG, licResult)) {
-                model.addAttribute("licFlag", "1");
-            }
-
-        }
-        if (lucFlag == 1) {
-            String lucResult = followService.getLucResult(manageId, checkYear);
-            if (StringUtils.isNotBlank(lucResult)
-                    && StringUtils.equals(Contants.CHECKRESULT_YANG, lucResult)) {
-                model.addAttribute("lucFlag", "1");
-            }
-        }
-        if (scFlag == 1) {
-            String scResult = followService.getScResult(manageId, checkYear);
-            if (StringUtils.isNotBlank(scResult)
-                    && StringUtils.equals(Contants.CHECKRESULT_YANG, scResult)) {
-                model.addAttribute("scFlag", "1");
-            }
-        }
+        model.addAttribute("crcFlag", crcFlag);
+        model.addAttribute("licFlag", licFlag);
+        model.addAttribute("lucFlag", lucFlag);
+        model.addAttribute("scFlag", scFlag);
+        model.addAttribute("manageId", manageId);
+        model.addAttribute("checkYear", checkYear);
         return "/follow/followPerson";
     }
 }

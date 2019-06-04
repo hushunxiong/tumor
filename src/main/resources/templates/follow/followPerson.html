@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
-      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
     <title>肿瘤早发现随访对象</title>
     <link>
@@ -8,20 +7,23 @@
 </head>
 <body>
 <div class="content pd-10" style="width:auto; overflow: hidden;">
-    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
-        <div title="大肠癌随访" th:if="${crcFlag} eq '1'" url="../crcFollow/list">
-
-        </div>
-        <div title="肝癌随访" th:if="${licFlag} eq '1'">
-
-        </div>
-        <div title="胃癌随访" th:if="${scFlag} eq '1'">
-
-        </div>
-        <div title="肺癌随访" th:if="${lucFlag} eq '1'">
-
-        </div>
+    <div id="tabs" class="mini-tabs" activeIndex="0" style="width:100%; overflow: hidden;">
+        <div name="crc" title="大肠癌随访" th:if="${crcFlag==1?true:false}" ></div>
+        <!--<div title="肝癌随访" th:if="${licFlag==1?true:false}" th:url="@{/licFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
+        <div title="胃癌随访" th:if="${scFlag==1?true:false}" th:url="@{/scFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
+        <div title="肺癌随访" th:if="${lucFlag==1?true:false}" th:url="@{/lucFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>-->
     </div>
 </div>
 </body>
+<script type="text/javascript" th:inline="javascript">
+    mini.parse();
+    var manageId = [[${manageId}]];
+    var checkYear = [[${checkYear}]];
+    var tabs = mini.get("tabs");
+    $(function() {
+        var tab1 = tabs.getTab("crc");
+        tabs.loadTab("../crcFollow/list?manageId=" + manageId + "&checkYear=" + checkYear, tab1);
+
+    });
+</script>
 </html>

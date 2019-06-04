@@ -148,16 +148,16 @@
         where
         1=1 and (
         <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
-            (t.crcCheckYear is not null AND t.crcResult = '2') or
+            t.crcCheckYear is not null or
         </if>
         <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
-            (t.licCheckYear is not null AND t.licResult = '2') or
+            t.licCheckYear is not null or
         </if>
         <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
-            (t.scCheckYear is not null  AND t.scResult = '2') or
+            t.scCheckYear is not null  or
         </if>
         <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
-            (t.lucCheckYear is not null AND t.lucResult = '2') or
+            t.lucCheckYear is not null or
         </if>
         1=2 )
     </sql>
