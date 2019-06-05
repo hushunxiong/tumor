@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.follow.service;
 
 import com.wonders.health.tumor.common.model.DataGrid;
+import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.follow.dao.CrcFollowDao;
 import com.wonders.health.tumor.follow.entity.CrcFollow;
 import com.wonders.health.tumor.follow.vo.FollowSearchVo;
@@ -47,7 +48,22 @@ public class CrcFollowService {
 
     public DataGrid<CrcFollow> getFollowList(FollowSearchVo searchVo) {
         List<CrcFollow> list = crcFollowDao.getListByCheckId(searchVo.getCrcCheckId());
+        if (list != null && list.size() > 0) {
+            for (CrcFollow follow : list) {
+                //随访医生名
+                follow.setSuifangyishengName(AuthUtils.getUserById(follow.getSuifangyishengId()).getName());
+            }
+        }
         long size = list != null ? list.size() : 0;
         return new DataGrid<CrcFollow>(size,list);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteById(String id) {
+        crcFollowDao.delete(id);
+    }
+
+    public CrcFollow getFollowById(String id) {
+        return crcFollowDao.get(id);
     }
 }

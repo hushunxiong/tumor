@@ -78,7 +78,7 @@
             <tr>
                 <td style="background: #FFFFFF;" colspan="6">
                     <span>大肠癌随访信息</span>
-                    <button shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="viewPerson('','')">新增随访</button>
+                    <button id="add" shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="viewPerson('','')">新增随访</button>
                     <!--大肠癌管理一览 编辑权限  -->
                     <input  name="hideInput" shiro:hasPermission="tumor:follow:edit" value="1" class="mini-hidden"/>
                     <!--大肠癌管理一览 删除权限  -->
@@ -97,20 +97,21 @@
             </div>
         </div>
     </div>
-    <div class="btn-list text-c mt-30">
-        <button class="my-btn my-btn-blue mr-20">返回</button>
-    </div>
 </div>
 </body>
 <script type="text/javascript" th:inline="javascript">
     mini.parse();
     var grid = mini.get("datagrid");
     var checkId = [[${checkId}]];
+    var checkResult = [[${regcase.checkResult}]];
     var hideValue="";
 
     $(function() {
         onSearch();
 
+        if (checkResult == "" || checkResult == "1") {
+            $("#add").hide();
+        }
         //获取权限标识 1--编辑；2--删除
         var els = mini.getsByName("hideInput");
         for (var i = 0; i < els.length; i++) {
@@ -134,16 +135,20 @@
 
         h += '<a onclick="viewPerson(\'' + r.id + '\', \'1\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
         if (hideValue.indexOf('1') != -1){
-            h += '<a onclick="viewPerson(\'' + r.id + '\', \'2\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
+            if (checkResult == "2") {
+                h += '<a onclick="viewPerson(\'' + r.id + '\', \'2\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
+            }
         }
 
         //存在删除权限
         if (hideValue.indexOf('2') != -1){
-            h += '<a onclick="deleteRecords(\'' + r.id + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+            if (checkResult == "2") {
+                h += '<a onclick="deleteRecord(\'' + r.id + '\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
+            }
         }
         return h;
     }
-
+    //新增查看编辑
     function viewPerson(id,flag) {
         if(id==null||id==''||id==undefined){
             csnf=$("#csnf").val();
@@ -155,6 +160,40 @@
             html: '加载中...'
         });
         window.location.href =url;
+    }
+    //删除
+    function deleteRecord(id) {
+        mini.confirm("确认是否删除", "确定？",
+                function (action) {
+                    if (action == "ok") {
+                        $.ajax({
+                            url: "../crcFollow/delete",
+                            data: {id:id},
+                            dataType: "json",
+                            success: function (res) {
+                                if (res.ok) {
+                                    mini.showTips({
+                                        content: res.msg,
+                                        state: "success",
+                                        x: "center",
+                                        y: "center",
+                                        timeout: 2000
+                                    });
+                                    onSearch();
+                                } else {
+                                    mini.showTips({
+                                        content: res.msg,
+                                        state: "warning",
+                                        x: "center",
+                                        y: "center",
+                                        timeout: 2000
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+        );
     }
 </script>
 </html>

@@ -1,7 +1,9 @@
 package com.wonders.health.tumor.follow.web;
 
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
+import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.follow.entity.CrcFollow;
 import com.wonders.health.tumor.follow.service.CrcFollowService;
 import com.wonders.health.tumor.follow.service.FollowService;
@@ -59,8 +61,34 @@ public class CrcFollowController extends BaseController {
         return grid;
     }
 
+    /**
+     * 大肠癌随访一览数据删除
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "delete", produces = "application/json; charset=utf-8")
+    public AjaxReturn<String> delete(String id) {
+        if (StringUtils.isNotBlank(id)) {
+            try {
+                crcFollowService.deleteById(id);
+                return new AjaxReturn<String>(true, "删除成功");
+            } catch (Exception e) {
+                logger.error("", e);
+                return new AjaxReturn<String>(false, "删除异常");
+            }
+        } else {
+            return new AjaxReturn<String>(false, "传入id不能为空");
+        }
+    }
 
 
-
-
+    @RequestMapping(value = "form", method = RequestMethod.GET)
+    public String form(Model model, String id, String flag) {
+        if (StringUtils.isNotBlank(id)) {
+            CrcFollow follow =  crcFollowService.getFollowById(id);
+            model.addAttribute("vo", follow);
+            model.addAttribute("flag", flag);
+        }
+        return "/follow/crcForm";
+    }
 }

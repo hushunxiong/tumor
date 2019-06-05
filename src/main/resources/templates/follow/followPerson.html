@@ -14,5 +14,14 @@
         <div title="肺癌随访" th:if="${lucFlag==1?true:false}" th:url="@{/lucFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>-->
     </div>
 </div>
+<div class="btn-list text-c mt-10">
+    <button class="my-btn my-btn-blue mr-20" onclick="back();">返回</button>
+</div>
 </body>
+<script type="text/javascript">
+    //返回
+    function back() {
+        window.location.href = "../follow/list";
+    }
+</script>
 </html>
