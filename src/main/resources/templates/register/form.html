@@ -6,6 +6,8 @@
     <script></script>
 </head>
 <body>
+
+<script src="../static/lib/lodop/LodopFuncs.js" th:src="@{/lib/lodop/LodopFuncs.js}"></script>
 <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
 <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
 <div class="content pd-10" style="width:auto; overflow: hidden;">
@@ -2265,7 +2267,7 @@
         window.location.href='/tumor/cancerPersonInfo/list';
     }
 
-    function printSuggest(){
+    function printSuggest1(){
         //先计算结果
         makeResult();
         makeChushaiResult();
@@ -2307,5 +2309,71 @@
         }
         window.location.href = '/tumor/screening/printSuggest?name='+name+'&aizhengs='+aizhengs+'&byx='+byx+'&gtp='+gtp+'&hbs='+hbs+'&afp='+afp+'&bus='+bus;
     }
+
+    //打印
+    function printSuggest(){
+        var LODOP = getLodop();
+        LODOP.PRINT_INIT("打印诊断建议书");
+        LODOP.SET_SHOW_MODE ("PREVIEW_IN_BROWSE","2");
+        LODOP.SET_PRINT_PAGESIZE(1,"0","0","A4");  //设置打印页面属性：2：表示横向打印，0：定义纸张宽度，为0表示无效设置，A4：设置纸张为A4
+        LODOP.ADD_PRINT_HTM("5","10","98%","100%",getPrintHtml()); //添加html元素 top; left; width; height
+        LODOP.PREVIEW();
+    }
+
+    //获取打印页面-诊断结果
+    function getPrintHtml() {
+        //先计算结果
+        makeResult();
+        makeChushaiResult();
+        var name=mini.get("name").getValue();
+        var aizhengs='';
+        var byx='';
+        var gtp='';
+        var hbs='';
+        var afp='';
+        var bus='';
+
+        if (areaCode != '310104000000') {
+            if(crcFlag =="1") {
+                byx=mini.get("fobtResult").getValue();
+                if($("#assessmentResult1").val()=="2"){
+                    aizhengs+="1";
+                }
+            }
+            if(licFlag =="1") {
+                gtp=mini.get("gtp").getValue();
+                hbs=mini.get("hbeg").getValue();
+                afp=mini.get("afp").getValue();
+                bus=mini.get("bus").getValue();
+                alert(gtp)
+                if($("#assessmentResult2").val()=="2"){
+                    aizhengs+="2";
+                }
+            }
+            if(scFlag =="1") {
+                if($("#assessmentResult3").val()=="2"){
+                    aizhengs+="3";
+                }
+            }
+            if(lucFlag =="1") {
+                if($("#assessmentResult4").val()=="2"){
+                    aizhengs+="4";
+                }
+            }
+        }
+
+        var obj;
+        var url ='/tumor/screening/printSuggest1?name='+name+'&aizhengs='+aizhengs+'&byx='+byx+'&gtp='+gtp+'&hbs='+hbs+'&afp='+afp+'&bus='+bus;
+        $.ajax({
+            url : url,
+            type : "get",
+            async : false,
+            success : function(data) {
+                obj = data;
+            }
+        });
+        return obj;
+    }
+
 </script>
 </html>

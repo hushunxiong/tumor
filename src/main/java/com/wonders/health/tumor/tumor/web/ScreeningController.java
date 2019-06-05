@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -856,7 +857,6 @@ public class ScreeningController extends BaseController {
         }
     }
 
-
     @RequestMapping(value = {"", "printSuggest"}, method = RequestMethod.GET)
     public String printSuggest(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
         model.addAttribute("name",name);
@@ -870,6 +870,7 @@ public class ScreeningController extends BaseController {
         if(StringUtils.isNotBlank(aizhengs)){
             if(aizhengs.contains("1")){
                 aizheng+="大肠癌";
+                model.addAttribute("dca",1);
             }
             if(aizhengs.contains("2")){
                 if(StringUtils.isNotBlank(aizheng)){
@@ -882,12 +883,14 @@ public class ScreeningController extends BaseController {
                     aizheng+="，";
                 }
                 aizheng+="胃癌";
+                model.addAttribute("wa",1);
             }
             if(aizhengs.contains("4")){
                 if(StringUtils.isNotBlank(aizheng)){
                     aizheng+="，";
                 }
                 aizheng+="肺癌";
+                model.addAttribute("fa",1);
             }
         }
         model.addAttribute("aizheng",aizheng);
@@ -897,9 +900,55 @@ public class ScreeningController extends BaseController {
         if(hos!=null){
             model.addAttribute("hosName",hos.getName());
         }
-
         return "/register/printSuggest";
+    }
 
+
+    @RequestMapping(value = {"", "printSuggest1"}, method = RequestMethod.GET)
+    public ModelAndView printSuggest2(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
+        ModelAndView mav = new ModelAndView("/register/printSuggest");
+        model.addAttribute("name",name);
+        model.addAttribute("byx",byx);
+        model.addAttribute("gtp",gtp);
+        model.addAttribute("hbs",hbs);
+        model.addAttribute("afp",afp);
+        model.addAttribute("bus",bus);
+        model.addAttribute("curtime",DateUtils.getDate("yyyy-mm-dd"));
+        String aizheng="";
+        if(StringUtils.isNotBlank(aizhengs)){
+            if(aizhengs.contains("1")){
+                aizheng+="大肠癌";
+                model.addAttribute("dca",1);
+            }
+            if(aizhengs.contains("2")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肝癌";
+            }
+            if(aizhengs.contains("3")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="胃癌";
+                model.addAttribute("wa",1);
+            }
+            if(aizhengs.contains("4")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肺癌";
+                model.addAttribute("fa",1);
+            }
+        }
+        model.addAttribute("aizheng",aizheng);
+        User user=getSessionUser();
+        Hospital hos=AuthUtils.getHospitalByCode(user.getOrgCode());
+
+        if(hos!=null){
+            model.addAttribute("hosName",hos.getName());
+        }
+        return mav;
     }
 
 
