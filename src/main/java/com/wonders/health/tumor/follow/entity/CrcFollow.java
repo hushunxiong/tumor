@@ -204,6 +204,8 @@ public class CrcFollow extends BaseEntity {
 	@Length(max=32)
 	private String dengjiId;	// 登记人ID
 
+	private String suifangyishengName;	// 随访医生
+
 
 	public CrcFollow() {
 		super();
@@ -757,5 +759,11 @@ public class CrcFollow extends BaseEntity {
 		this.dengjiId = dengjiId;
 	}
 
+	public String getSuifangyishengName() {
+		return suifangyishengName;
+	}
 
+	public void setSuifangyishengName(String suifangyishengName) {
+		this.suifangyishengName = suifangyishengName;
+	}
 }

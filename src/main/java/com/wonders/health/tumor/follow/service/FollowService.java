@@ -78,7 +78,15 @@ public class FollowService {
      * @return
      */
     public CancerPersonInfo getPersonInfo(String manageId) {
-        return cancerPersonInfoDao.get(manageId);
+        CancerPersonInfo personInfo = cancerPersonInfoDao.get(manageId);
+
+        if (personInfo != null) {
+            //居住地址拼接
+            personInfo.setAddressDetail(areaService.getFullAddress(
+                    personInfo.getAddressProvince(), personInfo.getAddressCity(), personInfo.getAddressCounty(),
+                    personInfo.getAddressTown(), personInfo.getAddressCommittee(), personInfo.getAddressDetail()));
+        }
+        return personInfo;
     }
 
     /**

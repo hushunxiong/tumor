@@ -7,23 +7,12 @@
 </head>
 <body>
 <div class="content pd-10" style="width:auto; overflow: hidden;">
-    <div id="tabs" class="mini-tabs" activeIndex="0" style="width:100%; overflow: hidden;">
-        <div name="crc" title="大肠癌随访" th:if="${crcFlag==1?true:false}" ></div>
+    <div id="tabs" class="mini-tabs" activeIndex="0" style="width:100%; height:calc(100vh - 100px);overflow: hidden;">
+        <div name="crc" title="大肠癌随访" th:if="${crcFlag==1?true:false}" th:url="@{/crcFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
         <!--<div title="肝癌随访" th:if="${licFlag==1?true:false}" th:url="@{/licFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
         <div title="胃癌随访" th:if="${scFlag==1?true:false}" th:url="@{/scFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
         <div title="肺癌随访" th:if="${lucFlag==1?true:false}" th:url="@{/lucFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>-->
     </div>
 </div>
 </body>
-<script type="text/javascript" th:inline="javascript">
-    mini.parse();
-    var manageId = [[${manageId}]];
-    var checkYear = [[${checkYear}]];
-    var tabs = mini.get("tabs");
-    $(function() {
-        var tab1 = tabs.getTab("crc");
-        tabs.loadTab("../crcFollow/list?manageId=" + manageId + "&checkYear=" + checkYear, tab1);
-
-    });
-</script>
 </html>
