@@ -128,13 +128,13 @@
                 </div>
                 <div>
                     <div id="datagrid" url="../statistics/informationData" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto ;display: none;"
-                         showPageInfo="false" showPagerButtonText="false" showPagerButtonIcon="false" idField="id">
+                         showpager='false' idField="id">
                         <div property="columns" >
                             <div field="xm"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
                             <div field="xb" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
                                 <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                        valueField="code" th:data="${#dic.generals('60023')}"/></div>
-                            <div field="birthday" sortField="birthday"  format="yyyy-MM-dd"  width="150px" headerAlign="center" align="center" allowSort="false">出生日期</div>
+                            <div field="birthday" sortField="birthday"  dateFormat="yyyy-MM-dd"   width="150px" headerAlign="center" align="center" allowSort="false">出生日期</div>
                             <div field="address" sortField="address"    width="150px" headerAlign="center" align="center" allowSort="false">居住地址</div>
                             <div field="mobile" sortField="mobile"    width="150px" headerAlign="center" align="center" allowSort="false">移动电话</div>
                             <div field="telephone" sortField="telephone"    width="150px" headerAlign="center" align="center" allowSort="false">固定电话</div>
@@ -160,7 +160,7 @@
                             <div field="zlqb" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >肿瘤期别
                                 <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                        valueField="code" th:data="${#dic.generals('60042')}"/></div>
-                            <div field="csrq" sortField="birthday"  format="yyyy-MM-dd"  width="150px" headerAlign="center" align="center" allowSort="false">初筛日期</div>
+                            <div field="csrq" sortField="csrq"  dateFormat="yyyy-MM-dd"   width="150px" headerAlign="center" align="center" allowSort="false">初筛日期</div>
                         </div>
                     </div>
                 </div>

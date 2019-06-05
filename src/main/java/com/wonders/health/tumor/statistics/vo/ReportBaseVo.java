@@ -3,6 +3,8 @@ package com.wonders.health.tumor.statistics.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
 * @Description:    抽取报表相同字段作为基类被继承
 * @Author:         lxl
@@ -16,8 +18,8 @@ public class ReportBaseVo {
 
     private String xb; //性别
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String birthday; //出生日期
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") //Jackson包使用注解
+    private Date birthday; //出生日期
 
     private String address; //居住地址
 
@@ -25,10 +27,9 @@ public class ReportBaseVo {
 
     private String telephone;//固定电话
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String regorg; //筛查登记机构
-
-    private String csrq; //初筛日期
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") //Jackson包使用注解
+    private Date csrq; //初筛日期
 
     private String assessmentResult;//危险度评估结果
 
