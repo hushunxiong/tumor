@@ -8,6 +8,7 @@ import com.wonders.health.tumor.follow.entity.CrcFollow;
 import com.wonders.health.tumor.follow.service.CrcFollowService;
 import com.wonders.health.tumor.follow.service.FollowService;
 import com.wonders.health.tumor.follow.vo.FollowSearchVo;
+import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.tumor.entity.CrcRegcase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ public class CrcFollowController extends BaseController {
      */
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model, String manageId, String checkYear) {
+        model.addAttribute("manageId", manageId);
         model.addAttribute("checkYear", checkYear);
         model.addAttribute("personInfo", followService.getPersonInfo(manageId));
 
@@ -81,12 +83,36 @@ public class CrcFollowController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "add", method = RequestMethod.GET)
+    public String add(Model model, String manageId, String checkYear, String flag) {
+        if (StringUtils.isNotBlank(manageId) && StringUtils.isNotBlank(checkYear)) {
+            //大肠癌初筛信息
+            CancerPersonInfo personInfo = followService.getPersonInfo(manageId);
+            model.addAttribute("personInfo", personInfo);
+            CrcRegcase regcase = crcFollowService.getRegcase(manageId, checkYear);
+            model.addAttribute("regcase", regcase);
+        }
+        model.addAttribute("follow", new CrcFollow());
+        model.addAttribute("flag", flag);
+        return "/follow/crcForm";
+    }
 
     @RequestMapping(value = "form", method = RequestMethod.GET)
     public String form(Model model, String id, String flag) {
         if (StringUtils.isNotBlank(id)) {
             CrcFollow follow =  crcFollowService.getFollowById(id);
-            model.addAttribute("vo", follow);
+            if (follow != null) {
+                //大肠癌初筛信息
+                CrcRegcase regcase = crcFollowService.getRegcaseById(follow.getCrcCheckId());
+                model.addAttribute("regcase", regcase);
+
+                if (regcase != null) {
+                    //初筛对象信息
+                    CancerPersonInfo personInfo = followService.getPersonInfo(regcase.getManageid());
+                    model.addAttribute("personInfo", personInfo);
+                }
+            }
+            model.addAttribute("follow", follow);
             model.addAttribute("flag", flag);
         }
         return "/follow/crcForm";

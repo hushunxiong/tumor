@@ -31,6 +31,15 @@ public class CrcFollowService {
         return regcase;
     }
 
+    public CrcRegcase getRegcaseById(String id) {
+        CrcRegcase regcase = crcRegcaseDao.get(id);
+        return regcase;
+    }
+
+    /**
+     * 大肠癌随访记录取得推出诊断状态
+     * @return
+     */
     public String getDiagStatus(String checkId) {
         String status = "";
         FollowSearchVo searchVo = new FollowSearchVo();
@@ -46,6 +55,10 @@ public class CrcFollowService {
         return status;
     }
 
+    /**
+     * 大肠癌随访列表取得
+     * @return
+     */
     public DataGrid<CrcFollow> getFollowList(FollowSearchVo searchVo) {
         List<CrcFollow> list = crcFollowDao.getListByCheckId(searchVo.getCrcCheckId());
         if (list != null && list.size() > 0) {

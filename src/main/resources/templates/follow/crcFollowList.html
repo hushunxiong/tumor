@@ -78,7 +78,7 @@
             <tr>
                 <td style="background: #FFFFFF;" colspan="6">
                     <span>大肠癌随访信息</span>
-                    <button id="add" shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="viewPerson('','')">新增随访</button>
+                    <button id="add" shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="addFollow();">新增随访</button>
                     <!--大肠癌管理一览 编辑权限  -->
                     <input  name="hideInput" shiro:hasPermission="tumor:follow:edit" value="1" class="mini-hidden"/>
                     <!--大肠癌管理一览 删除权限  -->
@@ -103,6 +103,8 @@
     mini.parse();
     var grid = mini.get("datagrid");
     var checkId = [[${checkId}]];
+    var manageId = [[${manageId}]];
+    var checkYear = [[${checkYear}]];
     var checkResult = [[${regcase.checkResult}]];
     var hideValue="";
 
@@ -133,10 +135,10 @@
         var r = e.record;
         var h = '';
 
-        h += '<a onclick="viewPerson(\'' + r.id + '\', \'1\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
+        h += '<a onclick="viewFollow(\'' + r.id + '\', \'1\')" style="color:blue;cursor:pointer">查看</a>&nbsp;';
         if (hideValue.indexOf('1') != -1){
             if (checkResult == "2") {
-                h += '<a onclick="viewPerson(\'' + r.id + '\', \'2\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
+                h += '<a onclick="viewFollow(\'' + r.id + '\', \'2\')" style="color:blue;cursor:pointer">编辑</a>&nbsp;';
             }
         }
 
@@ -148,18 +150,27 @@
         }
         return h;
     }
-    //新增查看编辑
-    function viewPerson(id,flag) {
-        if(id==null||id==''||id==undefined){
-            csnf=$("#csnf").val();
-        }
-        var url = "../crcFollow/form/?id="+id+"&&flag="+flag;
+
+    //新增随访
+    function addFollow() {
+        var url = "../crcFollow/add?manageId=" + manageId + "&checkYear=" + checkYear + "&flag=3";
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',
             html: '加载中...'
         });
-        window.location.href =url;
+        parent.window.location.href =url;
+    }
+
+    //查看或者编辑
+    function viewFollow(id,flag) {
+        var url = "../crcFollow/form?id="+id+"&flag="+flag;
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        parent.window.location.href =url;
     }
     //删除
     function deleteRecord(id) {
