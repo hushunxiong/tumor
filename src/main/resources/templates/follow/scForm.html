@@ -62,30 +62,30 @@
                     <tr>
                         <td width="20%"><span class="red-span">*</span>是否进行胃镜检查</td>
                         <td width="80%" class="text-l">
-                            <input name="shifouweijing" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                            <input name="shifouweijing" showNullItem="true" class="mini-radiobuttonlist" width="47%" onvaluechanged="weijingCheck"
                                    th:data="${#dic.generals('60013')}" th:value="${info.scFollow.shifouweijing}" th:readonly="${info.flag=='3'}"
-                                   textField="name" valueField="code"/>
+                                   textField="name" valueField="code" required="true"/>
                         </td>
                     </tr>
                     <tr>
                         <td width="20%">未进行胃镜检查原因</td>
                         <td width="80%" class="text-l">
-                            <input name="buzuoweujingYuanyin" showNullItem="true" class="mini-radiobuttonlist" width="47%"
-                                   th:data="${#dic.generals('60029')}" th:value="${info.scFollow.buzuoweujingYuanyin}" th:readonly="${info.flag=='3'}"
+                            <input name="buzuoweujingYuanyin" showNullItem="true" class="mini-radiobuttonlist" width="47%" th:enabled="${info.scFollow.shifouweijing==null ? false : info.scFollow.shifouweijing=='2'}"
+                                   th:data="${#dic.generals('60029')}" th:value="${info.scFollow.buzuoweujingYuanyin}" th:readonly="${info.flag=='3'}" onvaluechanged="otherCheck"
                                    textField="name" valueField="code"/>
-                            <input name="buzuoweijingYuanyinQt" class="mini-textbox" th:value="${info.scFollow.buzuoweijingYuanyinQt}" th:readonly="${info.flag=='3'}"/>
+                            <input name="buzuoweijingYuanyinQt" class="mini-textbox" th:value="${info.scFollow.buzuoweijingYuanyinQt}" th:enabled="${info.scFollow.buzuoweujingYuanyin==null ? false : info.scFollow.buzuoweujingYuanyin=='05'}" th:readonly="${info.flag=='3'}"/>
                         </td>
                     </tr>
                     <tr>
                         <td width="20%">胃镜结果</td>
                         <td width="80%" class="text-l">
-                            <input name="weijingJieguo" class="mini-textbox" width="100%" th:value="${info.scFollow.weijingJieguo}" th:readonly="${info.flag=='3'}"/>
+                            <input name="weijingJieguo" class="mini-textbox" width="100%" th:value="${info.scFollow.weijingJieguo}" th:enabled="${info.scFollow.shifouweijing==null ? false : info.scFollow.shifouweijing=='1'}" th:readonly="${info.flag=='3'}"/>
                         </td>
                     </tr>
                     <tr>
                         <td width="20%">是否活检</td>
                         <td width="80%" class="text-l">
-                            <input name="huojian" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                            <input name="huojian" showNullItem="true" class="mini-radiobuttonlist" width="47%" onvaluechanged="huojianCheck"
                                    th:data="${#dic.generals('60013')}" th:value="${info.scFollow.huojian}" th:readonly="${info.flag=='3'}"
                                    textField="name" valueField="code"/>
                         </td>
@@ -93,7 +93,7 @@
                     <tr>
                         <td width="20%"> 活检结果</td>
                         <td width="80%" class="text-l">
-                            <input name="huojianjieguo" class="mini-textbox" width="100%" th:value="${info.scFollow.huojianjieguo}" th:readonly="${info.flag=='3'}"/>
+                            <input name="huojianjieguo" class="mini-textbox" width="100%" th:value="${info.scFollow.huojianjieguo}" th:readonly="${info.flag=='3'}" th:enabled="${info.scFollow.huojian==null ? false : info.scFollow.huojian=='1'}"/>
                         </td>
                     </tr>
                     <tr>
@@ -101,21 +101,27 @@
                         <td width="80%" class="text-l">
                             <input name="shifouquezhen" showNullItem="true" class="mini-radiobuttonlist" width="47%"
                                    th:data="${#dic.generals('60013')}" th:value="${info.scFollow.shifouquezhen}" th:readonly="${info.flag=='3'}"
-                                   textField="name" valueField="code"/>
+                                   textField="name" valueField="code" required="true"/>
                         </td>
                     </tr>
                     <tr>
                         <td width="20%"><span class="red-span">*</span>是否病理</td>
                         <td width="80%" class="text-l">
-                            <input name="bingli" showNullItem="true" class="mini-radiobuttonlist" width="90%"
+                            <input name="bingli" showNullItem="true" class="mini-radiobuttonlist" width="90%" onvaluechanged="bingliCheck"
                                    th:data="${#dic.generals('60013')}" th:value="${info.scFollow.bingli}" th:readonly="${info.flag=='3'}"
-                                   textField="name" valueField="code"/>
+                                   textField="name" valueField="code" required="true"/>
                         </td>
                     </tr>
                     <tr>
-                        <td width="20%"><span class="red-span">*</span>病理类型</td>
+                        <td width="20%">病理类型</td>
                         <td width="80%" class="text-l">
-                            <input name="binglileixing" class="mini-textbox" width="100%" th:value="${info.scFollow.binglileixing}" th:readonly="${info.flag=='3'}"/>
+                            <input name="binglileixing" class="mini-textbox" width="100%" th:value="${info.scFollow.binglileixing}" th:readonly="${info.flag=='3'}" th:enabled="${info.scFollow.bingli==null ? false : info.scFollow.bingli=='1'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">肿瘤大小（最大直径）</td>
+                        <td width="20%" class="text-l">
+                            <input name="zhongliudaxiao" class="mini-textbox" width="100%" th:value="${info.scFollow.zhongliudaxiao}" th:readonly="${info.flag=='3'}"/>
                         </td>
                     </tr>
                     <tr>
@@ -160,7 +166,7 @@
                     <tr>
                         <td width="20%"><span class="red-span">*</span>是否治疗</td>
                         <td width="80%" class="text-l">
-                            <input name="shifouzhiliao" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                            <input name="shifouzhiliao" showNullItem="true" class="mini-radiobuttonlist" width="47%" required="true"
                                    th:data="${#dic.generals('60013')}" th:value="${info.scFollow.shifouzhiliao}" th:readonly="${info.flag=='3'}"
                                    textField="name" valueField="code"/>
                         </td>
@@ -214,7 +220,7 @@
                         </td>
                         <td width="20%">随访日期</td>
                         <td width="30%" class="text-l">
-                            <input name="suifangDate" class="mini-datepicker" th:value="${info.flag=='1' ? new java.util.Date().getTime() : info.scFollow.suifangDate}" readonly="true"/>
+                            <input name="suifangDate" class="mini-datepicker" th:value="${#dates.format(info.flag=='1' ? new java.util.Date().getTime() : info.scFollow.suifangDate, 'yyyy-MM-dd')}" readonly="true"/>
                         </td>
                     </tr>
                 </table>
@@ -283,6 +289,47 @@
         //关闭页面
         function closeYM(){
             window.history.go(-1);
+        }
+        //是否胃镜检查
+        function weijingCheck(){
+            if (mini.getByName("shifouweijing").getValue()=='2'){
+                mini.getByName("buzuoweujingYuanyin").enable();
+                mini.getByName("weijingJieguo").setValue();
+                mini.getByName("weijingJieguo").disable();
+            }else{
+                mini.getByName("buzuoweujingYuanyin").setValue();
+                mini.getByName("buzuoweujingYuanyin").disable();
+                mini.getByName("buzuoweijingYuanyinQt").setValue();
+                mini.getByName("buzuoweijingYuanyinQt").disable();
+                mini.getByName("weijingJieguo").enable();
+            }
+        }
+        //其他
+        function otherCheck(){
+            if (mini.getByName("buzuoweujingYuanyin").getValue()=='05'){
+                mini.getByName("buzuoweijingYuanyinQt").enable();
+            }else{
+                mini.getByName("buzuoweijingYuanyinQt").setValue();
+                mini.getByName("buzuoweijingYuanyinQt").disable();
+            }
+        }
+        //是否活检
+        function huojianCheck(){
+            if (mini.getByName("huojian").getValue()=='1') {
+                mini.getByName("huojianjieguo").enable();
+            }else{
+                mini.getByName("huojianjieguo").setValue();
+                mini.getByName("huojianjieguo").disable();
+            }
+        }
+        //是否病理
+        function bingliCheck(){
+            if (mini.getByName("bingli").getValue()=='1') {
+                mini.getByName("binglileixing").enable();
+            }else{
+                mini.getByName("binglileixing").setValue();
+                mini.getByName("binglileixing").disable();
+            }
         }
     </script>
 </div>
