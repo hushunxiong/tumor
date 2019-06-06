@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 import java.lang.Integer;
 import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -131,6 +132,9 @@ public class ScFollow extends BaseEntity {
 
 	
 	private Integer zhongliudaxiao;	// 肿瘤大小
+
+	
+	private Date zhenduanDate;	// 诊断日期
 
 
 	public ScFollow() {
@@ -473,6 +477,16 @@ public class ScFollow extends BaseEntity {
 
 	public void setZhongliudaxiao(Integer zhongliudaxiao) {
 		this.zhongliudaxiao = zhongliudaxiao;
+	}
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonProperty("zhenduanDate")
+	public Date getZhenduanDate() {
+		return zhenduanDate;
+	}
+
+	public void setZhenduanDate(Date zhenduanDate) {
+		this.zhenduanDate = zhenduanDate;
 	}
 
 
