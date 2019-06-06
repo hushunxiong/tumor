@@ -1,10 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>胃癌新增随访</title>
+    <link>
+    <script>
+    </script>
 </head>
 <body>
-
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
+        <div title="胃癌新增随访">
+            <div class="title_tip mt-30">基本信息</div>
+            <table class="table_new table_new5 mt-10">
+                <tr>
+                    <td width="10%">ID编号</td>
+                    <td width="20%">
+                        <input class="mini-textbox" readonly="readonly" th:value="${info.manageId}"/>
+                    </td>
+                    <td width="10%">证件类型</td>
+                    <td width="20%">
+                        <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.personcardType}" th:data="${#dic.generals('60022')}" readonly="readonly" />
+                    </td>
+                    <td width="10%">证件号码</td>
+                    <td>
+                        <input class="mini-textbox" readonly="readonly" th:value="${info.personcard}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10%">姓&nbsp;&nbsp;名</td>
+                    <td width="20%">
+                        <input class="mini-textbox" readonly="readonly" th:value="${info.name}"/>
+                    </td>
+                    <td width="10%">性&nbsp;&nbsp;别</td>
+                    <td width="20%">
+                        <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.gender}" th:data="${#dic.generals('60023')}" readonly="readonly" />
+                    </td>
+                    <td width="10%">出生日期</td>
+                    <td>
+                        <input class="mini-textbox" readonly="readonly" th:value="${#dates.format(info.birth, 'yyyy-MM-dd')}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10%">移动电话</td>
+                    <td width="20%">
+                        <input class="mini-textbox" readonly="readonly" th:value="${info.mobile}"/>
+                    </td>
+                    <td width="10%">固定电话</td>
+                    <td width="20%">
+                        <input class="mini-textbox" readonly="readonly" th:value="${info.telephone}"/>
+                    </td>
+                    <td>胃癌初筛判定结果</td>
+                    <td>
+                        <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.checkResult}" th:data="${#dic.generals('60001')}" readonly="readonly" />
+                    </td>
+                </tr>
+            </table>
+            <div class="title_tip mt-30">后续诊断及治疗</div>
+            <div id="scFollow">
+                <input class="mini-textbox" id="id" name="id"  visible="false" th:value="${info.scFollow.id}"/>
+                <table class="table_new table_new5 mt-10">
+                    <tr>
+                        <td width="20%"><span class="red-span">*</span>是否进行胃镜检查</td>
+                        <td width="80%" class="text-l">
+                            <input name="shifouweijing" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                                   th:data="${#dic.generals('60013')}" th:value="${info.scFollow.shifouweijing}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">未进行胃镜检查原因</td>
+                        <td width="80%" class="text-l">
+                            <input name="buzuoweujingYuanyin" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                                   th:data="${#dic.generals('60029')}" th:value="${info.scFollow.buzuoweujingYuanyin}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                            <input name="buzuoweijingYuanyinQt" class="mini-textbox" th:value="${info.scFollow.buzuoweijingYuanyinQt}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">胃镜结果</td>
+                        <td width="80%" class="text-l">
+                            <input name="weijingJieguo" class="mini-textbox" width="100%" th:value="${info.scFollow.weijingJieguo}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">是否活检</td>
+                        <td width="80%" class="text-l">
+                            <input name="huojian" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                                   th:data="${#dic.generals('60013')}" th:value="${info.scFollow.huojian}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%"> 活检结果</td>
+                        <td width="80%" class="text-l">
+                            <input name="huojianjieguo" class="mini-textbox" width="100%" th:value="${info.scFollow.huojianjieguo}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%"><span class="red-span">*</span>是否确诊为胃癌</td>
+                        <td width="80%" class="text-l">
+                            <input name="shifouquezhen" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                                   th:data="${#dic.generals('60013')}" th:value="${info.scFollow.shifouquezhen}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%"><span class="red-span">*</span>是否病理</td>
+                        <td width="80%" class="text-l">
+                            <input name="bingli" showNullItem="true" class="mini-radiobuttonlist" width="90%"
+                                   th:data="${#dic.generals('60013')}" th:value="${info.scFollow.bingli}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%"><span class="red-span">*</span>病理类型</td>
+                        <td width="80%" class="text-l">
+                            <input name="binglileixing" class="mini-textbox" width="100%" th:value="${info.scFollow.binglileixing}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">肿瘤位置</td>
+                        <td width="20%" class="text-l">
+                            <input name="zhongliuweizh" class="mini-textbox" width="100%" th:value="${info.scFollow.zhongliuweizh}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">肿瘤分期</td>
+                        <td width="20%" class="text-l">
+                            <input name="linchuangfenqi" class="mini-radiobuttonlist" width="100%"
+                                   th:data="${#dic.generals('60051')}" th:value="${info.scFollow.linchuangfenqi}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table_new table_new5">
+                    <tr>
+                        <td style="width: 20%!important;" rowspan="2">肿瘤TNM分期</td>
+                        <td class="bg-white">T</td>
+                        <td class="bg-white">
+                            <input name="zhongliutnmT" showNullItem="true" class="mini-combobox" width="43%"
+                                   th:data="${#dic.generals('60044')}" th:value="${info.scFollow.zhongliutnmT}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                        <td class="bg-white">N</td>
+                        <td class="bg-white">
+                            <input name="zhongliutnmN" showNullItem="true" class="mini-combobox" width="43%"
+                                   th:data="${#dic.generals('60045')}" th:value="${info.scFollow.zhongliutnmN}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                        <td class="bg-white">M</td>
+                        <td class="bg-white">
+                            <input name="zhongliutnmM" showNullItem="true" class="mini-combobox" width="43%"
+                                   th:data="${#dic.generals('60046')}" th:value="${info.scFollow.zhongliutnmM}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table_new table_new5">
+                    <tr>
+                        <td width="20%"><span class="red-span">*</span>是否治疗</td>
+                        <td width="80%" class="text-l">
+                            <input name="shifouzhiliao" showNullItem="true" class="mini-radiobuttonlist" width="47%"
+                                   th:data="${#dic.generals('60013')}" th:value="${info.scFollow.shifouzhiliao}" th:readonly="${info.flag=='3'}"
+                                   textField="name" valueField="code"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table_new table_new5">
+                    <tr>
+                        <td width="20%" style="width:20%!important;">手术机构名称</td>
+                        <td width="30%" class="text-l">
+                            <input name="shoushujigouName" class="mini-textbox" width="100%" th:value="${info.scFollow.shoushujigouName}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                        <td width="20%">手术日期</td>
+                        <td width="30%" class="text-l">
+                            <input name="shoushuDate" class="mini-datepicker" th:value="${info.scFollow.shoushuDate}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">放疗机构名称</td>
+                        <td width="30%" class="text-l">
+                            <input name="fangliaojigouName" class="mini-textbox" width="100%" th:value="${info.scFollow.fangliaojigouName}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                        <td width="20%">放疗日期</td>
+                        <td width="30%" class="text-l">
+                            <input name="fangliaoDate" class="mini-datepicker" th:value="${info.scFollow.fangliaoDate}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">化疗机构名称</td>
+                        <td width="30%" class="text-l">
+                            <input name="hualiaojigouName" class="mini-textbox" width="100%" th:value="${info.scFollow.hualiaojigouName}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                        <td width="20%">化疗日期</td>
+                        <td width="30%" class="text-l">
+                            <input name="hualiaoDate" class="mini-datepicker" th:value="${info.scFollow.hualiaoDate}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%"><span class="red-span">*</span>诊断机构名称</td>
+                        <td width="30%" class="text-l">
+                            <input name="zhenduanjigouName" class="mini-textbox" width="100%" th:value="${info.scFollow.zhenduanjigouName}" th:readonly="${info.flag=='3'}"/>
+                        </td>
+                        <td width="20%"><span class="red-span">*</span>诊断日期</td>
+                        <td width="30%" class="text-l">
+                            <input  class="mini-datepicker"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">随访机构名称</td>
+                        <td width="30%" class="text-l">
+                            <input name="suifangjigouName" class="mini-textbox" width="100%" th:value="${info.flag=='1' ? #auth.getHospitalByCode(#auth.currUser().orgCode).name : info.scFollow.suifangjigouName}" readonly="true"/>
+                        </td>
+                        <td width="20%">随访日期</td>
+                        <td width="30%" class="text-l">
+                            <input name="suifangDate" class="mini-datepicker" th:value="${info.flag=='1' ? new java.util.Date().getTime() : info.scFollow.suifangDate}" readonly="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="btn-list text-c mt-30">
+                <button class="my-btn my-btn-blue mr-20" onclick="save()" th:if="${info.flag=='1'}">保存</button>
+                <button class="my-btn my-btn-blue mr-20" onclick="update()" th:if="${info.flag=='2'}">修改</button>
+                <button class="my-btn my-btn-blue mr-20" onclick="closeYM()">关闭</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        mini.parse();
+        //保存
+        function save(){
+            var scFollow = new mini.Form('#scFollow');
+            scFollow.validate();
+            if (scFollow.isValid()) {
+                var data=scFollow.getData();
+                data.scCheckId=[[${info.scRegcaseId}]];
+                var sc={};
+                sc.scFollow=data;
+                var json = mini.encode(sc);
+                $.ajax({
+                    url:'/tumor/scFollow/saveScFollow',
+                    type:'post',
+                    contentType : 'application/json',
+                    data: json,
+                    async:true,
+                    success: function (response) {
+                        mini.alert(response.msg,"提示消息",function () {
+                            if (response.value){
+                                window.history.go(-1);
+                            }
+                        })
+                    }
+                })
+            }
+        }
+        //修改
+        function update(){
+            var scFollow = new mini.Form('#scFollow');
+            scFollow.validate();
+            if (scFollow.isValid()) {
+                var data=scFollow.getData();
+                data.scCheckId=[[${info.scRegcaseId}]];
+                var sc={};
+                sc.scFollow=data;
+                var json = mini.encode(sc);
+                $.ajax({
+                    url:'/tumor/scFollow/saveScFollow',
+                    type:'post',
+                    contentType : 'application/json',
+                    data: json,
+                    async:true,
+                    success: function (response) {
+                        mini.alert(response.msg,"提示消息",function () {
+                            if (response.value){
+                                window.history.go(-1);
+                            }
+                        })
+                    }
+                })
+            }
+        }
+        //关闭页面
+        function closeYM(){
+            window.history.go(-1);
+        }
+    </script>
+</div>
 </body>
 </html>

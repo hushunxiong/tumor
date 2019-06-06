@@ -3,27 +3,27 @@
 <mapper namespace="com.wonders.health.tumor.follow.dao.ScFollowDao">
     
 	<sql id="ScFollowColumns">
-		a.id AS "id",a.primary_mark AS "primaryMark",a.sc_check_id AS "scCheckId",a.shifouweijing AS "shifouweijing",a.buzuoweujing_yuanyin AS "buzuoweujingYuanyin",a.buzuoweijing_yuanyin_qt AS "buzuoweijingYuanyinQt",a.shifouquezhen AS "shifouquezhen",a.bingli AS "bingli",a.binglileixing AS "binglileixing",a.zhongliuweizh AS "zhongliuweizh",a.zhongliutnm_t AS "zhongliutnmT",a.zhongliutnm_n AS "zhongliutnmN",a.zhongliutnm_m AS "zhongliutnmM",a.shifouzhiliao AS "shifouzhiliao",a.shoushujigou_id AS "shoushujigouId",a.shoushujigou_name AS "shoushujigouName",a.shoushu_date AS "shoushuDate",a.fangliaojigou_id AS "fangliaojigouId",a.fangliaojigou_name AS "fangliaojigouName",a.fangliao_date AS "fangliaoDate",a.hualiaojigou_id AS "hualiaojigouId",a.hualiaojigou_name AS "hualiaojigouName",a.hualiao_date AS "hualiaoDate",a.zhenduanjigou_id AS "zhenduanjigouId",a.zhenduanjigou_name AS "zhenduanjigouName",a.suifangjigou_id AS "suifangjigouId",a.suifangjigou_name AS "suifangjigouName",a.suifang_date AS "suifangDate",a.suifangyisheng_id AS "suifangyishengId",a.dengjijigou_id AS "dengjijigouId",a.dengji_date AS "dengjiDate",a.dengji_id AS "dengjiId",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+		a.id AS "id",a.primary_mark AS "primaryMark",a.sc_check_id AS "scCheckId",a.shifouweijing AS "shifouweijing",a.buzuoweujing_yuanyin AS "buzuoweujingYuanyin",a.buzuoweijing_yuanyin_qt AS "buzuoweijingYuanyinQt",a.shifouquezhen AS "shifouquezhen",a.bingli AS "bingli",a.binglileixing AS "binglileixing",a.zhongliuweizh AS "zhongliuweizh",a.zhongliutnm_t AS "zhongliutnmT",a.zhongliutnm_n AS "zhongliutnmN",a.zhongliutnm_m AS "zhongliutnmM",a.shifouzhiliao AS "shifouzhiliao",a.shoushujigou_id AS "shoushujigouId",a.shoushujigou_name AS "shoushujigouName",a.shoushu_date AS "shoushuDate",a.fangliaojigou_id AS "fangliaojigouId",a.fangliaojigou_name AS "fangliaojigouName",a.fangliao_date AS "fangliaoDate",a.hualiaojigou_id AS "hualiaojigouId",a.hualiaojigou_name AS "hualiaojigouName",a.hualiao_date AS "hualiaoDate",a.zhenduanjigou_id AS "zhenduanjigouId",a.zhenduanjigou_name AS "zhenduanjigouName",a.suifangjigou_id AS "suifangjigouId",a.suifangjigou_name AS "suifangjigouName",a.suifang_date AS "suifangDate",a.suifangyisheng_id AS "suifangyishengId",a.dengjijigou_id AS "dengjijigouId",a.dengji_date AS "dengjiDate",a.dengji_id AS "dengjiId",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate",a.linchuangfenqi AS "linchuangfenqi",a.weijing_jieguo AS "weijingJieguo",a.huojian AS "huojian",a.huojianjieguo AS "huojianjieguo",a.zhongliudaxiao AS "zhongliudaxiao"
 	</sql>
 
 	<select id="get" resultType="com.wonders.health.tumor.follow.entity.ScFollow">
 		SELECT 
 			<include refid="ScFollowColumns"/>
-		FROM SC_FOLLOW a
+		FROM sc_follow a
 		WHERE a.id = #{id}
 	</select>
 
 	<select id="findAll" resultType="com.wonders.health.tumor.follow.entity.ScFollow">
 		SELECT 
 			<include refid="ScFollowColumns"/>
-		FROM SC_FOLLOW a
+		FROM sc_follow a
 		<where>
 			a.del_flag = '0'
 		</where>		
 	</select>
 	<!-- 分页模块 -->
 	<sql id="pageFromAndWhere">
-      FROM SC_FOLLOW a
+      FROM sc_follow a
       <where>
 		a.del_flag = '0'
 	  </where>
@@ -67,23 +67,30 @@
     </select>
 	
 	<insert id="insert">
-		INSERT INTO SC_FOLLOW(
-		id,primary_mark,sc_check_id,shifouweijing,buzuoweujing_yuanyin,buzuoweijing_yuanyin_qt,shifouquezhen,bingli,binglileixing,zhongliuweizh,zhongliutnm_t,zhongliutnm_n,zhongliutnm_m,shifouzhiliao,shoushujigou_id,shoushujigou_name,shoushu_date,fangliaojigou_id,fangliaojigou_name,fangliao_date,hualiaojigou_id,hualiaojigou_name,hualiao_date,zhenduanjigou_id,zhenduanjigou_name,suifangjigou_id,suifangjigou_name,suifang_date,suifangyisheng_id,dengjijigou_id,dengji_date,dengji_id,del_flag,create_by,create_date
+		INSERT INTO sc_follow(
+		id,primary_mark,sc_check_id,shifouweijing,buzuoweujing_yuanyin,buzuoweijing_yuanyin_qt,shifouquezhen,bingli,binglileixing,zhongliuweizh,zhongliutnm_t,zhongliutnm_n,zhongliutnm_m,shifouzhiliao,shoushujigou_id,shoushujigou_name,shoushu_date,fangliaojigou_id,fangliaojigou_name,fangliao_date,hualiaojigou_id,hualiaojigou_name,hualiao_date,zhenduanjigou_id,zhenduanjigou_name,suifangjigou_id,suifangjigou_name,suifang_date,suifangyisheng_id,dengjijigou_id,dengji_date,dengji_id,del_flag,create_by,create_date,linchuangfenqi,weijing_jieguo,huojian,huojianjieguo,zhongliudaxiao
 		) VALUES (
-		#{id},#{primaryMark},#{scCheckId},#{shifouweijing},#{buzuoweujingYuanyin},#{buzuoweijingYuanyinQt},#{shifouquezhen},#{bingli},#{binglileixing},#{zhongliuweizh},#{zhongliutnmT},#{zhongliutnmN},#{zhongliutnmM},#{shifouzhiliao},#{shoushujigouId},#{shoushujigouName},#{shoushuDate},#{fangliaojigouId},#{fangliaojigouName},#{fangliaoDate},#{hualiaojigouId},#{hualiaojigouName},#{hualiaoDate},#{zhenduanjigouId},#{zhenduanjigouName},#{suifangjigouId},#{suifangjigouName},#{suifangDate},#{suifangyishengId},#{dengjijigouId},#{dengjiDate},#{dengjiId},#{delFlag},#{createBy},#{createDate}
+		#{id},#{primaryMark},#{scCheckId},#{shifouweijing},#{buzuoweujingYuanyin},#{buzuoweijingYuanyinQt},#{shifouquezhen},#{bingli},#{binglileixing},#{zhongliuweizh},#{zhongliutnmT},#{zhongliutnmN},#{zhongliutnmM},#{shifouzhiliao},#{shoushujigouId},#{shoushujigouName},#{shoushuDate},#{fangliaojigouId},#{fangliaojigouName},#{fangliaoDate},#{hualiaojigouId},#{hualiaojigouName},#{hualiaoDate},#{zhenduanjigouId},#{zhenduanjigouName},#{suifangjigouId},#{suifangjigouName},#{suifangDate},#{suifangyishengId},#{dengjijigouId},#{dengjiDate},#{dengjiId},#{delFlag},#{createBy},#{createDate},#{linchuangfenqi},#{weijingJieguo},#{huojian},#{huojianjieguo},#{zhongliudaxiao}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE SC_FOLLOW SET
-		id = #{id},primary_mark = #{primaryMark},sc_check_id = #{scCheckId},shifouweijing = #{shifouweijing},buzuoweujing_yuanyin = #{buzuoweujingYuanyin},buzuoweijing_yuanyin_qt = #{buzuoweijingYuanyinQt},shifouquezhen = #{shifouquezhen},bingli = #{bingli},binglileixing = #{binglileixing},zhongliuweizh = #{zhongliuweizh},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},shifouzhiliao = #{shifouzhiliao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		UPDATE sc_follow SET
+	  	shifouweijing = #{shifouweijing},buzuoweujing_yuanyin = #{buzuoweujingYuanyin},buzuoweijing_yuanyin_qt = #{buzuoweijingYuanyinQt},shifouquezhen = #{shifouquezhen},bingli = #{bingli},binglileixing = #{binglileixing},zhongliuweizh = #{zhongliuweizh},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},shifouzhiliao = #{shifouzhiliao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},linchuangfenqi = #{linchuangfenqi},weijing_jieguo = #{weijingJieguo},huojian = #{huojian},huojianjieguo = #{huojianjieguo},zhongliudaxiao = #{zhongliudaxiao}
 		WHERE id = #{id}
 	</update>
 
 	<update id="delete">
-	    UPDATE SC_FOLLOW SET del_flag = '1'
+	    UPDATE sc_follow SET del_flag = '1'
 	    WHERE id = #{id}
 	</update>
 
-	
+	<select id="queryScFollowListByCsId" resultType="com.wonders.health.tumor.follow.entity.ScFollow">
+		SELECT
+		<include refid="ScFollowColumns"/>
+		FROM SC_FOLLOW a
+		<where>
+			a.sc_check_id = #{scRegcaseId} and a.del_flag = '0'
+		</where>
+	</select>
 </mapper>

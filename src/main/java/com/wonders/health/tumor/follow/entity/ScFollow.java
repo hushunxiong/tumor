@@ -1,21 +1,18 @@
-/**
- * 
- */
 package com.wonders.health.tumor.follow.entity;
 
 import java.util.Date;
 import java.lang.String;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
+import java.lang.Integer;
 import org.hibernate.validator.constraints.Length;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 import com.wonders.health.tumor.common.model.BaseEntity;
 
 /**
- * 胃癌随访实体
+ * 胃癌随访管理表实体
  * @author zhangyi
  */
 public class ScFollow extends BaseEntity {
@@ -34,19 +31,19 @@ public class ScFollow extends BaseEntity {
 	private String scCheckId;	// 胃癌初筛信息登记id
 
 	@Length(max=1)
-	private String shifouweijing;	// 是否进行胃镜检查字典表 id=60013 code=1：是；code=2：否
+	private String shifouweijing;	// 是否进行胃镜检查 字典表 id=60013 code=1：是；code=2：否
 
 	@Length(max=2)
-	private String buzuoweujingYuanyin;	// 不进行胃镜的原因字典表 id=60029
+	private String buzuoweujingYuanyin;	// 不进行胃镜的原因 字典表 id=60029
 
 	@Length(max=500)
 	private String buzuoweijingYuanyinQt;	// 不进行胃镜的原因其他
 
 	@Length(max=1)
-	private String shifouquezhen;	// 是否确诊胃癌字典表 id=60013 code=1：是；code=2：否
+	private String shifouquezhen;	// 是否确诊胃癌 字典表 id=60013 code=1：是；code=2：否
 
 	@Length(max=1)
-	private String bingli;	// 是否病理字典表 id=60013 code=1：是；code=2：否
+	private String bingli;	// 是否病理 字典表 id=60013 code=1：是；code=2：否
 
 	@Length(max=1000)
 	private String binglileixing;	// 病理类型
@@ -119,6 +116,21 @@ public class ScFollow extends BaseEntity {
 
 	@Length(max=32)
 	private String dengjiId;	// 登记人ID
+
+	@Length(max=2)
+	private String linchuangfenqi;	// 胃癌临床分期 字典表 id=60051
+
+	@Length(max=1000)
+	private String weijingJieguo;	// 胃镜检查结果
+
+	@Length(max=1)
+	private String huojian;	// 是否活检 字典表 id=60013 code=1：是；code=2：否
+
+	@Length(max=500)
+	private String huojianjieguo;	// 活检结果
+
+	
+	private Integer zhongliudaxiao;	// 肿瘤大小
 
 
 	public ScFollow() {
@@ -416,6 +428,51 @@ public class ScFollow extends BaseEntity {
 
 	public void setDengjiId(String dengjiId) {
 		this.dengjiId = dengjiId;
+	}
+
+	@JsonProperty("linchuangfenqi")
+	public String getLinchuangfenqi() {
+		return linchuangfenqi;
+	}
+
+	public void setLinchuangfenqi(String linchuangfenqi) {
+		this.linchuangfenqi = linchuangfenqi;
+	}
+
+	@JsonProperty("weijingJieguo")
+	public String getWeijingJieguo() {
+		return weijingJieguo;
+	}
+
+	public void setWeijingJieguo(String weijingJieguo) {
+		this.weijingJieguo = weijingJieguo;
+	}
+
+	@JsonProperty("huojian")
+	public String getHuojian() {
+		return huojian;
+	}
+
+	public void setHuojian(String huojian) {
+		this.huojian = huojian;
+	}
+
+	@JsonProperty("huojianjieguo")
+	public String getHuojianjieguo() {
+		return huojianjieguo;
+	}
+
+	public void setHuojianjieguo(String huojianjieguo) {
+		this.huojianjieguo = huojianjieguo;
+	}
+
+	@JsonProperty("zhongliudaxiao")
+	public Integer getZhongliudaxiao() {
+		return zhongliudaxiao;
+	}
+
+	public void setZhongliudaxiao(Integer zhongliudaxiao) {
+		this.zhongliudaxiao = zhongliudaxiao;
 	}
 
 
