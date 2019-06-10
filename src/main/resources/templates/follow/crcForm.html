@@ -437,7 +437,7 @@
     </table>
 
     <div class="btn-list text-c mt-30">
-        <button class="my-btn my-btn-blue mr-20" onclick="save()">保存</button>
+        <button id="save" class="my-btn my-btn-blue mr-20" onclick="save()">保存</button>
         <button class="my-btn my-btn-blue mr-20" onclick="closeSelf()">关闭</button>
     </div>
     <input id="id" name="id" class="mini-hidden" th:value="${follow.id}"/>
@@ -474,6 +474,7 @@
             $(controls4).each(function (i, item) {
                 item.setReadOnly(true);
             });
+            $("#save").hide();
         } else if (flag == "2") {
             var changjing = mini.get("changjing").getValue();
             //肠镜检查:是

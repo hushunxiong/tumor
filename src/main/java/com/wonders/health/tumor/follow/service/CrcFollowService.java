@@ -13,6 +13,7 @@ import com.wonders.health.tumor.follow.entity.CrcFollow;
 import com.wonders.health.tumor.follow.vo.FollowSearchVo;
 import com.wonders.health.tumor.tumor.dao.CancerDicHospitalInfoDao;
 import com.wonders.health.tumor.tumor.dao.CrcRegcaseDao;
+import com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo;
 import com.wonders.health.tumor.tumor.entity.CrcRegcase;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
@@ -98,17 +99,47 @@ public class CrcFollowService {
                     BeanUtils.copyProperties(vo, po, all_ignore);
                     po.initByUpdate(user.getId());
                     //手术医疗机构名称
-                    po.setShoushujigouName(cancerDicHospitalInfoDao.get(po.getShoushujigouId()).getHospitalName());
+                    if (StringUtils.isNotBlank(po.getShoushujigouId())) {
+                        CancerDicHospitalInfo shoushujigou = cancerDicHospitalInfoDao.get(po.getShoushujigouId());
+                        if (shoushujigou != null) {
+                            po.setShoushujigouName(shoushujigou.getHospitalName());
+                        }
+                    }
                     //放疗医疗机构名称
-                    po.setFangliaojigouName(cancerDicHospitalInfoDao.get(po.getFangliaojigouId()).getHospitalName());
+                    if (StringUtils.isNotBlank(po.getFangliaojigouId())) {
+                        CancerDicHospitalInfo fangliaojigou = cancerDicHospitalInfoDao.get(po.getFangliaojigouId());
+                        if (fangliaojigou != null) {
+                            po.setFangliaojigouName(fangliaojigou.getHospitalName());
+                        }
+                    }
                     //化疗医疗机构名称
-                    po.setHualiaojigouName(cancerDicHospitalInfoDao.get(po.getHualiaojigouId()).getHospitalName());
+                    if (StringUtils.isNotBlank(po.getHualiaojigouId())) {
+                        CancerDicHospitalInfo hualiaojigou = cancerDicHospitalInfoDao.get(po.getHualiaojigouId());
+                        if (hualiaojigou != null) {
+                            po.setHualiaojigouName(hualiaojigou.getHospitalName());
+                        }
+                    }
                     //肠镜医疗机构名称
-                    po.setChangjingjigouName(cancerDicHospitalInfoDao.get(po.getChangjingjigouId()).getHospitalName());
+                    if (StringUtils.isNotBlank(po.getChangjingjigouId())) {
+                        CancerDicHospitalInfo changjingjigou = cancerDicHospitalInfoDao.get(po.getChangjingjigouId());
+                        if (changjingjigou != null) {
+                            po.setChangjingjigouName(changjingjigou.getHospitalName());
+                        }
+                    }
                     //诊断医疗机构名称
-                    po.setZhenduanjigouName(cancerDicHospitalInfoDao.get(po.getZhenduanjigouId()).getHospitalName());
+                    if (StringUtils.isNotBlank(po.getZhenduanjigouId())) {
+                        CancerDicHospitalInfo zhenduanjigou = cancerDicHospitalInfoDao.get(po.getZhenduanjigouId());
+                        if (zhenduanjigou != null) {
+                            po.setZhenduanjigouName(zhenduanjigou.getHospitalName());
+                        }
+                    }
                     //随访医疗机构名称
-                    po.setSuifangjigouName(cancerDicHospitalInfoDao.get(po.getSuifangjigouId()).getHospitalName());
+                    if (StringUtils.isNotBlank(po.getSuifangjigouId())) {
+                        CancerDicHospitalInfo suifangjigou = cancerDicHospitalInfoDao.get(po.getSuifangjigouId());
+                        if (suifangjigou != null) {
+                            po.setSuifangjigouName(suifangjigou.getHospitalName());
+                        }
+                    }
                     crcFollowDao.update(po);
                 }
 
@@ -125,18 +156,47 @@ public class CrcFollowService {
                 po.setPrimaryMark(user.getOrgCode() + DateUtils.formatDate(new Date(), "yyyyMMddHHmm"));
 
                 //手术医疗机构名称
-                po.setShoushujigouName(cancerDicHospitalInfoDao.get(po.getShoushujigouId()).getHospitalName());
+                if (StringUtils.isNotBlank(po.getShoushujigouId())) {
+                    CancerDicHospitalInfo shoushujigou = cancerDicHospitalInfoDao.get(po.getShoushujigouId());
+                    if (shoushujigou != null) {
+                        po.setShoushujigouName(shoushujigou.getHospitalName());
+                    }
+                }
                 //放疗医疗机构名称
-                po.setFangliaojigouName(cancerDicHospitalInfoDao.get(po.getFangliaojigouId()).getHospitalName());
+                if (StringUtils.isNotBlank(po.getFangliaojigouId())) {
+                    CancerDicHospitalInfo fangliaojigou = cancerDicHospitalInfoDao.get(po.getFangliaojigouId());
+                    if (fangliaojigou != null) {
+                        po.setFangliaojigouName(fangliaojigou.getHospitalName());
+                    }
+                }
                 //化疗医疗机构名称
-                po.setHualiaojigouName(cancerDicHospitalInfoDao.get(po.getHualiaojigouId()).getHospitalName());
+                if (StringUtils.isNotBlank(po.getHualiaojigouId())) {
+                    CancerDicHospitalInfo hualiaojigou = cancerDicHospitalInfoDao.get(po.getHualiaojigouId());
+                    if (hualiaojigou != null) {
+                        po.setHualiaojigouName(hualiaojigou.getHospitalName());
+                    }
+                }
                 //肠镜医疗机构名称
-                po.setChangjingjigouName(cancerDicHospitalInfoDao.get(po.getChangjingjigouId()).getHospitalName());
+                if (StringUtils.isNotBlank(po.getChangjingjigouId())) {
+                    CancerDicHospitalInfo changjingjigou = cancerDicHospitalInfoDao.get(po.getChangjingjigouId());
+                    if (changjingjigou != null) {
+                        po.setChangjingjigouName(changjingjigou.getHospitalName());
+                    }
+                }
                 //诊断医疗机构名称
-                po.setZhenduanjigouName(cancerDicHospitalInfoDao.get(po.getZhenduanjigouId()).getHospitalName());
+                if (StringUtils.isNotBlank(po.getZhenduanjigouId())) {
+                    CancerDicHospitalInfo zhenduanjigou = cancerDicHospitalInfoDao.get(po.getZhenduanjigouId());
+                    if (zhenduanjigou != null) {
+                        po.setZhenduanjigouName(zhenduanjigou.getHospitalName());
+                    }
+                }
                 //随访医疗机构名称
-                po.setSuifangjigouName(cancerDicHospitalInfoDao.get(po.getSuifangjigouId()).getHospitalName());
-
+                if (StringUtils.isNotBlank(po.getSuifangjigouId())) {
+                    CancerDicHospitalInfo suifangjigou = cancerDicHospitalInfoDao.get(po.getSuifangjigouId());
+                    if (suifangjigou != null) {
+                        po.setSuifangjigouName(suifangjigou.getHospitalName());
+                    }
+                }
                 //登记医疗机构编码
                 po.setDengjijigouId(user.getOrgCode());
                 //登记日期
