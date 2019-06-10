@@ -1016,7 +1016,7 @@
     <div class="btn-list text-c mt-30">
         <button class="my-btn my-btn-blue mr-20" onclick="save()" id="savebtn">保存</button>
         <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
-        <button class="my-btn my-btn-blue mr-20" onclick="printSuggest()">打印诊断建议书</button>
+        <button th:if="${operation} ne '3'" class="my-btn my-btn-blue mr-20" onclick="printSuggest()">打印诊断建议书</button>
     </div>
 
 
@@ -1732,7 +1732,7 @@
                 //单独再验证一次大肠癌id
                 var id=mini.get("id").getValue();
                 var crcNum=mini.get("idNumber").getValue();
-                if($.trim(crcNum) == "" || (crcNum.length == 12)){
+                if(crcNum.length == 12){
                     $.ajax({
                         url: "/tumor/screening/checkIdnumber?manageid="+id+"&&idnumber="+crcNum,
                         type:'get',

@@ -611,26 +611,6 @@ public class ScreeningController extends BaseController {
                     lucRegcase.init();
                     lucRegcaseService.insert(lucRegcaseDao,lucRegcase);
                 }
-            }
-            LucRiskAssessment lucrisk=screeningVo.getLucRisk();
-            if(lucrisk!=null  && !checkObjAllFieldsIsNull(lucrisk)){
-                lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
-                if(lucrisk.getAssessmentResult()=="阴性" || "阴性".equals(lucrisk.getAssessmentResult())){
-                    lucrisk.setAssessmentResult("1");
-                }else  if(lucrisk.getAssessmentResult()=="阳性" || "阳性".equals(lucrisk.getAssessmentResult())){
-                    lucrisk.setAssessmentResult("2");
-                }
-                if(StringUtils.isNotBlank(lucrisk.getId())){
-                    lucRiskAssessmentService.update(lucRiskAssessmentDao,lucrisk);
-                }else{
-                    lucrisk.setId(IdGen.uuid());
-                    lucrisk.setLucCheckId(lucRegcase.getId());
-                    lucrisk.setRiskQualityFlag("1");
-                    lucrisk.setCreateBy(user.getId());
-                    lucrisk.init();
-                    lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
-                }
-
                 //处理肺癌新需求
                 if("2".equals(lucRegcase.getCheckResult())||(lucRegcase.getCheckResult()=="2")){
                     LucDiagCheckRemind lucDiagCheckRemind=lucDiagCheckRemindService.findByCheckId(lucRegcase.getId());
@@ -650,8 +630,28 @@ public class ScreeningController extends BaseController {
                     lucDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
                     lucDiagCheckRemindService.saveOrUpdate(lucDiagCheckRemind,user.getId());
                 }
-
             }
+            LucRiskAssessment lucrisk=screeningVo.getLucRisk();
+            if(lucrisk!=null  && !checkObjAllFieldsIsNull(lucrisk)){
+                lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
+                if(lucrisk.getAssessmentResult()=="阴性" || "阴性".equals(lucrisk.getAssessmentResult())){
+                    lucrisk.setAssessmentResult("1");
+                }else  if(lucrisk.getAssessmentResult()=="阳性" || "阳性".equals(lucrisk.getAssessmentResult())){
+                    lucrisk.setAssessmentResult("2");
+                }
+                if(StringUtils.isNotBlank(lucrisk.getId())){
+                    lucRiskAssessmentService.update(lucRiskAssessmentDao,lucrisk);
+                }else{
+                    lucrisk.setId(IdGen.uuid());
+                    lucrisk.setLucCheckId(lucRegcase.getId());
+                    lucrisk.setRiskQualityFlag("1");
+                    lucrisk.setCreateBy(user.getId());
+                    lucrisk.init();
+                    lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
+                }
+            }
+
+
         }
         if(isOpen(scFlag)){
             ScRegcase scRegcase=screeningVo.getScRegcase();
@@ -677,6 +677,25 @@ public class ScreeningController extends BaseController {
                     scRegcase.init();
                     scRegcaseService.insert(scRegcaseDao,scRegcase);
                 }
+
+                //处理胃癌新需求
+                if("2".equals(scRegcase.getCheckResult())||(scRegcase.getCheckResult()=="2")){
+                    ScDiagCheckRemind scDiagCheckRemind=scDiagCheckRemindService.findByCheckId(scRegcase.getId());
+                    if(scDiagCheckRemind==null || StringUtils.isBlank(scDiagCheckRemind.getId())){
+                        scDiagCheckRemind=new ScDiagCheckRemind();
+                        scDiagCheckRemind.setCreateDate(new Date());
+                        scDiagCheckRemind.init();
+                    }else{
+                        scDiagCheckRemind.setUpdateBy(user.getId());
+                        scDiagCheckRemind.setUpdateDate(new Date());
+                    }
+                    scDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    scDiagCheckRemind.setScCheckId(scRegcase.getId());
+
+                    scDiagCheckRemind.setRemindStatus("01");
+                    scDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                    scDiagCheckRemindService.saveOrUpdate(scDiagCheckRemind,user.getId());
+                }
             }
 
             ScRiskAssessment scrisk=screeningVo.getScRisk();
@@ -698,24 +717,7 @@ public class ScreeningController extends BaseController {
                     scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
                 }
             }
-            //处理胃癌新需求
-            if("2".equals(scRegcase.getCheckResult())||(scRegcase.getCheckResult()=="2")){
-                ScDiagCheckRemind scDiagCheckRemind=scDiagCheckRemindService.findByCheckId(scRegcase.getId());
-                if(scDiagCheckRemind==null || StringUtils.isBlank(scDiagCheckRemind.getId())){
-                    scDiagCheckRemind=new ScDiagCheckRemind();
-                    scDiagCheckRemind.setCreateDate(new Date());
-                    scDiagCheckRemind.init();
-                }else{
-                    scDiagCheckRemind.setUpdateBy(user.getId());
-                    scDiagCheckRemind.setUpdateDate(new Date());
-                }
-                scDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                scDiagCheckRemind.setScCheckId(scRegcase.getId());
 
-                scDiagCheckRemind.setRemindStatus("01");
-                scDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
-                scDiagCheckRemindService.saveOrUpdate(scDiagCheckRemind,user.getId());
-            }
         }
 
 
@@ -915,7 +917,11 @@ public class ScreeningController extends BaseController {
         Hospital hos=AuthUtils.getHospitalByCode(user.getOrgCode());
 
         if(hos!=null){
-            model.addAttribute("hosName",hos.getName());
+            String hosname=hos.getName();
+            if(hosname.contains("社区卫生服务中心")){
+                hosname=hosname.replace("社区卫生服务中心","");
+            }
+            model.addAttribute("hosName",hosname);
         }
 
         model.addAttribute("flag",1);
@@ -965,7 +971,11 @@ public class ScreeningController extends BaseController {
         Hospital hos=AuthUtils.getHospitalByCode(user.getOrgCode());
 
         if(hos!=null){
-            model.addAttribute("hosName",hos.getName());
+            String hosname=hos.getName();
+            if(hosname.contains("社区卫生服务中心")){
+                hosname=hosname.replace("社区卫生服务中心","");
+            }
+            model.addAttribute("hosName",hosname);
         }
 
         model.addAttribute("flag",2);
