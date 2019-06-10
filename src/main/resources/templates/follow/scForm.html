@@ -210,7 +210,7 @@
                         </td>
                         <td width="20%"><span class="red-span">*</span>诊断日期</td>
                         <td width="30%" class="text-l">
-                            <input  class="mini-datepicker"/>
+                            <input name="zhenduanDate" class="mini-datepicker" th:value="${info.scFollow.zhenduanDate}" th:readonly="${info.flag=='3'}"/>
                         </td>
                     </tr>
                     <tr>

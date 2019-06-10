@@ -19,6 +19,6 @@ public interface ScFollowDao extends BaseDao<ScFollow> {
 
     public int delete(@Param("id") String id);
 
-    List<ScFollow> queryScFollowListByCsId(@Param("scRegcaseId")String scRegcaseId);
+    List<ScFollow> queryScFollowListByScRegcaseId(@Param("scRegcaseId")String scRegcaseId);
 
 }

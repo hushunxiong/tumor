@@ -38,7 +38,7 @@ public class ScFollowService {
      */
     public ScFollowVo scFollowList(String manageId,String checkYear){
         ScFollowVo vo=handleData(manageId,checkYear);
-        List<ScFollow> list=scFollowDao.queryScFollowListByCsId(vo.getScRegcaseId());
+        List<ScFollow> list=scFollowDao.queryScFollowListByScRegcaseId(vo.getScRegcaseId());
         if (list.size()>0){
           vo.setZdzt("已诊断");
         }else{
@@ -50,7 +50,7 @@ public class ScFollowService {
      * 根据胃癌初筛信息登记id查询随访数据
      */
     public List<ScFollow> queryScFollowListByCsId(String scRegcaseId){
-        return scFollowDao.queryScFollowListByCsId(scRegcaseId);
+        return scFollowDao.queryScFollowListByScRegcaseId(scRegcaseId);
     }
     /**
      * 胃癌随访页面数据
