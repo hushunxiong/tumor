@@ -85,7 +85,7 @@
 	    WHERE id = #{id}
 	</update>
 
-	<select id="queryScFollowListByCsId" resultType="com.wonders.health.tumor.follow.entity.ScFollow">
+	<select id="queryScFollowListByScRegcaseId" resultType="com.wonders.health.tumor.follow.entity.ScFollow">
 		SELECT
 		<include refid="ScFollowColumns"/>
 		FROM SC_FOLLOW a

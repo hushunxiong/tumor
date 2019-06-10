@@ -2,6 +2,7 @@ package com.wonders.health.tumor.follow.service;
 
 import com.wonders.health.tumor.common.service.AreaService;
 import com.wonders.health.tumor.common.utils.AuthUtils;
+import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.IdGen;
 import com.wonders.health.tumor.follow.dao.LucFollowDao;
 import com.wonders.health.tumor.follow.entity.LucFollow;
@@ -111,7 +112,7 @@ public class LucFollowService {
             //uuid生成主键
             luc.setId(IdGen.uuid());
             //随访编号
-            luc.setPrimaryMark(Math.random()+"");
+            luc.setPrimaryMark(vo.getUser().getOrgCode()+ DateUtils.formatDate(new Date(),"yyyyMMddHHmm"));
             luc.setCreateDate(new Date());
             luc.setSuifangyishengId(vo.getUser().getId());
             luc.setDelFlag("0");

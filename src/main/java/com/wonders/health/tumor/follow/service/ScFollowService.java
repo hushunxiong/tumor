@@ -2,6 +2,7 @@ package com.wonders.health.tumor.follow.service;
 
 import com.wonders.health.tumor.common.service.AreaService;
 import com.wonders.health.tumor.common.utils.AuthUtils;
+import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.IdGen;
 import com.wonders.health.tumor.follow.dao.ScFollowDao;
 import com.wonders.health.tumor.follow.entity.ScFollow;
@@ -110,7 +111,7 @@ public class ScFollowService {
             //uuid生成主键
             sc.setId(IdGen.uuid());
             //随访编号
-            sc.setPrimaryMark(Math.random()+"");
+            sc.setPrimaryMark(vo.getUser().getOrgCode()+ DateUtils.formatDate(new Date(),"yyyyMMddHHmm"));
             sc.setDelFlag("0");
             sc.setCreateBy(vo.getUser().getName());
             sc.setCreateDate(new Date());
