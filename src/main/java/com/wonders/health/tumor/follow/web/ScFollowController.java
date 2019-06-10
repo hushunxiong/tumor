@@ -56,7 +56,7 @@ public class ScFollowController extends BaseController {
     @ResponseBody
     public DataGrid<ScFollowListVo> getScData(@RequestParam("scRegcaseId")String scRegcaseId) {
         List<ScFollowListVo> listSc=new ArrayList<>();
-        List<ScFollow> list=scFollowService.queryScFollowListByCsId(scRegcaseId);
+        List<ScFollow> list=scFollowService.queryScFollowListByScRegcaseId(scRegcaseId);
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         list.forEach(sc ->{
             ScFollowListVo vo=new ScFollowListVo();

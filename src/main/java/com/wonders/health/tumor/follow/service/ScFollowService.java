@@ -49,7 +49,7 @@ public class ScFollowService {
     /**
      * 根据胃癌初筛信息登记id查询随访数据
      */
-    public List<ScFollow> queryScFollowListByCsId(String scRegcaseId){
+    public List<ScFollow> queryScFollowListByScRegcaseId(String scRegcaseId){
         return scFollowDao.queryScFollowListByScRegcaseId(scRegcaseId);
     }
     /**
