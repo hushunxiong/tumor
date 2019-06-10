@@ -8,8 +8,10 @@ import com.wonders.health.tumor.follow.dao.LucFollowDao;
 import com.wonders.health.tumor.follow.entity.LucFollow;
 import com.wonders.health.tumor.follow.vo.LucFollowVo;
 import com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao;
+import com.wonders.health.tumor.tumor.dao.LucDiagCheckRemindDao;
 import com.wonders.health.tumor.tumor.dao.LucRegcaseDao;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.tumor.entity.LucDiagCheckRemind;
 import com.wonders.health.tumor.tumor.entity.LucRegcase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class LucFollowService {
     private AreaService areaService;
     @Autowired
     private LucRegcaseDao lucRegcaseDao;
+    @Autowired
+    private LucDiagCheckRemindDao lucDiagCheckRemindDao;
 
     /**
      * 肺癌随访一览页面数据
@@ -126,6 +130,12 @@ public class LucFollowService {
             flag=lucFollowDao.insert(vo.getLucFollow());
         }
         if (flag>0){
+            //查询肺癌诊断检查提醒表
+            LucDiagCheckRemind ldcr=lucDiagCheckRemindDao.getByCheckId(luc.getLucCheckId());
+            if (!ldcr.getRemindStatus().equals("04")){
+                ldcr.setRemindStatus("02");
+                lucDiagCheckRemindDao.update(ldcr);
+            }
             return true;
         }else{
             return false;

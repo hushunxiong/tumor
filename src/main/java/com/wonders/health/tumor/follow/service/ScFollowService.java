@@ -8,8 +8,10 @@ import com.wonders.health.tumor.follow.dao.ScFollowDao;
 import com.wonders.health.tumor.follow.entity.ScFollow;
 import com.wonders.health.tumor.follow.vo.ScFollowVo;
 import com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao;
+import com.wonders.health.tumor.tumor.dao.ScDiagCheckRemindDao;
 import com.wonders.health.tumor.tumor.dao.ScRegcaseDao;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.tumor.entity.ScDiagCheckRemind;
 import com.wonders.health.tumor.tumor.entity.ScRegcase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class ScFollowService {
     private AreaService areaService;
     @Autowired
     private ScRegcaseDao scRegcaseDao;
+    @Autowired
+    private ScDiagCheckRemindDao scDiagCheckRemindDao;
     /**
      * 胃癌随访一览页面数据
      */
@@ -125,6 +129,12 @@ public class ScFollowService {
             flag=scFollowDao.insert(vo.getScFollow());
         }
         if (flag>0){
+            //查询胃癌诊断检查提醒表
+            ScDiagCheckRemind sdcr=scDiagCheckRemindDao.getByCheckId(sc.getScCheckId());
+            if (!sdcr.getRemindStatus().equals("04")){
+                sdcr.setRemindStatus("02");
+                scDiagCheckRemindDao.update(sdcr);
+            }
             return true;
         }else{
             return false;
