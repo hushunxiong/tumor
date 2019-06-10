@@ -7,7 +7,7 @@
 </head>
 <body>
 <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
-<div class="content pd-10" style="width:auto; overflow: hidden;">
+<div class="content pd-10" style="width:auto; overflow: hidden;" id="allForm">
     <div class="title_tip mt-30">基本信息</div>
     <table class="table_new table_new5 mt-10">
         <tbody>
@@ -62,7 +62,7 @@
         </tr>
     </table>
     <div class="title_tip mt-30">后续诊断及治疗</div>
-    <table class="table_new table_new5 mt-10" id="form1">
+    <table class="table_new table_new5 table_new_border mt-10" id="form1">
         <tbody>
         <tr>
             <td width="20%"><span class="red-span">*</span>是否确诊为大肠癌</td>
@@ -91,10 +91,13 @@
         <tr>
             <td width="20%">未进行肠镜检查原因</td>
             <td width="80%" class="text-l">
-                <input id="buzuochangjingYuanyin" name="buzuochangjingYuanyin" class="mini-radiobuttonlist" width="80%"
+                <input id="buzuochangjingYuanyin" name="buzuochangjingYuanyin" class="mini-radiobuttonlist fl" width="450px"
                        th:data="${#dic.generals('60029')}" th:value="${follow.buzuochangjingYuanyin}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" onvaluechanged="buzuochangjingYuanyinChange"/>
+                <input id="buzuochangjingYuanyinQita" name="buzuochangjingYuanyinQita" class="mini-textbox fl"
+                       width="300px" th:value="${follow.buzuochangjingYuanyinQita}" enabled="false" maxlength="250"/>
             </td>
+
         </tr>
         <tr>
             <td width="20%">是否无痛肠镜检查</td>
@@ -124,7 +127,7 @@
             <td width="20%">发现病变数（病变部位选择多发时填）</td>
             <td width="80%" class="text-l">
                 <input id="bingbianshu" name="bingbianshu" class="mini-combobox" width="80px" showNullItem="true" emptyText="请选择"
-                       th:data="${#dic.generals('60032')}" th:value="${follow.bingbianshu}"
+                       th:data="${#dic.generals('60032')}" th:value="${follow.bingbianshu}" enabled="false"
                        textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
             </td>
         </tr>
@@ -132,14 +135,14 @@
             <td width="20%">最大病变距肛门距离</td>
             <td width="20%" class="text-l">
                 <input id="gangjuli" name="gangjuli" class="mini-textbox"
-                       width="100px" th:value="${follow.gangjuli}" vtype="decimal2"/>&nbsp;Cm
+                       width="100px" th:value="${follow.gangjuli}" vtype="decimal2" onvaluechanged="gangjuliChange" enabled="false"/>&nbsp;Cm
             </td>
         </tr>
         <tr>
             <td width="20%">最大病变大小（最大直径）</td>
             <td width="20%" class="text-l">
                 <input id="bingbiandaxiao" name="bingbiandaxiao" class="mini-textbox"
-                       width="100px" th:value="${follow.bingbiandaxiao}" vtype="decimal2"/>&nbsp;Cm
+                       width="100px" th:value="${follow.bingbiandaxiao}" vtype="decimal2" enabled="false"/>&nbsp;Cm
             </td>
         </tr>
         <tr>
@@ -147,13 +150,13 @@
             <td width="80%" class="text-l">
                 <input id="huojian" name="huojian" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60013')}" th:value="${follow.huojian}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" onvaluechanged="huojianChange"/>
             </td>
         </tr>
         <tr>
-            <td width="20%" height="80px">活检结果</td>
-            <td width="80%" height="80px" class="text-l">
-                <input id="huojianjieguo" name="huojianjieguo" class="mini-radiobuttonlist" width="90%"
+            <td width="20%">活检结果</td>
+            <td width="80%" class="text-l">
+                <input id="huojianjieguo" name="huojianjieguo" class="mini-radiobuttonlist" style="height:40px" width="90%"
                        th:data="${#dic.generals('60033')}" th:value="${follow.huojianjieguo}"
                        textField="name" valueField="code" />
             </td>
@@ -169,9 +172,9 @@
         <tr>
             <td width="20%">息肉形状</td>
             <td width="80%" class="text-l">
-                <input id="xirouxingzhuang" name="xirouxingzhuang" class="mini-radiobuttonlist" width="80%"
+                    <input id="xirouxingzhuang" name="xirouxingzhuang" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60035')}" th:value="${follow.xirouxingzhuang}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" onvaluechanged="xirouxingzhuangChange"/>
             </td>
         </tr>
         <tr>
@@ -210,7 +213,7 @@
             <td width="20%"><span class="red-span">*</span>病理类型</td>
             <td width="20%" class="text-l">
                 <input id="binglileixing" name="binglileixing" class="mini-textbox"
-                       width="100px" th:value="${follow.binglileixing}" maxlength="500" required="true"/>
+                       width="400px" th:value="${follow.binglileixing}" maxlength="500" required="true"/>
             </td>
         </tr>
         <tr>
@@ -248,7 +251,7 @@
         <tr>
             <td width="20%">恶性肿瘤类型</td>
             <td width="80%" class="text-l">
-                <input id="zhongliuleix" name="zhongliuleix" class="mini-radiobuttonlist" width="90%"
+                <input id="zhongliuleix" name="zhongliuleix" class="mini-radiobuttonlist" style="height:40px" width="90%"
                        th:data="${#dic.generals('60039')}" th:value="${follow.zhongliuleix}"
                        textField="name" valueField="code" />
             </td>
@@ -271,7 +274,7 @@
         </tr>
         </tbody>
     </table>
-    <table class="table_new table_new5" id="form2">
+    <table class="table_new table_new5 table_new_border" id="form2">
         <tr>
             <td style="width: 20%!important;">肿瘤TNM分期</td>
             <td class="bg-white">T</td>
@@ -294,7 +297,7 @@
             </td>
         </tr>
     </table>
-    <table class="table_new table_new5" id="form3">
+    <table class="table_new table_new5 table_new_border" id="form3">
         <tbody>
         <tr>
             <td width="20%">大肠癌临床分期</td>
@@ -316,18 +319,18 @@
             <td width="20%">住院号</td>
             <td width="80%" class="text-l">
                 <input id="zhuyuanhao" name="zhuyuanhao" class="mini-textbox"
-                       width="100px" th:value="${follow.zhuyuanhao}" maxlength="30" />
+                       width="200px" th:value="${follow.zhuyuanhao}" maxlength="30" />
             </td>
         </tr>
         </tbody>
     </table>
-    <table class="table_new table_new5" id="form4">
+    <table class="table_new table_new5 table_new_border" id="form4">
         <tbody>
         <tr>
             <td width="20%" style="width:20%!important;">手术机构名称</td>
             <td width="30%" class="text-l">
                 <input id="shoushujigouId" name="shoushujigouId"  class="mini-autocomplete"
-                       style="width:200px" th:value="${follow.shoushujigouId}"
+                       style="width:300px"
                        textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
                        th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
             </td>
@@ -342,7 +345,7 @@
             <td width="20%">放疗机构名称</td>
             <td width="30%" class="text-l">
                 <input id="fangliaojigouId" name="fangliaojigouId"  class="mini-autocomplete"
-                       style="width:200px" th:value="${follow.fangliaojigouId}"
+                       style="width:300px" th:value="${follow.fangliaojigouId}"
                        textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
                        th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
             </td>
@@ -357,7 +360,7 @@
             <td width="20%">化疗机构名称</td>
             <td width="30%" class="text-l">
                 <input id="hualiaojigouId" name="hualiaojigouId"  class="mini-autocomplete"
-                       style="width:200px" th:value="${follow.hualiaojigouId}"
+                       style="width:300px" th:value="${follow.hualiaojigouId}"
                        textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
                        th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
             </td>
@@ -372,7 +375,7 @@
             <td width="20%">肠镜机构名称</td>
             <td width="30%" class="text-l">
                 <input id="changjingjigouId" name="changjingjigouId"  class="mini-autocomplete"
-                       style="width:200px" th:value="${follow.changjingjigouId}"
+                       style="width:300px" th:value="${follow.changjingjigouId}"
                        textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
                        th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
             </td>
@@ -387,14 +390,30 @@
             <td width="20%">肠镜医生</td>
             <td colspan="3" class="text-l">
                 <input id="changjingYisheng" name="changjingYisheng" class="mini-textbox"
-                       width="100" th:value="${follow.changjingYisheng}" maxlength="32" />
+                       width="200px" th:value="${follow.changjingYisheng}" maxlength="32" />
+            </td>
+        </tr>
+
+        <tr>
+            <td width="20%"><span class="red-span">*</span>诊断机构名称</td>
+            <td width="30%" class="text-l">
+                <input id="zhenduanjigouId" name="zhenduanjigouId"  class="mini-autocomplete"
+                       style="width:300px"
+                       textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
+                       th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true" required="true"/>
+            </td>
+            <td width="20%"><span class="red-span">*</span>诊断日期</td>
+            <td width="30%" class="text-l">
+                <input id="zhenduanDate" name="zhenduanDate" class="mini-datepicker"
+                       th:value="${#dates.format(follow.zhenduanDate,'yyyy-MM-dd')}"
+                       allowInput="false" required="true"/>
             </td>
         </tr>
         <tr>
             <td width="20%">随访机构名称</td>
             <td width="30%" class="text-l">
                 <input id="suifangjigouId" name="suifangjigouId"  class="mini-autocomplete"
-                       style="width:200px" th:value="${follow.suifangjigouId}"
+                       style="width:300px"
                        textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
                        th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
             </td>
@@ -408,8 +427,8 @@
         <tr>
             <td width="20%">随访医生</td>
             <td colspan="3" class="text-l">
-                <input id="suifangyishengName" class="mini-textbox"
-                       width="100" th:value="${follow.suifangyishengName}" allowInput="false" />
+                <input id="suifangyishengName" name="suifangyishengName" class="mini-textbox"
+                       width="200px" th:value="${follow.suifangyishengName}" allowInput="false" />
                 <input id="suifangyishengId" name="suifangyishengId" th:value="${follow.suifangyishengId}" class="mini-hidden"/>
             </td>
         </tr>
@@ -418,14 +437,19 @@
     </table>
 
     <div class="btn-list text-c mt-30">
-        <button class="my-btn my-btn-blue mr-20">保存</button>
-        <button class="my-btn my-btn-blue mr-20">关闭</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="save()">保存</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="closeSelf()">关闭</button>
     </div>
+    <input id="id" name="id" class="mini-hidden" th:value="${follow.id}"/>
+    <input id="crcCheckId" name="crcCheckId" class="mini-hidden" th:value="${follow.crcCheckId}"/>
+    <input id="primaryMark" name="primaryMark" class="mini-hidden" th:value="${follow.primaryMark}"/>
 </div>
 </body>
 <script type="text/javascript" th:inline="javascript">
     mini.parse();
     var flag=[[${flag}]]; //操作flag 1-查看  2-修改 3-新增
+    var manageId=[[${manageId}]];
+    var checkYear=[[${checkYear}]];
 
     $(function() {
         if(flag == '1') { //查看
@@ -450,9 +474,128 @@
             $(controls4).each(function (i, item) {
                 item.setReadOnly(true);
             });
+        } else if (flag == "2") {
+            var changjing = mini.get("changjing").getValue();
+            //肠镜检查:是
+            if (changjing == "1") {
+                mini.get("buzuochangjingYuanyin").setRequired(false);
+                mini.get("buzuochangjingYuanyin").setValue("");
+                //否
+            } else {
+                mini.get("buzuochangjingYuanyin").setRequired(true);
+            }
+
+            var buzuochangjingYuanyin = mini.get("buzuochangjingYuanyin").getValue();
+            //其他
+            if (buzuochangjingYuanyin == "05") {
+                mini.get("buzuochangjingYuanyinQita").set({Enabled:true, required:true});
+            } else {
+                mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, isValid:true});
+                mini.get("buzuochangjingYuanyinQita").setValue("");
+            }
+
+            var bingbianbuw = mini.get("bingbianbuw").getValue();
+            //病变部位:无
+            if (bingbianbuw == "01") {
+                mini.get("bingbianshu").setEnabled(false);
+                mini.get("gangjuli").setEnabled(false);
+                mini.get("bingbiandaxiao").setEnabled(false);
+
+            } else {
+                mini.get("bingbianshu").setEnabled(false);
+                mini.get("gangjuli").setEnabled(true);
+                mini.get("bingbiandaxiao").setEnabled(true);
+                //多发
+                if (bingbianbuw == "12") {
+                    mini.get("bingbianshu").setEnabled(true);
+                }
+            }
+
+            var gangjuli = mini.get("gangjuli").getValue();
+            //病变距离
+            if (isNotEmpty(gangjuli)) {
+                mini.get("bingbiandaxiao").setRequired(true);
+            } else {
+                mini.get("bingbiandaxiao").setRequired(false);
+            }
+
+            var huojian = mini.get("huojian").getValue();
+            //是否活检:是
+            if (huojian == "1") {
+                mini.get("huojianjieguo").set({enabled:true,required:true});
+                mini.get("liubian").setEnabled(true);
+                mini.get("xirouxingzhuang").setEnabled(true);
+                mini.get("youwudi").setEnabled(true);
+                mini.get("chuxueqingkuang").setEnabled(true);
+                mini.get("huojianriq").set({enabled:true,required:true});
+                mini.get("huojianjieguo").setRequired(true);
+                //否
+            } else {
+                mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
+                mini.get("liubian").set({enabled:false,value:"",isValid:true});
+                mini.get("xirouxingzhuang").set({enabled:false,value:"",isValid:true});
+                mini.get("youwudi").set({enabled:false,value:"",isValid:true});
+                mini.get("chuxueqingkuang").set({enabled:false,value:"",isValid:true});
+                mini.get("huojianriq").set({enabled:false,required:false,value:"",isValid:true});
+            }
+
+            var xirouxingzhuang = mini.get("xirouxingzhuang").getValue();
+            if (isNotEmpty(xirouxingzhuang)) {
+                mini.get("youwudi").setRequired(true);
+                mini.get("chuxueqingkuang").setRequired(true);
+            } else {
+                mini.get("youwudi").setRequired(false);
+                mini.get("chuxueqingkuang").setRequired(false);
+            }
         }
 
+        //手术机构
+        var shoushujigouId = [[${follow.shoushujigouId}]];
+        var shoushujigouName = [[${follow.shoushujigouName}]];
+        if (isNotEmpty(shoushujigouId)) {
+            mini.get("shoushujigouId").setValue(shoushujigouId);
+            mini.get("shoushujigouId").setText(shoushujigouName);
+        }
 
+        //放疗机构
+        var fangliaojigouId = [[${follow.fangliaojigouId}]];
+        var fangliaojigouName = [[${follow.fangliaojigouName}]];
+        if (isNotEmpty(fangliaojigouId)) {
+            mini.get("fangliaojigouId").setValue(fangliaojigouId);
+            mini.get("fangliaojigouId").setText(fangliaojigouName);
+        }
+
+        //化疗机构
+        var hualiaojigouId = [[${follow.hualiaojigouId}]];
+        var hualiaojigouName = [[${follow.hualiaojigouName}]];
+        if (isNotEmpty(hualiaojigouId)) {
+            mini.get("hualiaojigouId").setValue(hualiaojigouId);
+            mini.get("hualiaojigouId").setText(hualiaojigouName);
+        }
+
+        //肠镜机构
+        var changjingjigouId = [[${follow.changjingjigouId}]];
+        var changjingjigouName = [[${follow.changjingjigouName}]];
+        if (isNotEmpty(changjingjigouId)) {
+            mini.get("changjingjigouId").setValue(changjingjigouId);
+            mini.get("changjingjigouId").setText(changjingjigouName);
+        }
+
+        //诊断机构
+        var zhenduanjigouId = [[${follow.zhenduanjigouId}]];
+        var zhenduanjigouName = [[${follow.zhenduanjigouName}]];
+        if (isNotEmpty(zhenduanjigouId)) {
+            mini.get("zhenduanjigouId").setValue(zhenduanjigouId);
+            mini.get("zhenduanjigouId").setText(zhenduanjigouName);
+        }
+
+        //随访机构
+        var suifangjigouId = [[${follow.suifangjigouId}]];
+        var suifangjigouName = [[${follow.suifangjigouName}]];
+        if (isNotEmpty(suifangjigouId)) {
+            mini.get("suifangjigouId").setValue(suifangjigouId);
+            mini.get("suifangjigouId").setText(suifangjigouName);
+        }
     });
 
     //肠镜检查
@@ -468,17 +611,110 @@
         }
     }
 
+    //不做肠镜原因
+    function buzuochangjingYuanyinChange(e) {
+        var buzuochangjingYuanyin = mini.get("buzuochangjingYuanyin").getValue();
+        //其他
+        if (buzuochangjingYuanyin == "05") {
+            mini.get("buzuochangjingYuanyinQita").set({Enabled:true, required:true});
+        } else {
+            mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, isValid:true});
+            mini.get("buzuochangjingYuanyinQita").setValue("");
+        }
+    }
+
     //病变部位
     function bingbianbuwChange(e) {
         var bingbianbuw = mini.get("bingbianbuw").getValue();
-        //肠镜检查:是
-        if (changjing == "1") {
-            mini.get("buzuochangjingYuanyin").setRequired(false);
-            mini.get("buzuochangjingYuanyin").setValue("");
+        //病变部位:无
+        if (bingbianbuw == "01") {
+            mini.get("bingbianshu").setEnabled(false);
+            mini.get("gangjuli").setEnabled(false);
+            mini.get("bingbiandaxiao").setEnabled(false);
+
+        } else {
+            mini.get("bingbianshu").setEnabled(false);
+            mini.get("gangjuli").setEnabled(true);
+            mini.get("bingbiandaxiao").setEnabled(true);
+            //多发
+            if (bingbianbuw == "12") {
+                mini.get("bingbianshu").setEnabled(true);
+            }
+        }
+    }
+
+    //病变距离
+    function gangjuliChange(e) {
+        var gangjuli = mini.get("gangjuli").getValue();
+        //病变距离
+        if (isNotEmpty(gangjuli)) {
+            mini.get("bingbiandaxiao").setRequired(true);
+        } else {
+            mini.get("bingbiandaxiao").setRequired(false);
+        }
+    }
+
+    //是否活检
+    function huojianChange(e) {
+        var huojian = mini.get("huojian").getValue();
+        //是否活检:是
+        if (huojian == "1") {
+            mini.get("huojianjieguo").set({enabled:true,required:true});
+            mini.get("liubian").setEnabled(true);
+            mini.get("xirouxingzhuang").setEnabled(true);
+            mini.get("youwudi").setEnabled(true);
+            mini.get("chuxueqingkuang").setEnabled(true);
+            mini.get("huojianriq").set({enabled:true,required:true});
+            mini.get("huojianjieguo").setRequired(true);
             //否
         } else {
-            mini.get("buzuochangjingYuanyin").setRequired(true);
+            mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
+            mini.get("liubian").set({enabled:false,value:"",isValid:true});
+            mini.get("xirouxingzhuang").set({enabled:false,value:"",isValid:true});
+            mini.get("youwudi").set({enabled:false,value:"",isValid:true});
+            mini.get("chuxueqingkuang").set({enabled:false,value:"",isValid:true});
+            mini.get("huojianriq").set({enabled:false,required:false,value:"",isValid:true});
         }
+    }
+
+    //息肉形状
+    function xirouxingzhuangChange(e) {
+        var xirouxingzhuang = mini.get("xirouxingzhuang").getValue();
+        if (isNotEmpty(xirouxingzhuang)) {
+            mini.get("youwudi").setRequired(true);
+            mini.get("chuxueqingkuang").setRequired(true);
+        } else {
+            mini.get("youwudi").setRequired(false);
+            mini.get("chuxueqingkuang").setRequired(false);
+        }
+    }
+
+    //保存
+    function save() {
+        var form = new mini.Form("#allForm");
+        form.validate();
+        if (form.isValid() == false) {
+            mini.alert('请填写必要信息','提示!');
+            return;
+        }
+
+        //提交
+        submitForm("allForm", "../crcFollow/save", "refresh");
+    }
+
+    //关闭
+    function closeSelf() {
+        window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear;
+    }
+
+    //回调函数
+    function refresh() {
+        setTimeout(function () {
+            try {
+                window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear;
+            } catch (e) {
+            }
+        }, 1000);
     }
 </script>
 </html>

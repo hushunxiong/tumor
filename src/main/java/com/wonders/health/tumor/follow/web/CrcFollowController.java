@@ -3,6 +3,7 @@ package com.wonders.health.tumor.follow.web;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
+import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.follow.entity.CrcFollow;
 import com.wonders.health.tumor.follow.service.CrcFollowService;
@@ -15,9 +16,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 大肠癌随访Controller
@@ -85,15 +91,28 @@ public class CrcFollowController extends BaseController {
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String add(Model model, String manageId, String checkYear, String flag) {
+        String crcCheckId = "";
         if (StringUtils.isNotBlank(manageId) && StringUtils.isNotBlank(checkYear)) {
             //大肠癌初筛信息
             CancerPersonInfo personInfo = followService.getPersonInfo(manageId);
             model.addAttribute("personInfo", personInfo);
             CrcRegcase regcase = crcFollowService.getRegcase(manageId, checkYear);
+            crcCheckId = regcase.getId();
             model.addAttribute("regcase", regcase);
         }
-        model.addAttribute("follow", new CrcFollow());
+        CrcFollow follow = new CrcFollow();
+        follow.setSuifangyishengId(getSessionUser().getId());
+        follow.setSuifangyishengName(getSessionUser().getName());
+        follow.setSuifangjigouId(getSessionUser().getOrgCode());
+        follow.setSuifangjigouName(AuthUtils.getHospitalByCode(getSessionUser().getOrgCode()).getName());
+        follow.setSuifangDate(new Date());
+        follow.setCrcCheckId(crcCheckId);
+        follow.setPrimaryMark(getSessionUser().getOrgCode());
+
+        model.addAttribute("follow", follow);
         model.addAttribute("flag", flag);
+        model.addAttribute("manageId", manageId);
+        model.addAttribute("checkYear", checkYear);
         return "/follow/crcForm";
     }
 
@@ -102,6 +121,7 @@ public class CrcFollowController extends BaseController {
         if (StringUtils.isNotBlank(id)) {
             CrcFollow follow =  crcFollowService.getFollowById(id);
             if (follow != null) {
+                follow.setSuifangyishengName(AuthUtils.getUserById(follow.getSuifangyishengId()).getName());
                 //大肠癌初筛信息
                 CrcRegcase regcase = crcFollowService.getRegcaseById(follow.getCrcCheckId());
                 model.addAttribute("regcase", regcase);
@@ -110,11 +130,29 @@ public class CrcFollowController extends BaseController {
                     //初筛对象信息
                     CancerPersonInfo personInfo = followService.getPersonInfo(regcase.getManageid());
                     model.addAttribute("personInfo", personInfo);
+                    model.addAttribute("manageId", regcase.getManageid());
+                    model.addAttribute("checkYear", regcase.getCheckYear());
                 }
             }
             model.addAttribute("follow", follow);
             model.addAttribute("flag", flag);
         }
         return "/follow/crcForm";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "save", produces = "application/json; charset=utf-8")
+    public AjaxReturn<Map<String, String>> save(@Valid CrcFollow vo, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return new AjaxReturn<Map<String, String>>(false, "校验失败");
+        }
+
+        try {
+            return crcFollowService.saveOrUpdate(vo, getSessionUser());
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<Map<String, String>>(false, "保存异常");
+        }
     }
 }
