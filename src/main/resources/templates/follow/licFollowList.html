@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
-    <title>大肠癌随访一览</title>
+    <title>肝癌随访一览</title>
     <link>
     <script></script>
 </head>
@@ -55,40 +55,33 @@
                 </td>
             </tr>
             <tr>
-                <td>大肠癌初筛编号</td>
-                <td>
-                    <span th:text="${regcase.idNumber}"></span>
-                </td>
-                <td>大肠癌初筛登记日期</td>
+                <td>肝癌初筛登记日期</td>
                 <td>
                     <span th:text="${#dates.format(regcase.regdate, 'yyyy-MM-dd')}"></span>
                 </td>
-                <td>大肠癌判定结果</td>
+                <td>肝癌判定结果</td>
                 <td>
                     <span th:text="${#dic.generalName('60001',regcase.checkResult)}"></span>
                 </td>
-            </tr>
-            <tr>
-                <td>大肠癌诊断状态</td>
+                <td>肝癌诊断状态</td>
                 <td>
                     <span th:text="${diagStatus}"></span>
                 </td>
-                <td colspan="4"></td>
             </tr>
             <tr>
                 <td style="background: #FFFFFF;" colspan="6">
-                    <span>大肠癌随访信息</span>
+                    <span>肝癌随访信息</span>
                     <button id="add" shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="addFollow();">新增随访</button>
-                    <!--大肠癌管理一览 编辑权限  -->
+                    <!--肝癌管理一览 编辑权限  -->
                     <input  name="hideInput" shiro:hasPermission="tumor:follow:edit" value="1" class="mini-hidden"/>
-                    <!--大肠癌管理一览 删除权限  -->
+                    <!--肝癌管理一览 删除权限  -->
                     <input  name="hideInput" shiro:hasPermission="tumor:follow:delete" value="2" class="mini-hidden"/>
                 </td>
             </tr>
             </tbody>
         </table>
-        <div id="datagrid" url="../crcFollow/data" class="mini-datagrid" style=" width:99%; height:auto;"
-                 showPager="false" idField="id" allowResize="false" multiSelect="false">
+        <div id="datagrid" url="../licFollow/data" class="mini-datagrid" style=" width:99%; height:auto;"
+             showPager="false" idField="id" allowResize="false" multiSelect="false">
             <div property="columns">
                 <div field="suifangDate" width="90px" headerAlign="center" align="center" dateFormat="yyyy-MM-dd">随访日期</div>
                 <div field="suifangyishengName" width="60px" headerAlign="center" align="center">随访医生</div>
@@ -126,7 +119,7 @@
     //查询
     function onSearch() {
         var data = new Object();
-        data.crcCheckId=checkId;
+        data.licCheckId=checkId;
         grid.load(data, gridLoadSuccess, gridLoadError);
     }
 
@@ -153,7 +146,7 @@
 
     //新增随访
     function addFollow() {
-        var url = "../crcFollow/add?manageId=" + manageId + "&checkYear=" + checkYear + "&flag=3";
+        var url = "../licFollow/add?manageId=" + manageId + "&checkYear=" + checkYear + "&flag=3";
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',
@@ -164,7 +157,7 @@
 
     //查看或者编辑
     function viewFollow(id,flag) {
-        var url = "../crcFollow/form?id="+id+"&flag="+flag;
+        var url = "../licFollow/form?id="+id+"&flag="+flag;
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',
@@ -178,7 +171,7 @@
                 function (action) {
                     if (action == "ok") {
                         $.ajax({
-                            url: "../crcFollow/delete",
+                            url: "../licFollow/delete",
                             data: {id:id},
                             dataType: "json",
                             success: function (res) {
