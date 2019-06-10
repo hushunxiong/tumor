@@ -7,7 +7,6 @@
 </head>
 <body>
 
-<script src="../static/lib/lodop/LodopFuncs.js" th:src="@{/lib/lodop/LodopFuncs.js}"></script>
 <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
 <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
 <div class="content pd-10" style="width:auto; overflow: hidden;">
@@ -904,7 +903,7 @@
                 <td style="width:20%!important;">肝癌初筛辅助检查结果</td>
             </tr>
             <tr>
-                <td width="10%">GTP</td>
+                <td width="10%">GPT</td>
                 <td class="text-l">
                     <input id="licid" name="licCheck.id" class="mini-hidden" th:value="${licCheck.id}"/>
                     <input id="gtp" name="licCheck.gtp" class="mini-textbox" th:value="${licCheck.gtp}" vtype="int"/>
@@ -954,7 +953,7 @@
         <input id="riskAssessment4" name="lucRisk.aizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${historyListFlag}"/>
 
         <div class="title_tip mt-30">初筛结果判定<button class="my-btn my-btn-blue mr-20" onclick="makeChushaiResult()" id="chushaibtn">计算初筛结果</button></div>
-        <table class="table_new table_new5 mt-10">
+        <table class="table_new table_new5 mt-10" style="margin-top:-20px">
             <tbody>
                 <tr th:if="${crcFlag} eq '1'">
                     <input id="riskAssessmentQ1" name="crcRisk.qinshuAizhengshi" class="mini-radiobuttonlist mini-hidden"  th:value="${crcRisk.qinshuAizhengshi}"/>
@@ -1237,9 +1236,13 @@
             $("#savebtn").remove();
             $("#weixiandubtn").remove();
             $("#chushaibtn").remove();
+            makeResult();
+            makeChushaiResult();
         }else if(operation=='2'){   //修改
             mini.get("personcardType").setReadOnly(true);
             mini.get("personcard").setReadOnly(true);
+            makeResult();
+            makeChushaiResult();
         }
 
     });
@@ -2198,7 +2201,11 @@
             }
         }
     }
+
+    var chushaiflag=false;
+
     function makeChushaiResult(){
+        chushaiflag=true;
         makeResult();
         if(crcFlag=="1"){
             var dcpinggu= $("#crcRiskResult").text();//大肠癌危险度评估结果
@@ -2267,64 +2274,60 @@
         window.location.href='/tumor/cancerPersonInfo/list';
     }
 
-    function printSuggest1(){
-        //先计算结果
-        makeResult();
-        makeChushaiResult();
-        var name=mini.get("name").getValue();
-        var aizhengs='';
-        var byx='';
-        var gtp='';
-        var hbs='';
-        var afp='';
-        var bus='';
-
-        if (areaCode != '310104000000') {
-            if(crcFlag =="1") {
-                byx=mini.get("fobtResult").getValue();
-                if($("#assessmentResult1").val()=="2"){
-                    aizhengs+="1";
-                }
-            }
-            if(licFlag =="1") {
-                gtp=mini.get("gtp").getValue();
-                hbs=mini.get("hbeg").getValue();
-                afp=mini.get("afp").getValue();
-                bus=mini.get("bus").getValue();
-                alert(gtp)
-                if($("#assessmentResult2").val()=="2"){
-                    aizhengs+="2";
-                }
-            }
-            if(scFlag =="1") {
-                if($("#assessmentResult3").val()=="2"){
-                    aizhengs+="3";
-                }
-            }
-            if(lucFlag =="1") {
-                if($("#assessmentResult4").val()=="2"){
-                    aizhengs+="4";
-                }
-            }
-        }
-        window.location.href = '/tumor/screening/printSuggest?name='+name+'&aizhengs='+aizhengs+'&byx='+byx+'&gtp='+gtp+'&hbs='+hbs+'&afp='+afp+'&bus='+bus;
-    }
-
     //打印
-    function printSuggest(){
-        var LODOP = getLodop();
-        LODOP.PRINT_INIT("打印诊断建议书");
-        LODOP.SET_SHOW_MODE ("PREVIEW_IN_BROWSE","2");
-        LODOP.SET_PRINT_PAGESIZE(1,"0","0","A4");  //设置打印页面属性：2：表示横向打印，0：定义纸张宽度，为0表示无效设置，A4：设置纸张为A4
-        LODOP.ADD_PRINT_HTM("5","10","98%","100%",getPrintHtml()); //添加html元素 top; left; width; height
-        LODOP.PREVIEW();
-    }
+    function printSuggest() {
 
-    //获取打印页面-诊断结果
-    function getPrintHtml() {
-        //先计算结果
-        makeResult();
-        makeChushaiResult();
+        if(chushaiflag){
+            makeChushaiResult();
+        }
+
+        var isok=true;
+
+        if(crcFlag=="1"){
+            if(!isok){
+                return;
+            }
+            if(mini.get("checkResult1").getValue()==''){
+                isok=false;
+                mini.alert("大肠癌癌症判定未完成！");
+                return;
+            }
+        }
+        if(licFlag=="1"){
+            if(!isok){
+                return;
+            }
+            if(mini.get("checkResult2").getValue()==''){
+                isok=false;
+                mini.alert("肝癌癌症判定未完成！");
+                return;
+            }
+        }
+        if(scFlag=="1"){
+            if(!isok){
+                return;
+            }
+            if(mini.get("checkResult3").getValue()==''){
+                isok=false;
+                mini.alert("胃癌癌症判定未完成！");
+                return;
+            }
+        }
+        if(lucFlag=="1"){
+            if(!isok){
+                return;
+            }
+            if(mini.get("checkResult3").getValue()==''){
+                isok=false;
+                mini.alert("肺癌癌症判定未完成！");
+                return;
+            }
+        }
+
+        if(!isok){
+            return;
+        }
+
         var name=mini.get("name").getValue();
         var aizhengs='';
         var byx='';
@@ -2336,7 +2339,7 @@
         if (areaCode != '310104000000') {
             if(crcFlag =="1") {
                 byx=mini.get("fobtResult").getValue();
-                if($("#assessmentResult1").val()=="2"){
+                if($("#checkResult1").val()=="2" || $("#checkResult1").val()=="阳性"){
                     aizhengs+="1";
                 }
             }
@@ -2345,34 +2348,27 @@
                 hbs=mini.get("hbeg").getValue();
                 afp=mini.get("afp").getValue();
                 bus=mini.get("bus").getValue();
-                alert(gtp)
-                if($("#assessmentResult2").val()=="2"){
+                if($("#checkResult2").val()=="2" || $("#checkResult2").val()=="阳性"){
                     aizhengs+="2";
                 }
             }
             if(scFlag =="1") {
-                if($("#assessmentResult3").val()=="2"){
+                if($("#checkResult3").val()=="2" || $("#checkResult3").val()=="阳性"){
                     aizhengs+="3";
                 }
             }
             if(lucFlag =="1") {
-                if($("#assessmentResult4").val()=="2"){
+                if($("#checkResult4").val()=="2" || $("#checkResult4").val()=="阳性"){
                     aizhengs+="4";
                 }
             }
         }
 
-        var obj;
-        var url ='/tumor/screening/printSuggest1?name='+name+'&aizhengs='+aizhengs+'&byx='+byx+'&gtp='+gtp+'&hbs='+hbs+'&afp='+afp+'&bus='+bus;
-        $.ajax({
-            url : url,
-            type : "get",
-            async : false,
-            success : function(data) {
-                obj = data;
-            }
-        });
-        return obj;
+        if(aizhengs==''){
+            mini.alert("检查结果全部为阴性，无需打印诊断性检查建议书")
+            return;
+        }
+        window.location.href='/tumor/screening/printSuggest?name='+name+'&aizhengs='+aizhengs+'&byx='+byx+'&gtp='+gtp+'&hbs='+hbs+'&afp='+afp+'&bus='+bus;
     }
 
 </script>

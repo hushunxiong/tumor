@@ -552,11 +552,15 @@ public class ScreeningController extends BaseController {
                     LicDiagCheckRemind licDiagCheckRemind=licDiagCheckRemindService.findByCheckId(licRegcase.getId());
                     if(licDiagCheckRemind==null || StringUtils.isBlank(licDiagCheckRemind.getId())){    //新增时处理
                         licDiagCheckRemind=new LicDiagCheckRemind();
+                        licDiagCheckRemind.setCreateDate(new Date());
                         licDiagCheckRemind.init();
+                    }else{
+                        licDiagCheckRemind.setUpdateBy(user.getId());
+                        licDiagCheckRemind.setUpdateDate(new Date());
                     }
                     licDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     licDiagCheckRemind.setLicCheckId(licRegcase.getId());
-                    licDiagCheckRemind.setCreateDate(new Date());
+
                     licDiagCheckRemind.setRemindStatus("01");
                     licDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
                     licDiagCheckRemindService.saveOrUpdate(licDiagCheckRemind,user.getId());
@@ -632,12 +636,16 @@ public class ScreeningController extends BaseController {
                     LucDiagCheckRemind lucDiagCheckRemind=lucDiagCheckRemindService.findByCheckId(lucRegcase.getId());
                     if(lucDiagCheckRemind==null || StringUtils.isBlank(lucDiagCheckRemind.getId())){
                         lucDiagCheckRemind=new LucDiagCheckRemind();
+                        lucDiagCheckRemind.setCreateDate(new Date());
                         lucDiagCheckRemind.init();
+                    }else{
+                        lucDiagCheckRemind.setUpdateBy(user.getId());
+                        lucDiagCheckRemind.setUpdateDate(new Date());
                     }
 
                     lucDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                     lucDiagCheckRemind.setLucCheckId(lucRegcase.getId());
-                    lucDiagCheckRemind.setCreateDate(new Date());
+
                     lucDiagCheckRemind.setRemindStatus("01");
                     lucDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
                     lucDiagCheckRemindService.saveOrUpdate(lucDiagCheckRemind,user.getId());
@@ -695,11 +703,15 @@ public class ScreeningController extends BaseController {
                 ScDiagCheckRemind scDiagCheckRemind=scDiagCheckRemindService.findByCheckId(scRegcase.getId());
                 if(scDiagCheckRemind==null || StringUtils.isBlank(scDiagCheckRemind.getId())){
                     scDiagCheckRemind=new ScDiagCheckRemind();
+                    scDiagCheckRemind.setCreateDate(new Date());
                     scDiagCheckRemind.init();
+                }else{
+                    scDiagCheckRemind.setUpdateBy(user.getId());
+                    scDiagCheckRemind.setUpdateDate(new Date());
                 }
                 scDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 scDiagCheckRemind.setScCheckId(scRegcase.getId());
-                scDiagCheckRemind.setCreateDate(new Date());
+
                 scDiagCheckRemind.setRemindStatus("01");
                 scDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
                 scDiagCheckRemindService.saveOrUpdate(scDiagCheckRemind,user.getId());
@@ -739,11 +751,16 @@ public class ScreeningController extends BaseController {
                 if( fobtRemind==null || fobtRemind.getFobtRemindStatus()!="04"){
                     if(fobtRemind==null||StringUtils.isBlank(fobtRemind.getId())){
                         fobtRemind=new CrcFobtRemind();
+                        fobtRemind.setCreateDate(new Date());
                         fobtRemind.init();
+                    }else{
+                        fobtRemind.setUpdateBy(user.getId());
+                        fobtRemind.setUpdateDate(new Date());
                     }
+
                     fobtRemind.setCrcCheckId(screeningVo.getCrcRegcase().getId());
                     fobtRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                    fobtRemind.setCreateDate(new Date());
+
                     if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isNotBlank(crcFobt.getSecondFobtResult()))){ //两次都做
                         if("2".equals(crcFobt.getFobtResult())){//若大肠癌初筛结果为阳性  大肠癌诊断结果提醒表插入数据
                             if(crcCheckRemind==null || StringUtils.isBlank(crcCheckRemind.getId())){//修改：提醒表中无记录  其实新增的时候也没有
@@ -865,7 +882,7 @@ public class ScreeningController extends BaseController {
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
         model.addAttribute("bus",bus);
-        model.addAttribute("curtime",DateUtils.getDate("yyyy-mm-dd"));
+        model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
         String aizheng="";
         if(StringUtils.isNotBlank(aizhengs)){
             if(aizhengs.contains("1")){
@@ -900,12 +917,14 @@ public class ScreeningController extends BaseController {
         if(hos!=null){
             model.addAttribute("hosName",hos.getName());
         }
+
+        model.addAttribute("flag",1);
         return "/register/printSuggest";
     }
 
 
     @RequestMapping(value = {"", "printSuggest1"}, method = RequestMethod.GET)
-    public ModelAndView printSuggest2(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
+    public ModelAndView printSuggest1(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
         ModelAndView mav = new ModelAndView("/register/printSuggest");
         model.addAttribute("name",name);
         model.addAttribute("byx",byx);
@@ -913,7 +932,7 @@ public class ScreeningController extends BaseController {
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
         model.addAttribute("bus",bus);
-        model.addAttribute("curtime",DateUtils.getDate("yyyy-mm-dd"));
+        model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
         String aizheng="";
         if(StringUtils.isNotBlank(aizhengs)){
             if(aizhengs.contains("1")){
@@ -948,6 +967,8 @@ public class ScreeningController extends BaseController {
         if(hos!=null){
             model.addAttribute("hosName",hos.getName());
         }
+
+        model.addAttribute("flag",2);
         return mav;
     }
 
