@@ -79,13 +79,14 @@ public class FollowController extends BaseController {
     }
 
     @RequestMapping(value = "person", method = RequestMethod.GET)
-    public String person(Model model, String manageId, String checkYear) {
+    public String person(Model model, String manageId, String checkYear, String from) {
         model.addAttribute("crcFlag", crcFlag);
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("scFlag", scFlag);
         model.addAttribute("manageId", manageId);
         model.addAttribute("checkYear", checkYear);
+        model.addAttribute("from", from);
         return "/follow/followPerson";
     }
 }

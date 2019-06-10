@@ -705,14 +705,14 @@
 
     //关闭
     function closeSelf() {
-        window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear;
+        window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear+"&from=crc";
     }
 
     //回调函数
     function refresh() {
         setTimeout(function () {
             try {
-                window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear;
+                window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear+"&from=crc";
             } catch (e) {
             }
         }, 1000);
