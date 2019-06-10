@@ -206,11 +206,11 @@
                     <tr>
                         <td width="20%"><span class="red-span">*</span>诊断机构名称</td>
                         <td width="30%" class="text-l">
-                            <input name="zhenduanjigouName" class="mini-textbox" width="100%" th:value="${info.scFollow.zhenduanjigouName}" th:readonly="${info.flag=='3'}"/>
+                            <input name="zhenduanjigouName" class="mini-textbox" width="100%" th:value="${info.scFollow.zhenduanjigouName}" th:readonly="${info.flag=='3'}" required="true"/>
                         </td>
                         <td width="20%"><span class="red-span">*</span>诊断日期</td>
                         <td width="30%" class="text-l">
-                            <input name="zhenduanDate" class="mini-datepicker" th:value="${info.scFollow.zhenduanDate}" th:readonly="${info.flag=='3'}"/>
+                            <input name="zhenduanDate" class="mini-datepicker" th:value="${info.scFollow.zhenduanDate}" th:readonly="${info.flag=='3'}" required="true"/>
                         </td>
                     </tr>
                     <tr>
@@ -240,6 +240,10 @@
             scFollow.validate();
             if (scFollow.isValid()) {
                 var data=scFollow.getData();
+                var flag=check(data);
+                if (!flag){
+                    return;
+                }
                 data.scCheckId=[[${info.scRegcaseId}]];
                 var sc={};
                 sc.scFollow=data;
@@ -266,6 +270,10 @@
             scFollow.validate();
             if (scFollow.isValid()) {
                 var data=scFollow.getData();
+                var flag=check(data);
+                if (!flag){
+                    return;
+                }
                 data.scCheckId=[[${info.scRegcaseId}]];
                 var sc={};
                 sc.scFollow=data;
@@ -330,6 +338,34 @@
                 mini.getByName("binglileixing").setValue();
                 mini.getByName("binglileixing").disable();
             }
+        }
+        //验证
+        function check(data){
+            if(data.shifouweijing=="2"){
+                if (data.buzuoweujingYuanyin==""){
+                    mini.alert("请选择未进行胃镜原因");
+                    return false;
+                }
+                if (data.buzuoweujingYuanyin=="05"){
+                    if (data.buzuoweijingYuanyinQt==""){
+                        mini.alert("请输入其他原因");
+                        return false;
+                    }
+                }
+            }
+            if (data.bingli=="1"){
+                if (data.binglileixing==""){
+                    mini.alert("请输入病理类型");
+                    return false;
+                }
+            }
+            if (data.linchuangfenqi!=""){
+                if (data.zhongliutnmT==""&&data.zhongliutnmN==""&&data.zhongliutnmM==""){
+                    mini.alert("至少选择一个肿瘤TNM分期");
+                    return false;
+                }
+            }
+            return true;
         }
     </script>
 </div>

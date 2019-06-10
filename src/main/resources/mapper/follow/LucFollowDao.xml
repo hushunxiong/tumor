@@ -76,7 +76,7 @@
 	
 	<update id="update">
 		UPDATE luc_follow SET
-		id = #{id},primary_mark = #{primaryMark},luc_check_id = #{lucCheckId},shifouquezhen = #{shifouquezhen},bingli = #{bingli},binglileixing = #{binglileixing},zhongliuweizh = #{zhongliuweizh},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},shifouzhiliao = #{shifouzhiliao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate},buzuoldct_yuanyin = #{buzuoldctYuanyin},shifouldct = #{shifouldct},buzuoldct_yuanyin_qt = #{buzuoldctYuanyinQt},ldct_jieguo = #{ldctJieguo},linchuangfenqi = #{linchuangfenqi},buzuoweujing_yuanyin = #{buzuoweujingYuanyin},buzuoweijing_yuanyin_qt = #{buzuoweijingYuanyinQt},shifouweijing = #{shifouweijing},weijing_jieguo = #{weijingJieguo},huojian = #{huojian},huojianjieguo = #{huojianjieguo},zhongliudaxiao = #{zhongliudaxiao},zhenduan_date = #{zhenduanDate}
+		shifouquezhen = #{shifouquezhen},bingli = #{bingli},binglileixing = #{binglileixing},zhongliuweizh = #{zhongliuweizh},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},shifouzhiliao = #{shifouzhiliao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},buzuoldct_yuanyin = #{buzuoldctYuanyin},shifouldct = #{shifouldct},buzuoldct_yuanyin_qt = #{buzuoldctYuanyinQt},ldct_jieguo = #{ldctJieguo},linchuangfenqi = #{linchuangfenqi},buzuoweujing_yuanyin = #{buzuoweujingYuanyin},buzuoweijing_yuanyin_qt = #{buzuoweijingYuanyinQt},shifouweijing = #{shifouweijing},weijing_jieguo = #{weijingJieguo},huojian = #{huojian},huojianjieguo = #{huojianjieguo},zhongliudaxiao = #{zhongliudaxiao},zhenduan_date = #{zhenduanDate}
 		WHERE id = #{id}
 	</update>
 
@@ -88,9 +88,11 @@
 	<select id="queryLucFollowListByLucRegcaseId" resultType="com.wonders.health.tumor.follow.entity.LucFollow">
 		SELECT
 		<include refid="LucFollowColumns"/>
-		FROM luc_follow a
+		FROM LUC_FOLLOW a
 		<where>
 			a.luc_check_id = #{lucRegcaseId} and a.del_flag = '0'
 		</where>
 	</select>
+
+	
 </mapper>
