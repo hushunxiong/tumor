@@ -44,7 +44,7 @@ public class LicDiagCheckRemindService {
     }
 
     public LicDiagCheckRemind findByCheckId(String checkid) {
-        return licDiagCheckRemindDao.getByCheck(checkid);
+        return licDiagCheckRemindDao.getByCheckid(checkid);
     }
 
     @Transactional(readOnly = false)

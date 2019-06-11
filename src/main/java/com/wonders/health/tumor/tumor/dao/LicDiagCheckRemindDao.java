@@ -17,8 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface LicDiagCheckRemindDao extends BaseDao<LicDiagCheckRemind> {
 	public LicDiagCheckRemind get(@Param("id") String id);
 
-	public LicDiagCheckRemind getByCheck(@Param("checkid") String checkid);
-
     public int delete(@Param("id") String id);
 
+	public void updateRemindStatus(LicDiagCheckRemind remind);
 }

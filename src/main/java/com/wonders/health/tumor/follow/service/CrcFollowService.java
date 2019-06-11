@@ -218,6 +218,14 @@ public class CrcFollowService {
                 po.setDengjiId(user.getId());
                 crcFollowDao.insert(po);
 
+                //更新大肠癌诊断检查提醒表
+                CrcDiagCheckRemind checkRemind = crcDiagCheckRemindDao.getByCheckid(po.getCrcCheckId());
+                if (checkRemind != null) {
+                    checkRemind.setRemindStatus(Constants.REMIND_STATUS_YZD);
+                    checkRemind.initByUpdate(user.getId());
+                    crcDiagCheckRemindDao.updateRemindStatus(checkRemind);
+                }
+
                 return new AjaxReturn<Map<String, String>>(true, "保存成功");
             }
         } else {

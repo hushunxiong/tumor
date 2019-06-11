@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.follow.service;
 
 import com.wonders.health.auth.client.vo.User;
+import com.wonders.health.tumor.common.Constants;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.model.DataGrid;
@@ -12,8 +13,10 @@ import com.wonders.health.tumor.follow.dao.LicFollowDao;
 import com.wonders.health.tumor.follow.entity.LicFollow;
 import com.wonders.health.tumor.follow.vo.FollowSearchVo;
 import com.wonders.health.tumor.tumor.dao.CancerDicHospitalInfoDao;
+import com.wonders.health.tumor.tumor.dao.LicDiagCheckRemindDao;
 import com.wonders.health.tumor.tumor.dao.LicRegcaseDao;
 import com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo;
+import com.wonders.health.tumor.tumor.entity.LicDiagCheckRemind;
 import com.wonders.health.tumor.tumor.entity.LicRegcase;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +39,8 @@ public class LicFollowService {
     private LicRegcaseDao licRegcaseDao;
     @Autowired
     private LicFollowDao licFollowDao;
+    @Autowired
+    private LicDiagCheckRemindDao licDiagCheckRemindDao;
     @Autowired
     private CancerDicHospitalInfoDao cancerDicHospitalInfoDao;
 
@@ -143,6 +148,14 @@ public class LicFollowService {
                         }
                     }
                     licFollowDao.update(po);
+
+                    //更新肝癌诊断检查提醒表
+                    LicDiagCheckRemind checkRemind = licDiagCheckRemindDao.getByCheckid(po.getLicCheckId());
+                    if (checkRemind != null) {
+                        checkRemind.setRemindStatus(Constants.REMIND_STATUS_YZD);
+                        checkRemind.initByUpdate(user.getId());
+                        licDiagCheckRemindDao.updateRemindStatus(checkRemind);
+                    }
                 }
 
                 return new AjaxReturn<Map<String, String>>(true, "修改成功");
@@ -199,6 +212,14 @@ public class LicFollowService {
                 //登记人ID
                 po.setDengjiId(user.getId());
                 licFollowDao.insert(po);
+
+                //更新肝癌诊断检查提醒表
+                LicDiagCheckRemind checkRemind = licDiagCheckRemindDao.getByCheckid(po.getLicCheckId());
+                if (checkRemind != null) {
+                    checkRemind.setRemindStatus(Constants.REMIND_STATUS_YZD);
+                    checkRemind.initByUpdate(user.getId());
+                    licDiagCheckRemindDao.updateRemindStatus(checkRemind);
+                }
 
                 return new AjaxReturn<Map<String, String>>(true, "保存成功");
             }
