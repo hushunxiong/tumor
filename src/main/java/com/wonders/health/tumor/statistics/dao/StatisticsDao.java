@@ -31,6 +31,6 @@ public interface StatisticsDao {
     //初筛信息汇总（阳性胃癌）
     List<ScPositiveSummaryVo> getScPositive(SummarySearchVo searchVo);
 
-
+    //诊断信息收集
     List<InformationCollectionVo> getInformation(SummarySearchVo searchVo);
 }

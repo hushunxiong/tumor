@@ -26,7 +26,7 @@ public class NegativeSummaryVo  {
 
     private String telephone;//固定电话
 
-    private String regorgName; //筛查登记机构
+    private String regorg; //筛查登记机构
 
     private String csrq; //初筛日期
 

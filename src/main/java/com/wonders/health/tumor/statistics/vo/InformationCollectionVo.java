@@ -13,6 +13,10 @@ import lombok.Data;
 public class InformationCollectionVo {
     private String xm; //姓名
 
+    private String personcardType;//证件类型
+
+    private String personcard;//证件号码
+
     private String regorg; //筛查登记机构
 
     private String jcxm;  //检查项目
@@ -32,4 +36,11 @@ public class InformationCollectionVo {
     private String TNMfq; //TNM分期
 
     private String sfrq;  //随访日期
+
+    private String  ZHONGLIUTNM_T;
+
+    private String ZHONGLIUTNM_N;
+
+    private String ZHONGLIUTNM_M;
+
 }

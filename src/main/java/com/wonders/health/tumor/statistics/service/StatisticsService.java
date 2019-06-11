@@ -47,21 +47,24 @@ public class StatisticsService {
      * @param searchVo
      * @return
      */
-    public List<NegativeSummaryVo> getNegative(SummarySearchVo searchVo) {
+    public DataGrid<NegativeSummaryVo> getNegative(SummarySearchVo searchVo) {
         List<NegativeSummaryVo> summaryVoList = statisticsDao.getNegative(searchVo);
         if (summaryVoList != null && summaryVoList.size() > 0) {
-
+            AuthUtils a = new AuthUtils();
             for (NegativeSummaryVo vo : summaryVoList) {
+                if (vo.getRegorg() != null) {
+                    vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                }
                 if (vo != null) {
                     //循环将居住地址拼接放入
                     vo.setAddress(areaService.getFullAddress(
                             vo.getAddressProvince(), vo.getAddressCity(), vo.getAddressCounty(), vo.getAddressTown(), vo.getAddressCommittee(), vo.getAddressDetail()
-                    ));
+                    ).replaceAll("null", ""));
                 }
 
             }
         }
-        return summaryVoList;
+        return new DataGrid<>(summaryVoList.size(), summaryVoList);
     }
 
 
@@ -76,13 +79,13 @@ public class StatisticsService {
         if (crcVoList != null && crcVoList.size() > 0) {
             AuthUtils a = new AuthUtils();
             for (CrcPositiveSummaryVo vo : crcVoList) {
-
-                //循环通过医疗机构代码获取医疗机构名称
-                vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                if (vo.getRegorg() != null) {
+                    vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                }
                 //循环拼接写入居住地址
                 vo.setAddress(areaService.getFullAddress(
                         vo.getAddressProvince(), vo.getAddressCity(), vo.getAddressCounty(), vo.getAddressTown(), vo.getAddressCommittee(), vo.getAddressDetail()
-                ));
+                ).replaceAll("null", ""));
             }
         }
         return new DataGrid<>(crcVoList.size(), crcVoList);
@@ -126,16 +129,18 @@ public class StatisticsService {
      * @return
      */
     public DataGrid<LicPositiveSummaryVo> getLicPositive(SummarySearchVo searchVo) {
+        AuthUtils a = new AuthUtils();
+
         List<LicPositiveSummaryVo> licVoList = statisticsDao.getLicPositive(searchVo);
         if (licVoList != null && licVoList.size() > 0) {
-            AuthUtils a = new AuthUtils();
             for (LicPositiveSummaryVo vo : licVoList) {
-                if (vo != null) {
+                if (vo.getRegorg() != null) {
                     vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
-
+                }
+                if (vo != null) {
                     vo.setAddress(areaService.getFullAddress(
                             vo.getAddressProvince(), vo.getAddressCity(), vo.getAddressCounty(), vo.getAddressTown(), vo.getAddressCommittee(), vo.getAddressDetail()
-                    ));
+                    ).replaceAll("null", ""));
                 }
             }
         }
@@ -153,12 +158,13 @@ public class StatisticsService {
         if (lucVoList != null && lucVoList.size() > 0) {
             AuthUtils a = new AuthUtils();
             for (LucPositiveSummaryVo vo : lucVoList) {
-                if (vo != null) {
+                if (vo.getRegorg() != null) {
                     vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
-
+                }
+                if (vo != null) {
                     vo.setAddress(areaService.getFullAddress(
                             vo.getAddressProvince(), vo.getAddressCity(), vo.getAddressCounty(), vo.getAddressTown(), vo.getAddressCommittee(), vo.getAddressDetail()
-                    ));
+                    ).replaceAll("null", ""));
                 }
             }
         }
@@ -176,12 +182,13 @@ public class StatisticsService {
         if (scVoList != null && scVoList.size() > 0) {
             AuthUtils a = new AuthUtils();
             for (ScPositiveSummaryVo vo : scVoList) {
-                if (vo != null) {
+                if (vo.getRegorg() != null) {
                     vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
-
+                }
+                if (vo != null) {
                     vo.setAddress(areaService.getFullAddress(
                             vo.getAddressProvince(), vo.getAddressCity(), vo.getAddressCounty(), vo.getAddressTown(), vo.getAddressCommittee(), vo.getAddressDetail()
-                    ));
+                    ).replaceAll("null", ""));
                 }
             }
         }
@@ -191,6 +198,7 @@ public class StatisticsService {
 
     /**
      * 诊断信息收集
+     *
      * @param searchVo
      * @return
      */
@@ -199,7 +207,10 @@ public class StatisticsService {
         if (scVoList != null && scVoList.size() > 0) {
             AuthUtils a = new AuthUtils();
             for (InformationCollectionVo vo : scVoList) {
-                if (vo != null) {
+                if (vo!=null){
+                    vo.setTNMfq(vo.getZHONGLIUTNM_T()+vo.getZHONGLIUTNM_N()+vo.getZHONGLIUTNM_M());
+                }
+                if (vo.getRegorg() != null) {
                     vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
                 }
             }

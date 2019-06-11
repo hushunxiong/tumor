@@ -9,6 +9,7 @@ import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.DictUtils;
 import com.wonders.health.tumor.statistics.service.StatisticsService;
 import com.wonders.health.tumor.statistics.vo.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -21,9 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 统计报表Controller
@@ -46,6 +46,18 @@ public class StatisticsController {
     @Value("${yearNum}")
     private  Integer yearNum;
 
+    @Value("${crc_switch_flag}")
+    private Integer crcFlag;
+
+    @Value("${luc_switch_flag}")
+    private Integer lucFlag;
+
+    @Value("${lic_switch_flag}")
+    private Integer licFlag;
+
+    @Value("${sc_switch_flag}")
+    private Integer scFlag;
+
     /**
      * 初筛信息汇总表（阴性）
      * @param model
@@ -66,20 +78,9 @@ public class StatisticsController {
 
     @ResponseBody
     @RequestMapping(value = "negativeData")
-    public AjaxReturn<List<NegativeSummaryVo>> getNegative(@RequestBody(required = false) SummarySearchVo searchVo){
-        AjaxReturn<List<NegativeSummaryVo>> ajaxReturn = new AjaxReturn<>();
-
-        List<NegativeSummaryVo> summaryVoList = statisticsService.getNegative(searchVo);
-        if (summaryVoList.size()>0){
-            ajaxReturn.setValue(summaryVoList);
-            ajaxReturn.setMsg("初筛信息汇总表（阴性）查询成功");
-            ajaxReturn.setOk(true);
-        }else {
-            ajaxReturn.setValue(summaryVoList);
-            ajaxReturn.setMsg("初筛信息汇总表（阴性）查询失败");
-            ajaxReturn.setOk(false);
-        }
-        return ajaxReturn;
+    public DataGrid<NegativeSummaryVo> getNegative(@ModelAttribute  NegativeSearchVo searchVo){
+        DataGrid<NegativeSummaryVo> dataGrid =  statisticsService.getNegative(searchVo);
+        return dataGrid;
     }
 
 
@@ -105,7 +106,6 @@ public class StatisticsController {
     @ResponseBody
     @PostMapping("crcPositiveData")
     public DataGrid<CrcPositiveSummaryVo> getCrcPositive(@ModelAttribute SummarySearchVo searchVo) {
-
         DataGrid<CrcPositiveSummaryVo> dataGrid =  statisticsService.getCrcPositive(searchVo);
         return dataGrid;
     }
@@ -206,11 +206,19 @@ public class StatisticsController {
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
         model.addAttribute("tjRqStart", DateUtils.getYear()+"01"+"01");
+        model.addAttribute("crcFlag", crcFlag);
+        model.addAttribute("licFlag", licFlag);
+        model.addAttribute("lucFlag", lucFlag);
+        model.addAttribute("scFlag", scFlag);
         return "/statistics/informationCollection";
     }
     @ResponseBody
     @RequestMapping("informationData")
-    public DataGrid<InformationCollectionVo> getInformation(@ModelAttribute SummarySearchVo searchVo) {
+    public DataGrid<InformationCollectionVo> getInformation(@ModelAttribute InfomationSearchVo searchVo) {
+        searchVo.setCrcFlag(crcFlag);
+        searchVo.setLicFlag(licFlag);
+        searchVo.setLucFlag(lucFlag);
+        searchVo.setScFlag(scFlag);
         DataGrid<InformationCollectionVo> dataGrid =  statisticsService.getInformation(searchVo);
         return dataGrid;
     }
