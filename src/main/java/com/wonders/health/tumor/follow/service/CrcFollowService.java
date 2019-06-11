@@ -151,6 +151,7 @@ public class CrcFollowService {
                     CrcDiagCheckRemind checkRemind = crcDiagCheckRemindDao.getByCheckid(po.getCrcCheckId());
                     if (checkRemind != null) {
                         checkRemind.setRemindStatus(Constants.REMIND_STATUS_YZD);
+                        checkRemind.initByUpdate(user.getId());
                         crcDiagCheckRemindDao.updateRemindStatus(checkRemind);
                     }
                 }
