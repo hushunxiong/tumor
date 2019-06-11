@@ -1,11 +1,9 @@
 package com.wonders.health.tumor.follow.web;
 
-import com.wonders.health.tumor.common.Contants;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
-import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.follow.service.FollowService;
 import com.wonders.health.tumor.follow.vo.FollowPersonInfoSearchVo;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
