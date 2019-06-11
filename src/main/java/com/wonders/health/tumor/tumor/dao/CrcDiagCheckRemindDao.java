@@ -10,16 +10,15 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 /**
  * 大肠癌诊断检查提醒表DAO接口
- * @author menglianghai
+ * @author sunyang
  */
 @Mapper
 @Repository
 public interface CrcDiagCheckRemindDao extends BaseDao<CrcDiagCheckRemind> {
-
 	public CrcDiagCheckRemind get(@Param("id") String id);
 
-	public CrcDiagCheckRemind getByCheckid(@Param("checkid") String checkid);
-
     public int delete(@Param("id") String id);
+
+    public void updateRemindStatus(CrcDiagCheckRemind remind);
 
 }

@@ -17,7 +17,7 @@ import com.wonders.health.tumor.common.model.BaseEntity;
 
 /**
  * 大肠癌诊断检查提醒表实体
- * @author menglianghai
+ * @author sunyang
  */
 public class CrcDiagCheckRemind extends BaseEntity {
 	
@@ -37,25 +37,25 @@ public class CrcDiagCheckRemind extends BaseEntity {
 	private Date firstRemindDate;	// 第一次提醒日期
 
 	@Length(max=2)
-	private String firstRemindType;	// 第一次提醒方式 字典表 id=60047
+	private String firstRemindType;	// 第一次提醒方式
 
 	
 	private Date secondRemindDate;	// 第二次提醒日期
 
 	@Length(max=2)
-	private String secondRemindType;	// 第二次提醒方式 字典表 id=60047
+	private String secondRemindType;	// 第二次提醒方式
 
 	
 	private Date thirdRemindDate;	// 第三次提醒日期
 
 	@Length(max=2)
-	private String thirdRemindType;	// 第三次提醒方式 字典表 id=60047
+	private String thirdRemindType;	// 第三次提醒方式
 
 	
 	private Date perRemindDate;	// 计划提醒时间
 
 	@Length(max=2)
-	private String remindStatus;	// 提醒状态 字典表 id=60048
+	private String remindStatus;	// 提醒状态
 
 
 	public CrcDiagCheckRemind() {

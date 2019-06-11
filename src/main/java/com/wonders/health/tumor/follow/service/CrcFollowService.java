@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.follow.service;
 
 import com.wonders.health.auth.client.vo.User;
+import com.wonders.health.tumor.common.Constants;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.model.DataGrid;
@@ -12,8 +13,10 @@ import com.wonders.health.tumor.follow.dao.CrcFollowDao;
 import com.wonders.health.tumor.follow.entity.CrcFollow;
 import com.wonders.health.tumor.follow.vo.FollowSearchVo;
 import com.wonders.health.tumor.tumor.dao.CancerDicHospitalInfoDao;
+import com.wonders.health.tumor.tumor.dao.CrcDiagCheckRemindDao;
 import com.wonders.health.tumor.tumor.dao.CrcRegcaseDao;
 import com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo;
+import com.wonders.health.tumor.tumor.entity.CrcDiagCheckRemind;
 import com.wonders.health.tumor.tumor.entity.CrcRegcase;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +40,8 @@ public class CrcFollowService {
     private CrcRegcaseDao crcRegcaseDao;
     @Autowired
     private CrcFollowDao crcFollowDao;
+    @Autowired
+    private CrcDiagCheckRemindDao crcDiagCheckRemindDao;
     @Autowired
     private CancerDicHospitalInfoDao cancerDicHospitalInfoDao;
 
@@ -141,6 +146,13 @@ public class CrcFollowService {
                         }
                     }
                     crcFollowDao.update(po);
+
+                    //更新大肠癌诊断检查提醒表
+                    CrcDiagCheckRemind checkRemind = crcDiagCheckRemindDao.getByCheckid(po.getCrcCheckId());
+                    if (checkRemind != null) {
+                        checkRemind.setRemindStatus(Constants.REMIND_STATUS_YZD);
+                        crcDiagCheckRemindDao.updateRemindStatus(checkRemind);
+                    }
                 }
 
                 return new AjaxReturn<Map<String, String>>(true, "修改成功");

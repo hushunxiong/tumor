@@ -13,13 +13,6 @@
 		WHERE a.id = #{id}
 	</select>
 
-	<select id="getByCheckid" resultType="com.wonders.health.tumor.tumor.entity.CrcDiagCheckRemind">
-		SELECT
-		<include refid="CrcDiagCheckRemindColumns"/>
-		FROM crc_diag_check_remind a
-		WHERE a.crc_check_id = #{checkid}
-	</select>
-
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcDiagCheckRemind">
 		SELECT 
 			<include refid="CrcDiagCheckRemindColumns"/>
@@ -92,5 +85,20 @@
 	    WHERE id = #{id}
 	</update>
 
-	
+	<select id="getByCheckid" resultType="com.wonders.health.tumor.tumor.entity.CrcDiagCheckRemind">
+		SELECT
+		<include refid="CrcDiagCheckRemindColumns"/>
+		FROM crc_diag_check_remind a
+		<where>
+			a.del_flag = '0'
+		AND a.crc_check_id = #{checkid}
+		</where>
+	</select>
+
+	<update id="updateRemindStatus">
+		UPDATE crc_diag_check_remind SET
+		remind_status = #{remindStatus}
+		WHERE id = #{id}
+		AND remind_status != '04'
+	</update>
 </mapper>
