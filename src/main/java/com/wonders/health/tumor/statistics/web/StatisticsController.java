@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.statistics.web;
 
 import com.wonders.health.tumor.closingcase.web.crcClosingCaseController;
+import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.tags.DictData;
 import com.wonders.health.tumor.common.utils.AuthUtils;
@@ -98,6 +99,76 @@ public class StatisticsController {
 
 
     /**
+     * 初筛信息汇总表（阴性）导出
+     * @param regarea
+     * @param regorg
+     * @param csrqStart
+     * @param csrqEnd
+     * @param response
+     */
+    @ResponseBody
+    @RequestMapping("/exportNegativeData")
+    public void exportNegativeData(   @RequestParam(required = false) String regarea,
+                                      @RequestParam(required = false) String regorg,
+                                      @RequestParam(required = false) Date csrqStart,
+                                      @RequestParam(required = false) Date csrqEnd,
+                                      @RequestParam(required = false) boolean crc,
+                                      @RequestParam(required = false) boolean lic,
+                                      @RequestParam(required = false) boolean luc,
+                                      @RequestParam(required = false) boolean sc,
+                                      HttpServletResponse response) {
+        NegativeSearchVo searchVo = new NegativeSearchVo();
+        Integer count = 0;
+        if (crc==true) {
+            count++;
+        }
+        if (lic==true) {
+            count++;
+        }
+        if (luc==true) {
+            count++;
+        }
+        if (sc==true) {
+            count++;
+        }
+        if(count==0){
+            throw new RuntimeException("必须选择一个复选框");
+        }else{
+            searchVo.setCount(count);
+        }
+        searchVo.setCsrqStart(csrqStart);
+        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setRegarea(regarea);
+        searchVo.setRegorg(regorg);
+        searchVo.setCrc(crc);
+        searchVo.setLic(lic);
+        searchVo.setLuc(luc);
+        searchVo.setSc(sc);
+
+        DataGrid<NegativeSummaryVo> list = statisticsService.getNegative(searchVo);
+        DictData dic = new DictData();
+        List<ExportNegative> datas = list.getData().stream().map(vo -> {
+            ExportNegative negative = new ExportNegative();
+            negative.setXm(vo.getXm());
+            negative.setXb(dic.generalName("60023",vo.getXb()));
+            negative.setAddress(vo.getAddress());
+            negative.setBirthday(vo.getBirthday());
+            negative.setMobile(vo.getMobile());
+            negative.setTelephone(vo.getTelephone());
+            negative.setRegorg(vo.getRegorg());
+            negative.setCsrq(vo.getCsrq());
+            return negative;
+        }).collect(Collectors.toList());
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        try {
+            ExcelUtils.exportExcel(response, datas);
+        } catch (Exception e) {
+            logger.error("初筛信息汇总表（阴性）导出异常", e);
+        }
+    }
+    /**
      * 初筛信息汇总（阳性大肠癌）
      * @param model
      * @return
@@ -122,6 +193,59 @@ public class StatisticsController {
         DataGrid<CrcPositiveSummaryVo> dataGrid = statisticsService.getCrcPositive(searchVo);
         return dataGrid;
     }
+
+    /**
+     * 大肠癌阳性导出
+     * @param regarea
+     * @param regorg
+     * @param csrqStart
+     * @param csrqEnd
+     * @param response
+     */
+    @ResponseBody
+    @RequestMapping("/exportCrcPositiveData")
+    public void exportCrcPositiveData(@RequestParam(required = false) String regarea,
+                                   @RequestParam(required = false) String regorg,
+                                   @RequestParam(required = false) Date csrqStart,
+                                   @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+        SummarySearchVo searchVo = new SummarySearchVo();
+        searchVo.setCsrqStart(csrqStart);
+        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setRegarea(regarea);
+        searchVo.setRegorg(regorg);
+
+        DataGrid<CrcPositiveSummaryVo> list = statisticsService.getCrcPositive(searchVo);
+        DictData dic = new DictData();
+        List<ExportCrcPositive> datas = list.getData().stream().map(vo -> {
+            ExportCrcPositive exportCrcPositive = new ExportCrcPositive();
+            exportCrcPositive.setXm(vo.getXm());
+            exportCrcPositive.setXb(dic.generalName("60023",vo.getXb()));
+            exportCrcPositive.setBirthday(vo.getBirthday());
+            exportCrcPositive.setAddress(vo.getAddress());
+            exportCrcPositive.setMobile(vo.getMobile());
+            exportCrcPositive.setTelephone(vo.getTelephone());
+            exportCrcPositive.setRegorg(vo.getRegorg());
+            exportCrcPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
+            exportCrcPositive.setFobtResult(dic.generalName("60001",vo.getFobtResult()));
+            exportCrcPositive.setChangjing(dic.generalName("60013",vo.getChangjing()));
+            exportCrcPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
+            exportCrcPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
+            exportCrcPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            exportCrcPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            exportCrcPositive.setCsrq(vo.getCsrq());
+            return exportCrcPositive;
+        }).collect(Collectors.toList());
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        try {
+            ExcelUtils.exportExcel(response, datas);
+        } catch (Exception e) {
+            logger.error("大肠癌阳性导出异常", e);
+        }
+    }
+
+
 
     /**
      * 初筛信息汇总（阳性肝癌）
@@ -149,6 +273,62 @@ public class StatisticsController {
     }
 
     /**
+     * 肝癌导出
+     * @param regarea
+     * @param regorg
+     * @param csrqStart
+     * @param csrqEnd
+     * @param response
+     */
+    @ResponseBody
+    @RequestMapping("/exportLicPositiveData")
+    public void exportLicPositiveData(@RequestParam(required = false) String regarea,
+                                      @RequestParam(required = false) String regorg,
+                                      @RequestParam(required = false) Date csrqStart,
+                                      @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+        SummarySearchVo searchVo = new SummarySearchVo();
+        searchVo.setCsrqStart(csrqStart);
+        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setRegarea(regarea);
+        searchVo.setRegorg(regorg);
+
+        DataGrid<LicPositiveSummaryVo> list = statisticsService.getLicPositive(searchVo);
+        DictData dic = new DictData();
+        List<ExportLicPositive> datas = list.getData().stream().map(vo -> {
+            ExportLicPositive licPositive = new ExportLicPositive();
+            licPositive.setXm(vo.getXm());
+            licPositive.setXb(dic.generalName("60023",vo.getXb()));
+            licPositive.setBirthday(vo.getBirthday());
+            licPositive.setAddress(vo.getAddress());
+            licPositive.setMobile(vo.getMobile());
+            licPositive.setTelephone(vo.getTelephone());
+            licPositive.setRegorg(vo.getRegorg());
+            licPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
+            licPositive.setAFP(vo.getAFP());
+            licPositive.setGTP(vo.getGTP());
+            licPositive.setHbeg(vo.getHbeg());
+            licPositive.setBus(dic.generalName("60001",vo.getBus()));
+            licPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
+            licPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
+            licPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            licPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            licPositive.setCsrq(vo.getCsrq());
+            return licPositive;
+        }).collect(Collectors.toList());
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        try {
+            ExcelUtils.exportExcel(response, datas);
+        } catch (Exception e) {
+            logger.error("肝癌阳性导出异常", e);
+        }
+    }
+
+
+
+
+    /**
      * 初筛信息汇总（阳性肺癌）
      * @param model
      * @return
@@ -171,6 +351,57 @@ public class StatisticsController {
     public DataGrid<LucPositiveSummaryVo> getLucPositive(@ModelAttribute SummarySearchVo searchVo) {
         DataGrid<LucPositiveSummaryVo> dataGrid = statisticsService.getLucPositive(searchVo);
         return dataGrid;
+    }
+
+    /**
+     * 肺癌导出
+     * @param regarea
+     * @param regorg
+     * @param csrqStart
+     * @param csrqEnd
+     * @param response
+     */
+    @ResponseBody
+    @RequestMapping("/exportLucPositiveData")
+    public void exportLucPositiveData(@RequestParam(required = false) String regarea,
+                                      @RequestParam(required = false) String regorg,
+                                      @RequestParam(required = false) Date csrqStart,
+                                      @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+        SummarySearchVo searchVo = new SummarySearchVo();
+        searchVo.setCsrqStart(csrqStart);
+        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setRegarea(regarea);
+        searchVo.setRegorg(regorg);
+
+        DataGrid<LucPositiveSummaryVo> list = statisticsService.getLucPositive(searchVo);
+        DictData dic = new DictData();
+        List<ExportLucPositive> datas = list.getData().stream().map(vo -> {
+            ExportLucPositive lucPositive = new ExportLucPositive();
+            lucPositive.setXm(vo.getXm());
+            lucPositive.setXb(dic.generalName("60023",vo.getXb()));
+            lucPositive.setBirthday(vo.getBirthday());
+            lucPositive.setAddress(vo.getAddress());
+            lucPositive.setMobile(vo.getMobile());
+            lucPositive.setTelephone(vo.getTelephone());
+            lucPositive.setRegorg(vo.getRegorg());
+            lucPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
+            lucPositive.setShifouLDCT(dic.generalName("60013",vo.getShifouLDCT()));
+            lucPositive.setLDCTJieguo(dic.generalName("60013",vo.getLDCTJieguo()));
+            lucPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
+            lucPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
+            lucPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            lucPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            lucPositive.setCsrq(vo.getCsrq());
+            return lucPositive;
+        }).collect(Collectors.toList());
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        try {
+            ExcelUtils.exportExcel(response, datas);
+        } catch (Exception e) {//todo 这个异常处理log
+            logger.error("肺癌阳性导出异常", e);
+        }
     }
 
     /**
@@ -198,6 +429,49 @@ public class StatisticsController {
         return dataGrid;
     }
 
+
+    @ResponseBody
+    @RequestMapping("/exportScPositiveData")
+    public void exportScPositiveData(@RequestParam(required = false) String regarea,
+                                      @RequestParam(required = false) String regorg,
+                                      @RequestParam(required = false) Date csrqStart,
+                                      @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+        SummarySearchVo searchVo = new SummarySearchVo();
+        searchVo.setCsrqStart(csrqStart);
+        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setRegarea(regarea);
+        searchVo.setRegorg(regorg);
+
+        DataGrid<ScPositiveSummaryVo> list = statisticsService.getScPositive(searchVo);
+        DictData dic = new DictData();
+        List<ExportScPositive> datas = list.getData().stream().map(vo -> {
+            ExportScPositive scPositive = new ExportScPositive();
+            scPositive.setXm(vo.getXm());
+            scPositive.setXb(dic.generalName("60023",vo.getXb()));
+            scPositive.setBirthday(vo.getBirthday());
+            scPositive.setAddress(vo.getAddress());
+            scPositive.setMobile(vo.getMobile());
+            scPositive.setTelephone(vo.getTelephone());
+            scPositive.setRegorg(vo.getRegorg());
+            scPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
+            scPositive.setSfwj(dic.generalName("60013",vo.getSfwj()));
+            scPositive.setWjjcjg(dic.generalName("60001",vo.getWjjcjg()));
+            scPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
+            scPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
+            scPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            scPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            scPositive.setCsrq(vo.getCsrq());
+            return scPositive;
+        }).collect(Collectors.toList());
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        try {
+            ExcelUtils.exportExcel(response, datas);
+        } catch (Exception e) {//todo 这个异常处理log
+            logger.error("胃癌阳性导出异常", e);
+        }
+    }
 
     /**
      * 诊断信息收集
@@ -276,7 +550,7 @@ public class StatisticsController {
         try {
             ExcelUtils.exportExcel(response, datas);
         } catch (Exception e) {//todo 这个异常处理log
-            e.printStackTrace();
+            logger.error("诊断信息收集导出异常", e);
         }
     }
 

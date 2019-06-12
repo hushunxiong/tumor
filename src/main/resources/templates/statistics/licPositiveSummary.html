@@ -49,82 +49,26 @@
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构：</label>
 
-                            <input id="regorg" name="regorg"  class="mini-combobox" width="66%"
+                            <input id="regorg" name="regorg"  class="mini-combobox" width="66%" emptyText="请选择"
                                    textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                         </div>
                     </div>
-                    <div class="col-sm-4 col-lg-3">日期范围
-                        <input id="csrqStart" name="csrqStart" class="mini-datepicker" tooltip="起始日期不能大于截止日期"
-                               allowInput="true" errorMode="border"  th:value="${tjRqStart}"
-                               onvalidation="dateValidation" style="width:115px;">至
-                        <input id="csrqEnd" name="csrqEnd" class="mini-datepicker" tooltip="截止日期不能小于起始日期"
-                               errorMode="border"
-                               allowInput="true"
-                               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
-                               onvalidation="dateValidation" style="width:115px;">
+                    <div class="col-sm-4 col-lg-3">日期范围：
+                        <input id="csrqStart" name="beginDate" class="mini-datepicker"
+                               allowInput="true" th:value="${tjRqStart}"  style="width:115px;"  errorMode="border" onvalidation="dateValidation" >
+                        -
+                        <input id="csrqEnd" name="endDate" class="mini-datepicker"
+                               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" allowInput="false" style="width:115px;" errorMode="border" onvalidation="dateValidation">
                         <div id="js" class="my-btn my-btn-blue" onclick="onSearch()">检索</div>
                         <div class="my-btn my-btn-blue" onclick="reset()">重置</div>
-
                     </div>
+
 
                     <div class="col-sm-2" align="right">
                         <div class="my-btn my-btn-blue" onclick="exportData()">导出</div>
                     </div>
 
-                    <script type="text/javascript" th:inline="javascript">
-                        function dateValidation(e) {
-                            var key = $('#keyword').val();
-                            if (key!=null && key!=''){
-                                return;
-                            }
-                            var sender = e.sender;
-                            var date = sender.value;
-                            if (date != undefined && typeof (date) != 'undefined' && date != '') {
-                                if (sender.id == 'csrqStart') {
-                                    var end = mini.get('csrqEnd').getValue();
-                                    if (end != undefined && typeof (end) != 'undefined' && end != '') {
-                                        date = new Date(date.format('yyyy-MM-dd'));
-                                        end = new Date(end.format('yyyy-MM-dd'));
-                                        if (date.getTime() - end.getTime() > 0) {
-                                            e.errorText = "起始日期不能大于截止日期";
-                                            e.isValid = false;
-                                        }
-                                    }
-                                } else if (sender.id == 'csrqEnd') {
-                                    var from = mini.get('csrqStart').getValue();
-                                    if (from != undefined && typeof (from) != 'undefined' && from != '') {
-                                        date = new Date(date.format('yyyy-MM-dd'));
-                                        from = new Date(from.format('yyyy-MM-dd'));
-                                        if (from.getTime() - date.getTime() > 0) {
-                                            e.errorText = "截至日期不能大于截止日期";
-                                            e.isValid = false;
-                                        }
 
-                                        date = new Date(date.format('yyyy-MM-dd'));
-
-                                        var nowDate = mini.get("nowDate").getValue();
-                                        nowDate =  new Date(nowDate.format('yyyy-MM-dd'));
-                                        if(date.getTime() - nowDate.getTime() > 0){
-
-                                            e.errorText = "截至日期不能大于当前日期";
-                                            e.isValid = false;
-                                        }
-
-                                    }
-                                }
-                            } else {
-                                if (sender.id == 'csrqStart') {
-                                    e.errorText = [[#{MSGERR-COM01-001('统计日期(开始)')}]];
-                                    e.isValid = false;
-                                    mini.get('csrqStart').setIsValid(false);
-                                } else if (sender.id == 'csrqEnd') {
-                                    e.errorText = [[#{MSGERR-COM01-001('统计日期(结束)')}]];
-                                    e.isValid = false;
-                                    mini.get('csrqEnd').setIsValid(false);
-                                }
-                            }
-                        }
-                    </script>
 
                 </div>
                 <div>
@@ -207,16 +151,16 @@
 
                 //导出
                 function exportData(){
-                    /*if(isEmpty()){
-                        mini.alert("请选择统计年度");
-                        return;
-                    }
-                    var year = $("#year").val();
-                    var month = $("#month").val();
+                    var  regarea=mini.get("regarea").getValue();
+                    var  regorg=mini.get("regorg").getValue();
+                    var  csrqStart=mini.get("csrqStart").getValue();
+                    var  csrqEnd=mini.get("csrqEnd").getValue();
                     var param ='?';
-                    param += 'year='+year;
-                    param += '&month='+month;*/
-                    window.location.href="${ctx}/doctor/healthassessment/exportHealthWorkload";
+                    param += 'regarea='+regarea;
+                    param += '&regorg='+regorg;
+                    /* param += '&csrqStart='+csrqStart;
+                     param += '&csrqEnd='+csrqEnd;*/
+                    window.location.href="../statistics/exportLicPositiveData"+param;
                 }
 
             </script>

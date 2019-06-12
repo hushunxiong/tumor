@@ -18,8 +18,8 @@ public class ReportBaseVo {
 
     private String xb; //性别
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") //Jackson包使用注解
-    private Date birthday; //出生日期
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") //Jackson包使用注解
+    private String birthday; //出生日期
 
     private String address; //居住地址
 
@@ -28,8 +28,8 @@ public class ReportBaseVo {
     private String telephone;//固定电话
 
     private String regorg; //筛查登记机构
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") //Jackson包使用注解
-    private Date csrq; //初筛日期
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") //Jackson包使用注解
+    private String csrq; //初筛日期
 
     private String assessmentResult;//危险度评估结果
 

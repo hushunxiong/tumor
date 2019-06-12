@@ -47,7 +47,7 @@ public class StatisticsService {
      * @param searchVo
      * @return
      */
-    public DataGrid<NegativeSummaryVo> getNegative(SummarySearchVo searchVo) {
+    public DataGrid<NegativeSummaryVo> getNegative(NegativeSearchVo searchVo) {
         List<NegativeSummaryVo> summaryVoList = statisticsDao.getNegative(searchVo);
         if (summaryVoList != null && summaryVoList.size() > 0) {
             AuthUtils a = new AuthUtils();
