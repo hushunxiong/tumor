@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.busremind.dao.BusRemindDao">
+	<!--
+	a crc_person_info
+	b crc_fobt
+	c crc_fobt_remind
+	d crc_regcase
+	e crc_diag_check_remind
+	f lic_regcase
+	g lic_diag_check_remind
+	h sc_regcase
+	-->
+
+	<!--查询项目：一览-->
+	<sql id="CancerPersonInfoColumns">
+		a.id AS "cancerPersonInfo.id",
+		a.personcard AS "cancerPersonInfo.personcard",
+		a.name AS "cancerPersonInfo.name",
+		a.gender AS "cancerPersonInfo.gender",
+		a.telephone AS "cancerPersonInfo.telephone",
+		a.mobile AS "cancerPersonInfo.mobile",
+		a.address_detail AS "cancerPersonInfo.addressDetail"
+	</sql>
+
+	<!--查询项目：大肠癌便隐血提醒-->
+	<sql id="CrcFobtColumns">
+		b.crc_check_id AS "crcFobt.crcCheckId",
+		b.first_fobt_result AS "crcFobt.firstFobtResult",
+		b.second_fobt_result AS "crcFobt.secondFobtResult"
+	</sql>
+	<sql id="CrcFobtRemindColumns">
+		c.id AS "fobtR.id",
+		c.first_fobt_remind_date AS "fobtR.firstFobtRemindDate",c.first_fobt_remind_type AS "fobtR.firstFobtRemindType",
+		c.second_fobt_remind_date AS "fobtR.secondFobtRemindDate",c.second_fobt_remind_type AS "fobtR.secondFobtRemindType",
+		c.per_fobt_remind_date AS "fobtR.perFobtRemindDate",
+		c.fobt_remind_status AS "fobtR.fobtRemindStatus"
+	</sql>
+
+	<!--查询项目：大肠癌诊断提醒-->
+	<sql id="CrcRegcaseColumns">
+		d.id AS "crcRegcase.id",
+		d.regdate as "crcRegcase.regdate",
+  		d.check_result as "crcRegcase.checkResult",
+  		d.id_number AS "crcRegcase.idNumber"
+	</sql>
+	<sql id="CrcDiagCheckRemindColumns">
+  		e.id AS "crcDiag.id",e.crc_check_id AS "crcDiag.crcCheckId",
+  		e.first_remind_date AS "crcDiag.firstRemindDate",e.first_remind_type AS "crcDiag.firstRemindType",
+  		e.second_remind_date AS "crcDiag.secondRemindDate",e.second_remind_type AS "crcDiag.secondRemindType",
+  		e.third_remind_date AS "crcDiag.thirdRemindDate",e.third_remind_type AS "crcDiag.thirdRemindType",
+  		e.per_remind_date AS "crcDiag.perRemindDate",
+  		e.remind_status AS "crcDiag.remindStatus"
+	</sql>
+
+	<!--查询项目：肝癌诊断提醒-->
+	<sql id="LicRegcaseColumns">
+		f.check_result AS "licRegcase.checkResult",
+		f.id AS "licRegcase.id"
+	</sql>
+	<sql id="LicDiagCheckRemindColumns">
+		g.id AS "licDiag.id",g.lic_check_id AS "licDiag.licCheckId",
+		g.check_year AS "licDiag.checkYear",
+		g.per_remind_date AS "licDiag.perRemindDate",
+		g.remind_status AS "licDiag.remindStatus",
+		g.first_remind_date AS "licDiag.firstRemindDate",g.first_remind_type AS "licDiag.firstRemindType",
+		g.second_remind_date AS "licDiag.secondRemindDate",g.second_remind_type AS "licDiag.secondRemindType",
+		g.third_remind_date AS "licDiag.thirdRemindDate",g.third_remind_type AS "licDiag.thirdRemindType"
+	</sql>
+	
+	<!--查询项目：胃癌诊断提醒-->
+	<sql id="ScRegcaseColumns">
+		h.check_result as "scRegcase.checkResult",
+		h.id AS "scRegcase.id"
+	</sql>
+	<sql id="ScDiagCheckRemindColumns">
+		i.id AS "scDiag.id",i.sc_check_id AS "scDiag.scCheckId",
+		i.first_remind_date AS "scDiag.firstRemindDate",i.first_remind_type AS "scDiag.firstRemindType",
+		i.second_remind_date AS "scDiag.secondRemindDate",i.second_remind_type AS "scDiag.secondRemindType",
+		i.third_remind_date AS "scDiag.thirdRemindDate",i.third_remind_type AS "scDiag.thirdRemindType",
+		i.per_remind_date AS "scDiag.perRemindDate",
+		i.remind_status AS "scDiag.remindStatus"
+	</sql>
+
+	<!--查询项目：肺癌诊断提醒-->
+	<sql id="LucRegcaseColumns">
+		j.check_result as "lucRegcase.checkResult",
+		j.id AS "lucRegcase.id"
+	</sql>
+	<sql id="LucDiagCheckRemindColumns">
+		k.id AS "lucDiag.id",k.luc_check_id AS "lucDiag.lucCheckId",
+		k.first_remind_date AS "lucDiag.firstRemindDate",k.first_remind_type AS "lucDiag.firstRemindType",
+		k.second_remind_date AS "lucDiag.secondRemindDate",k.second_remind_type AS "lucDiag.secondRemindType",
+		k.third_remind_date AS "lucDiag.thirdRemindDate",k.third_remind_type AS "lucDiag.thirdRemindType",
+		k.per_remind_date AS "lucDiag.perRemindDate",k.remind_status AS "lucDiag.remindStatus"
+	</sql>
+
+	
+	<!-- from模块 -->
+	<sql id="pageFromBase">
+      FROM cancer_person_info a
+    </sql>
+
+	<sql id="pageFromCrcfobt">
+	  LEFT JOIN crc_regcase d on a.id=d.manageid
+	  LEFT JOIN crc_fobt_remind c on d.id=c.crc_check_id
+	  LEFT JOIN crc_fobt b on d.id=b.crc_check_id
+	  LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id
+	</sql>
+
+	<sql id="pageFromOther">
+		<if test="crcFlag!='' and crcFlag!=null">
+			LEFT JOIN crc_regcase d on a.id=d.manageid
+			LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id
+		</if>
+		<if test="licFlag!='' and licFlag!=null">
+			LEFT JOIN lic_regcase f on a.id=f.manageid
+			LEFT JOIN lic_diag_check_remind g on f.id=g.lic_check_id
+		</if>
+		<if test="scFlag!='' and scFlag!=null">
+			LEFT JOIN sc_regcase h on a.id=h.manageid
+			LEFT JOIN sc_diag_check_remind i on h.id=i.sc_check_id
+		</if>
+		<if test="lucFlag!='' and lucFlag!=null">
+			LEFT JOIN luc_regcase j on a.id=j.manageid
+			LEFT JOIN luc_diag_check_remind k on j.id=k.luc_check_id
+		</if>
+	</sql>
+
+	<!-- where模块 -->
+	<sql id="pageWhereBase">
+		1=1
+		<if test="keyword!=null and keyword!='' ">
+			AND (
+				a.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+				OR
+				a.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+			)
+			AND a.del_flag='0'
+		</if>
+	</sql>
+
+	<sql id="pageWhereCrcFobt">
+		<if test="crcFlag!='' and crcFlag!=null">
+			<if test="year!=null and year!=''">
+				AND d.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND d.regorg=#{orgCode}
+			</if>
+			<if test="status!=null and status!=''">
+				AND c.fobt_remind_status=#{status}
+				AND e.remind_status=#{status}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+				AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+				AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
+			AND c.del_flag='0'
+			AND d.del_flag='0'
+			AND e.del_flag='0'
+		</if>
+	</sql>
+
+	<sql id="pageWhereOther">
+		<if test="licFlag!='' and licFlag!=null">
+			<if test="year!=null and year!=''">
+				AND f.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND f.regorg=#{orgCode}
+			</if>
+			<if test="status!=null and status!=''">
+				AND g.remind_status=#{status}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
+		</if>
+
+		<if test="scFlag!='' and scFlag!=null">
+			<if test="year!=null and year!=''">
+				AND h.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND h.regorg=#{orgCode}
+			</if>
+			<if test="status!=null and status!=''">
+				AND i.remind_status=#{status}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
+		</if>
+
+		<if test="lucFlag!='' and lucFlag!=null">
+			<if test="year!=null and year!=''">
+				AND j.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND j.regorg=#{orgCode}
+			</if>
+			<if test="status!=null and status!=''">
+				AND k.remind_status=#{status}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
+		</if>
+		AND f.del_flag='0'
+		AND g.del_flag='0'
+		AND h.del_flag='0'
+		AND i.del_flag='0'
+		AND j.del_flag='0'
+		AND k.del_flag='0'
+	</sql>
+
+
+	<select id="getBasic"  resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+			SELECT
+			<include refid="CancerPersonInfoColumns"/>
+			<include refid="pageFromBase"/>
+		<choose>
+			<when test="remindType == null or remindType == ''.toString()">
+				<include refid="pageFromCrcfobt"/>
+				<include refid="pageFromOther"/>
+			</when>
+			<when test="remindType == '01'.toString()">
+				<include refid="pageFromCrcfobt"/>
+			</when>
+			<when test="remindType == '02'.toString()">
+				<include refid="pageFromOther"/>
+			</when>
+		</choose>
+
+			WHERE
+			<include refid="pageWhereBase"/>
+
+		<choose>
+			<when test="remindType == null or remindType == ''.toString()">
+				<include refid="pageWhereCrcFobt"/>
+				<include refid="pageWhereOther"/>
+			</when>
+			<when test="remindType == '01'.toString()">
+				<include refid="pageWhereCrcFobt"/>
+			</when>
+			<when test="remindType == '02'.toString()">
+				<include refid="pageWhereOther"/>
+			</when>
+		</choose>
+
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+
+	<select id="getCrcFobtRemind" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
+		SELECT
+		 <include refid="CrcRegcaseColumns"/>,
+		 <include refid="CrcFobtColumns"/>,
+		 <include refid="CrcFobtRemindColumns"/>
+		<include refid="pageFromBase"/>
+		<include refid="pageFromCrcfobt"/>
+		WHERE
+			a.personcard=#{personcard}
+	</select>
+
+	<select id="getCrcDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
+		SELECT
+		<include refid="CrcRegcaseColumns"/>,
+		<include refid="CrcDiagCheckRemindColumns"/>
+		<include refid="pageFromBase"/>
+		<include refid="pageFromOther"/>
+		WHERE
+		a.personcard=#{personcard}
+	</select>
+
+	<select id="getLicDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
+		SELECT
+		<include refid="LicRegcaseColumns"/>,
+		<include refid="LicDiagCheckRemindColumns"/>
+		<include refid="pageFromBase"/>
+		<include refid="pageFromOther"/>
+		WHERE
+		a.personcard=#{personcard}
+	</select>
+
+	<select id="getScDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
+		SELECT
+		<include refid="ScRegcaseColumns"/>,
+		<include refid="ScDiagCheckRemindColumns"/>
+		<include refid="pageFromBase"/>
+		<include refid="pageFromOther"/>
+		WHERE
+		a.personcard=#{personcard}
+	</select>
+
+	<select id="getLucDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
+		SELECT
+		<include refid="LucRegcaseColumns"/>,
+		<include refid="LucDiagCheckRemindColumns"/>
+		<include refid="pageFromBase"/>
+		<include refid="pageFromOther"/>
+		WHERE
+		a.personcard=#{personcard}
+	</select>
+
+	<update id="update">
+		UPDATE CRC_FOLLOW SET
+		id = #{id},primary_mark = #{primaryMark},crc_check_id = #{crcCheckId},shifouquezhen = #{shifouquezhen},yingxiangxue_fangshi = #{yingxiangxueFangshi},changjing = #{changjing},buzuochangjing_yuanyin = #{buzuochangjingYuanyin},buzuochangjing_yuanyin_qita = #{buzuochangjingYuanyinQita},wutongchangjing = #{wutongchangjing},changjingbuwei = #{changjingbuwei},bingbianbuw = #{bingbianbuw},bingbianshu = #{bingbianshu},gangjuli = #{gangjuli},bingbiandaxiao = #{bingbiandaxiao},huojian = #{huojian},huojianjieguo = #{huojianjieguo},liubian = #{liubian},xirouxingzhuang = #{xirouxingzhuang},youwudi = #{youwudi},chuxueqingkuang = #{chuxueqingkuang},huojianriq = #{huojianriq},bingli = #{bingli},binglileixing = #{binglileixing},shifouzhiliao = #{shifouzhiliao},bingbianchuli = #{bingbianchuli},shoushufangshi = #{shoushufangshi},fuzhuzhiliao = #{fuzhuzhiliao},zhongliuleix = #{zhongliuleix},fenhuachengdu = #{fenhuachengdu},fenqiyiju = #{fenqiyiju},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},linchuangfenqi = #{linchuangfenqi},linchuangfenqi_putuo = #{linchuangfenqiPutuo},tnmfenqilaiyuan = #{tnmfenqilaiyuan},zhuyuanhao = #{zhuyuanhao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},changjingjigou_id = #{changjingjigouId},changjingjigou_name = #{changjingjigouName},changjing_date = #{changjingDate},changjing_yisheng = #{changjingYisheng},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},zhenduan_date = #{zhenduanDate},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE CRC_FOLLOW SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	<select id="getListByCheckId" resultType="com.wonders.health.tumor.follow.entity.CrcFollow">
+		SELECT
+		a.*
+		FROM CRC_FOLLOW a
+		<where>
+			a.del_flag = '0'
+			AND a.crc_check_id = #{crcCheckId}
+		</where>
+	</select>
+	
+</mapper>

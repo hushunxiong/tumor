@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wonders.health.tumor.common.model.BaseEntity;
 
 /**
- * 胃癌诊断检查提醒表实体
+ * 肺癌诊断检查提醒表实体
  * @author menglianghai
  */
 public class LucDiagCheckRemind extends BaseEntity {
