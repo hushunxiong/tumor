@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.wonders.health.tumor.follow.entity;
 
 import java.util.Date;

@@ -111,6 +111,8 @@ public class LucFollowService {
             luc.setSuifangyishengId(vo.getUser().getId());
             luc.setSuifangDate(new Date());
             luc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
+            luc.setUpdateBy(vo.getUser().getName());
+            luc.setUpdateDate(new Date());
             flag=lucFollowDao.update(luc);
         }else{
             //uuid生成主键
@@ -121,6 +123,8 @@ public class LucFollowService {
             luc.setSuifangyishengId(vo.getUser().getId());
             luc.setDelFlag("0");
             luc.setCreateBy(vo.getUser().getName());
+            luc.setUpdateBy(vo.getUser().getName());
+            luc.setUpdateDate(new Date());
             luc.setSuifangjigouId(vo.getUser().getOrgCode());
             luc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
             luc.setSuifangDate(new Date());
@@ -134,6 +138,8 @@ public class LucFollowService {
             LucDiagCheckRemind ldcr=lucDiagCheckRemindDao.getByCheckId(luc.getLucCheckId());
             if (!ldcr.getRemindStatus().equals("04")){
                 ldcr.setRemindStatus("02");
+                ldcr.setUpdateBy(vo.getUser().getName());
+                ldcr.setUpdateDate(new Date());
                 lucDiagCheckRemindDao.update(ldcr);
             }
             return true;

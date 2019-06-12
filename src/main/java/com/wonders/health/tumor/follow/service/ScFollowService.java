@@ -110,6 +110,8 @@ public class ScFollowService {
             sc.setSuifangDate(new Date());
             sc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
             sc.setSuifangyishengId(vo.getUser().getId());
+            sc.setUpdateDate(new Date());
+            sc.setUpdateBy(vo.getUser().getName());
             flag=scFollowDao.update(sc);
         }else{
             //uuid生成主键
@@ -126,6 +128,8 @@ public class ScFollowService {
             sc.setDengjiDate(new Date());
             sc.setDengjiId(vo.getUser().getId());
             sc.setDengjijigouId(vo.getUser().getOrgCode());
+            sc.setUpdateBy(vo.getUser().getName());
+            sc.setUpdateDate(new Date());
             flag=scFollowDao.insert(vo.getScFollow());
         }
         if (flag>0){
@@ -133,6 +137,8 @@ public class ScFollowService {
             ScDiagCheckRemind sdcr=scDiagCheckRemindDao.getByCheckId(sc.getScCheckId());
             if (!sdcr.getRemindStatus().equals("04")){
                 sdcr.setRemindStatus("02");
+                sdcr.setUpdateDate(new Date());
+                sdcr.setUpdateBy(vo.getUser().getName());
                 scDiagCheckRemindDao.update(sdcr);
             }
             return true;
