@@ -209,6 +209,12 @@ public class StatisticsService {
             for (InformationCollectionVo vo : scVoList) {
                 if (vo!=null){
                     vo.setTNMfq(vo.getZHONGLIUTNM_T()+vo.getZHONGLIUTNM_N()+vo.getZHONGLIUTNM_M());
+                    if ("1".equals(vo.getShifouweijing()))
+                        vo.setJcxm("胃镜");
+                    if ("1".equals(vo.getChangjing()))
+                        vo.setJcxm("肠镜");
+                    if ("1".equals(vo.getShifouLDCT()))
+                        vo.setJcxm("LDCT");
                 }
                 if (vo.getRegorg() != null) {
                     vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());

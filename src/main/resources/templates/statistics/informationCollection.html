@@ -136,14 +136,12 @@
                         <div field="personcard" renderer="sfzhRenderer" width="200px" headerAlign="center" align="center" allowSort="false">证件号码</div>
                         <div field="regorg" sortField="regorg"autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >筛查登记机构</div>
                         <div field="jcxm" width="150px" headerAlign="center" align="center" allowSort="false">检查项目</div>
-                        <div field="zlwz" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >病变部位
-                            <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
-                                   valueField="code" th:data="${#dic.generals('60031')}"/></div>
+                        <div field="zlwz" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >病变部位</div>
                         <div field="zldx" width="150px" headerAlign="center" align="center" allowSort="false">肿瘤大小（最大直径）</div>
                         <div field="sfhj" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否活检
                             <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                    valueField="code" th:data="${#dic.generals('60031')}"/></div>
-                        <div field="hjjg" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否活检
+                        <div field="hjjg" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >活检结果
                             <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                    valueField="code" th:data="${#dic.generals('60033')}"/></div>
                         <div field="sfbl" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否病理
@@ -162,12 +160,19 @@
             <script type="text/javascript">
 
                 mini.parse();
+                var form = new mini.Form("#formsearch");
                 var grid = mini.get("datagrid");
 
                 $(function () {
                     getHospitals();
                 });
                 function onSearch() {
+                    if(form.isValid() == false){
+                        miniErrorLocation();
+                        showTips('查询条件不正确','warning');
+                        $("datagrid").empty();
+                        return;
+                    }
                     var data={};
                     data.regarea=mini.get("regarea").getValue();
                     data.regorg=mini.get("regorg").getValue();
@@ -191,20 +196,37 @@
                     var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
                     mini.get("regorg").setUrl(url);
                 }
+                function reset(){
+                    var textbox= $(".mini-textbox").length;
+                    for(var i=0;i<textbox;i++) {
+                        var id = $(".mini-textbox")[i].id;
+                        if(id!="jbzabh"&&id!="etbm"&&id!='csrq'&&id!='dqzt'){
+                            if(mini.get(id)!=null){
+                                mini.get(id).setValue('');
+                            }
+                        }
+                    }
+                }
+
+
+
 
 
                 //导出
                 function exportData(){
-                    /*if(isEmpty()){
-                        mini.alert("请选择统计年度");
-                        return;
-                    }
-                    var year = $("#year").val();
-                    var month = $("#month").val();
-                    var param ='?';
-                    param += 'year='+year;
-                    param += '&month='+month;*/
-                    window.location.href="${ctx}/doctor/healthassessment/exportHealthWorkload";
+
+                   var  regarea=mini.get("regarea").getValue();
+                   var  regorg=mini.get("regorg").getValue();
+                   var  csrqStart=mini.get("csrqStart").getValue();
+                   var  csrqEnd=mini.get("csrqEnd").getValue();
+                  /* console.log(csrqEnd);
+                   console.log(csrqStart);*/
+                   var param ='?';
+                    param += 'regarea='+regarea;
+                    param += '&regorg='+regorg;
+                   /* param += '&csrqStart='+csrqStart;
+                    param += '&csrqEnd='+csrqEnd;*/
+                    window.location.href="../statistics/exportInformationData"+param;
                 }
 
             </script>
@@ -212,7 +234,6 @@
         </div>
 
     </div>
-
-
+</div>
 </body>
 </html>

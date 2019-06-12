@@ -32,5 +32,10 @@ public class NegativeSearchVo extends SummarySearchVo {
      */
     private Boolean sc;
 
+    /**
+     * 复选框选中几个
+     */
+    private Integer count;
+
 
 }

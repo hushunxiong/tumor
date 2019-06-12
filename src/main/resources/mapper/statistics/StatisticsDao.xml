@@ -25,7 +25,7 @@
         t.csrq,
         t.manageid
         FROM(
-        <if test=" crc ==true">
+        <if test="crc==true">
             SELECT
             crc.MANAGEID as manageid,
             crc.regorg AS regorg,
@@ -34,6 +34,7 @@
             CRC_REGCASE crc
             where
             crc.CHECK_RESULT=1
+            and crc.del_flag=0
             <if test="csrqStart !=null">
                 and crc.regdate >=#{csrqStart}
             </if>
@@ -46,11 +47,11 @@
             <if test="regorg != null and regorg !=''">
                 and crc.regorg=#{regorg}
             </if>
-            <if test=" sc==true || test=luc==true || test=lic==true ">
+            <if test="sc==true or luc==true or lic==true ">
                 union all
             </if>
         </if>
-        <if test=" lic ==true">
+        <if test="lic==true">
             SELECT
             lic.MANAGEID as manageid,
             lic.regorg AS regorg,
@@ -59,6 +60,7 @@
             LIC_REGCASE lic
             where
             lic.CHECK_RESULT=1
+            and lic.del_flag=0
             <if test="csrqStart !=null">
                 and lic.regdate >=#{csrqStart}
             </if>
@@ -71,11 +73,11 @@
             <if test="regorg != null and regorg !=''">
                 and lic.regorg=#{regorg}
             </if>
-            <if test="sc==true || test=luc==true ">
+            <if test="sc==true or luc==true ">
                 union all
             </if>
         </if>
-        <if test=" luc==true">
+        <if test="luc==true">
             SELECT
             luc.MANAGEID as manageid,
             luc.regorg AS regorg,
@@ -84,6 +86,7 @@
             LUC_REGCASE luc
             where
             luc.CHECK_RESULT=1
+            and luc.del_flag=0
             <if test="csrqStart !=null">
                 and luc.regdate >=#{csrqStart}
             </if>
@@ -97,11 +100,11 @@
             <if test="regorg != null and regorg !=''">
                 and luc.regorg=#{regorg}
             </if>
-            <if test=" sc==true">
+            <if test="sc==true">
                 union all
             </if>
         </if>
-        <if test=" sc==true">
+        <if test="sc==true">
             SELECT
             sc.MANAGEID as manageid,
             sc.regorg AS regorg,
@@ -110,6 +113,7 @@
             SC_REGCASE sc
             where
             sc.CHECK_RESULT=1
+            and sc.del_flag=0
             <if test="csrqStart !=null">
                 and sc.regdate >=#{csrqStart}
             </if>
@@ -128,11 +132,11 @@
         GROUP BY
         t.REGORG,
         t.CSRQ,
-        t.MANAGEID
+        t.MANAGEID having count(1)=#{count}
         ) t2 left join cancer_person_info info on t2.MANAGEID=info.ID
+        where info.del_flag=0
 
     </select>
-    
 
     <!--初筛信息汇总（阳性大肠癌）-->
     <select id="getCrcPositive" parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo"
@@ -167,7 +171,10 @@
         WHERE
         crc.check_result =2
         AND info.del_flag =0
-
+        and crc.del_flag=0
+        and crcrisk.del_flag=0
+        and crcfobt.del_flag=0
+        and crcfo.del_flag=0
         <if test="csrqStart !=null">
             and crc.regdate >=#{csrqStart}
         </if>
@@ -219,6 +226,10 @@
         WHERE
         lic.check_result = 2
         AND info.del_flag = 0
+        and lic.del_flag=0
+        and licrisk.del_flag = 0
+        and licfo.del_flag = 0
+        and licac.del_flag = 0
         <if test="csrqStart !=null">
             and lic.regdate >=#{csrqStart}
         </if>
@@ -267,6 +278,9 @@
         WHERE
         luc.check_result = 2
         AND info.del_flag = 0
+        and luc.del_flag = 0
+        and lucrisk.del_flag = 0
+        and lucfo.del_flag = 0
         <if test="csrqStart !=null">
             and luc.regdate >=#{csrqStart}
         </if>
@@ -312,6 +326,9 @@
         WHERE
         sc.check_result = 2
         AND info.del_flag = 0
+        and sc.del_flag = 0
+        and scrisk.del_flag = 0
+        and scfo.del_flag = 0
         <if test="csrqStart !=null">
             and sc.regdate >=#{csrqStart}
         </if>
@@ -334,6 +351,9 @@
         info.PERSONCARD AS personcard,
         t.MANAGEID AS MANAGEID,
         t.REGORG AS REGORG,
+        t.CHANGJING as changjing,
+        t.SHIFOULDCT as SHIFOULDCT,
+        t.SHIFOUWEIJING as SHIFOUWEIJING,
         t.bbbw AS bbbw,
         t.zldx AS zldx,
         t.sfhj AS sfhj,
@@ -350,6 +370,9 @@
             SELECT
             crc.MANAGEID AS MANAGEID,
             crc.REGORG AS REGORG,
+            crcfo.changjing as changjing,
+            null as shifouLDCT,
+            null as shifouweijing,
             crcfo.bingbianbuw AS bbbw,
             crcfo.bingbianDaXiao AS zldx,
             crcfo.huojian AS sfhj,
@@ -364,7 +387,8 @@
             crc_regcase crc
             LEFT JOIN CRC_FOLLOW crcfo ON crc.ID = crcfo.CRC_CHECK_ID
             where
-            1=1
+            crc.del_flag = 0
+            and crcfo.del_flag = 0
             <if test="csrqStart !=null">
                 and crc.regdate >=#{csrqStart}
             </if>
@@ -383,6 +407,9 @@
             SELECT
             lic.MANAGEID AS MANAGEID,
             lic.REGORG AS REGORG,
+            null as changjing,
+            null as shifouLDCT,
+            null as shifouweijing,
             licfo.zhongliuweizh AS bbbw,
             licfo.zhongliudaxiao AS zldx,
             licfo.huojian AS sfhj,
@@ -397,7 +424,8 @@
             lic_regcase lic
             LEFT JOIN lic_FOLLOW licfo ON lic.ID = licfo.LIC_CHECK_ID
             where
-            1=1
+            lic.del_flag = 0
+            and licfo.del_flag = 0
             <if test="csrqStart !=null">
                 and lic.regdate >=#{csrqStart}
             </if>
@@ -417,6 +445,9 @@
             SELECT
             luc.MANAGEID AS MANAGEID,
             luc.REGORG AS REGORG,
+            null as changjing,
+            lucfo.shifouLDCT as shifouLDCT,
+            null as shifouweijing,
             lucfo.zhongliuweizh AS bbbw,
             lucfo.zhongliudaxiao AS zldx,
             lucfo.huojian AS sfhj,
@@ -431,7 +462,8 @@
             luc_regcase luc
             LEFT JOIN luc_FOLLOW lucfo ON luc.ID = lucfo.luc_CHECK_ID
             where
-            1=1
+            luc.del_flag = 0
+            and lucfo.del_flag = 0
             <if test="csrqStart !=null">
                 and luc.regdate >=#{csrqStart}
             </if>
@@ -452,6 +484,9 @@
             SELECT
             sc.MANAGEID AS MANAGEID,
             sc.REGORG AS REGORG,
+            null as changjing ,
+            null as shifouLDCT,
+            scfo.shifouweijing as shifouweijing,
             scfo.zhongliuweizh AS bbbw,
             scfo.zhongliudaxiao AS zldx,
             scfo.huojian AS sfhj,
@@ -466,7 +501,8 @@
             sc_regcase sc
             LEFT JOIN sc_FOLLOW scfo ON sc.ID = scfo.sc_CHECK_ID
             where
-            1=1
+            sc.del_flag = 0
+            and scfo.del_flag = 0
             <if test="csrqStart !=null">
                 and sc.regdate >=#{csrqStart}
             </if>

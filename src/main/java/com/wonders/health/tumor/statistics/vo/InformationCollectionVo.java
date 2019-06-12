@@ -43,4 +43,11 @@ public class InformationCollectionVo {
 
     private String ZHONGLIUTNM_M;
 
+    private String shifouweijing; //是否胃镜,为1是，是则在页面检查项处显示“胃镜”
+
+    private String changjing ;    // 是否肠镜,为1是，是则在页面检查项处显示“肠镜”
+
+    private String shifouLDCT;    // 是否ct,为1是，是则在页面检查项处显示“ct”
+
+
 }
