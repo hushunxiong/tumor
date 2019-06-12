@@ -13,6 +13,7 @@ import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.tumor.entity.CrcFobtRemind;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -126,17 +128,37 @@ public class BusinessRemindController extends BaseController {
 
 
 
+    //更新大肠癌便隐血提醒  传参解释：id为对应便隐血检查提醒表id，type为电话（01）或者上门（02），first代表第一次提醒日期是否为空，second代表第二次提醒日期是否为空
     @ResponseBody
-    @RequestMapping(value = "save", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-    public AjaxReturn<Map<String, String>> save(@Valid crcClosingCase crcClosingCase, BindingResult result) {
-        if (result.hasErrors()) {
-            return new AjaxReturn<Map<String, String>>(false, "校验失败");
-        }
+    @RequestMapping(value = "updateCrcFobtRemind", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public AjaxReturn<Map<String, String>> updateCrcFobtRemind(String id,String type, String first,String second,String res1,String res2) {
         try {
-            return busRemindService.saveOrUpdate(crcClosingCase, getSessionUser().getId());
+            CrcFobtRemind vo=new CrcFobtRemind();
+            vo.setId(id);
+            vo.setUpdateBy(getSessionUser().getId());
+            vo.setUpdateDate(new Date());
+
+            if((StringUtils.isBlank(res1)||res1==null||res1=="null"||"null".equals(res1))&&(StringUtils.isBlank(res2)||res2==null||res2=="null"||"null".equals(res2))){//第一次检查结果为空
+                if((StringUtils.isBlank(first)||first==null||first=="null"||"null".equals(first))&&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))){                //第一次提醒日期、第二次提醒日期均为空的场合（电话、上门）
+                    vo.setPerFobtRemindDate(DateUtils.addDate(new Date(),7));
+                    vo.setFobtRemindStatus("01");
+                    vo.setFirstFobtRemindDate(new Date());
+                    vo.setFirstFobtRemindType(type);
+                }else if(StringUtils.isNotBlank(first)&&first!="null"&&!"null".equals(first)&&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))){      //第一次提醒日期不为空、第二次提醒日期为空的场合（电话、上门）
+                    vo.setFobtRemindStatus("04");
+                    vo.setSecondFobtRemindDate(new Date());
+                    vo.setSecondFobtRemindType(type);
+                }
+            }else if(StringUtils.isNotBlank(res1)&&res1!="null"&&!"null".equals(res1)&&(StringUtils.isBlank(res2)||res2==null||res2=="null"||"null".equals(res2))){
+                vo.setFobtRemindStatus("04");
+                vo.setSecondFobtRemindDate(new Date());
+                vo.setSecondFobtRemindType(type);
+            }
+
+            return busRemindService.updateCrcFobtRemind(vo, getSessionUser().getId());
         } catch (Exception e) {
             logger.error("", e);
-            return new AjaxReturn<Map<String, String>>(false, "保存异常");
+            return new AjaxReturn<Map<String, String>>(false, "操作异常");
         }
     }
 

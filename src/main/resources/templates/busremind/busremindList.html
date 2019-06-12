@@ -93,7 +93,7 @@
                 <div id="crcGrid1" class="mini-datagrid" style="width:100%;height:auto;" showpager="false" allowCellWrap="true"
                      url="/tumor/busremind/detailFobtRemind">
                     <div property="columns">
-                        <div field="crcRegcase.id" visible="false">id</div>
+                        <div field="crcRegcase.id" name="id" visible="false">id</div>
                         <div field="fobtR.fobtRemindStatus" visible="false">提醒状态</div>
                         <div field="crcRegcase.idNumber" align="center" headerAlign="center" allowSort="false">大肠癌<BR>初筛编号</div>
                         <div field="crcRegcase.regdate" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">大肠癌<BR>初筛登记日期</div>
@@ -124,7 +124,7 @@
                 <div id="licGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
                      url="/tumor/busremind/detailLicRemind">
                     <div property="columns">
-                        <div field="licDiag.id" visible="false">id</div>
+                        <div field="licDiag.id" name="id" visible="false">id</div>
                         <div field="licDiag.remindStatus" visible="false">提醒状态</div>
                         <div field="licRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">肝癌<BR>初筛判定结果</div>
                         <div field="licDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
@@ -213,7 +213,6 @@
         mini.get("orgCode").setUrl(url);
     }
 
-
     function onShowRowDetail(e) {
         var crcgrid1=mini.get("crcGrid1");
         var crcgrid2=mini.get("crcGrid2");
@@ -287,13 +286,102 @@
     //操作列
     function actionRenderer(e) {
         var r = e.record;
-        console.log(r)
         var h = '';
-        h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="onSearch()">电话</div>';
-        h+='<div class="my-btn my-btn-blue "  style="min-width: 30px;width:30px" onclick="onSearch()">上门</div>';
+        console.log(r)
+        //状态为03是需要提醒
+        if(r.fobtR!=null){  //大肠癌便隐血提醒
+            if(r.fobtR.fobtRemindStatus!=null){
+                if(r.fobtR.fobtRemindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+\''+ r.fobtR.id + '\',\'' + 0 + '\',\'' + r.fobtR.firstFobtRemindDate + '\',\'' + r.fobtR.secondFobtRemindDate + '\',\''
+                        + r.crcFobt.firstFobtResult + '\',\'' + r.crcFobt.secondFobtResult +'\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+\''+ r.fobtR.id + '\',\'' + 0 + '\',\'' + r.fobtR.firstFobtRemindDate + '\',\'' + r.fobtR.secondFobtRemindDate+ '\',\''
+                        + r.crcFobt.firstFobtResult + '\',\''  + r.crcFobt.secondFobtResult +'\')">上门</div>';
+                }
+            }
+        }else if(r.crcDiag!=null){  //大肠癌诊断检查提醒
+            if(r.crcDiag.remindStatus!=null){
+                if(r.crcDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+\''+ r.crcDiag.id + '\',\'' + 1 + '\',\'' + r.crcDiag.firstRemindDate + '\',\'' + r.crcDiag.secondRemindDate+ '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+\'' + r.crcDiag.id  + '\',\'' + 1 + '\',\'' + r.crcDiag.firstRemindDate + '\',\'' + r.crcDiag.secondRemindDate+ '\')">上门</div>';
+                }
+            }
+        }else if(r.licDiag!=null){  //肝癌诊断检查提醒
+            if(r.licDiag.remindStatus!=null){
+                if(r.licDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+\''+ r.licDiag.id + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+   '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+\'' + r.licDiag.id  + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+  '\')">上门</div>';
+                }
+            }
+        }else if(r.lucDiag!=null){  //肺癌诊断检查提醒
+            if(r.lucDiag.remindStatus!=null){
+                if(r.lucDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+\''+ r.lucDiag.id + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+  '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+\'' + r.lucDiag.id  + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+  '\')">上门</div>';
+                }
+            }
+        }else if(r.scDiag!=null){   //胃癌诊断检查提醒
+            if(r.scDiag.remindStatus!=null){
+                if(r.scDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+\''+ r.scDiag.id + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+\'' + r.scDiag.id  + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\')">上门</div>';
+                }
+            }
+        }
         return h;
     }
 
+    //电话按钮  type为对应功能表，first为第一次提醒日期，second为第二次提醒日期,res1为便隐血第一次检查结果，res2为便隐血第二次检查结果
+    function doit(opType,id,type,first,second,res1,res2){
+        var data={};
+        data.id=id;
+        data.first=first;
+        data.second=second;
+        data.res1=res1;
+        data.res2=res2;
+        if(opType==1){
+            data.type="01";
+        }else{
+            data.type="02";
+        }
+
+        var url='';
+        if(type=="0"|| type=='0'){
+            url='/tumor/busremind/updateCrcFobtRemind';
+        }else if(type=="1"|| type=='1'){
+            url='/tumor/busremind/updateCrcFobtRemind';
+        }else if(type=="2"|| type=='2'){
+            url='/tumor/busremind/updateCrcFobtRemind';
+        }else if(type=="3"|| type=='3'){
+            url='/tumor/busremind/updateCrcFobtRemind';
+        }
+
+        $.ajax({
+            url: url,
+            type:"post",
+            data:data,
+            dataType: "json",
+            success:function(res){
+                if(!res.ok){
+                    mini.showTips({
+                        content: res.msg,
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                } else {
+                    mini.showTips({
+                        content: res.msg,
+                        state: "success",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                    var obj = res.value;
+                }
+            }
+        });
+    }
 
     function dateValidation(e) {
         var key = $('#keyword').val();

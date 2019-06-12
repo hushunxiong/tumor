@@ -339,11 +339,41 @@
 		a.personcard=#{personcard}
 	</select>
 
+
+	<!--以下为提醒方式update-->
+	<update id="updateCrcFobtRemind">
+		UPDATE crc_fobt_remind SET
+		<if test="firstFobtRemindDate!=null">
+			first_fobt_remind_date =  #{firstFobtRemindDate},
+		</if>
+		<if test="firstFobtRemindType!=null and firstFobtRemindType !=''">
+			first_fobt_remind_type = #{firstFobtRemindType},
+		</if>
+		<if test="secondFobtRemindDate!=null">
+			second_fobt_remind_date =  #{secondFobtRemindDate},
+		</if>
+		<if test="secondFobtRemindType!=null and secondFobtRemindType !=''">
+			second_fobt_remind_type = #{secondFobtRemindType},
+		</if>
+		<if test="perFobtRemindDate!=null ">
+			per_fobt_remind_date = #{perFobtRemindDate},
+		</if>
+
+		fobt_remind_status = #{fobtRemindStatus}
+
+		WHERE id = #{id}
+	</update>
+
 	<update id="update">
 		UPDATE CRC_FOLLOW SET
 		id = #{id},primary_mark = #{primaryMark},crc_check_id = #{crcCheckId},shifouquezhen = #{shifouquezhen},yingxiangxue_fangshi = #{yingxiangxueFangshi},changjing = #{changjing},buzuochangjing_yuanyin = #{buzuochangjingYuanyin},buzuochangjing_yuanyin_qita = #{buzuochangjingYuanyinQita},wutongchangjing = #{wutongchangjing},changjingbuwei = #{changjingbuwei},bingbianbuw = #{bingbianbuw},bingbianshu = #{bingbianshu},gangjuli = #{gangjuli},bingbiandaxiao = #{bingbiandaxiao},huojian = #{huojian},huojianjieguo = #{huojianjieguo},liubian = #{liubian},xirouxingzhuang = #{xirouxingzhuang},youwudi = #{youwudi},chuxueqingkuang = #{chuxueqingkuang},huojianriq = #{huojianriq},bingli = #{bingli},binglileixing = #{binglileixing},shifouzhiliao = #{shifouzhiliao},bingbianchuli = #{bingbianchuli},shoushufangshi = #{shoushufangshi},fuzhuzhiliao = #{fuzhuzhiliao},zhongliuleix = #{zhongliuleix},fenhuachengdu = #{fenhuachengdu},fenqiyiju = #{fenqiyiju},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},linchuangfenqi = #{linchuangfenqi},linchuangfenqi_putuo = #{linchuangfenqiPutuo},tnmfenqilaiyuan = #{tnmfenqilaiyuan},zhuyuanhao = #{zhuyuanhao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},changjingjigou_id = #{changjingjigouId},changjingjigou_name = #{changjingjigouName},changjing_date = #{changjingDate},changjing_yisheng = #{changjingYisheng},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},zhenduan_date = #{zhenduanDate},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
 		WHERE id = #{id}
 	</update>
+
+
+
+
+
 
 	<update id="delete">
 	    UPDATE CRC_FOLLOW SET del_flag = '1'

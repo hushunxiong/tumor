@@ -16,6 +16,7 @@ import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.DictUtils;
 import com.wonders.health.tumor.common.utils.IdGen;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.tumor.entity.CrcFobtRemind;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,6 @@ public class BusRemindService {
         return new DataGrid<BusRemindResultVo>(list.size(),list);
     }
 
-
     public  DataGrid<BusRemindResultVo>getCrcDiag(String personcard,String crcFlag) {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
@@ -105,7 +105,6 @@ public class BusRemindService {
         });
         return new DataGrid<BusRemindResultVo>(list.size(),list);
     }
-
 
     public  DataGrid<BusRemindResultVo>getLicDiag(String personcard,String licFlag) {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
@@ -213,41 +212,15 @@ public class BusRemindService {
     }
 
 
-    public DataGrid<BusRemindResultVo> findPage(DataGridSearch search) {
 
-//        Integer count = crcClosingCaseDao.pageCount(search);
-
-
-//        if (count > 0) {
-//        	list = crcClosingCaseDao.pageList(search);
-//        }
-//        return new DataGrid<BusRemindResultVo>(count,list);
-
-        return null;
-    }
-
-//    public crcClosingCase findById(String id) {
-//        return crcClosingCaseDao.get(id);
-//    }
 
     @Transactional(readOnly = false)
-    public AjaxReturn<Map<String, String>> saveOrUpdate(crcClosingCase vo, String userId) {
+    public AjaxReturn<Map<String, String>> updateCrcFobtRemind(CrcFobtRemind vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
-            crcClosingCase po = null;
-            if (po != null) {
-                BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
-                po.initByUpdate(userId);
-//                crcClosingCaseDao.update(po);
-                return new AjaxReturn<Map<String, String>>(true, "修改成功");
-            } else {
-                return new AjaxReturn<Map<String, String>>(false, "传入ID无法找到记录");
-            }
-        } else { //新增
-            vo.setId(IdGen.uuid());
-            vo.init(userId);
-//            crcClosingCaseDao.insert(vo);
-            return new AjaxReturn<Map<String, String>>(true, "保存成功");
+            busRemindDao.updateCrcFobtRemind(vo);
+            return new AjaxReturn<Map<String, String>>(true, "操作成功");
         }
+        return new AjaxReturn<Map<String, String>>(false, "操作失败");
     }
 
 }
