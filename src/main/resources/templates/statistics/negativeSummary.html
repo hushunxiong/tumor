@@ -34,7 +34,9 @@
 <body>
 
 <div class="content pd-10" style="width:auto; overflow: hidden;">
-    <div align="center">初筛信息汇总(阴性)</div>
+    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
+        <div title="初筛信息汇总(阴性)">
+            <div class="col-lg-12">
     <div class="col-lg-12">
 
         <div class="mini-clearfix">
@@ -105,6 +107,10 @@
         </div>
     </div>
 </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -134,14 +140,14 @@
                     if(isSel==false)
                     {
                         showActionMessage('info','初筛阴性类型至少要选中一个');
-                        $("#datagrid").hide();
+                        grid.clearRows();
                         return;
                     }
                     var data = {};
                     data.regarea=mini.get("regarea").getValue();
                     data.regorg = mini.get("regorg").getValue();
                     data.csrqStart = mini.get("csrqStart").getValue();
-                    if(!data.csrqStart) data.csrqStart=stringToDate('1996-09-07');
+                    if(!data.csrqStart) data.csrqStart=stringToDate('1970-01-01');
                     data.csrqEnd = mini.get("csrqEnd").getValue();
                     if(!data.csrqEnd) data.csrqEnd=stringToDate(getNow());
                     data.crc = mini.get("crc").getValue();
@@ -180,7 +186,20 @@
                     var date = new Date(year,month,day);
                     return date;
                 }
-
+                function reset(){
+                    var mydate = new Date();
+                    var start = mydate.getFullYear()+"-01"+"-01";
+                    mini.get('csrqStart').setValue(start);
+                    mini.get('csrqEnd').setValue(getResetNow());
+                    mini.get('regorg').setValue("")
+                }
+                function getResetNow() {
+                    var myDate = new Date();//获取系统当前时间
+                    var y = myDate.getFullYear();
+                    var m = myDate.getMonth()+1;
+                    var d = myDate.getDate();
+                    return y+"-"+m+"-"+d;
+                }
 
 
                 /**

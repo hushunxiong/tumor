@@ -33,8 +33,9 @@
     <title>初筛信息汇总表(阳性_大肠癌)</title>
 <body>
 <div class="content pd-10" style="width:auto; overflow: hidden;">
-    <div align="center">初筛信息汇总表(阳性_大肠癌)</div>
-    <div class="col-lg-12">
+    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
+        <div title="初筛信息汇总表(阳性大肠癌)">
+            <div class="col-lg-12">
 
         <div class="mini-clearfix">
             <div class="tab-content">
@@ -113,7 +114,10 @@
             </div>
         </div>
 
-
+        </div>
+            </div>
+        </div></div>
+</div>
 
         <script type="text/javascript">
 
@@ -128,7 +132,7 @@
                 data.regarea=mini.get("regarea").getValue();
                 data.regorg=mini.get("regorg").getValue();
                 data.csrqStart=mini.get("csrqStart").getValue();
-                if(!data.csrqStart) data.csrqStart=stringToDate('1996-09-07');
+                if(!data.csrqStart) data.csrqStart=stringToDate('1970-01-01');
                 data.csrqEnd=mini.get("csrqEnd").getValue();
                 if(!data.csrqEnd) data.csrqEnd=stringToDate(getNow());
                 grid.load(data, gridLoadSuccess, gridLoadError);
@@ -170,6 +174,21 @@
                 var regarea= mini.get("regarea").getValue();
                 var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
                 mini.get("regorg").setUrl(url);
+            }
+
+            function reset(){
+                var mydate = new Date();
+                var start = mydate.getFullYear()+"-01"+"-01";
+                mini.get('csrqStart').setValue(start);
+                mini.get('csrqEnd').setValue(getResetNow());
+                mini.get('regorg').setValue("")
+            }
+            function getResetNow() {
+                var myDate = new Date();//获取系统当前时间
+                var y = myDate.getFullYear();
+                var m = myDate.getMonth()+1;
+                var d = myDate.getDate();
+                return y+"-"+m+"-"+d;
             }
             /**
              * miniui 小提示

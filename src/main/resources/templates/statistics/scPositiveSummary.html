@@ -33,12 +33,11 @@
 
 
 <div class="content pd-10" style="width:auto; overflow: hidden;">
-    <div align="center">初筛信息汇总(阳性胃癌)</div>
+    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
+        <div title="初筛信息汇总(阳性胃癌)">
+    <div align="center"></div>
     <div class="col-lg-12">
 
-        <div class="mini-clearfix">
-            <div class="tab-content">
-                <div class="secher">
                     <div id="formsearch" class="row mt-10">
                         <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
                         <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
@@ -111,6 +110,9 @@
                     </div>
                 </div>
             </div>
+    </div>
+</div>
+
 
 
 
@@ -127,7 +129,7 @@
                     data.regarea=mini.get("regarea").getValue();
                     data.regorg=mini.get("regorg").getValue();
                     data.csrqStart=mini.get("csrqStart").getValue();
-                    if(!data.csrqStart) data.csrqStart=stringToDate('1996-09-07');
+                    if(!data.csrqStart) data.csrqStart=stringToDate('1970-01-01');
                     data.csrqEnd=mini.get("csrqEnd").getValue();
                     if(!data.csrqEnd) data.csrqEnd=stringToDate(getNow());
                     grid.load(data, gridLoadSuccess, gridLoadError);
@@ -173,6 +175,20 @@
                     var regarea= mini.get("regarea").getValue();
                     var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
                     mini.get("regorg").setUrl(url);
+                }
+                function reset(){
+                    var mydate = new Date();
+                    var start = mydate.getFullYear()+"-01"+"-01";
+                    mini.get('csrqStart').setValue(start);
+                    mini.get('csrqEnd').setValue(getResetNow());
+                    mini.get('regorg').setValue("")
+                }
+                function getResetNow() {
+                    var myDate = new Date();//获取系统当前时间
+                    var y = myDate.getFullYear();
+                    var m = myDate.getMonth()+1;
+                    var d = myDate.getDate();
+                    return y+"-"+m+"-"+d;
                 }
 
                 /**
