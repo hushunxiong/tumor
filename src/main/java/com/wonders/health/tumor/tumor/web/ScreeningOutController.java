@@ -181,10 +181,11 @@ public class ScreeningOutController extends BaseController {
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
             CancerPersonInfo personInfo = new CancerPersonInfo();
+            personInfo.setPersoncard(personcard);
+            personInfo.setPersoncardType(personcardType);
             personInfo.setRegdoc(user.getId());
             personInfo.setRegorg(user.getOrgCode());
             personInfo.setRegdate(new Date());
-            personInfo.setPersoncardType("01");
             personInfo.setAddressCounty(areaCode);
             personInfo.setPaddressCounty(areaCode);
 
