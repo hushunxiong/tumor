@@ -1,9 +1,6 @@
 package com.wonders.health.tumor.statistics.vo;
 
-import com.wonders.health.tumor.common.model.DataGridSearch;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
 * @Description:    统计报表的查询条件

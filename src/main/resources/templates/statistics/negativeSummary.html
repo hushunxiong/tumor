@@ -238,9 +238,11 @@
                     var luc = mini.get("luc").getValue();
                     var sc  = mini.get("sc").getValue();
                     var regarea=mini.get("regarea").getValue();
+                    var csrqStart= mini.formatDate(mini.get("#csrqStart").getValue(),"yyyy-MM-dd HH:MM:SS");
+                    var csrqEnd= mini.formatDate(mini.get("#csrqEnd").getValue(),"yyyy-MM-dd HH:MM:SS");
                     var regorg=mini.get("regorg").getValue();
-                    var csrqStart=mini.get("csrqStart").getValue();
-                    var csrqEnd=mini.get("csrqEnd").getValue();
+                    /*var csrqStart=mini.get("csrqStart").getValue();
+                    var csrqEnd=mini.get("csrqEnd").getValue();*/
                     var param ='?';
                     param += 'regarea='+regarea;
                     param += '&regorg='+regorg;
