@@ -3,6 +3,7 @@ package com.wonders.health.tumor.statistics.service;
 import com.google.common.collect.Lists;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.service.AreaService;
+import com.wonders.health.tumor.common.tags.DictData;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.statistics.dao.StatisticsDao;
 import com.wonders.health.tumor.statistics.vo.*;
@@ -205,11 +206,21 @@ public class StatisticsService {
     public DataGrid<InformationCollectionVo> getInformation(SummarySearchVo searchVo) {
         List<InformationCollectionVo> scVoList = statisticsDao.getInformation(searchVo);
         if (scVoList != null && scVoList.size() > 0) {
-            AuthUtils a = new AuthUtils();
+            AuthUtils authUtils = new AuthUtils();
+            DictData dic = new DictData();
             String tnm ;
             for (InformationCollectionVo vo : scVoList) {
                 if (vo!=null){
-                    tnm=vo.getZHONGLIUTNM_T()+vo.getZHONGLIUTNM_N()+vo.getZHONGLIUTNM_M();
+                    if (vo.getZHONGLIUTNM_T()!=null){
+                        vo.setZHONGLIUTNM_T(dic.generalName("60044",vo.getZHONGLIUTNM_T()));
+                    }
+                    if (vo.getZHONGLIUTNM_N()!=null){
+                        vo.setZHONGLIUTNM_N(dic.generalName("60045",vo.getZHONGLIUTNM_N()));
+                    }
+                    if (vo.getZHONGLIUTNM_M()!=null){
+                        vo.setZHONGLIUTNM_M(dic.generalName("60046",vo.getZHONGLIUTNM_M()));
+                    }
+                    tnm=(vo.getZHONGLIUTNM_T())+vo.getZHONGLIUTNM_N()+vo.getZHONGLIUTNM_M();
                     vo.setTNMfq(tnm.replaceAll("null",""));
                     if ("1".equals(vo.getShifouweijing()))
                         vo.setJcxm("胃镜");
@@ -219,7 +230,7 @@ public class StatisticsService {
                         vo.setJcxm("LDCT");
                 }
                 if (vo.getRegorg() != null) {
-                    vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                    vo.setRegorg(authUtils.getHospitalByCode(vo.getRegorg()).getName());
                 }
             }
         }

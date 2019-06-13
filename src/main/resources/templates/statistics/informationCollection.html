@@ -114,8 +114,6 @@
                     getHospitals();
                 });
                 function onSearch() {
-                    var data = mini.get("datagrid");
-                    console.log(data);
                     var data={};
                     data.regarea=mini.get("regarea").getValue();
                     data.regorg=mini.get("regorg").getValue();
@@ -210,8 +208,8 @@
                    var param ='?';
                     param += 'regarea='+regarea;
                     param += '&regorg='+regorg;
-                   /* param += '&csrqStart='+csrqStart;
-                    param += '&csrqEnd='+csrqEnd;*/
+                    param += '&csrqStart='+csrqStart;
+                    param += '&csrqEnd='+csrqEnd;
                     window.location.href="../statistics/exportInformationData"+param;
                 }
 

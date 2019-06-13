@@ -18,6 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -95,6 +98,19 @@ public class StatisticsController {
         return dataGrid;
     }
 
+    /**
+     * 日期转换
+     */
+    public  static  Date foramt(String  str){
+        Date date = null;
+        DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = format1.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
     /**
      * 初筛信息汇总表（阴性）导出
@@ -108,8 +124,8 @@ public class StatisticsController {
     @RequestMapping("/exportNegativeData")
     public void exportNegativeData(   @RequestParam(required = false) String regarea,
                                       @RequestParam(required = false) String regorg,
-                                      @RequestParam(required = false) Date csrqStart,
-                                      @RequestParam(required = false) Date csrqEnd,
+                                      @RequestParam(required = false) String csrqStart,
+                                      @RequestParam(required = false) String csrqEnd,
                                       @RequestParam(required = false) boolean crc,
                                       @RequestParam(required = false) boolean lic,
                                       @RequestParam(required = false) boolean luc,
@@ -134,8 +150,8 @@ public class StatisticsController {
         }else{
             searchVo.setCount(count);
         }
-        searchVo.setCsrqStart(csrqStart);
-        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setCsrqStart(foramt(csrqStart));
+        searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
         searchVo.setCrc(crc);
@@ -204,11 +220,11 @@ public class StatisticsController {
     @RequestMapping("/exportCrcPositiveData")
     public void exportCrcPositiveData(@RequestParam(required = false) String regarea,
                                    @RequestParam(required = false) String regorg,
-                                   @RequestParam(required = false) Date csrqStart,
-                                   @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+                                   @RequestParam(required = false) String csrqStart,
+                                   @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
         SummarySearchVo searchVo = new SummarySearchVo();
-        searchVo.setCsrqStart(csrqStart);
-        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setCsrqStart(foramt(csrqStart));
+        searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
 
@@ -282,11 +298,11 @@ public class StatisticsController {
     @RequestMapping("/exportLicPositiveData")
     public void exportLicPositiveData(@RequestParam(required = false) String regarea,
                                       @RequestParam(required = false) String regorg,
-                                      @RequestParam(required = false) Date csrqStart,
-                                      @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+                                      @RequestParam(required = false) String csrqStart,
+                                      @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
         SummarySearchVo searchVo = new SummarySearchVo();
-        searchVo.setCsrqStart(csrqStart);
-        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setCsrqStart(foramt(csrqStart));
+        searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
 
@@ -363,11 +379,11 @@ public class StatisticsController {
     @RequestMapping("/exportLucPositiveData")
     public void exportLucPositiveData(@RequestParam(required = false) String regarea,
                                       @RequestParam(required = false) String regorg,
-                                      @RequestParam(required = false) Date csrqStart,
-                                      @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+                                      @RequestParam(required = false) String csrqStart,
+                                      @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
         SummarySearchVo searchVo = new SummarySearchVo();
-        searchVo.setCsrqStart(csrqStart);
-        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setCsrqStart(foramt(csrqStart));
+        searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
 
@@ -397,7 +413,7 @@ public class StatisticsController {
         }
         try {
             ExcelUtils.exportExcel(response, datas);
-        } catch (Exception e) {//todo 这个异常处理log
+        } catch (Exception e) {
             logger.error("肺癌阳性导出异常", e);
         }
     }
@@ -432,11 +448,11 @@ public class StatisticsController {
     @RequestMapping("/exportScPositiveData")
     public void exportScPositiveData(@RequestParam(required = false) String regarea,
                                       @RequestParam(required = false) String regorg,
-                                      @RequestParam(required = false) Date csrqStart,
-                                      @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+                                      @RequestParam(required = false) String csrqStart,
+                                      @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
         SummarySearchVo searchVo = new SummarySearchVo();
-        searchVo.setCsrqStart(csrqStart);
-        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setCsrqStart(foramt(csrqStart));
+        searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
 
@@ -466,7 +482,7 @@ public class StatisticsController {
         }
         try {
             ExcelUtils.exportExcel(response, datas);
-        } catch (Exception e) {//todo 这个异常处理log
+        } catch (Exception e) {
             logger.error("胃癌阳性导出异常", e);
         }
     }
@@ -512,11 +528,11 @@ public class StatisticsController {
     @RequestMapping("/exportInformationData")
     public void exportDynamicData2(@RequestParam(required = false) String regarea,
                                    @RequestParam(required = false) String regorg,
-                                   @RequestParam(required = false) Date csrqStart,
-                                   @RequestParam(required = false) Date csrqEnd, HttpServletResponse response) {
+                                   @RequestParam(required = false) String csrqStart,
+                                   @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
         InfomationSearchVo searchVo = new InfomationSearchVo();
-        searchVo.setCsrqStart(csrqStart);
-        searchVo.setCsrqEnd(csrqEnd);
+        searchVo.setCsrqStart(foramt(csrqStart));
+        searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
         searchVo.setCrcFlag(crcFlag);
@@ -547,7 +563,7 @@ public class StatisticsController {
         }
         try {
             ExcelUtils.exportExcel(response, datas);
-        } catch (Exception e) {//todo 这个异常处理log
+        } catch (Exception e) {
             logger.error("诊断信息收集导出异常", e);
         }
     }
