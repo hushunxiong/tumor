@@ -121,10 +121,6 @@
 
                 });
                 function onSearch() {
-
-                    $("#js").click(function () {
-                        $("#datagrid").show();
-                    });
                     var objs=document.getElementsByName('checkbox');
                     var isSel=false;//判断是否有选中项，默认为无
                     for(var i=0;i<objs.length;i++)
@@ -137,10 +133,9 @@
                     }
                     if(isSel==false)
                     {
-                        //miniErrorLocation();
-                        showTips('初筛阴性类型至少要选中一个','warning');
-                        $("datagrid").hide();
-                        return false;
+                        showActionMessage('info','初筛阴性类型至少要选中一个');
+                        $("#datagrid").hide();
+                        return;
                     }
                     var data = {};
                     data.regarea=mini.get("regarea").getValue();
@@ -152,16 +147,12 @@
                     data.luc = mini.get("luc").getValue();
                     data.sc = mini.get("sc").getValue();
                     grid.load(data, gridLoadSuccess, gridLoadError);
-
-
-                    /*var len = $("input[name=checkbox]:checked").length;
-                    if (len==0){
-                        miniErrorLocation();
-                        showTips('初筛阴性类型至少要选中一个','warning');
-                        $("#datagrid").hide();
-                        return;
-                    }*/
                 }
+                $(document).ready(function(){
+                    $("#js").click(function(){
+                        $("#datagrid").show();
+                    });
+                });
 
 
 
@@ -170,13 +161,13 @@
                  * @param msg  消息
                  * @param state  消息类型  default|success|info|warning|danger
                  */
-                function showTips(msg,state) {
+                function showActionMessage(state, message) {
                     mini.showTips({
-                        content: msg,
+                        content: message,
                         state: state,
-                        x: "center",
-                        y: "center",
-                        timeout: 3000
+                        x: "Center",
+                        y: "Center",
+                        timeout: 2000
                     });
                 }
 
@@ -191,6 +182,11 @@
 
                 //导出
                 function exportData(){
+                    var data = mini.get("datagrid");
+                    if (data.data.length==0){
+                        showActionMessage('info','没有可以导出的数据');
+                        return;
+                    }
                     var crc = mini.get("crc").getValue();
                     var lic = mini.get("lic").getValue();
                     var luc = mini.get("luc").getValue();

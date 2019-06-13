@@ -3,8 +3,6 @@ package com.wonders.health.tumor.statistics.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @Description: 初筛信息汇总表（阴性）Vo
  * @Author: lxl
@@ -19,7 +17,7 @@ public class NegativeSummaryVo  {
 
     private String xb; //性别
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")//Jackson包使用注解
+    @JsonFormat(pattern = "yyyy-MM-dd ")//Jackson包使用注解
     private String birthday; //出生日期
 
     private String address; //居住地址
@@ -30,7 +28,7 @@ public class NegativeSummaryVo  {
 
     private String regorg; //筛查登记机构
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") //Jackson包使用注解
+    @JsonFormat(pattern = "yyyy-MM-dd ") //Jackson包使用注解
     private String csrq; //初筛日期
 
     private String addressProvince; //居住地-省（自治区、直辖市）12位统计用区划代码和城乡划分代码

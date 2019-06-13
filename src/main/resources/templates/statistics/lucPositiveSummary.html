@@ -131,7 +131,9 @@
                     data.regarea=mini.get("regarea").getValue();
                     data.regorg=mini.get("regorg").getValue();
                     data.csrqStart=mini.get("csrqStart").getValue();
+                    if(!data.csrqStart) data.csrqStart=stringToDate('1996-09-07');
                     data.csrqEnd=mini.get("csrqEnd").getValue();
+                    if(!data.csrqEnd) data.csrqEnd=stringToDate(getNow());
                     grid.load(data, gridLoadSuccess, gridLoadError);
                     if (grid==null){
                         $("datagrid").empty();
@@ -144,6 +146,31 @@
                         $("#datagrid").show();
                     });
                 });
+                function getNow() {
+                    var myDate = new Date();//获取系统当前时间
+                    var y = myDate.getFullYear();
+                    var m = myDate.getMonth();
+                    var d = myDate.getDate();
+                    return y+"-"+m+"-"+d;
+                }
+
+                function stringToDate (dateStr,separator){
+                    if(!separator){
+                        separator="-";
+                    }
+                    var dateArr = dateStr.split(separator);
+                    var year = parseInt(dateArr[0]);
+                    var month;
+                    //处理月份为04这样的情况
+                    if(dateArr[1].indexOf("0") == 0){
+                        month = parseInt(dateArr[1].substring(1));
+                    }else{
+                        month = parseInt(dateArr[1]);
+                    }
+                    var day = parseInt(dateArr[2]);
+                    var date = new Date(year,month,day);
+                    return date;
+                }
 
                 function getHospitals(){
                     var regarea= mini.get("regarea").getValue();
@@ -151,9 +178,28 @@
                     mini.get("regorg").setUrl(url);
                 }
 
+                /**
+                 * miniui 小提示
+                 * @param msg  消息
+                 * @param state  消息类型  default|success|info|warning|danger
+                 */
+                function showActionMessage(state, message) {
+                    mini.showTips({
+                        content: message,
+                        state: state,
+                        x: "Center",
+                        y: "Center",
+                        timeout: 2000
+                    });
+                }
 
                 //导出
                 function exportData(){
+                    var data = mini.get("datagrid");
+                    if (data.data.length==0){
+                        showActionMessage('info','没有可以导出的数据');
+                        return;
+                    }
                     var  regarea=mini.get("regarea").getValue();
                     var  regorg=mini.get("regorg").getValue();
                     var  csrqStart=mini.get("csrqStart").getValue();
