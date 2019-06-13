@@ -141,7 +141,9 @@
                     data.regarea=mini.get("regarea").getValue();
                     data.regorg = mini.get("regorg").getValue();
                     data.csrqStart = mini.get("csrqStart").getValue();
+                    if(!data.csrqStart) data.csrqStart=stringToDate('1996-09-07');
                     data.csrqEnd = mini.get("csrqEnd").getValue();
+                    if(!data.csrqEnd) data.csrqEnd=stringToDate(getNow());
                     data.crc = mini.get("crc").getValue();
                     data.lic = mini.get("lic").getValue();
                     data.luc = mini.get("luc").getValue();
@@ -153,6 +155,31 @@
                         $("#datagrid").show();
                     });
                 });
+                function getNow() {
+                    var myDate = new Date();//获取系统当前时间
+                    var y = myDate.getFullYear();
+                    var m = myDate.getMonth();
+                    var d = myDate.getDate();
+                    return y+"-"+m+"-"+d;
+                }
+
+                function stringToDate (dateStr,separator){
+                    if(!separator){
+                        separator="-";
+                    }
+                    var dateArr = dateStr.split(separator);
+                    var year = parseInt(dateArr[0]);
+                    var month;
+                    //处理月份为04这样的情况
+                    if(dateArr[1].indexOf("0") == 0){
+                        month = parseInt(dateArr[1].substring(1));
+                    }else{
+                        month = parseInt(dateArr[1]);
+                    }
+                    var day = parseInt(dateArr[2]);
+                    var date = new Date(year,month,day);
+                    return date;
+                }
 
 
 
