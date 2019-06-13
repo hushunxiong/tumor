@@ -5,7 +5,7 @@ package com.wonders.health.tumor.busremind.dao;
 
 import com.wonders.health.tumor.busremind.vo.BusRemindResultVo;
 import com.wonders.health.tumor.common.model.DataGridSearch;
-import com.wonders.health.tumor.tumor.entity.CrcFobtRemind;
+import com.wonders.health.tumor.tumor.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -54,5 +54,13 @@ public interface BusRemindDao{
     public int delete(@Param("id") String id);
 
     public void updateCrcFobtRemind(CrcFobtRemind crcFobtRemind);
+
+    public void updateCrcDiag(CrcDiagCheckRemind crcDiagCheckRemind);
+
+    public void updateLicDiag(LicDiagCheckRemind licDiagCheckRemind);
+
+    public void updateScDiag(ScDiagCheckRemind scDiagCheckRemind);
+
+    public void updateLucDiag(LucDiagCheckRemind scDiagCheckRemind);
 
 }

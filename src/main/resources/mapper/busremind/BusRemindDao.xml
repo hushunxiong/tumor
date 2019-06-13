@@ -233,42 +233,56 @@
             parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
 		<choose>
 			<when test="startRecord == 0">
-		select * from (
+		select DISTINCT * from (
 			</when>
 			<otherwise>
-		select * from ( select row_.*, rownum rownum_ from (
+		select  DISTINCT * from ( select row_.*, rownum rownum_ from (
 			</otherwise>
 		</choose>
-			SELECT
-			<include refid="CancerPersonInfoColumns"/>
-			<include refid="pageFromBase"/>
 		<choose>
 			<when test="remindType == null or remindType == ''.toString()">
+				SELECT
+				<include refid="CancerPersonInfoColumns"/>
+				<include refid="pageFromBase"/>
 				<include refid="pageFromCrcfobt"/>
-				<include refid="pageFromOther"/>
-			</when>
-			<when test="remindType == '01'.toString()">
-				<include refid="pageFromCrcfobt"/>
-			</when>
-			<when test="remindType == '02'.toString()">
-				<include refid="pageFromOther"/>
-			</when>
-		</choose>
-
-			WHERE
-			<include refid="pageWhereBase"/>
-
-		<choose>
-			<when test="remindType == null or remindType == ''.toString()">
+				WHERE
+				<include refid="pageWhereBase"/>
 				<include refid="pageWhereCrcFobt"/>
+
+				UNION ALL
+
+				SELECT
+				<include refid="CancerPersonInfoColumns"/>
+				<include refid="pageFromBase"/>
+				<include refid="pageFromOther"/>
+				WHERE
+				<include refid="pageWhereBase"/>
 				<include refid="pageWhereOther"/>
 			</when>
-			<when test="remindType == '01'.toString()">
-				<include refid="pageWhereCrcFobt"/>
-			</when>
-			<when test="remindType == '02'.toString()">
-				<include refid="pageWhereOther"/>
-			</when>
+			<otherwise>
+				SELECT
+				<include refid="CancerPersonInfoColumns"/>
+				<include refid="pageFromBase"/>
+				<choose>
+					<when test="remindType == '01'.toString()">
+						<include refid="pageFromCrcfobt"/>
+					</when>
+					<when test="remindType == '02'.toString()">
+						<include refid="pageFromOther"/>
+					</when>
+				</choose>
+				WHERE
+				<include refid="pageWhereBase"/>
+				<choose>
+					<when test="remindType == '01'.toString()">
+						<include refid="pageWhereCrcFobt"/>
+					</when>
+					<when test="remindType == '02'.toString()">
+						<include refid="pageWhereOther"/>
+					</when>
+				</choose>
+			</otherwise>
+
 		</choose>
 
 		<choose>
@@ -358,17 +372,126 @@
 		<if test="perFobtRemindDate!=null ">
 			per_fobt_remind_date = #{perFobtRemindDate},
 		</if>
-
-		fobt_remind_status = #{fobtRemindStatus}
+		fobt_remind_status = #{fobtRemindStatus},
+		update_by = #{updateBy},update_date = #{updateDate}
 
 		WHERE id = #{id}
 	</update>
 
-	<update id="update">
-		UPDATE CRC_FOLLOW SET
-		id = #{id},primary_mark = #{primaryMark},crc_check_id = #{crcCheckId},shifouquezhen = #{shifouquezhen},yingxiangxue_fangshi = #{yingxiangxueFangshi},changjing = #{changjing},buzuochangjing_yuanyin = #{buzuochangjingYuanyin},buzuochangjing_yuanyin_qita = #{buzuochangjingYuanyinQita},wutongchangjing = #{wutongchangjing},changjingbuwei = #{changjingbuwei},bingbianbuw = #{bingbianbuw},bingbianshu = #{bingbianshu},gangjuli = #{gangjuli},bingbiandaxiao = #{bingbiandaxiao},huojian = #{huojian},huojianjieguo = #{huojianjieguo},liubian = #{liubian},xirouxingzhuang = #{xirouxingzhuang},youwudi = #{youwudi},chuxueqingkuang = #{chuxueqingkuang},huojianriq = #{huojianriq},bingli = #{bingli},binglileixing = #{binglileixing},shifouzhiliao = #{shifouzhiliao},bingbianchuli = #{bingbianchuli},shoushufangshi = #{shoushufangshi},fuzhuzhiliao = #{fuzhuzhiliao},zhongliuleix = #{zhongliuleix},fenhuachengdu = #{fenhuachengdu},fenqiyiju = #{fenqiyiju},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},linchuangfenqi = #{linchuangfenqi},linchuangfenqi_putuo = #{linchuangfenqiPutuo},tnmfenqilaiyuan = #{tnmfenqilaiyuan},zhuyuanhao = #{zhuyuanhao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},changjingjigou_id = #{changjingjigouId},changjingjigou_name = #{changjingjigouName},changjing_date = #{changjingDate},changjing_yisheng = #{changjingYisheng},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},zhenduan_date = #{zhenduanDate},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+	<update id="updateCrcDiag">
+		UPDATE crc_diag_check_remind SET
+			<if test="firstRemindDate!=null">
+				first_remind_date = #{firstRemindDate},
+			</if>
+			<if test="firstRemindType!=null and firstRemindType !=''">
+				first_remind_type = #{firstRemindType},
+			</if>
+			<if test="secondRemindDate!=null">
+				second_remind_date = #{secondRemindDate},
+			</if>
+			<if test="secondRemindType!=null and secondRemindType !=''">
+				second_remind_type = #{secondRemindType},
+			</if>
+			<if test="thirdRemindDate!=null">
+				third_remind_date = #{thirdRemindDate},
+			</if>
+
+			<if test="thirdRemindType!=null and thirdRemindType !=''">
+				third_remind_type = #{thirdRemindType},
+			</if>
+			<if test="perRemindDate!=null ">
+				per_remind_date = #{perRemindDate},
+			</if>
+			remind_status = #{remindStatus},
+			update_by = #{updateBy},update_date = #{updateDate}
 		WHERE id = #{id}
 	</update>
+
+	<update id="updateLicDiag">
+		UPDATE lic_diag_check_remind SET
+		<if test="firstRemindDate!=null">
+			first_remind_date = #{firstRemindDate},
+		</if>
+		<if test="firstRemindType!=null and firstRemindType !=''">
+			first_remind_type = #{firstRemindType},
+		</if>
+		<if test="secondRemindDate!=null">
+			second_remind_date = #{secondRemindDate},
+		</if>
+		<if test="secondRemindType!=null and secondRemindType !=''">
+			second_remind_type = #{secondRemindType},
+		</if>
+		<if test="thirdRemindDate!=null">
+			third_remind_date = #{thirdRemindDate},
+		</if>
+
+		<if test="thirdRemindType!=null and thirdRemindType !=''">
+			third_remind_type = #{thirdRemindType},
+		</if>
+		<if test="perRemindDate!=null ">
+			per_remind_date = #{perRemindDate},
+		</if>
+		remind_status = #{remindStatus},
+		update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateScDiag">
+		UPDATE sc_diag_check_remind SET
+		<if test="firstRemindDate!=null">
+			first_remind_date = #{firstRemindDate},
+		</if>
+		<if test="firstRemindType!=null and firstRemindType !=''">
+			first_remind_type = #{firstRemindType},
+		</if>
+		<if test="secondRemindDate!=null">
+			second_remind_date = #{secondRemindDate},
+		</if>
+		<if test="secondRemindType!=null and secondRemindType !=''">
+			second_remind_type = #{secondRemindType},
+		</if>
+		<if test="thirdRemindDate!=null">
+			third_remind_date = #{thirdRemindDate},
+		</if>
+		<if test="thirdRemindType!=null and thirdRemindType !=''">
+			third_remind_type = #{thirdRemindType},
+		</if>
+		<if test="perRemindDate!=null ">
+			per_remind_date = #{perRemindDate},
+		</if>
+		remind_status = #{remindStatus},
+		update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateLucDiag">
+		UPDATE luc_diag_check_remind SET
+		<if test="firstRemindDate!=null">
+			first_remind_date = #{firstRemindDate},
+		</if>
+		<if test="firstRemindType!=null and firstRemindType !=''">
+			first_remind_type = #{firstRemindType},
+		</if>
+		<if test="secondRemindDate!=null">
+			second_remind_date = #{secondRemindDate},
+		</if>
+		<if test="secondRemindType!=null and secondRemindType !=''">
+			second_remind_type = #{secondRemindType},
+		</if>
+		<if test="thirdRemindDate!=null">
+			third_remind_date = #{thirdRemindDate},
+		</if>
+		<if test="thirdRemindType!=null and thirdRemindType !=''">
+			third_remind_type = #{thirdRemindType},
+		</if>
+		<if test="perRemindDate!=null ">
+			per_remind_date = #{perRemindDate},
+		</if>
+		remind_status = #{remindStatus},
+		update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
 
 
 

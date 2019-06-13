@@ -15,8 +15,7 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.DictUtils;
 import com.wonders.health.tumor.common.utils.IdGen;
-import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
-import com.wonders.health.tumor.tumor.entity.CrcFobtRemind;
+import com.wonders.health.tumor.tumor.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -215,7 +214,7 @@ public class BusRemindService {
 
 
     @Transactional(readOnly = false)
-    public AjaxReturn<Map<String, String>> updateCrcFobtRemind(CrcFobtRemind vo, String userId) {
+    public AjaxReturn<Map<String, String>> updateCrcFobtRemind(CrcFobtRemind vo) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
             busRemindDao.updateCrcFobtRemind(vo);
             return new AjaxReturn<Map<String, String>>(true, "操作成功");
@@ -223,4 +222,39 @@ public class BusRemindService {
         return new AjaxReturn<Map<String, String>>(false, "操作失败");
     }
 
+    @Transactional(readOnly = false)
+    public AjaxReturn<Map<String, String>> updateCrcDiag(CrcDiagCheckRemind vo) {
+        if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
+            busRemindDao.updateCrcDiag(vo);
+            return new AjaxReturn<Map<String, String>>(true, "操作成功");
+        }
+        return new AjaxReturn<Map<String, String>>(false, "操作失败");
+    }
+
+    @Transactional(readOnly = false)
+    public AjaxReturn<Map<String, String>> updateLicDiag(LicDiagCheckRemind vo) {
+        if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
+            busRemindDao.updateLicDiag(vo);
+            return new AjaxReturn<Map<String, String>>(true, "操作成功");
+        }
+        return new AjaxReturn<Map<String, String>>(false, "操作失败");
+    }
+
+    @Transactional(readOnly = false)
+    public AjaxReturn<Map<String, String>> updateScDiag(ScDiagCheckRemind vo) {
+        if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
+            busRemindDao.updateScDiag(vo);
+            return new AjaxReturn<Map<String, String>>(true, "操作成功");
+        }
+        return new AjaxReturn<Map<String, String>>(false, "操作失败");
+    }
+
+    @Transactional(readOnly = false)
+    public AjaxReturn<Map<String, String>> updateLucDiag(LucDiagCheckRemind vo) {
+        if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
+            busRemindDao.updateLucDiag(vo);
+            return new AjaxReturn<Map<String, String>>(true, "操作成功");
+        }
+        return new AjaxReturn<Map<String, String>>(false, "操作失败");
+    }
 }

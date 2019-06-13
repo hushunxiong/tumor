@@ -12,8 +12,7 @@ import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.utils.DateUtils;
-import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
-import com.wonders.health.tumor.tumor.entity.CrcFobtRemind;
+import com.wonders.health.tumor.tumor.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +130,7 @@ public class BusinessRemindController extends BaseController {
     //更新大肠癌便隐血提醒  传参解释：id为对应便隐血检查提醒表id，type为电话（01）或者上门（02），first代表第一次提醒日期是否为空，second代表第二次提醒日期是否为空
     @ResponseBody
     @RequestMapping(value = "updateCrcFobtRemind", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-    public AjaxReturn<Map<String, String>> updateCrcFobtRemind(String id,String type, String first,String second,String res1,String res2) {
+    public AjaxReturn<Map<String, String>> updateCrcFobtRemind(String id,String type, String first,String second,String third,String res1,String res2) {
         try {
             CrcFobtRemind vo=new CrcFobtRemind();
             vo.setId(id);
@@ -154,13 +153,168 @@ public class BusinessRemindController extends BaseController {
                 vo.setSecondFobtRemindDate(new Date());
                 vo.setSecondFobtRemindType(type);
             }
-
-            return busRemindService.updateCrcFobtRemind(vo, getSessionUser().getId());
+            return busRemindService.updateCrcFobtRemind(vo);
         } catch (Exception e) {
             logger.error("", e);
             return new AjaxReturn<Map<String, String>>(false, "操作异常");
         }
     }
+
+    //更新大肠癌诊断检查提醒  传参解释：id为对应诊断检查提醒表id，type为电话（01）或者上门（02），first代表第一次提醒日期是否为空，second代表第二次提醒日期是否为空
+    @ResponseBody
+    @RequestMapping(value = "updateCrcDiag", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public AjaxReturn<Map<String, String>> updateCrcDiag(String id,String type, String first,String second,String third) {
+        try {
+            CrcDiagCheckRemind vo=new CrcDiagCheckRemind();
+
+            vo.setId(id);
+            vo.setUpdateBy(getSessionUser().getId());
+            vo.setUpdateDate(new Date());
+            if((StringUtils.isBlank(first)||first==null||first=="null"||"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//三次提醒日期都为空
+                vo.setFirstRemindDate(new Date());
+                vo.setFirstRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//后两次提醒日期都为空
+                vo.setSecondRemindDate(new Date());
+                vo.setSecondRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isNotBlank(second)||second!=null||second!="null"||!"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//最后一次提醒日期都为空
+                vo.setThirdRemindDate(new Date());
+                vo.setThirdRemindType(type);
+                vo.setRemindStatus("04");
+            }
+            return busRemindService.updateCrcDiag(vo);
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<Map<String, String>>(false, "操作异常");
+        }
+    }
+
+    //更新肝癌诊断检查提醒  传参解释：id为对应诊断检查提醒表id，type为电话（01）或者上门（02），first代表第一次提醒日期是否为空，second代表第二次提醒日期是否为空
+    @ResponseBody
+    @RequestMapping(value = "updateLicDiag", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public AjaxReturn<Map<String, String>> updateLicDiag(String id,String type, String first,String second,String third) {
+        try {
+            LicDiagCheckRemind vo=new LicDiagCheckRemind();
+
+            vo.setId(id);
+            vo.setUpdateBy(getSessionUser().getId());
+            vo.setUpdateDate(new Date());
+            if((StringUtils.isBlank(first)||first==null||first=="null"||"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//三次提醒日期都为空
+                vo.setFirstRemindDate(new Date());
+                vo.setFirstRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//后两次提醒日期都为空
+                vo.setSecondRemindDate(new Date());
+                vo.setSecondRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isNotBlank(second)||second!=null||second!="null"||!"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//最后一次提醒日期都为空
+                vo.setThirdRemindDate(new Date());
+                vo.setThirdRemindType(type);
+                vo.setRemindStatus("04");
+            }
+            return busRemindService.updateLicDiag(vo);
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<Map<String, String>>(false, "操作异常");
+        }
+    }
+
+
+    //更新胃癌诊断检查提醒  传参解释：id为对应诊断检查提醒表id，type为电话（01）或者上门（02），first代表第一次提醒日期是否为空，second代表第二次提醒日期是否为空
+    @ResponseBody
+    @RequestMapping(value = "updateScDiag", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public AjaxReturn<Map<String, String>> updateScDiag(String id,String type, String first,String second,String third) {
+        try {
+            ScDiagCheckRemind vo=new ScDiagCheckRemind();
+
+            vo.setId(id);
+            vo.setUpdateBy(getSessionUser().getId());
+            vo.setUpdateDate(new Date());
+            if((StringUtils.isBlank(first)||first==null||first=="null"||"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//三次提醒日期都为空
+                vo.setFirstRemindDate(new Date());
+                vo.setFirstRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//后两次提醒日期都为空
+                vo.setSecondRemindDate(new Date());
+                vo.setSecondRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isNotBlank(second)||second!=null||second!="null"||!"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//最后一次提醒日期都为空
+                vo.setThirdRemindDate(new Date());
+                vo.setThirdRemindType(type);
+                vo.setRemindStatus("04");
+            }
+            return busRemindService.updateScDiag(vo);
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<Map<String, String>>(false, "操作异常");
+        }
+    }
+
+    //更新肺癌诊断检查提醒  传参解释：id为对应诊断检查提醒表id，type为电话（01）或者上门（02），first代表第一次提醒日期是否为空，second代表第二次提醒日期是否为空
+    @ResponseBody
+    @RequestMapping(value = "updateLucDiag", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public AjaxReturn<Map<String, String>> updateLucDiag(String id,String type, String first,String second,String third,String res1,String res2) {
+        try {
+            LucDiagCheckRemind vo=new LucDiagCheckRemind();
+
+            vo.setId(id);
+            vo.setUpdateBy(getSessionUser().getId());
+            vo.setUpdateDate(new Date());
+            if((StringUtils.isBlank(first)||first==null||first=="null"||"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//三次提醒日期都为空
+                vo.setFirstRemindDate(new Date());
+                vo.setFirstRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isBlank(second)||second==null||second=="null"||"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//后两次提醒日期都为空
+                vo.setSecondRemindDate(new Date());
+                vo.setSecondRemindType(type);
+                vo.setPerRemindDate(DateUtils.addDate(new Date(),30));
+                vo.setRemindStatus("01");
+            }else if((StringUtils.isNotBlank(first)||first!=null||first!="null"||!"null".equals(first))
+                    &&(StringUtils.isNotBlank(second)||second!=null||second!="null"||!"null".equals(second))
+                    &&(StringUtils.isBlank(third)||third==null||third=="null"||"null".equals(third))) {//最后一次提醒日期都为空
+                vo.setThirdRemindDate(new Date());
+                vo.setThirdRemindType(type);
+                vo.setRemindStatus("04");
+            }
+            return busRemindService.updateLucDiag(vo);
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<Map<String, String>>(false, "操作异常");
+        }
+    }
+
+
+
 
     @ResponseBody
     @RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json; charset=utf-8")

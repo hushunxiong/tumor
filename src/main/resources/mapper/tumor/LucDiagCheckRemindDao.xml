@@ -83,7 +83,8 @@
 	
 	<update id="update">
 		UPDATE luc_diag_check_remind SET
-		id = #{id},luc_check_id = #{lucCheckId},check_year = #{checkYear},first_remind_date = #{firstRemindDate},first_remind_type = #{firstRemindType},second_remind_date = #{secondRemindDate},second_remind_type = #{secondRemindType},third_remind_date = #{thirdRemindDate},third_remind_type = #{thirdRemindType},per_remind_date = #{perRemindDate},remind_status = #{remindStatus},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		id = #{id},luc_check_id = #{lucCheckId},check_year = #{checkYear},first_remind_date = #{firstRemindDate},first_remind_type = #{firstRemindType},second_remind_date = #{secondRemindDate},second_remind_type = #{secondRemindType},third_remind_date = #{thirdRemindDate},third_remind_type = #{thirdRemindType},per_remind_date = #{perRemindDate},remind_status = #{remindStatus},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate},
+		update_by = #{updateBy},update_date = #{updateDate}
 		WHERE id = #{id}
 	</update>
 
