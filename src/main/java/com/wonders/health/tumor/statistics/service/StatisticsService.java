@@ -206,9 +206,11 @@ public class StatisticsService {
         List<InformationCollectionVo> scVoList = statisticsDao.getInformation(searchVo);
         if (scVoList != null && scVoList.size() > 0) {
             AuthUtils a = new AuthUtils();
+            String tnm ;
             for (InformationCollectionVo vo : scVoList) {
                 if (vo!=null){
-                    vo.setTNMfq(vo.getZHONGLIUTNM_T()+vo.getZHONGLIUTNM_N()+vo.getZHONGLIUTNM_M());
+                    tnm=vo.getZHONGLIUTNM_T()+vo.getZHONGLIUTNM_N()+vo.getZHONGLIUTNM_M();
+                    vo.setTNMfq(tnm.replaceAll("null",""));
                     if ("1".equals(vo.getShifouweijing()))
                         vo.setJcxm("胃镜");
                     if ("1".equals(vo.getChangjing()))
