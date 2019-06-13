@@ -150,7 +150,6 @@
 			</if>
 			<if test="status!=null and status!=''">
 				AND c.fobt_remind_status=#{status}
-				AND e.remind_status=#{status}
 			</if>
 			<if test="startDate!=null and startDate!=''">
 				AND c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
@@ -174,9 +173,7 @@
 			<if test="orgCode!=null and orgCode!=''">
 				AND f.regorg=#{orgCode}
 			</if>
-			<if test="status!=null and status!=''">
-				AND g.remind_status=#{status}
-			</if>
+
 			<if test="startDate!=null and startDate!=''">
 				AND g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
 			</if>
@@ -192,9 +189,7 @@
 			<if test="orgCode!=null and orgCode!=''">
 				AND h.regorg=#{orgCode}
 			</if>
-			<if test="status!=null and status!=''">
-				AND i.remind_status=#{status}
-			</if>
+
 			<if test="startDate!=null and startDate!=''">
 				AND i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
 			</if>
@@ -210,9 +205,7 @@
 			<if test="orgCode!=null and orgCode!=''">
 				AND j.regorg=#{orgCode}
 			</if>
-			<if test="status!=null and status!=''">
-				AND k.remind_status=#{status}
-			</if>
+
 			<if test="startDate!=null and startDate!=''">
 				AND k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
 			</if>
@@ -226,6 +219,26 @@
 		AND i.del_flag='0'
 		AND j.del_flag='0'
 		AND k.del_flag='0'
+		<if test="status!=null and status!=''">
+			AND(
+			1=2 OR
+			<if test="crcFlag!='' and crcFlag!=null">
+				(e.remind_status=#{status}) OR
+			</if>
+			1=2 OR
+			<if test="licFlag!='' and licFlag!=null">
+				(g.remind_status=#{status}) OR
+			</if>
+			1=2 OR
+			<if test="scFlag!='' and scFlag!=null">
+				(i.remind_status=#{status}) OR
+			</if>
+			1=2 OR
+			<if test="lucFlag!='' and lucFlag!=null">
+				(k.remind_status=#{status}) OR
+			</if>
+			1=2)
+		</if>
 	</sql>
 
 
