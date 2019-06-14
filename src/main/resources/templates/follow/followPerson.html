@@ -10,8 +10,8 @@
     <div id="tabs" class="mini-tabs" activeIndex="0" style="width:100%; height:calc(100vh - 100px);overflow: hidden;">
         <div name="crc" title="大肠癌随访" th:if="${crcFlag==1?true:false}" th:url="@{/crcFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
         <div name="lic" title="肝癌随访" th:if="${licFlag==1?true:false}" th:url="@{/licFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
-        <!--<div title="胃癌随访" th:if="${scFlag==1?true:false}" th:url="@{/scFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
-        <div title="肺癌随访" th:if="${lucFlag==1?true:false}" th:url="@{/lucFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>-->
+        <div name="sc" title="胃癌随访" th:if="${scFlag==1?true:false}" th:url="@{/scFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
+        <div name="luc" title="肺癌随访" th:if="${lucFlag==1?true:false}" th:url="@{/lucFollow/list(manageId=${manageId},checkYear=${checkYear})}"></div>
     </div>
 </div>
 <div class="btn-list text-c mt-10">
