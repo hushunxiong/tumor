@@ -3,8 +3,6 @@ package com.wonders.health.tumor.statistics.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
 * @Description:    抽取报表相同字段作为基类被继承
 * @Author:         lxl

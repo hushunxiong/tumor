@@ -4,8 +4,6 @@ import com.wonders.health.tumor.common.utils.excel.annotation.ExcelField;
 import com.wonders.health.tumor.common.utils.excel.annotation.ExcelFile;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
 * @Description:    肺癌阳性导出
 * @Author:         lxl

@@ -5,8 +5,8 @@ package com.wonders.health.tumor.busremind.service;
 
 import com.wonders.health.tumor.busremind.dao.BusRemindDao;
 import com.wonders.health.tumor.busremind.vo.BusRemindResultVo;
-import com.wonders.health.tumor.closingcase.dao.crcClosingCaseDao;
-import com.wonders.health.tumor.closingcase.entity.crcClosingCase;
+import com.wonders.health.tumor.closingcase.dao.CrcClosingCaseDao;
+import com.wonders.health.tumor.closingcase.entity.CrcClosingCase;
 import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;

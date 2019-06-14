@@ -12,7 +12,7 @@ import lombok.Data;
  * @author zhaomeng
  */
 @Data
-public class lucClosingCaseSearchVo extends DataGridSearch {
+public class LucClosingCaseSearchVo extends DataGridSearch {
 
     private String keyword; //可按照姓名或者证件号码模糊查询
     private String csnf;  //初筛年份

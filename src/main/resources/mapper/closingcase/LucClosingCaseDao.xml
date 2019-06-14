@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wonders.health.tumor.closingcase.dao.scClosingCaseDao">
+<mapper namespace="com.wonders.health.tumor.closingcase.dao.LucClosingCaseDao">
     
-	<sql id="scClosingCaseColumns">
+	<sql id="lucClosingCaseColumns">
 		a.id AS "id",a.manageid AS "manageid",a.check_year AS checkYear,a.check_result AS "checkResult",a.region_code AS "regionCode",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.submits_status AS "submitsStatus",a.submit_date AS "submitDate",a.trans_date AS "transDate",a.print_date AS "printDate",a.close_status AS "closeStatus",a.close_date AS "closeDate",a.close_result AS "closeResult",a.check_quality_flag AS "checkQualityFlag",a.checkresult_quality_flag AS "checkresultQualityFlag",a.upload_time AS "uploadTime",a.source_id AS "sourceId",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
 	</sql>
 
-	<select id="get" resultType="com.wonders.health.tumor.closingcase.entity.scClosingCase">
+	<select id="get" resultType="com.wonders.health.tumor.closingcase.entity.LucClosingCase">
 		SELECT 
-			<include refid="scClosingCaseColumns"/>
-		FROM sc_regcase a
+			<include refid="lucClosingCaseColumns"/>
+		FROM luc_regcase a
 		WHERE a.id = #{id}
 	</select>
 
-	<select id="findAll" resultType="com.wonders.health.tumor.closingcase.entity.scClosingCase">
+	<select id="findAll" resultType="com.wonders.health.tumor.closingcase.entity.LucClosingCase">
 		SELECT 
-			<include refid="scClosingCaseColumns"/>
-		FROM sc_regcase a
+			<include refid="lucClosingCaseColumns"/>
+		FROM luc_regcase a
 		<where>
 			a.del_flag = '0'
 		</where>		
 	</select>
 	<!-- 分页模块 -->
 	<sql id="pageFromAndWhere">
-      FROM sc_regcase a
+      FROM luc_regcase a
 		inner  join  cancer_person_info b on a.MANAGEID = b . ID
-		LEFT JOIN SC_RISK_ASSESSMENT sc ON (a. ID = sc.sc_check_id) AND sc.DEL_FLAG='0'
-      <where>
-		  and   b.del_flag = '0'
-		  <if test="keyword!=null and keyword!='' ">
-			  AND (
-			  b.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
-			  OR
-			  b.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
-			  )
-		  </if>
-		  <if test="regarea !=null and regarea!=''">
-			  and   a.region_code=#{regarea}
-		  </if>
-		  <if test="regorg != null and regorg!='' ">
-			  and   a.regorg=#{regorg}
-		  </if>
-		  <if test="csnf !=null and csnf !='' ">
-			  and  a.check_year=#{csnf}
-		  </if>
-		  <if test="checkResult !=null and checkResult !=''">
-			  <choose>
-				  <when test="checkResult == '3'.toString()">
-					  and  a.check_result is null
-				  </when>
-				  <otherwise>
-					  and  a.check_result=#{checkResult}
-				  </otherwise>
-			  </choose>
-		  </if>
-		  <if test="closeResult !=null and closeResult !='' ">
-			  and  a.close_result=#{closeResult}
-		  </if>
-	  </where>
+		LEFT JOIN LUC_RISK_ASSESSMENT luc ON (a. ID = luc.luc_check_id) AND luc.DEL_FLAG='0'
+		<where>
+			and   b.del_flag = '0'
+			<if test="keyword!=null and keyword!='' ">
+				AND (
+				b.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+				OR
+				b.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+				)
+			</if>
+			<if test="regarea !=null and regarea!=''">
+				and   a.region_code=#{regarea}
+			</if>
+			<if test="regorg != null and regorg!='' ">
+				and   a.regorg=#{regorg}
+			</if>
+			<if test="csnf !=null and csnf !='' ">
+				and  a.check_year=#{csnf}
+			</if>
+			<if test="checkResult !=null and checkResult !=''">
+				<choose>
+					<when test="checkResult == '3'.toString()">
+						and  a.check_result is null
+					</when>
+					<otherwise>
+						and  a.check_result=#{checkResult}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="closeResult !=null and closeResult !='' ">
+				and  a.close_result=#{closeResult}
+			</if>
+		</where>
     </sql>
 
     <select id="pageCount" resultType="java.lang.Integer"
@@ -67,7 +67,7 @@
     </select>
 
 
-    <select id="pageList" resultType="com.wonders.health.tumor.closingcase.entity.scClosingCase"
+    <select id="pageList" resultType="com.wonders.health.tumor.closingcase.entity.LucClosingCase"
             parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
 		<choose>
 			<when test="startRecord == 0">
@@ -82,8 +82,8 @@
 			b.personcard AS "personcard",
 			b.name AS "name",
 			b.gender AS "gender",
-			sc.ASSESSMENT_RESULT AS "assessmentResult",
-			<include refid="scClosingCaseColumns"/>
+			luc.ASSESSMENT_RESULT AS "assessmentResult",
+			<include refid="lucClosingCaseColumns"/>
         <include refid="pageFromAndWhere"/>
 		<choose>
 			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
@@ -104,7 +104,7 @@
     </select>
 	
 	<insert id="insert">
-		INSERT INTO sc_regcase(
+		INSERT INTO luc_regcase(
 		id,manageid,check_year,check_result,region_code,regorg,regdoc,regdate,submits_status,submit_date,trans_date,print_date,close_status,close_date,close_result,check_quality_flag,checkresult_quality_flag,upload_time,source_id,del_flag,create_by,create_date
 		) VALUES (
 		#{id},#{manageid},#{checkYear},#{checkResult},#{regionCode},#{regorg},#{regdoc},#{regdate},#{submitsStatus},#{submitDate},#{transDate},#{printDate},#{closeStatus},#{closeDate},#{closeResult},#{checkQualityFlag},#{checkresultQualityFlag},#{uploadTime},#{sourceId},#{delFlag},#{createBy},#{createDate}
@@ -112,13 +112,13 @@
 	</insert>
 	
 	<update id="update">
-		UPDATE sc_regcase SET
+		UPDATE luc_regcase SET
 		id = #{id},manageid = #{manageid},check_year = #{checkYear},check_result = #{checkResult},region_code = #{regionCode},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},submits_status = #{submitsStatus},submit_date = #{submitDate},trans_date = #{transDate},print_date = #{printDate},close_status = #{closeStatus},close_date = #{closeDate},close_result = #{closeResult},check_quality_flag = #{checkQualityFlag},checkresult_quality_flag = #{checkresultQualityFlag},upload_time = #{uploadTime},source_id = #{sourceId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
 		WHERE id = #{id}
 	</update>
 
 	<update id="delete">
-	    UPDATE sc_regcase SET del_flag = '1'
+	    UPDATE luc_regcase SET del_flag = '1'
 	    WHERE id = #{id}
 	</update>
 

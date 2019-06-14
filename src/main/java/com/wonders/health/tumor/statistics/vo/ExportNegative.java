@@ -1,10 +1,9 @@
 package com.wonders.health.tumor.statistics.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wonders.health.tumor.common.utils.excel.annotation.ExcelField;
 import com.wonders.health.tumor.common.utils.excel.annotation.ExcelFile;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
 * @Description:    初筛信息汇总表（阴性）导出
@@ -23,6 +22,7 @@ public class ExportNegative  {
     @ExcelField(title = "性别")
     private String xb; //性别
 
+    @JsonFormat(pattern = "yyyy-MM-dd") //Jackson包使用注解
     @ExcelField(title = "出生日期")
     private String birthday; //出生日期
 
@@ -38,6 +38,7 @@ public class ExportNegative  {
     @ExcelField(title = "筛查登记机构")
     private String regorg; //筛查登记机构
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @ExcelField(title ="初筛日期" )
     private String csrq; //初筛日期
 }

@@ -16,10 +16,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wonders.health.tumor.common.model.BaseEntity;
 
 /**
- * 肝癌结案实体
+ * 肺癌结案实体
  * @author zhaomeng
  */
-public class licClosingCase extends BaseEntity {
+public class LucClosingCase extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -35,9 +35,6 @@ public class licClosingCase extends BaseEntity {
 
 	@Length(max=1)
 	private String checkResult;	// 判定结果
-
-	
-	private Date fzjcDate;	// 辅助检查录入日期
 
 	@Length(max=32)
 	@NotNull
@@ -89,10 +86,6 @@ public class licClosingCase extends BaseEntity {
 	@Length(max=32)
 	private String sourceId;	// 来源代码
 
-	private String assessmentResult; //肝癌危险评估结果
-
-	private String licAssistResult;//肝癌辅助检查结果
-
 	private String personcardType;	// 证件类型
 
 	private String personcard;	// 证件号码
@@ -101,9 +94,10 @@ public class licClosingCase extends BaseEntity {
 
 	private String gender;	// 性别
 
+	private String assessmentResult; //危险评估结果
 
 
-	public licClosingCase() {
+	public LucClosingCase() {
 		super();
 	}
 
@@ -141,16 +135,6 @@ public class licClosingCase extends BaseEntity {
 
 	public void setCheckResult(String checkResult) {
 		this.checkResult = checkResult;
-	}
-
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-	@JsonProperty("fzjcDate")
-	public Date getFzjcDate() {
-		return fzjcDate;
-	}
-
-	public void setFzjcDate(Date fzjcDate) {
-		this.fzjcDate = fzjcDate;
 	}
 
 	@JsonProperty("regionCode")
@@ -294,22 +278,6 @@ public class licClosingCase extends BaseEntity {
 		this.sourceId = sourceId;
 	}
 
-	public String getAssessmentResult() {
-		return assessmentResult;
-	}
-
-	public void setAssessmentResult(String assessmentResult) {
-		this.assessmentResult = assessmentResult;
-	}
-
-	public String getLicAssistResult() {
-		return licAssistResult;
-	}
-
-	public void setLicAssistResult(String licAssistResult) {
-		this.licAssistResult = licAssistResult;
-	}
-
 	public String getPersoncardType() {
 		return personcardType;
 	}
@@ -340,5 +308,13 @@ public class licClosingCase extends BaseEntity {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getAssessmentResult() {
+		return assessmentResult;
+	}
+
+	public void setAssessmentResult(String assessmentResult) {
+		this.assessmentResult = assessmentResult;
 	}
 }

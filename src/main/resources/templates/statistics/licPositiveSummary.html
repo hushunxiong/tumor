@@ -186,7 +186,8 @@
                     var start = mydate.getFullYear()+"-01"+"-01";
                     mini.get('csrqStart').setValue(start);
                     mini.get('csrqEnd').setValue(getResetNow());
-                    mini.get('regorg').setValue("")
+                    mini.get('regorg').setValue("");
+                    grid.clearRows();
                 }
                 function getResetNow() {
                     var myDate = new Date();//获取系统当前时间
@@ -219,8 +220,10 @@
                     }
                     var  regarea=mini.get("regarea").getValue();
                     var  regorg=mini.get("regorg").getValue();
-                    var  csrqStart=mini.get("csrqStart").getValue();
-                    var  csrqEnd=mini.get("csrqEnd").getValue();
+                    var csrqStart= mini.formatDate(mini.get("#csrqStart").getValue(),"yyyy-MM-dd HH:MM:SS");
+                    var csrqEnd= mini.formatDate(mini.get("#csrqEnd").getValue(),"yyyy-MM-dd HH:MM:SS");
+                    /*var  csrqStart=mini.get("csrqStart").getValue();
+                    var  csrqEnd=mini.get("csrqEnd").getValue();*/
                     var param ='?';
                     param += 'regarea='+regarea;
                     param += '&regorg='+regorg;
