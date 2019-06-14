@@ -24,11 +24,9 @@ public class DictData {
                 for (CancerDic vo : list) {
                     if (codeSet.contains(vo.getCode())) {
                         if (codeStr.length() > 0) {
-                            codeStr.append(";");
+                            codeStr.append("，");
                         }
-                        codeStr.append("<span style='display: block;'>");
                         codeStr.append(vo.getName());
-                        codeStr.append("</span>");
                     }
                 }
                 return codeStr.toString();

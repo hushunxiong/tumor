@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>业务提醒一览</title>
+    <link>
+    <script></script>
+</head>
+<body>
+
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
+        <div title="业务提醒一览">
+            <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+            <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+            <div class="search-div-box mb-10">
+                <table width="99%" border="0">
+                    <tbody>
+                    <tr>
+                        <td align="left">
+                            <div class="keyword">
+                                <input id="keyword" name="keyword" class="radius" placeholder="可按照姓名或者证件号码模糊查询" data-tooltip="输入身份证号时至少6位" type="text">
+                                <div class="my-btn my-btn-blue" onclick="onSearch()">搜索</div>
+                            </div>
+                        </td>
+                        <td width="100px" align="center">
+                            <a herf="#" onclick="toggleVisibility(div1)"><strong style="color:#3f93d4">高级搜索&nbsp;
+                                <img th:src="@{/images/pp_up.png}" src="../static/images/pp_up.png" id="pctid"></strong></a>
+                        </td>
+                        <td align="left"></td>
+                        <td style="width: 200px" align="right">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="div1" style="display: none;" class="mt-10">
+                    <div class="mini-row">
+                        <div class="mini-col-3">
+                            <label class="mr-5">筛查年份：</label>
+                            <select id="year" name="year" class="select-default radius" style="width:60%">
+                                <option th:each="row,loop : ${years}" th:value="${row}" th:text="${row}"></option>
+                            </select>
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构：</label>
+                            <input id="orgCode" name="orgCode" class="mini-combobox" width="70%" th:value="${orgcode}"
+                                   textField="text" valueField="id"  th:showNullItem="false" readonly />
+                        </div>
+                        <div class="mini-col-4">
+                            <label class="mr-5">业务提醒类型：</label>
+                            <input id="type" name="type" class="mini-combobox" width="49%" showNullItem="true"
+                                   th:data="${#dic.generals('60052')}" emptyText="请选择" nullItemText="请选择"   textField="name" valueField="code"/>
+                        </div>
+                    </div>
+                    <div class="mini-row">
+                    </div>
+                    <div class="mini-row">
+                        <div class="mini-col-3">
+                            <label class="mr-5">业务提醒状态：</label>
+                            <input id="status" name="status" class="mini-combobox" width="50%" showNullItem="true"
+                                   th:data="${#dic.generals('60048')}" emptyText="请选择" nullItemText="请选择"   textField="name" valueField="code"/>
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">计划提醒开始时间：</label>
+                            <input id="startDate" name="startDate" class="mini-datepicker" format="yyyy-MM-dd"
+                                   value="" allowInput="false" style="width: 50%;" errorMode="border" onvalidation="dateValidation">
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">计划提醒结束时间：</label>
+                            <input id="endDate" name="endDate" class="mini-datepicker" format="yyyy-MM-dd"
+                                   value="" allowInput="false" style="width: 54%;" errorMode="border" onvalidation="dateValidation">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="datagrid" url="/tumor/busremind/data" class="mini-datagrid"  onshowrowdetail="onShowRowDetail"  style="overflow: auto;width: 99%;height: auto"
+                 sizeList="[10,20,50]" pageSize="20" idField="id">
+                <div property="columns" >
+                    <div type="expandcolumn" width="60px">选择列</div>
+                    <div field="name" width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
+                    <div field="personcard" renderer="sfzhRenderer" width="200px" headerAlign="center" align="center" allowSort="false">证件号码</div>
+                    <div field="gender" type="comboboxcolumn" width="50px" headerAlign="center" align="center" allowSort="false">性别
+                        <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                               valueField="code" th:data="${#dic.generals('60023')}"/></div>
+                    <div field="addressDetail" width="350px" headerAlign="center" align="center" allowSort="false">地址</div>
+                    <div field="mobile" width="150px" headerAlign="center" align="center" allowSort="false">移动电话</div>
+                    <div field="phone" width="150px" headerAlign="center" align="center" allowSort="false">固定电话</div>
+                </div>
+            </div>
+
+            <div id="detailGridForm" style="display:none;">
+                <div id="crcGrid1" class="mini-datagrid" style="width:100%;height:auto;" showpager="false" allowCellWrap="true"
+                     url="/tumor/busremind/detailFobtRemind">
+                    <div property="columns">
+                        <div field="crcRegcase.id" name="id" visible="false">id</div>
+                        <div field="fobtR.fobtRemindStatus" visible="false">提醒状态</div>
+                        <div field="crcRegcase.idNumber" align="center" headerAlign="center" allowSort="false">大肠癌<BR>初筛编号</div>
+                        <div field="crcRegcase.regdate" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">大肠癌<BR>初筛登记日期</div>
+                        <div field="crcFobt.firstFobtResult" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">FOBT<BR>第一次检查结果</div>
+                        <div field="crcFobt.secondFobtResult"  renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">FOBT<BR>第二次检查结果</div>
+                        <div field="fobtR.perFobtRemindDate"  align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="fobtR.firstFobtRemindType" align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
+                        <div field="fobtR.secondFobtRemindType" align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
+                        <div align="center" headerAlign="center" width="10%" allowSort="false" field="action" renderer="actionRenderer">操作</div>
+                    </div>
+                </div>
+
+                <div id="crcGrid2" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                     url="/tumor/busremind/detailCrcRemind">
+                    <div property="columns">
+                        <div field="tbjgStr" visible="false">id</div>
+                        <div field="crcDiag.remindStatus" visible="false">提醒状态</div>
+                        <div field="crcRegcase.idNumber" align="center" headerAlign="center" allowSort="false">大肠癌<BR>初筛编号</div>
+                        <div field="crcRegcase.checkResult" sortField="crcRegcase.idNumber"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">大肠癌<BR>初筛判定结果</div>
+                        <div field="crcDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="crcDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
+                        <div field="crcDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
+                        <div field="crcDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
+                        <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
+                    </div>
+                </div>
+
+                <div id="licGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                     url="/tumor/busremind/detailLicRemind">
+                    <div property="columns">
+                        <div field="licDiag.id" name="id" visible="false">id</div>
+                        <div field="licDiag.remindStatus" visible="false">提醒状态</div>
+                        <div field="licRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">肝癌<BR>初筛判定结果</div>
+                        <div field="licDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="licDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
+                        <div field="licDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
+                        <div field="licDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
+                        <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
+                    </div>
+                </div>
+
+                <div id="lucGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                     url="/tumor/busremind/detaillLucRemind">
+                    <div property="columns">
+                        <div field="lucDiag.id" visible="false">id</div>
+                        <div field="lucDiag.remindStatus" visible="false">提醒状态</div>
+                        <div field="lucRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">肺癌<BR>初筛判定结果</div>
+                        <div field="lucDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="lucDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
+                        <div field="lucDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
+                        <div field="lucDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
+                        <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
+                    </div>
+                </div>
+                <div id="scGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                     url="/tumor/busremind/detailScRemind">
+                    <div property="columns">
+                        <div field="scDiag.id" visible="false">id</div>
+                        <div field="scDiag.remindStatus" visible="false">提醒状态</div>
+                        <div field="scRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">胃癌<BR>初筛判定结果</div>
+                        <div field="scDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="scDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
+                        <div field="scDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
+                        <div field="scDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
+                        <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    mini.parse();
+    var areaCode=[[${areaCode}]]
+    var grid = mini.get("datagrid");
+    var form = new mini.Form('#div1');
+    var detailGridForm = document.getElementById("detailGridForm");
+    
+    $(function () {
+        // onSearch();
+        getHospitals();
+
+    });
+    var ctxStatic ='..';
+    function toggleVisibility(div1) {
+        if (div1.style.display == 'none'){
+            div1.style.display = 'block';
+            document.getElementById("pctid").src =ctxStatic+ '/images/pp_down.png';
+        } else if (div1.style.display == 'block') {
+            div1.style.display = 'none';
+            document.getElementById("pctid").src = ctxStatic+'/images/pp_up.png';
+        } else {
+            div1.style.display = 'block';
+            document.getElementById("pctid").src = ctxStatic+'/images/pp_down.png';
+        }
+    }
+    function validateKey(key) {
+        if(key != null && key != undefined && key != '' && key.length < 6){
+            var flag = false;
+            for(var i = 0 ; i < key.length ; i++){
+                var c = key[i];
+                if(!((c >= '0' && c <= '9') || c == "x" || c == "X" || c == " ")){
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag) {
+                mini.showTips({content: "按照证件号码查询，输入不能小于六位", state: "warning", x: "center", y: "center", timeout: "2000"});
+            }
+            return flag;
+        }
+        return true;
+    }
+    function getHospitals() {
+        var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+areaCode;
+        mini.get("orgCode").setUrl(url);
+    }
+
+    function onShowRowDetail(e) {
+        var crcgrid1=mini.get("crcGrid1");
+        var crcgrid2=mini.get("crcGrid2");
+        var licGrid=mini.get("licGrid");
+        var scGrid=mini.get("scGrid");
+        var lucGrid=mini.get("lucGrid");
+
+        var type= mini.get("type").getValue();
+        if(type=="01"){
+            crcgrid1.show();
+            crcgrid2.hide();
+            licGrid.hide();
+            scGrid.hide();
+            lucGrid.hide();
+        }else if(type=="02"){
+            crcgrid1.hide();
+            crcgrid2.show();
+            licGrid.show();
+            scGrid.show();
+            lucGrid.show();
+        }else{
+            crcgrid1.show();
+            crcgrid2.show();
+            licGrid.show();
+            scGrid.show();
+            lucGrid.show();
+        }
+
+        var grid = e.sender;
+        var row = e.record;
+        var td = grid.getRowDetailCellEl(row);
+        td.appendChild(detailGridForm);
+        detailGridForm.style.display = "block";
+        var data = {};
+        data['personcard'] = row.personcard;
+
+        if(type=="01"){
+            crcgrid1.load(data,gridLoadSuccess,gridLoadError);
+        }else if(type=="02"){
+            crcgrid2.load(data,gridLoadSuccess,gridLoadError);
+            licGrid.load(data,gridLoadSuccess,gridLoadError);
+            scGrid.load(data,gridLoadSuccess,gridLoadError);
+            lucGrid.load(data,gridLoadSuccess,gridLoadError);
+        }else{
+            crcgrid1.load(data,gridLoadSuccess,gridLoadError);
+            crcgrid2.load(data,gridLoadSuccess,gridLoadError);
+            licGrid.load(data,gridLoadSuccess,gridLoadError);
+            scGrid.load(data,gridLoadSuccess,gridLoadError);
+            lucGrid.load(data,gridLoadSuccess,gridLoadError);
+        }
+    }
+
+    //查询
+    function onSearch() {
+        var data = {};
+        var keyword = $("#keyword").val();
+        if (!validateKey(keyword)) {
+            return;
+        }
+        data.keyword=keyword;
+        data.year= $("#year").val();
+        data.orgCode= mini.get("orgCode").getValue();
+        data.remindType= mini.get("type").getValue();
+        data.status= mini.get("status").getValue();
+        data.startDate= mini.get("startDate").getFormValue();
+        data.endDate= mini.get("endDate").getFormValue();
+        grid.load(data, gridLoadSuccess, gridLoadError);
+    }
+
+    //操作列
+    function actionRenderer(e) {
+        var r = e.record;
+        var h = '';
+        //状态为03是需要提醒
+        if(r.fobtR!=null){  //大肠癌便隐血提醒
+            if(r.fobtR.fobtRemindStatus!=null){
+                if(r.fobtR.fobtRemindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doCrcFobt(1+ \'\',\''+r.fobtR.id + '\',\'' + r.fobtR.firstFobtRemindDate + '\',\'' + r.fobtR.secondFobtRemindDate + '\',\''
+                        + r.crcFobt.firstFobtResult + '\',\'' + r.crcFobt.secondFobtResult +'\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doCrcFobt(2+ \'\',\''+ r.fobtR.id + '\',\''  + r.fobtR.firstFobtRemindDate + '\',\'' + r.fobtR.secondFobtRemindDate+ '\',\''
+                        + r.crcFobt.firstFobtResult + '\',\''  + r.crcFobt.secondFobtResult +'\')">上门</div>';
+                }
+            }
+        }else if(r.crcDiag!=null){  //大肠癌诊断检查提醒
+            if(r.crcDiag.remindStatus!=null){
+                if(r.crcDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+ r.crcDiag.id + '\',\'' + '1' + '\',\'' + r.crcDiag.firstRemindType + '\',\'' + r.crcDiag.secondRemindType+ '\',\'' +r.crcDiag.thirdRemindType + '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.crcDiag.id  + '\',\'' + 1 + '\',\'' + r.crcDiag.firstRemindType + '\',\'' + r.crcDiag.secondRemindType+ '\',\'' + r.crcDiag.thirdRemindType+ '\')">上门</div>';
+                }
+            }
+        }else if(r.licDiag!=null){  //肝癌诊断检查提醒
+            if(r.licDiag.remindStatus!=null){
+                if(r.licDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+ r.licDiag.id + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+ '\',\'' + r.licDiag.thirdRemindDate+'\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.licDiag.id  + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+ '\',\'' + r.licDiag.thirdRemindDate+'\')">上门</div>';
+                }
+            }
+        }else if(r.lucDiag!=null){  //肺癌诊断检查提醒
+            if(r.lucDiag.remindStatus!=null){
+                if(r.lucDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+r.lucDiag.id + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+ '\',\'' + r.lucDiag.thirdRemindDate+  '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.lucDiag.id  + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+ '\',\'' + r.lucDiag.thirdRemindDate+  '\')">上门</div>';
+                }
+            }
+        }else if(r.scDiag!=null){   //胃癌诊断检查提醒
+            if(r.scDiag.remindStatus!=null){
+                if(r.scDiag.remindStatus=="03"){
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+r.scDiag.id + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\',\'' + r.scDiag.thirdRemindDate+ '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.scDiag.id  + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\',\'' + r.scDiag.thirdRemindDate+ '\')">上门</div>';
+                }
+            }
+        }
+        return h;
+    }
+
+    //电话上门按钮  type为对应功能表，first为第一次提醒日期，second为第二次提醒日期,res1为便隐血第一次检查结果，res2为便隐血第二次检查结果
+    function doCrcFobt(opType,id,first,second,res1,res2){
+        var crcgrid1=mini.get("crcGrid1");
+        var data={};
+        data.id=id;
+        data.first=first;
+        data.second=second;
+        data.res1=res1;
+        data.res2=res2;
+
+        if(opType==1){
+            data.type="01";
+        }else{
+            data.type="02";
+        }
+        var url='/tumor/busremind/updateCrcFobtRemind';
+        $.ajax({
+            url: url,
+            type:"post",
+            data:data,
+            dataType: "json",
+            success:function(res){
+                if(!res.ok){
+                    mini.showTips({
+                        content: res.msg,
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                } else {
+                    crcgrid1.reload();
+                    mini.showTips({
+                        content: res.msg,
+                        state: "success",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                }
+            }
+        });
+    }
+
+    function doit(opType,id,type,first,second,third){
+        var crcgrid2=mini.get("crcGrid2");
+        var licGrid=mini.get("licGrid");
+        var scGrid=mini.get("scGrid");
+        var lucGrid=mini.get("lucGrid");
+
+        var data={};
+        data.id=id;
+        data.first=first;
+        data.second=second;
+        data.third=third;
+
+        if(opType==1){
+            data.type="01";
+        }else{
+            data.type="02";
+        }
+        var url='';
+        if(type==1|| type=='1'){
+            url='/tumor/busremind/updateCrcDiag';
+        }else if(type==2|| type=='2'){
+            url='/tumor/busremind/updateLicDiag';
+        }else if(type==3|| type=='3'){
+            url='/tumor/busremind/updateLucDiag';
+        }else if(type==4|| type=='4'){
+            url='/tumor/busremind/updateScDiag';
+        }
+
+        $.ajax({
+            url: url,
+            type:"post",
+            data:data,
+            dataType: "json",
+            success:function(res){
+                if(!res.ok){
+                    mini.showTips({
+                        content: res.msg,
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                } else {
+                    if(type==1|| type=='1'){
+                        crcgrid2.reload();
+                    }else if(type==2|| type=='2'){
+                        licGrid.reload();
+                    }else if(type==3|| type=='3'){
+                        scGrid.reload();
+                    }else if(type==4|| type=='4'){
+                        lucGrid.reload();
+                    }
+                    mini.showTips({
+                        content: res.msg,
+                        state: "success",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                }
+            }
+        });
+    }
+
+    function dateValidation(e) {
+        var key = $('#keyword').val();
+        if (key!=null && key!=''){
+            return;
+        }
+        var sender = e.sender;
+        var date = sender.value;
+        if (date != undefined && typeof (date) != 'undefined' && date != '') {
+            if (sender.id == 'startDate') {
+                var end = mini.get('endDate').getValue();
+                if (end != undefined && typeof (end) != 'undefined' && end != '') {
+                    date = new Date(date.format('yyyy-MM-dd'));
+                    end = new Date(end.format('yyyy-MM-dd'));
+                    if (date.getTime() - end.getTime() > 0) {
+                        e.errorText = "起始日期不能大于截止日期";
+                        e.isValid = false;
+                    }
+                }
+            }else if (sender.id == 'endDate') {
+                var from = mini.get('startDate').getValue();
+                if (from != undefined && typeof (from) != 'undefined' && from != '') {
+                    date = new Date(date.format('yyyy-MM-dd'));
+                    from = new Date(from.format('yyyy-MM-dd'));
+                    if (from.getTime() - date.getTime() > 0) {
+                        e.errorText = "起始日期不能大于截止日期";
+                        e.isValid = false;
+                    }
+
+                }
+            }
+        } else {
+            if (sender.id == 'startDate') {
+                e.errorText = [[#{MSGERR-COM01-001('统计日期(开始)')}]];
+                e.isValid = false;
+                mini.get('startDate').setIsValid(false);
+            } else if (sender.id == 'endDate') {
+                e.errorText = [[#{MSGERR-COM01-001('统计日期(结束)')}]];
+                e.isValid = false;
+                mini.get('endDate').setIsValid(false);
+            }
+        }
+    }
+
+</script>
+</html>

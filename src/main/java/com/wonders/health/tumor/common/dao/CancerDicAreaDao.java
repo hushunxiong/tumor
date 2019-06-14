@@ -16,4 +16,6 @@ public interface CancerDicAreaDao {
     List<CancerDicArea> findAreas(@Param("level") String level, @Param("pcode") String pcode);
 
     List<CancerDicArea> findParent(@Param("code") String code);
+
+    CancerDicArea get(@Param("ccode") String ccode);
 }

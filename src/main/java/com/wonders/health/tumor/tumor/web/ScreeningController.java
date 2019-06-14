@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.google.common.collect.Lists;
+import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.entity.CancerDic;
@@ -25,10 +26,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -113,6 +116,22 @@ public class ScreeningController extends BaseController {
     @Autowired
     private CrcRegcaseIdService crcRegcaseIdService;
 
+    @Autowired
+    private CrcFobtRemindService crcFobtRemindService;
+
+    @Autowired
+    private CrcDiagCheckRemindService crcDiagCheckRemindService;
+
+    @Autowired
+    private LicDiagCheckRemindService licDiagCheckRemindService;
+
+    @Autowired
+    private ScDiagCheckRemindService scDiagCheckRemindService;
+    @Autowired
+    private LucDiagCheckRemindService lucDiagCheckRemindService;
+
+
+
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear,String operation) {
         User user=getSessionUser();
@@ -158,7 +177,6 @@ public class ScreeningController extends BaseController {
             model.addAttribute("historyListFlag", "2");
 
             model.addAttribute("idNumber", "");
-            model.addAttribute("flag", "1"); //1：新增
         } else {
             ScreeningVo screeningVo=getDetail(manageId,checkYear);
             model.addAttribute("personInfo", screeningVo.getPersonInfo());
@@ -194,7 +212,6 @@ public class ScreeningController extends BaseController {
                 model.addAttribute("familyCancerHistoryListFlag", "2"); //
             }
 
-            model.addAttribute("flag", "2"); //2:修改
             //各癌症数据库存在标志
             model.addAttribute("crcDbflag", "2"); //数据库状态  1：新增 2：修改
             model.addAttribute("licDbflag", "2"); //数据库状态  1：新增 2：修改
@@ -205,7 +222,6 @@ public class ScreeningController extends BaseController {
                     model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
                 }
             }
-            model.addAttribute("flag", "2"); //2：修改
         }
 
         //各癌症数据库存在标志
@@ -486,11 +502,13 @@ public class ScreeningController extends BaseController {
             CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
             if(crcrisk!=null && !checkObjAllFieldsIsNull(crcrisk)){
                 crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
+
                 if(crcrisk.getAssessmentResult()=="阴性" || "阴性".equals(crcrisk.getAssessmentResult())){
                     crcrisk.setAssessmentResult("1");
                 }else  if(crcrisk.getAssessmentResult()=="阳性" || "阳性".equals(crcrisk.getAssessmentResult())){
                     crcrisk.setAssessmentResult("2");
                 }
+
                 if(StringUtils.isNotBlank(crcrisk.getId())){
                     crcRiskAssessmentService.update(crcRiskAssessmentDao,crcrisk);
                 }else{
@@ -502,6 +520,7 @@ public class ScreeningController extends BaseController {
                     crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
                 }
             }
+
         }
         if(isOpen(licFlag)){
             LicRegcase licRegcase=screeningVo.getLicRegcase();
@@ -527,6 +546,26 @@ public class ScreeningController extends BaseController {
                     licRegcase.init();
                     licRegcaseService.insert(licRegcaseDao,licRegcase);
                 }
+
+                //处理新需求
+                if("2".equals(licRegcase.getCheckResult())||(licRegcase.getCheckResult()=="2")){
+                    LicDiagCheckRemind licDiagCheckRemind=licDiagCheckRemindService.findByCheckId(licRegcase.getId());
+                    if(licDiagCheckRemind==null || StringUtils.isBlank(licDiagCheckRemind.getId())){    //新增时处理
+                        licDiagCheckRemind=new LicDiagCheckRemind();
+                        licDiagCheckRemind.setCreateDate(new Date());
+                        licDiagCheckRemind.init();
+                    }else{
+                        licDiagCheckRemind.setUpdateBy(user.getId());
+                        licDiagCheckRemind.setUpdateDate(new Date());
+                    }
+                    licDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    licDiagCheckRemind.setLicCheckId(licRegcase.getId());
+
+                    licDiagCheckRemind.setRemindStatus("01");
+                    licDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                    licDiagCheckRemindService.saveOrUpdate(licDiagCheckRemind,user.getId());
+                }
+
             }
             LicRiskAssessment licrisk=screeningVo.getLicRisk();
             if(licrisk!=null && !checkObjAllFieldsIsNull(licrisk)){
@@ -546,7 +585,6 @@ public class ScreeningController extends BaseController {
                     licrisk.init();
                     licRiskAssessmentService.insert(licRiskAssessmentDao,licrisk);
                 }
-
             }
         }
         if(isOpen(lucFlag)){
@@ -573,6 +611,25 @@ public class ScreeningController extends BaseController {
                     lucRegcase.init();
                     lucRegcaseService.insert(lucRegcaseDao,lucRegcase);
                 }
+                //处理肺癌新需求
+                if("2".equals(lucRegcase.getCheckResult())||(lucRegcase.getCheckResult()=="2")){
+                    LucDiagCheckRemind lucDiagCheckRemind=lucDiagCheckRemindService.findByCheckId(lucRegcase.getId());
+                    if(lucDiagCheckRemind==null || StringUtils.isBlank(lucDiagCheckRemind.getId())){
+                        lucDiagCheckRemind=new LucDiagCheckRemind();
+                        lucDiagCheckRemind.setCreateDate(new Date());
+                        lucDiagCheckRemind.init();
+                    }else{
+                        lucDiagCheckRemind.setUpdateBy(user.getId());
+                        lucDiagCheckRemind.setUpdateDate(new Date());
+                    }
+
+                    lucDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    lucDiagCheckRemind.setLucCheckId(lucRegcase.getId());
+
+                    lucDiagCheckRemind.setRemindStatus("01");
+                    lucDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                    lucDiagCheckRemindService.saveOrUpdate(lucDiagCheckRemind,user.getId());
+                }
             }
             LucRiskAssessment lucrisk=screeningVo.getLucRisk();
             if(lucrisk!=null  && !checkObjAllFieldsIsNull(lucrisk)){
@@ -592,8 +649,9 @@ public class ScreeningController extends BaseController {
                     lucrisk.init();
                     lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
                 }
-
             }
+
+
         }
         if(isOpen(scFlag)){
             ScRegcase scRegcase=screeningVo.getScRegcase();
@@ -619,6 +677,25 @@ public class ScreeningController extends BaseController {
                     scRegcase.init();
                     scRegcaseService.insert(scRegcaseDao,scRegcase);
                 }
+
+                //处理胃癌新需求
+                if("2".equals(scRegcase.getCheckResult())||(scRegcase.getCheckResult()=="2")){
+                    ScDiagCheckRemind scDiagCheckRemind=scDiagCheckRemindService.findByCheckId(scRegcase.getId());
+                    if(scDiagCheckRemind==null || StringUtils.isBlank(scDiagCheckRemind.getId())){
+                        scDiagCheckRemind=new ScDiagCheckRemind();
+                        scDiagCheckRemind.setCreateDate(new Date());
+                        scDiagCheckRemind.init();
+                    }else{
+                        scDiagCheckRemind.setUpdateBy(user.getId());
+                        scDiagCheckRemind.setUpdateDate(new Date());
+                    }
+                    scDiagCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                    scDiagCheckRemind.setScCheckId(scRegcase.getId());
+
+                    scDiagCheckRemind.setRemindStatus("01");
+                    scDiagCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                    scDiagCheckRemindService.saveOrUpdate(scDiagCheckRemind,user.getId());
+                }
             }
 
             ScRiskAssessment scrisk=screeningVo.getScRisk();
@@ -640,7 +717,10 @@ public class ScreeningController extends BaseController {
                     scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
                 }
             }
+
         }
+
+
 
         CrcFobt crcFobt=screeningVo.getCrcFobt();
         if(!checkObjAllFieldsIsNull(crcFobt)){
@@ -663,7 +743,80 @@ public class ScreeningController extends BaseController {
                 crcFobtService.update(crcFobtDao,crcFobt);
             }
 
+
+            //处理新需求  往大肠癌便隐血检查提醒表插入数
+            if(isOpen(crcFlag)){
+                CrcDiagCheckRemind crcCheckRemind=crcDiagCheckRemindService.findByCheckId(screeningVo.getCrcRegcase().getId()); //诊断检查提醒表记录
+                CrcFobtRemind fobtRemind=crcFobtRemindService.findByCheckId(screeningVo.getCrcRegcase().getId());   //大肠癌便隐血检查提醒表
+
+                //若大肠癌便隐血检查提醒表.提醒状态 != 完成提醒的场合
+                if( fobtRemind==null || fobtRemind.getFobtRemindStatus()!="04"){
+                    if(fobtRemind==null||StringUtils.isBlank(fobtRemind.getId())){
+                        fobtRemind=new CrcFobtRemind();
+                        fobtRemind.setCreateDate(new Date());
+                        fobtRemind.init();
+                    }else{
+                        fobtRemind.setUpdateBy(user.getId());
+                        fobtRemind.setUpdateDate(new Date());
+                    }
+
+                    fobtRemind.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                    fobtRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+
+                    if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isNotBlank(crcFobt.getSecondFobtResult()))){ //两次都做
+                        if("2".equals(crcFobt.getFobtResult())){//若大肠癌初筛结果为阳性  大肠癌诊断结果提醒表插入数据
+                            if(crcCheckRemind==null || StringUtils.isBlank(crcCheckRemind.getId())){//修改：提醒表中无记录  其实新增的时候也没有
+                                CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
+                                cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                                cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                                cdcr.setCreateDate(new Date());
+                                cdcr.setRemindStatus("01");
+                                cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                                cdcr.init();
+                                crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
+                            }else if(StringUtils.isBlank(fobtRemind.getId())){  //新增
+                                CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
+                                cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                                cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                                cdcr.setCreateDate(new Date());
+                                cdcr.setRemindStatus("01");
+                                cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                                cdcr.init();
+                                crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
+                            }
+                        }
+                        fobtRemind.setFobtRemindStatus("02");
+                        crcFobtRemindService.saveOrUpdate(fobtRemind,user.getId());  //提醒表插入数据
+                    }else if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isBlank(crcFobt.getSecondFobtResult()))){  //只做第一次 新增修改都一样
+                        fobtRemind.setFobtRemindStatus("01");
+                        fobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
+                        crcFobtRemindService.saveOrUpdate(fobtRemind,user.getId());
+                    }else{  //两次都没做
+                        if(fobtRemind!=null){
+                            fobtRemind.setFirstFobtRemindDate(null);
+                            fobtRemind.setFirstFobtRemindType(null);
+                            fobtRemind.setSecondFobtRemindDate(null);
+                            fobtRemind.setSecondFobtRemindType(null);
+                        }
+                        fobtRemind.setFobtRemindStatus("01");
+                        fobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
+                        crcFobtRemindService.saveOrUpdate(fobtRemind,user.getId());
+                    }
+                }
+            }
+
+        }else{  //为空,无便隐血检查结果  这里是为了防止没有做结果，一般不会使用
+            if(isOpen(crcFlag)){
+                CrcFobtRemind crcFobtRemind=new CrcFobtRemind();
+                crcFobtRemind.setCrcCheckId(screeningVo.getCrcRegcase().getIdNumber());
+                crcFobtRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                crcFobtRemind.setCreateDate(new Date());
+                crcFobtRemind.setFobtRemindStatus("01");
+                crcFobtRemind.setPerFobtRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),7)));
+                crcFobtRemindService.saveOrUpdate(crcFobtRemind,user.getId());
+            }
         }
+
 
         LicAssistCheck licAssistCheck=screeningVo.getLicCheck();
         if(!checkObjAllFieldsIsNull(licAssistCheck)){
@@ -721,8 +874,115 @@ public class ScreeningController extends BaseController {
         }catch (Exception e){
             return "2";
         }
-
     }
+
+    @RequestMapping(value = {"", "printSuggest"}, method = RequestMethod.GET)
+    public String printSuggest(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
+        model.addAttribute("name",name);
+        model.addAttribute("byx",byx);
+        model.addAttribute("gtp",gtp);
+        model.addAttribute("hbs",hbs);
+        model.addAttribute("afp",afp);
+        model.addAttribute("bus",bus);
+        model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
+        String aizheng="";
+        if(StringUtils.isNotBlank(aizhengs)){
+            if(aizhengs.contains("1")){
+                aizheng+="大肠癌";
+                model.addAttribute("dca",1);
+            }
+            if(aizhengs.contains("2")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肝癌";
+            }
+            if(aizhengs.contains("3")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="胃癌";
+                model.addAttribute("wa",1);
+            }
+            if(aizhengs.contains("4")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肺癌";
+                model.addAttribute("fa",1);
+            }
+        }
+        model.addAttribute("aizheng",aizheng);
+        User user=getSessionUser();
+        Hospital hos=AuthUtils.getHospitalByCode(user.getOrgCode());
+
+        if(hos!=null){
+            String hosname=hos.getName();
+            if(hosname.contains("社区卫生服务中心")){
+                hosname=hosname.replace("社区卫生服务中心","");
+            }
+            model.addAttribute("hosName",hosname);
+        }
+
+        model.addAttribute("flag",1);
+        return "/register/printSuggest";
+    }
+
+
+    @RequestMapping(value = {"", "printSuggest1"}, method = RequestMethod.GET)
+    public ModelAndView printSuggest1(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
+        ModelAndView mav = new ModelAndView("/register/printSuggest");
+        model.addAttribute("name",name);
+        model.addAttribute("byx",byx);
+        model.addAttribute("gtp",gtp);
+        model.addAttribute("hbs",hbs);
+        model.addAttribute("afp",afp);
+        model.addAttribute("bus",bus);
+        model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
+        String aizheng="";
+        if(StringUtils.isNotBlank(aizhengs)){
+            if(aizhengs.contains("1")){
+                aizheng+="大肠癌";
+                model.addAttribute("dca",1);
+            }
+            if(aizhengs.contains("2")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肝癌";
+            }
+            if(aizhengs.contains("3")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="胃癌";
+                model.addAttribute("wa",1);
+            }
+            if(aizhengs.contains("4")){
+                if(StringUtils.isNotBlank(aizheng)){
+                    aizheng+="，";
+                }
+                aizheng+="肺癌";
+                model.addAttribute("fa",1);
+            }
+        }
+        model.addAttribute("aizheng",aizheng);
+        User user=getSessionUser();
+        Hospital hos=AuthUtils.getHospitalByCode(user.getOrgCode());
+
+        if(hos!=null){
+            String hosname=hos.getName();
+            if(hosname.contains("社区卫生服务中心")){
+                hosname=hosname.replace("社区卫生服务中心","");
+            }
+            model.addAttribute("hosName",hosname);
+        }
+
+        model.addAttribute("flag",2);
+        return mav;
+    }
+
+
 
     //简化计算flag成boolean
     private Boolean isOpen(String flag){

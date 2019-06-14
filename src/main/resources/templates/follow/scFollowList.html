@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>胃癌随访一览</title>
+    <link>
+    <script>
+    </script>
+</head>
+<body>
+<div class="content pd-10">
+    <table>
+        <tr>
+            <td>筛查年份</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.checkYear}"/>
+            </td>
+            <td>证件类型</td>
+            <td>
+                <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.personcardType}" th:data="${#dic.generals('60022')}" readonly="readonly" />
+            </td>
+            <td>证件号码</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.personcard}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>姓&nbsp;&nbsp;名</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.name}"/>
+            </td>
+            <td>性&nbsp;&nbsp;别</td>
+            <td>
+                <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.gender}" th:data="${#dic.generals('60023')}" readonly="readonly" />
+            </td>
+            <td>出生日期</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${#dates.format(info.birth, 'yyyy-MM-dd')}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>移动电话</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.mobile}"/>
+            </td>
+            <td>固定电话</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.telephone}"/>
+            </td>
+            <td>居住地址</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.address}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>胃癌初筛登记日期</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${#dates.format(info.regdate, 'yyyy-MM-dd')}"/>
+            </td>
+            <td>胃癌判定结果</td>
+            <td>
+                <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.checkResult}" th:data="${#dic.generals('60001')}" readonly="readonly" />
+            </td>
+            <td>胃癌诊断状态</td>
+            <td>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.zdzt}"/>
+            </td>
+        </tr>
+    </table>
+    <div th:if="${info.checkResult=='2'}">
+        <span>胃癌随访信息</span>
+        <button class="my-btn my-btn-blue mr-20" style="float: right;" onclick="addScFollow()">新增随访</button>
+    </div>
+    <div id="datagrid" class="mini-datagrid" style="width:99%; height:auto;"
+         allowResize="false" url="getScData" idField="id" multiSelect="false" showPager="false">
+        <div property="columns">
+            <div field="id" width="10" headerAlign="center" align="center" visible="false">随访编号</div>
+            <div field="suifangDate" width="20" headerAlign="center" align="center">随访日期</div>
+            <div field="suifangyishengName" width="20" headerAlign="center" align="center">随访医生</div>
+            <div field="suifangjigouName" width="20" headerAlign="center" align="center">随访医疗机构</div>
+            <div type="action" width="30" renderer="actionRender" headerAlign="center" align="center">操作</div>
+        </div>
+    </div>
+    <div class="btn-list text-c mt-30">
+        <button class="my-btn my-btn-blue mr-20">返回</button>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        mini.parse();
+        var scRegcaseId=[[${info.scRegcaseId}]];
+        var grid = mini.get("datagrid");
+        grid.load({scRegcaseId:scRegcaseId});
+        //操作列
+        function actionRender(e) {
+            var r = e.record;
+            var h = '';
+            if (r!=null) {
+                h += '<button class="my-btn my-btn-blue mr-20" onclick="lookScFollow(\''+r.id+'\')">查看</button>';
+                h += '<button class="my-btn my-btn-blue mr-20" onclick="updateScFollow(\''+r.id+'\')">编辑</button>';
+                h += '<button class="my-btn my-btn-blue mr-20" onclick="delScFollow(\''+r.id+'\')">删除</button>';
+            }
+            return h;
+        }
+        //新增随访
+        function addScFollow(){
+            var manageId=[[${info.manageId}]];
+            var checkYear=[[${info.checkYear}]];
+            var flag="1";
+            window.location.href = "/tumor/scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag;
+        }
+        //编辑随访
+        function updateScFollow(id){
+            var manageId=[[${info.manageId}]];
+            var checkYear=[[${info.checkYear}]];
+            var flag="2";
+            window.location.href = "/tumor/scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
+        }
+        //查看随访
+        function lookScFollow(id){
+            var manageId=[[${info.manageId}]];
+            var checkYear=[[${info.checkYear}]];
+            var flag="3";
+            window.location.href = "/tumor/scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
+        }
+        //删除随访
+        function delScFollow(id){
+            $.ajax({
+                url:'/tumor/scFollow/delScFollow?id='+id,
+                type:'get',
+                async:true,
+                success: function (response) {
+                    mini.alert(response.msg,"提示消息",function () {
+                        if (response.value){
+                            grid.load({scRegcaseId:scRegcaseId});
+                        }
+                    });
+                }
+            })
+        }
+    </script>
+</div>
+</body>
+</html>

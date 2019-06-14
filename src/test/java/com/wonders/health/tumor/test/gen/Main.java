@@ -28,10 +28,10 @@ public class Main {
 
     private static void createCancerHistory() { //
         String schema = "ZLZFX";
-        String tableName = "CANCER_HISTORY";
+        String tableName = "luc_diag_check_remind";
         String moduleName = "tumor";
-        String className = "CancerHistory";
-        GenUtils.createMain(schema, tableName, moduleName, className, ENTITY_TYPE_GRID, "历史", "xuguobing");
+        String className = "LucDiagCheckRemind";
+        GenUtils.createMain(schema, tableName, moduleName, className, ENTITY_TYPE_GRID, "胃癌诊断检查提醒表", "menglianghai");
     }
 
 }

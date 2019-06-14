@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:fragment="head(title,links,scripts)">
+    <meta charset="UTF-8">
+    <!--<title th:replace="${title}">肿瘤早发现</title>-->
+    <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
+    <script src="../static/js/common.js" th:src="@{/js/common.js}" type="text/javascript"></script>
+
+    <script src="../static/lib/miniui/miniui.js" th:src="@{/lib/miniui/miniui.js}" type="text/javascript"></script>
+    <link href="../static/lib/miniui/themes/icons.css" th:href="@{/lib/miniui/themes/icons.css}" rel="stylesheet" type="text/css" />
+    <link href="../static/lib/miniui/themes/default/miniui.css" th:href="@{/lib/miniui/themes/default/miniui.css}" rel="stylesheet" type="text/css" />
+
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" type="text/css" />
+    <link href="../static/css/my-mini.css" th:href="@{/css/my-mini.css}" rel="stylesheet" type="text/css" />
+
+    <!--[if lt IE 9]>
+    <script src="../js/html5shiv.min.js" th:src="@{/js/html5shiv.min.js}"></script>
+    <script src="../js/respond.js" th:src="@{/js/respond.js}"></script>
+    <![endif]-->
+    <!--[if lte IE 11]>
+    <script type="text/javascript" src="../static/js/flexie.js" th:src="@{/js/flexie.js}"></script>
+    <script type="text/javascript" src="../static/js/selectivizr.js" th:src="@{/js/selectivizr.js}"></script>
+    <script type="text/javascript" src="../static/js/PIE_IE678.js" th:src="@{/js/PIE_IE678.js}"></script>
+    <![endif]-->
+    <link href="../lib/font-awesome/css/font-awesome.min.css" th:href="@{/lib/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css" />
+
+    <meta charset="UTF-8">
+    <title>初筛信息汇总(阳性胃癌)</title>
+</head>
+<body>
+
+
+
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div class="mini-tabs" activeIndex="0" style=" width:100%; overflow: hidden;">
+        <div title="初筛信息汇总(阳性胃癌)">
+    <div align="center"></div>
+    <div class="col-lg-12">
+
+                    <div id="formsearch" class="row mt-10">
+                        <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+                        <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构所属区：</label>
+                            <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="46%"
+                                   th:data="${#auth.getAreas(areaCode)}"
+                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
+                        </div>
+                        <div class="mini-col-3">
+                            <label class="mr-5">登记机构：</label>
+
+                            <input id="regorg" name="regorg"  class="mini-combobox" width="66%" emptyText="请选择"
+                                   textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-lg-3">日期范围：
+                        <input id="csrqStart" name="beginDate" class="mini-datepicker"
+                               allowInput="true" th:value="${tjRqStart}"  style="width:115px;"  errorMode="border" onvalidation="dateValidation" >
+                        -
+                        <input id="csrqEnd" name="endDate" class="mini-datepicker"
+                               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" allowInput="false" style="width:115px;" errorMode="border" onvalidation="dateValidation">
+                        <div id="js" class="my-btn my-btn-blue" onclick="onSearch()">检索</div>
+                        <div class="my-btn my-btn-blue" onclick="reset()">重置</div>
+                    </div>
+
+                    <div class="col-sm-2" align="right">
+                        <div class="my-btn my-btn-blue" onclick="exportData()">导出</div>
+                    </div>
+                </div>
+                <div>
+                    <div id="datagrid" url="../statistics/scPositiveData" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto ;display: none;"
+                         showpager='false' idField="id">
+                        <div property="columns" >
+                            <div field="xm"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
+                            <div field="xb" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60023')}"/></div>
+                            <div field="birthday" sortField="birthday"  dateFormat="yyyy-MM-dd"  width="150px" headerAlign="center" align="center" allowSort="false">出生日期</div>
+                            <div field="address" sortField="address"    width="150px" headerAlign="center" align="center" allowSort="false">居住地址</div>
+                            <div field="mobile" sortField="mobile"    width="150px" headerAlign="center" align="center" allowSort="false">移动电话</div>
+                            <div field="telephone" sortField="telephone"    width="150px" headerAlign="center" align="center" allowSort="false">固定电话</div>
+                            <div field="regorg" sortField="regorg"autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >筛查登记机构</div>
+                            <div field="assessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >危险度评估结果
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60001')}"/></div>
+
+                            <div field="sfwj" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否胃镜
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60013')}"/></div>
+                            <div field="wjjcjg" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >胃镜检查结果
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60001')}"/></div>
+
+
+                            <div field="sfqz" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否确诊
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60013')}"/></div>
+                            <div field="sfzl" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否治疗
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60013')}"/></div>
+                            <div field="zlwz" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >肿瘤位置
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60031')}"/></div>
+                            <div field="zlqb" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >肿瘤期别
+                                <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
+                                       valueField="code" th:data="${#dic.generals('60042')}"/></div>
+                            <div field="csrq" sortField="csrq"  dateFormat="yyyy-MM-dd"   width="150px" headerAlign="center" align="center" allowSort="false">初筛日期</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+
+
+            <script type="text/javascript">
+
+                mini.parse();
+                var grid = mini.get("datagrid");
+
+                $(function () {
+                    getHospitals();
+                });
+                function onSearch() {
+                    var data={};
+                    data.regarea=mini.get("regarea").getValue();
+                    data.regorg=mini.get("regorg").getValue();
+                    data.csrqStart=mini.get("csrqStart").getValue();
+                    if(!data.csrqStart) data.csrqStart=stringToDate('1970-01-01');
+                    data.csrqEnd=mini.get("csrqEnd").getValue();
+                    if(!data.csrqEnd) data.csrqEnd=stringToDate(getNow());
+                    grid.load(data, gridLoadSuccess, gridLoadError);
+                    if (grid==null){
+                        $("datagrid").empty();
+                        return
+                    }
+                }
+
+                $(document).ready(function(){
+                    $("#js").click(function(){
+                        $("#datagrid").show();
+                    });
+                });
+
+                function getNow() {
+                    var myDate = new Date();//获取系统当前时间
+                    var y = myDate.getFullYear();
+                    var m = myDate.getMonth();
+                    var d = myDate.getDate();
+                    return y+"-"+m+"-"+d;
+                }
+
+                function stringToDate (dateStr,separator){
+                    if(!separator){
+                        separator="-";
+                    }
+                    var dateArr = dateStr.split(separator);
+                    var year = parseInt(dateArr[0]);
+                    var month;
+                    //处理月份为04这样的情况
+                    if(dateArr[1].indexOf("0") == 0){
+                        month = parseInt(dateArr[1].substring(1));
+                    }else{
+                        month = parseInt(dateArr[1]);
+                    }
+                    var day = parseInt(dateArr[2]);
+                    var date = new Date(year,month,day);
+                    return date;
+                }
+
+                function getHospitals(){
+                    var regarea= mini.get("regarea").getValue();
+                    var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
+                    mini.get("regorg").setUrl(url);
+                }
+                function reset(){
+                    var mydate = new Date();
+                    var start = mydate.getFullYear()+"-01"+"-01";
+                    mini.get('csrqStart').setValue(start);
+                    mini.get('csrqEnd').setValue(getResetNow());
+                    mini.get('regorg').setValue("");
+                    grid.clearRows();
+                }
+                function getResetNow() {
+                    var myDate = new Date();//获取系统当前时间
+                    var y = myDate.getFullYear();
+                    var m = myDate.getMonth()+1;
+                    var d = myDate.getDate();
+                    return y+"-"+m+"-"+d;
+                }
+
+                /**
+                 * miniui 小提示
+                 * @param msg  消息
+                 * @param state  消息类型  default|success|info|warning|danger
+                 */
+                function showActionMessage(state, message) {
+                    mini.showTips({
+                        content: message,
+                        state: state,
+                        x: "Center",
+                        y: "Center",
+                        timeout: 2000
+                    });
+                }
+
+                //导出
+                function exportData(){
+                    var data = mini.get("datagrid");
+                    if (data.data.length==0){
+                        showActionMessage('info','没有可以导出的数据');
+                        return;
+                    }
+                    var  regarea=mini.get("regarea").getValue();
+                    var  regorg=mini.get("regorg").getValue();
+                    var csrqStart= mini.formatDate(mini.get("#csrqStart").getValue(),"yyyy-MM-dd HH:MM:SS");
+                    var csrqEnd= mini.formatDate(mini.get("#csrqEnd").getValue(),"yyyy-MM-dd HH:MM:SS");
+                    /*var  csrqStart=mini.get("csrqStart").getValue();
+                    var  csrqEnd=mini.get("csrqEnd").getValue();*/
+                    var param ='?';
+                    param += 'regarea='+regarea;
+                    param += '&regorg='+regorg;
+                    param += '&csrqStart='+csrqStart;
+                    param += '&csrqEnd='+csrqEnd;
+                    window.location.href="../statistics/exportScPositiveData"+param;
+                }
+
+            </script>
+
+        </div>
+
+    </div>
+
+
+
+
+</body>
+</html>

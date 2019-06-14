@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>打印诊断建议书</title>
+    <link>
+    <script></script>
+</head>
+<body>
+
+<script src="../static/lib/lodop/LodopFuncs.js" th:src="@{/lib/lodop/LodopFuncs.js}"></script>
+<style>
+    .content {width: 137mm; margin: 0 auto;text-align: center;}
+    *{line-height: 1.5em; font-family:'宋体';}
+    .content h1 { font-size: 22px; margin:20px 0px;}
+    .content div,.content p{ font-size: 18px;text-align: left!important;text-indent: 2em;line-height: 1.8em;}
+    .content p { text-indent: 0em;}
+    .content span{display: inline-block;width:auto;min-width:0px;margin-left:-38px;margin-right:1px; word-break: normal;text-align: center}
+</style>
+
+    <div class="content pd-10">
+        <h2>普陀区肿瘤早发现</h2>
+        <h1>肺部CT/胃镜/肠镜建议书</h1>
+    <p>尊敬的<span id="namespan" style="margin-left: 0px"></span> ：</p>
+        <div>感谢您参加普陀区肿瘤早发现项目！
+        </div>
+        <div>收到本建议书说明您的筛查结果为<b>阳性</b>，其中危险因素评估<BR>
+            显示您具有<span id="aizhengs" style="width: 256px"></span>危险因素，FOBT检查结果为<span id="fobt" style="width: 80px;margin-right:0px"></span>，GPT检查结果为<span id="gpt" style="width:50px;margin-left:-10px;margin-right:35px"></span>，HBsAg检查结果为<span id="hbs" style="width: 50px;margin-left:-10px;margin-right:35px"></span>，<BR>
+            AFP检查结果为<span id="afp" style="width: 50px;margin-left:0px;margin-right:35px"></span>，肝脏B超检查结果为<span id="bus" style="width: 50px;margin-left:10px;margin-right:40px"></span>。有<BR>
+            很多原因会导致上述检查出现阳性结果，本结果并不意味着您已<BR>
+            经患上了肿瘤。为了明确您阳性结果原因，我们强烈建议您前往<BR>
+            医院接受 肺部低剂量螺旋CT/胃镜/肠镜检查。
+
+        </div>
+        <div>
+            您居住地附近的<span style="width:110px;border-bottom:1px solid #333;display: inline-block;margin-left:0px"></span>医院是普陀区肿瘤早发现项目<BR>
+            的指定医院，携带本建议书前往上述指定医院接受 肺部CT/胃镜<BR>
+            /肠镜 检查可享受便民措施，并可凭检查结果前往社区卫生服务<BR>
+
+            中心领取补贴。
+        </div>
+
+    <div>如果您对建议书上相关内容有任何疑问，请咨询社区卫生服<BR>
+        务中心的工作人员。</div>
+        <div><b>再次感谢您的参与！</b></div>
+        <div class="clearfix">
+            <b class="fr" style="width:100%">
+                <span id="hos" th:if="${flag} eq '1'" style="width:56%;text-align:right;"></span>
+                <span th:if="${flag} eq '1'" style="margin-right:-70px;float: right">社区卫生服务中心
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                <span id="hos" th:if="${flag} eq '2'" style="width:56%;text-align:right;"></span>
+                <span th:if="${flag} eq '2'" style="margin-right:-10px;float: right">社区卫生服务中心
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </b>
+        </div>
+
+        <div class="fr" style="margin-right:25px;"><b>
+            <span id="year" style="width:30px;margin-left:10px;margin-right:50px"></span>年
+            <span id="month" style="width:30px;margin-right:30px"></span>月
+            <span id="day" style="width:30px;margin-right:30px"></span>日</b></div>
+        <p style="clear: both; width: 100%;">
+            <b class="fl">地址：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span  th:if="${flag} eq '2'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                 电话：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+        </p>
+    </div>
+<BR>
+<BR>
+    <center>
+    <div th:if="${flag} eq '1'">
+        <button class="my-btn my-btn-blue mr-20" onclick="printSuggest()" id="savebtn">打印</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
+    </div>
+    </center>
+<script type="text/javascript" th:inline="javascript">
+    mini.parse();
+    var name=[[${name}]];
+    $("#namespan").html(name);
+
+    var aizhengs=[[${aizheng}]];
+    $("#aizhengs").html(aizhengs);
+
+    var fobt=[[${byx}]];
+    $("#fobt").html(fobt);
+
+    var gpt=[[${gtp}]];
+    $("#gpt").html(gpt);
+
+    var hbs=[[${hbs}]];
+    $("#hbs").html(hbs);
+
+    var afp=[[${afp}]];
+    $("#afp").html(afp);
+
+    var bus=[[${bus}]];
+    $("#bus").html(bus);
+
+    var hos=[[${hosName}]];
+    $("#hos").html(hos);
+
+    var curtime=[[${curtime}]];
+    $("#year").html(curtime.substring(0,4));
+    $("#month").html(curtime.substring(5,7));
+    $("#day").html(curtime.substring(8,10));
+
+    //打印
+    function printSuggest(){
+        var LODOP = getLodop();
+        LODOP.PRINT_INIT("打印诊断建议书");
+        LODOP.SET_SHOW_MODE ("PREVIEW_IN_BROWSE","2");
+        LODOP.SET_PRINT_PAGESIZE(1,"0","0","A4");  //设置打印页面属性：2：表示横向打印，0：定义纸张宽度，为0表示无效设置，A4：设置纸张为A4
+        LODOP.ADD_PRINT_HTM("5","10","98%","100%",getPrintHtml()); //添加html元素 top; left; width; height
+        LODOP.PREVIEW();
+    }
+
+    //获取打印页面-诊断结果
+    function getPrintHtml() {
+        var obj;
+        var url ='/tumor/screening/printSuggest1?name='+name+'&aizhengs='+aizhengs+'&byx='+fobt+'&gtp='+gpt+'&hbs='+hbs+'&afp='+afp+'&bus='+bus;
+        $.ajax({
+            url : url,
+            type : "get",
+            async : false,
+            success : function(data) {
+                obj = data;
+            }
+        });
+        return obj;
+    }
+
+    function closeWindow(){
+        window.history.go(-1);
+    }
+</script>
+
+</body>
+</html>

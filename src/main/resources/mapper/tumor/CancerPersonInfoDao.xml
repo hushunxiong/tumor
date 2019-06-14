@@ -72,7 +72,17 @@
 			luc.check_year as  "lucCheckYear",
 			1 as "luc",
 			luc.CHECK_RESULT AS "lucResult",
-			P .PERSONCARD AS "personCard"
+			P .PERSONCARD AS "personCard",
+			p.PERSONCARD_TYPE as "personcardType",
+			p.BIRTH as "birth",
+			p.TELEPHONE as "telephone",
+			p.MOBILE as "mobile",
+			p.ADDRESS_PROVINCE as "addressProvince",
+			p.ADDRESS_CITY as "addressCity",
+			p.ADDRESS_COUNTY as "addressCounty",
+			p.ADDRESS_TOWN as "addressTown",
+			p.ADDRESS_COMMITTEE as "addressCommittee",
+			p.ADDRESS_DETAIL as "addressDetail"
 		FROM cancer_person_info p
 			LEFT JOIN CRC_REGCASE crc ON (crc.MANAGEID = P . ID)  AND crc.DEL_FLAG='0'  and  crc.check_year=#{csnf}
 			LEFT JOIN CRC_RISK_ASSESSMENT crcas ON (crc. ID = crcas.CRC_CHECK_ID) AND crcas.DEL_FLAG='0'

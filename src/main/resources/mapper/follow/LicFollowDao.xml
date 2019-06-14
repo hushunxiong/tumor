@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.follow.dao.LicFollowDao">
+    
+	<sql id="LicFollowColumns">
+		a.id AS "id",a.primary_mark AS "primaryMark",a.lic_check_id AS "licCheckId",a.huojian AS "huojian",a.huojianjieguo AS "huojianjieguo",a.shifouquezhen AS "shifouquezhen",a.bingli AS "bingli",a.binglileixing AS "binglileixing",a.zhongliuweizh AS "zhongliuweizh",a.zhongliutnm_t AS "zhongliutnmT",a.zhongliutnm_n AS "zhongliutnmN",a.zhongliutnm_m AS "zhongliutnmM",a.shifouzhiliao AS "shifouzhiliao",a.shoushujigou_id AS "shoushujigouId",a.shoushujigou_name AS "shoushujigouName",a.shoushu_date AS "shoushuDate",a.fangliaojigou_id AS "fangliaojigouId",a.fangliaojigou_name AS "fangliaojigouName",a.fangliao_date AS "fangliaoDate",a.hualiaojigou_id AS "hualiaojigouId",a.hualiaojigou_name AS "hualiaojigouName",a.hualiao_date AS "hualiaoDate",a.zhenduanjigou_id AS "zhenduanjigouId",a.zhenduanjigou_name AS "zhenduanjigouName",a.suifangjigou_id AS "suifangjigouId",a.suifangjigou_name AS "suifangjigouName",a.suifang_date AS "suifangDate",a.suifangyisheng_id AS "suifangyishengId",a.dengjijigou_id AS "dengjijigouId",a.dengji_date AS "dengjiDate",a.dengji_id AS "dengjiId",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate",a.linchuangfenqi AS "linchuangfenqi",a.zhongliudaxiao AS "zhongliudaxiao",a.zhenduan_date AS "zhenduanDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.follow.entity.LicFollow">
+		SELECT 
+			<include refid="LicFollowColumns"/>
+		FROM lic_follow a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.follow.entity.LicFollow">
+		SELECT 
+			<include refid="LicFollowColumns"/>
+		FROM lic_follow a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM lic_follow a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.follow.entity.LicFollow"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="LicFollowColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO lic_follow(
+		id,primary_mark,lic_check_id,huojian,huojianjieguo,shifouquezhen,bingli,binglileixing,zhongliuweizh,zhongliutnm_t,zhongliutnm_n,zhongliutnm_m,shifouzhiliao,shoushujigou_id,shoushujigou_name,shoushu_date,fangliaojigou_id,fangliaojigou_name,fangliao_date,hualiaojigou_id,hualiaojigou_name,hualiao_date,zhenduanjigou_id,zhenduanjigou_name,suifangjigou_id,suifangjigou_name,suifang_date,suifangyisheng_id,dengjijigou_id,dengji_date,dengji_id,del_flag,create_by,create_date,update_by,update_date,linchuangfenqi,zhongliudaxiao,zhenduan_date
+		) VALUES (
+		#{id},#{primaryMark},#{licCheckId},#{huojian},#{huojianjieguo},#{shifouquezhen},#{bingli},#{binglileixing},#{zhongliuweizh},#{zhongliutnmT},#{zhongliutnmN},#{zhongliutnmM},#{shifouzhiliao},#{shoushujigouId},#{shoushujigouName},#{shoushuDate},#{fangliaojigouId},#{fangliaojigouName},#{fangliaoDate},#{hualiaojigouId},#{hualiaojigouName},#{hualiaoDate},#{zhenduanjigouId},#{zhenduanjigouName},#{suifangjigouId},#{suifangjigouName},#{suifangDate},#{suifangyishengId},#{dengjijigouId},#{dengjiDate},#{dengjiId},#{delFlag},#{createBy},#{createDate},#{updateBy},#{updateDate},#{linchuangfenqi},#{zhongliudaxiao},#{zhenduanDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE lic_follow SET
+		id = #{id},primary_mark = #{primaryMark},lic_check_id = #{licCheckId},huojian = #{huojian},huojianjieguo = #{huojianjieguo},shifouquezhen = #{shifouquezhen},bingli = #{bingli},binglileixing = #{binglileixing},zhongliuweizh = #{zhongliuweizh},zhongliutnm_t = #{zhongliutnmT},zhongliutnm_n = #{zhongliutnmN},zhongliutnm_m = #{zhongliutnmM},shifouzhiliao = #{shifouzhiliao},shoushujigou_id = #{shoushujigouId},shoushujigou_name = #{shoushujigouName},shoushu_date = #{shoushuDate},fangliaojigou_id = #{fangliaojigouId},fangliaojigou_name = #{fangliaojigouName},fangliao_date = #{fangliaoDate},hualiaojigou_id = #{hualiaojigouId},hualiaojigou_name = #{hualiaojigouName},hualiao_date = #{hualiaoDate},zhenduanjigou_id = #{zhenduanjigouId},zhenduanjigou_name = #{zhenduanjigouName},suifangjigou_id = #{suifangjigouId},suifangjigou_name = #{suifangjigouName},suifang_date = #{suifangDate},suifangyisheng_id = #{suifangyishengId},dengjijigou_id = #{dengjijigouId},dengji_date = #{dengjiDate},dengji_id = #{dengjiId},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate},linchuangfenqi = #{linchuangfenqi},zhongliudaxiao = #{zhongliudaxiao},zhenduan_date = #{zhenduanDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE lic_follow SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	<select id="getListByCheckId" resultType="com.wonders.health.tumor.follow.entity.LicFollow">
+		SELECT
+		<include refid="LicFollowColumns"/>
+		FROM lic_follow a
+		<where>
+			a.del_flag = '0'
+			AND a.lic_check_id = #{licCheckId}
+		</where>
+	</select>
+</mapper>
