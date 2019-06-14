@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
     <title>肺癌随访一览</title>
     <link>
@@ -8,7 +9,7 @@
 </head>
 <body>
 <div class="content pd-10">
-    <table>
+    <table class="table_new table_new5 mt-10">
         <tr>
             <td>筛查年份</td>
             <td>
@@ -68,7 +69,7 @@
     </table>
     <div th:if="${info.checkResult=='2'}">
         <span>肺癌随访信息</span>
-        <button class="my-btn my-btn-blue mr-20" style="float: right;" onclick="addLucFollow()">新增随访</button>
+        <button id="add" shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="addLucFollow()">新增随访</button>
     </div>
     <div id="datagrid" class="mini-datagrid" style="width:99%; height:auto;"
          allowResize="false" url="getLucData" idField="id" multiSelect="false" showPager="false">
