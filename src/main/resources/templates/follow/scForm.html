@@ -257,7 +257,7 @@
                     success: function (response) {
                         mini.alert(response.msg,"提示消息",function () {
                             if (response.value){
-                                window.history.go(-1);
+                                window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc";
                             }
                         })
                     }
@@ -287,7 +287,7 @@
                     success: function (response) {
                         mini.alert(response.msg,"提示消息",function () {
                             if (response.value){
-                                window.history.go(-1);
+                                window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc";
                             }
                         })
                     }
@@ -296,7 +296,7 @@
         }
         //关闭页面
         function closeYM(){
-            window.history.go(-1);
+            window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc";
         }
         //是否胃镜检查
         function weijingCheck(){
