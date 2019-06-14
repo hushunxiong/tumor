@@ -8,12 +8,11 @@ import com.wonders.health.tumor.common.model.DataGridSearch;
 import lombok.Data;
 
 /**
- * 胃癌结案搜索
+ * 肝癌结案搜索
  * @author zhaomeng
  */
 @Data
-public class scClosingCaseSearchVo extends DataGridSearch {
-
+public class LicClosingCaseSearchVo extends DataGridSearch {
 
     private String keyword; //可按照姓名或者身份证号模糊查询
     private String csnf;  //初筛年份
@@ -21,5 +20,6 @@ public class scClosingCaseSearchVo extends DataGridSearch {
     private String regorg; //登记机构
     private String checkResult; //判定结果
     private String closeResult; //结案结果
+
 
 }

@@ -49,12 +49,14 @@ public class CrcFollowController extends BaseController {
         model.addAttribute("personInfo", followService.getPersonInfo(manageId));
 
         CrcRegcase regcase = crcFollowService.getRegcase(manageId, checkYear);
-        model.addAttribute("regcase", regcase);
 
         if (regcase != null) {
             model.addAttribute("checkId", regcase.getId());
             model.addAttribute("diagStatus", crcFollowService.getDiagStatus(regcase.getId()));
+        } else {
+            regcase = new CrcRegcase();
         }
+        model.addAttribute("regcase", regcase);
         return "/follow/crcFollowList";
     }
 

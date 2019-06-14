@@ -62,7 +62,7 @@
             <td width="80%" class="text-l">
                 <input id="huojian" name="huojian" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60013')}" th:value="${follow.huojian}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" onvaluechanged="huojianChange"/>
             </td>
         </tr>
         <tr>
@@ -324,6 +324,18 @@
             mini.get("suifangjigouId").setText(suifangjigouName);
         }
     });
+
+    //是否活检
+    function huojianChange(e) {
+        var huojian = mini.get("huojian").getValue();
+        //是否活检:是
+        if (huojian == "1") {
+            mini.get("huojianjieguo").set({enabled:true,required:true});
+            //否
+        } else {
+            mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
+        }
+    }
 
     //保存
     function save() {

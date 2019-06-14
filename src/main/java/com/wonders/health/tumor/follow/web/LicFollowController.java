@@ -49,12 +49,13 @@ public class LicFollowController extends BaseController {
         model.addAttribute("personInfo", followService.getPersonInfo(manageId));
 
         LicRegcase regcase = licFollowService.getRegcase(manageId, checkYear);
-        model.addAttribute("regcase", regcase);
-
         if (regcase != null) {
             model.addAttribute("checkId", regcase.getId());
             model.addAttribute("diagStatus", licFollowService.getDiagStatus(regcase.getId()));
+        } else {
+            regcase = new LicRegcase();
         }
+        model.addAttribute("regcase", regcase);
         return "/follow/licFollowList";
     }
 
