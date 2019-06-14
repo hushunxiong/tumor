@@ -189,7 +189,8 @@
                     var start = mydate.getFullYear()+"-01"+"-01";
                     mini.get('csrqStart').setValue(start);
                     mini.get('csrqEnd').setValue(getResetNow());
-                    mini.get('regorg').setValue("")
+                    mini.get('regorg').setValue("");
+                    grid.clearRows();
                 }
                 function getResetNow() {
                     var myDate = new Date();//获取系统当前时间
