@@ -54,7 +54,7 @@
         <tr>
             <td>胃癌初筛登记日期</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${#dates.format(info.regdate, 'yyyy-MM-dd')}"/>
+                <input class="mini-textbox" readonly="readonly" th:value="${info.regdate==null ? null : #dates.format(info.regdate, 'yyyy-MM-dd')}"/>
             </td>
             <td>胃癌判定结果</td>
             <td>
@@ -85,7 +85,9 @@
         mini.parse();
         var scRegcaseId=[[${info.scRegcaseId}]];
         var grid = mini.get("datagrid");
-        grid.load({scRegcaseId:scRegcaseId});
+        if (null!=scRegcaseId) {
+            grid.load({scRegcaseId:scRegcaseId});
+        }
         //操作列
         function actionRender(e) {
             var r = e.record;
