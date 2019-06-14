@@ -3,8 +3,8 @@
  */
 package com.wonders.health.tumor.closingcase.service;
 
-import com.wonders.health.tumor.closingcase.dao.licClosingCaseDao;
-import com.wonders.health.tumor.closingcase.entity.licClosingCase;
+import com.wonders.health.tumor.closingcase.dao.LucClosingCaseDao;
+import com.wonders.health.tumor.closingcase.entity.LucClosingCase;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
@@ -20,37 +20,37 @@ import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataGridSearch;
 
 /**
- * 肝癌结案Service
+ * 肺癌结案Service
  * @author zhaomeng
  */
 @Service
 @Transactional(readOnly = true)
-public class licClosingCaseService {
+public class LucClosingCaseService {
 
     @Autowired
-    private licClosingCaseDao licClosingCaseDao;
+    private LucClosingCaseDao lucClosingCaseDao;
 
-	public DataGrid<licClosingCase> findPage(DataGridSearch search) {
-        Integer count = licClosingCaseDao.pageCount(search);
-        List<licClosingCase> list = null;
+	public DataGrid<LucClosingCase> findPage(DataGridSearch search) {
+        Integer count = lucClosingCaseDao.pageCount(search);
+        List<LucClosingCase> list = null;
         if (count > 0) {
-        	list = licClosingCaseDao.pageList(search);
+        	list = lucClosingCaseDao.pageList(search);
         }
-        return new DataGrid<licClosingCase>(count,list);
+        return new DataGrid<LucClosingCase>(count,list);
     }
 
-    public licClosingCase findById(String id) {
-        return licClosingCaseDao.get(id);
+    public LucClosingCase findById(String id) {
+        return lucClosingCaseDao.get(id);
     }
 
     @Transactional(readOnly = false)
-    public AjaxReturn<Map<String, String>> saveOrUpdate(licClosingCase vo, String userId) {
+    public AjaxReturn<Map<String, String>> saveOrUpdate(LucClosingCase vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
-            licClosingCase po = licClosingCaseDao.get(vo.getId());
+            LucClosingCase po = lucClosingCaseDao.get(vo.getId());
             if (po != null) {
                 BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
                 po.initByUpdate(userId);
-                licClosingCaseDao.update(po);
+                lucClosingCaseDao.update(po);
                 return new AjaxReturn<Map<String, String>>(true, "修改成功");
             } else {
                 return new AjaxReturn<Map<String, String>>(false, "传入ID无法找到记录");
@@ -58,14 +58,14 @@ public class licClosingCaseService {
         } else { //新增
             vo.setId(IdGen.uuid());
             vo.init(userId);
-            licClosingCaseDao.insert(vo);
+            lucClosingCaseDao.insert(vo);
             return new AjaxReturn<Map<String, String>>(true, "保存成功");
         }
     }
 
     @Transactional(readOnly = false)
     public void deleteById(String id) {
-        licClosingCaseDao.delete(id);
+        lucClosingCaseDao.delete(id);
     }
 
 }

@@ -4,10 +4,10 @@
 package com.wonders.health.tumor.closingcase.web;
 
 import com.wonders.health.tumor.common.controller.BaseController;
-import com.wonders.health.tumor.closingcase.entity.licClosingCase;
+import com.wonders.health.tumor.closingcase.entity.LicClosingCase;
 
-import com.wonders.health.tumor.closingcase.vo.licClosingCaseSearchVo;
-import com.wonders.health.tumor.closingcase.service.licClosingCaseService;
+import com.wonders.health.tumor.closingcase.vo.LicClosingCaseSearchVo;
+import com.wonders.health.tumor.closingcase.service.LicClosingCaseService;
 
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
-import com.wonders.health.tumor.common.model.DataGridSearch;
 
 import javax.validation.Valid;
 import java.util.Collections;
@@ -37,12 +36,12 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("licClosingCase")
-public class licClosingCaseController extends BaseController {
+public class LicClosingCaseController extends BaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(licClosingCaseController.class);
+    private static Logger logger = LoggerFactory.getLogger(LicClosingCaseController.class);
 
     @Autowired
-    private licClosingCaseService licClosingCaseService;
+    private LicClosingCaseService licClosingCaseService;
 
     @Value("${area_code}")
     private String areaCode;
@@ -50,7 +49,7 @@ public class licClosingCaseController extends BaseController {
     @Value("${yearNum}")
     private  Integer yearNum;
 
-	@RequiresPermissions("closingcase:licClosingCase:list")
+	@RequiresPermissions("closingcase:LicClosingCase:list")
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
         List<String> nds = DateUtils.getYearBefore(Integer.parseInt(DateUtils.getYear()), yearNum);
@@ -63,27 +62,27 @@ public class licClosingCaseController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions("closingcase:licClosingCase:list")
+    @RequiresPermissions("closingcase:LicClosingCase:list")
     @RequestMapping(value = "data", produces = "application/json; charset=utf-8")
-    public DataGrid<licClosingCase> data(licClosingCaseSearchVo search) {
-        DataGrid<licClosingCase> grid = licClosingCaseService.findPage(search);
+    public DataGrid<LicClosingCase> data(LicClosingCaseSearchVo search) {
+        DataGrid<LicClosingCase> grid = licClosingCaseService.findPage(search);
         return grid;
     }
 
-    @RequiresPermissions("closingcase:licClosingCase:save")
+    @RequiresPermissions("closingcase:LicClosingCase:save")
     @RequestMapping(value = "form", method = RequestMethod.GET)
     public String form(Model model , String id) {
         if (StringUtils.isNotBlank(id)) {
-            licClosingCase licClosingCase = licClosingCaseService.findById(id);
+            LicClosingCase licClosingCase = licClosingCaseService.findById(id);
             model.addAttribute("licClosingCase", licClosingCase);
         }
         return "/closingcase/licClosingCaseForm";
     }
 
     @ResponseBody
-    @RequiresPermissions("closingcase:licClosingCase:save")
+    @RequiresPermissions("closingcase:LicClosingCase:save")
     @RequestMapping(value = "save", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-    public AjaxReturn<Map<String, String>> save(@Valid licClosingCase licClosingCase, BindingResult result) {
+    public AjaxReturn<Map<String, String>> save(@Valid LicClosingCase licClosingCase, BindingResult result) {
         if (result.hasErrors()) {
             return new AjaxReturn<Map<String, String>>(false, "校验失败");
         }
@@ -96,7 +95,7 @@ public class licClosingCaseController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions("closingcase:licClosingCase:del")
+    @RequiresPermissions("closingcase:LicClosingCase:del")
     @RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public AjaxReturn<String> delete(String id) {
         if (StringUtils.isNotBlank(id)) {

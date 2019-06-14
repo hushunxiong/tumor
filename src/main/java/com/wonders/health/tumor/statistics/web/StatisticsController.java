@@ -1,6 +1,6 @@
 package com.wonders.health.tumor.statistics.web;
 
-import com.wonders.health.tumor.closingcase.web.crcClosingCaseController;
+import com.wonders.health.tumor.closingcase.web.CrcClosingCaseController;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.tags.DictData;
 import com.wonders.health.tumor.common.utils.AuthUtils;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("statistics")
 public class StatisticsController {
-    private static Logger logger = LoggerFactory.getLogger(crcClosingCaseController.class);
+    private static Logger logger = LoggerFactory.getLogger(CrcClosingCaseController.class);
 
     @Autowired
     private StatisticsService statisticsService;

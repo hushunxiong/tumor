@@ -3,8 +3,8 @@
  */
 package com.wonders.health.tumor.closingcase.service;
 
-import com.wonders.health.tumor.closingcase.dao.crcClosingCaseDao;
-import com.wonders.health.tumor.closingcase.entity.crcClosingCase;
+import com.wonders.health.tumor.closingcase.dao.ScClosingCaseDao;
+import com.wonders.health.tumor.closingcase.entity.ScClosingCase;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
@@ -20,37 +20,37 @@ import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataGridSearch;
 
 /**
- * 大肠癌结案Service
+ * 胃癌结案Service
  * @author zhaomeng
  */
 @Service
 @Transactional(readOnly = true)
-public class crcClosingCaseService {
+public class ScClosingCaseService {
 
     @Autowired
-    private crcClosingCaseDao crcClosingCaseDao;
+    private ScClosingCaseDao scClosingCaseDao;
 
-	public DataGrid<crcClosingCase> findPage(DataGridSearch search) {
-        Integer count = crcClosingCaseDao.pageCount(search);
-        List<crcClosingCase> list = null;
+	public DataGrid<ScClosingCase> findPage(DataGridSearch search) {
+        Integer count = scClosingCaseDao.pageCount(search);
+        List<ScClosingCase> list = null;
         if (count > 0) {
-        	list = crcClosingCaseDao.pageList(search);
+        	list = scClosingCaseDao.pageList(search);
         }
-        return new DataGrid<crcClosingCase>(count,list);
+        return new DataGrid<ScClosingCase>(count,list);
     }
 
-    public crcClosingCase findById(String id) {
-        return crcClosingCaseDao.get(id);
+    public ScClosingCase findById(String id) {
+        return scClosingCaseDao.get(id);
     }
 
     @Transactional(readOnly = false)
-    public AjaxReturn<Map<String, String>> saveOrUpdate(crcClosingCase vo, String userId) {
+    public AjaxReturn<Map<String, String>> saveOrUpdate(ScClosingCase vo, String userId) {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
-            crcClosingCase po = crcClosingCaseDao.get(vo.getId());
+            ScClosingCase po = scClosingCaseDao.get(vo.getId());
             if (po != null) {
                 BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
                 po.initByUpdate(userId);
-                crcClosingCaseDao.update(po);
+                scClosingCaseDao.update(po);
                 return new AjaxReturn<Map<String, String>>(true, "修改成功");
             } else {
                 return new AjaxReturn<Map<String, String>>(false, "传入ID无法找到记录");
@@ -58,14 +58,14 @@ public class crcClosingCaseService {
         } else { //新增
             vo.setId(IdGen.uuid());
             vo.init(userId);
-            crcClosingCaseDao.insert(vo);
+            scClosingCaseDao.insert(vo);
             return new AjaxReturn<Map<String, String>>(true, "保存成功");
         }
     }
 
     @Transactional(readOnly = false)
     public void deleteById(String id) {
-        crcClosingCaseDao.delete(id);
+        scClosingCaseDao.delete(id);
     }
 
 }

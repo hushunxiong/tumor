@@ -19,7 +19,7 @@ import com.wonders.health.tumor.common.model.BaseEntity;
  * 大肠癌结案实体
  * @author zhaomeng
  */
-public class crcClosingCase extends BaseEntity {
+public class CrcClosingCase extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -111,7 +111,7 @@ public class crcClosingCase extends BaseEntity {
 
 	private String fobtResult; //便隐血检查结果
 
-	public crcClosingCase() {
+	public CrcClosingCase() {
 		super();
 	}
 
