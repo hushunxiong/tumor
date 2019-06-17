@@ -10,62 +10,64 @@
 <body>
 <div class="content pd-10">
     <table class="table_new table_new5 mt-10">
+        <tbody>
         <tr>
             <td>筛查年份</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.checkYear}"/>
+                <span th:text="${info.checkYear}"></span>
             </td>
             <td>证件类型</td>
             <td>
-                <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.personcardType}" th:data="${#dic.generals('60022')}" readonly="readonly" />
+                <span th:text="${#dic.generalName('60022', info.personcardType)}"></span>
             </td>
             <td>证件号码</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.personcard}"/>
+                <span th:text="${info.personcard}"></span>
             </td>
         </tr>
         <tr>
             <td>姓&nbsp;&nbsp;名</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.name}"/>
+                <span th:text="${info.name}"></span>
             </td>
             <td>性&nbsp;&nbsp;别</td>
             <td>
-                <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.gender}" th:data="${#dic.generals('60023')}" readonly="readonly" />
+                <span th:text="${#dic.generalName('60023', info.gender)}"></span>
             </td>
             <td>出生日期</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${#dates.format(info.birth, 'yyyy-MM-dd')}"/>
+                <span th:text="${#dates.format(info.birth, 'yyyy-MM-dd')}"></span>
             </td>
         </tr>
         <tr>
             <td>移动电话</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.mobile}"/>
+                <span th:text="${info.mobile}"></span>
             </td>
             <td>固定电话</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.telephone}"/>
+                <span th:text="${info.telephone}"></span>
             </td>
             <td>居住地址</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.address}"/>
+                <span th:text="${info.address}"></span>
             </td>
         </tr>
         <tr>
             <td>胃癌初筛登记日期</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.regdate==null ? null : #dates.format(info.regdate, 'yyyy-MM-dd')}"/>
+                <span th:text="${info.regdate==null ? '' : #dates.format(info.regdate, 'yyyy-MM-dd')}"></span>
             </td>
             <td>胃癌判定结果</td>
             <td>
-                <input class="mini-combobox form-control" textField="name" valueField="code" th:value="${info.checkResult}" th:data="${#dic.generals('60001')}" readonly="readonly" />
+                <span th:text="${#dic.generalName('60001',info.checkResult)}"></span>
             </td>
             <td>胃癌诊断状态</td>
             <td>
-                <input class="mini-textbox" readonly="readonly" th:value="${info.zdzt}"/>
+                <span th:text="${info.zdzt}"></span>
             </td>
         </tr>
+        </tbody>
     </table>
     <div th:if="${info.checkResult=='2'}">
         <span>胃癌随访信息</span>
