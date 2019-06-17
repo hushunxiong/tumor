@@ -213,7 +213,7 @@
             <td width="20%">病理类型</td>
             <td width="20%" class="text-l">
                 <input id="binglileixing" name="binglileixing" class="mini-textbox"
-                       width="400px" th:value="${follow.binglileixing}" maxlength="500"/>
+                       width="400px" th:value="${follow.binglileixing}" maxlength="500" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -563,9 +563,9 @@
             var bingli = mini.get("bingli").getValue();
             //是否病理:是
             if (bingli == "1") {
-                mini.get("binglileixing").setRequired(true);
+                mini.get("binglileixing").set({required:true,enabled:true});
             } else {
-                mini.get("binglileixing").setRequired(false);
+                mini.get("binglileixing").set({required:false,enabled:false,value:"",isValid:true});
             }
         }
 
@@ -723,9 +723,9 @@
         var bingli = mini.get("bingli").getValue();
         //是否病理:是
         if (bingli == "1") {
-            mini.get("binglileixing").setRequired(true);
+            mini.get("binglileixing").set({required:true,enabled:true});
         } else {
-            mini.get("binglileixing").setRequired(false);
+            mini.get("binglileixing").set({required:false,enabled:false,value:"",isValid:true});
         }
     }
 

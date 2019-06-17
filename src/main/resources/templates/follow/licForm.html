@@ -69,7 +69,7 @@
             <td width="20%">活检结果</td>
             <td width="80%" class="text-l">
                 <input id="huojianjieguo" name="huojianjieguo" class="mini-textbox"
-                       width="400px" th:value="${follow.huojianjieguo}" maxlength="250" />
+                       width="400px" th:value="${follow.huojianjieguo}" maxlength="250" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -85,14 +85,14 @@
             <td width="80%" class="text-l">
                 <input id="bingli" name="bingli" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60013')}" th:value="${follow.bingli}" required="true"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" onvaluechanged="bingliChange"/>
             </td>
         </tr>
         <tr>
-            <td width="20%"><span class="red-span">*</span>病理类型</td>
+            <td width="20%">病理类型</td>
             <td width="80%" class="text-l">
                 <input id="binglileixing" name="binglileixing" class="mini-textbox"
-                       width="400px" th:value="${follow.binglileixing}" maxlength="500" required="true"/>
+                       width="400px" th:value="${follow.binglileixing}" maxlength="500" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -281,7 +281,22 @@
             });
             $("#save").hide();
         } else if (flag == "2") {
+            var huojian = mini.get("huojian").getValue();
+            //是否活检:是
+            if (huojian == "1") {
+                mini.get("huojianjieguo").set({enabled:true,required:true});
+                //否
+            } else {
+                mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
+            }
 
+            var bingli = mini.get("bingli").getValue();
+            //是否病理:是
+            if (bingli == "1") {
+                mini.get("binglileixing").set({required:true,enabled:true});
+            } else {
+                mini.get("binglileixing").set({required:false,enabled:false,value:"",isValid:true});
+            }
         }
 
         //手术机构
@@ -334,6 +349,17 @@
             //否
         } else {
             mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
+        }
+    }
+
+    //是否病理
+    function bingliChange(e) {
+        var bingli = mini.get("bingli").getValue();
+        //是否病理:是
+        if (bingli == "1") {
+            mini.get("binglileixing").set({required:true,enabled:true});
+        } else {
+            mini.get("binglileixing").set({required:false,enabled:false,value:"",isValid:true});
         }
     }
 
