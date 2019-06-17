@@ -121,6 +121,10 @@ public class ScFollowService {
             sc.setDelFlag("0");
             sc.setCreateBy(vo.getUser().getName());
             sc.setCreateDate(new Date());
+            sc.setShoushujigouName(AuthUtils.getHospitalByCode(sc.getShoushujigouId()).getName());
+            sc.setFangliaojigouName(AuthUtils.getHospitalByCode(sc.getFangliaojigouId()).getName());
+            sc.setHualiaojigouName(AuthUtils.getHospitalByCode(sc.getHualiaojigouId()).getName());
+            sc.setZhenduanjigouName(AuthUtils.getHospitalByCode(sc.getZhenduanjigouId()).getName());
             sc.setSuifangjigouId(vo.getUser().getOrgCode());
             sc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
             sc.setSuifangyishengId(vo.getUser().getId());
@@ -135,7 +139,7 @@ public class ScFollowService {
         if (flag>0){
             //查询胃癌诊断检查提醒表
             ScDiagCheckRemind sdcr=scDiagCheckRemindDao.getByCheckId(sc.getScCheckId());
-            if (!sdcr.getRemindStatus().equals("04")){
+            if (null!=sdcr&&!sdcr.getRemindStatus().equals("04")){
                 sdcr.setRemindStatus("02");
                 sdcr.setUpdateDate(new Date());
                 sdcr.setUpdateBy(vo.getUser().getName());
