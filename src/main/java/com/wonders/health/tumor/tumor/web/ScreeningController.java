@@ -884,9 +884,9 @@ public class ScreeningController extends BaseController {
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
         if(bus=="1" || bus=="01"||"1".equals(bus)||"01".equals(bus)){
-            bus="阳性";
-        } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
             bus="阴性";
+        } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
+            bus="阳性";
         }
         model.addAttribute("bus",bus);
         model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
@@ -943,9 +943,9 @@ public class ScreeningController extends BaseController {
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
         if(bus=="1" || bus=="01"||"1".equals(bus)||"01".equals(bus)){
-            bus="阳性";
-        } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
             bus="阴性";
+        } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
+            bus="阳性";
         }
         model.addAttribute("bus",bus);
         model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
