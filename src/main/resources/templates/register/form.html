@@ -1704,6 +1704,7 @@
                 url: "/tumor/screening/checkHadDone?year="+checkyear+"&&type="+zjlx+"&&personcard="+zjhm,
                 type:'get',
                 dataType:'json',
+                async:false,
                 success:function(res){
                     mini.unmask(document.body);
                     if(!res.ok){ //检查过
