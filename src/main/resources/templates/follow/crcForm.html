@@ -118,7 +118,7 @@
         <tr>
             <td width="20%">病变部位</td>
             <td width="80%" class="text-l">
-                <input id="bingbianbuw" name="bingbianbuw" class="mini-radiobuttonlist" width="80%"
+                <input id="bingbianbuw" name="bingbianbuw" class="mini-radiobuttonlist" width="90%"
                        th:data="${#dic.generals('60031')}" th:value="${follow.bingbianbuw}"
                        textField="name" valueField="code" onvaluechanged="bingbianbuwChange"/>
             </td>
@@ -259,7 +259,7 @@
         <tr>
             <td width="20%">分化程度</td>
             <td width="80%" class="text-l">
-                <input id="fenhuachengdu" name="fenhuachengdu" class="mini-radiobuttonlist" width="90%"
+                <input id="fenhuachengdu" name="fenhuachengdu" class="mini-radiobuttonlist" width="95%"
                        th:data="${#dic.generals('60040')}" th:value="${follow.fenhuachengdu}"
                        textField="name" valueField="code" />
             </td>
@@ -269,7 +269,7 @@
             <td width="80%" class="text-l">
                 <input id="fenqiyiju" name="fenqiyiju" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60041')}" th:value="${follow.fenqiyiju}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code"/>
             </td>
         </tr>
         </tbody>
@@ -281,19 +281,19 @@
             <td class="bg-white">
                 <input id="zhongliutnmT" name="zhongliutnmT" class="mini-combobox" width="43%" showNullItem="true" emptyText="请选择"
                        th:data="${#dic.generals('60044')}" th:value="${follow.zhongliutnmT}"
-                       textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                       textField="name" valueField="code" allowInput="true" valueFromSelect="true"/>
             </td>
             <td class="bg-white">N</td>
             <td class="bg-white">
                 <input id="zhongliutnmN" name="zhongliutnmN" class="mini-combobox" width="43%" showNullItem="true" emptyText="请选择"
                        th:data="${#dic.generals('60045')}" th:value="${follow.zhongliutnmN}"
-                       textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                       textField="name" valueField="code" allowInput="true" valueFromSelect="true"/>
             </td>
             <td class="bg-white">M</td>
             <td class="bg-white">
                 <input id="zhongliutnmM" name="zhongliutnmM" class="mini-combobox" width="43%" showNullItem="true" emptyText="请选择"
                        th:data="${#dic.generals('60046')}" th:value="${follow.zhongliutnmM}"
-                       textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                       textField="name" valueField="code" allowInput="true" valueFromSelect="true"/>
             </td>
         </tr>
     </table>
@@ -738,8 +738,28 @@
             return;
         }
 
+        if (!checkTnm()) {
+            mini.alert('肿瘤TNM分期至少填写一个','提示!');
+            return;
+        }
+
         //提交
         submitForm("allForm", "../crcFollow/save", "refresh");
+    }
+
+    function checkTnm() {
+        var flag = true;
+        var fenqiyiju = mini.get("fenqiyiju").getValue();
+
+        var zhongliutnmT = mini.get("zhongliutnmT").getValue();
+        var zhongliutnmN = mini.get("zhongliutnmN").getValue();
+        var zhongliutnmM = mini.get("zhongliutnmM").getValue();
+        if (isNotEmpty(fenqiyiju)) {
+            if (!isNotEmpty(zhongliutnmT) && !isNotEmpty(zhongliutnmN) && !isNotEmpty(zhongliutnmM)) {
+                flag = false;
+            }
+        }
+        return flag;
     }
 
     //关闭
