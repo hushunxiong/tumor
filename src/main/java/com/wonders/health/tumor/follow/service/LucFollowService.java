@@ -127,6 +127,10 @@ public class LucFollowService {
             luc.setUpdateDate(new Date());
             luc.setSuifangjigouId(vo.getUser().getOrgCode());
             luc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
+            luc.setHualiaojigouName(AuthUtils.getHospitalByCode(luc.getHualiaojigouId()).getName());
+            luc.setZhenduanjigouName(AuthUtils.getHospitalByCode(luc.getZhenduanjigouId()).getName());
+            luc.setShoushujigouName(AuthUtils.getHospitalByCode(luc.getShoushujigouId()).getName());
+            luc.setFangliaojigouName(AuthUtils.getHospitalByCode(luc.getFangliaojigouId()).getName());
             luc.setSuifangDate(new Date());
             luc.setDengjijigouId(vo.getUser().getOrgCode());
             luc.setDengjiDate(new Date());
@@ -136,7 +140,7 @@ public class LucFollowService {
         if (flag>0){
             //查询肺癌诊断检查提醒表
             LucDiagCheckRemind ldcr=lucDiagCheckRemindDao.getByCheckId(luc.getLucCheckId());
-            if (!ldcr.getRemindStatus().equals("04")){
+            if (null!=ldcr&&!ldcr.getRemindStatus().equals("04")){
                 ldcr.setRemindStatus("02");
                 ldcr.setUpdateBy(vo.getUser().getName());
                 ldcr.setUpdateDate(new Date());

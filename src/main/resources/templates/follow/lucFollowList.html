@@ -72,6 +72,10 @@
     <div th:if="${info.checkResult=='2'}">
         <span>肺癌随访信息</span>
         <button id="add" shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="addLucFollow()">新增随访</button>
+        <!--肺癌管理一览 编辑权限  -->
+        <input  name="hideInput" shiro:hasPermission="tumor:follow:edit" value="1" class="mini-hidden"/>
+        <!--肺癌管理一览 删除权限  -->
+        <input  name="hideInput" shiro:hasPermission="tumor:follow:delete" value="2" class="mini-hidden"/>
     </div>
     <div id="datagrid" class="mini-datagrid" style="width:99%; height:auto;"
          allowResize="false" url="getLucData" idField="id" multiSelect="false" showPager="false">
@@ -91,14 +95,26 @@
         if (null!=lucRegcaseId){
             grid.load({lucRegcaseId:lucRegcaseId});
         }
+        //获取权限标识 1--编辑；2--删除
+        var els = mini.getsByName("hideInput");
+        var hideValue='';
+        for (var i = 0; i < els.length; i++) {
+            var el = els[i];
+            hideValue +=el.value;
+            hideValue +=",";
+        }
         //操作列
         function actionRender(e) {
             var r = e.record;
             var h = '';
             if (r!=null) {
                 h += '<button class="my-btn my-btn-blue mr-20" onclick="lookLucFollow(\''+r.id+'\')">查看</button>';
-                h += '<button class="my-btn my-btn-blue mr-20" onclick="updateLucFollow(\''+r.id+'\')">编辑</button>';
-                h += '<button class="my-btn my-btn-blue mr-20" onclick="delLucFollow(\''+r.id+'\')">删除</button>';
+                if (hideValue.indexOf('1') != -1){
+                    h += '<button class="my-btn my-btn-blue mr-20" onclick="updateLucFollow(\''+r.id+'\')">编辑</button>';
+                }
+                if (hideValue.indexOf('2') != -1){
+                    h += '<button class="my-btn my-btn-blue mr-20" onclick="delLucFollow(\''+r.id+'\')">删除</button>';
+                }
             }
             return h;
         }
@@ -107,21 +123,21 @@
             var manageId=[[${info.manageId}]];
             var checkYear=[[${info.checkYear}]];
             var flag="1";
-            window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag;
+            parent.window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag;
         }
         //编辑随访
         function updateLucFollow(id){
             var manageId=[[${info.manageId}]];
             var checkYear=[[${info.checkYear}]];
             var flag="2";
-            window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
+            parent.window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
         }
         //查看随访
         function lookLucFollow(id){
             var manageId=[[${info.manageId}]];
             var checkYear=[[${info.checkYear}]];
             var flag="3";
-            window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
+            parent.window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
         }
         //删除随访
         function delLucFollow(id){

@@ -175,7 +175,10 @@
             <tr>
                 <td width="20%" style="width:20%!important;">手术机构名称</td>
                 <td width="30%" class="text-l">
-                    <input name="shoushujigouName" class="mini-textbox" style="width:300px" th:value="${info.scFollow.shoushujigouName}" th:readonly="${info.flag=='3'}"/>
+                    <input id="shoushujigouId" name="shoushujigouId"  class="mini-autocomplete"
+                           style="width:300px" th:value="${info.scFollow.shoushujigouId}" th:readonly="${info.flag=='3'}"
+                           textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
+                           th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
                 </td>
                 <td width="20%">手术日期</td>
                 <td width="30%" class="text-l">
@@ -185,7 +188,10 @@
             <tr>
                 <td width="20%">放疗机构名称</td>
                 <td width="30%" class="text-l">
-                    <input name="fangliaojigouName" class="mini-textbox" style="width:300px" th:value="${info.scFollow.fangliaojigouName}" th:readonly="${info.flag=='3'}"/>
+                    <input id="fangliaojigouId" name="fangliaojigouId"  class="mini-autocomplete"
+                           style="width:300px" th:value="${info.scFollow.fangliaojigouId}" th:readonly="${info.flag=='3'}"
+                           textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
+                           th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
                 </td>
                 <td width="20%">放疗日期</td>
                 <td width="30%" class="text-l">
@@ -195,7 +201,10 @@
             <tr>
                 <td width="20%">化疗机构名称</td>
                 <td width="30%" class="text-l">
-                    <input name="hualiaojigouName" class="mini-textbox" style="width:300px" th:value="${info.scFollow.hualiaojigouName}" th:readonly="${info.flag=='3'}"/>
+                    <input id="hualiaojigouId" name="hualiaojigouId"  class="mini-autocomplete"
+                           style="width:300px" th:value="${info.scFollow.hualiaojigouId}" th:readonly="${info.flag=='3'}"
+                           textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
+                           th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
                 </td>
                 <td width="20%">化疗日期</td>
                 <td width="30%" class="text-l">
@@ -205,7 +214,10 @@
             <tr>
                 <td width="20%"><span class="red-span">*</span>诊断机构名称</td>
                 <td width="30%" class="text-l">
-                    <input name="zhenduanjigouName" class="mini-textbox" style="width:300px" th:value="${info.scFollow.zhenduanjigouName}" th:readonly="${info.flag=='3'}" required="true"/>
+                    <input id="zhenduanjigouId" name="zhenduanjigouId"  class="mini-autocomplete"
+                           style="width:300px" th:value="${info.scFollow.zhenduanjigouId}" th:readonly="${info.flag=='3'}" required="true"
+                           textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
+                           th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
                 </td>
                 <td width="20%"><span class="red-span">*</span>诊断日期</td>
                 <td width="30%" class="text-l">
@@ -232,6 +244,37 @@
     </div>
     <script type="text/javascript" th:inline="javascript">
         mini.parse();
+        //手术机构
+        var shoushujigouId = [[${info.scFollow.shoushujigouId}]];
+        var shoushujigouName = [[${info.scFollow.shoushujigouName}]];
+        if (isNotEmpty(shoushujigouId)) {
+            mini.get("shoushujigouId").setValue(shoushujigouId);
+            mini.get("shoushujigouId").setText(shoushujigouName);
+        }
+
+        //放疗机构
+        var fangliaojigouId = [[${info.scFollow.fangliaojigouId}]];
+        var fangliaojigouName = [[${info.scFollow.fangliaojigouName}]];
+        if (isNotEmpty(fangliaojigouId)) {
+            mini.get("fangliaojigouId").setValue(fangliaojigouId);
+            mini.get("fangliaojigouId").setText(fangliaojigouName);
+        }
+
+        //化疗机构
+        var hualiaojigouId = [[${info.scFollow.hualiaojigouId}]];
+        var hualiaojigouName = [[${info.scFollow.hualiaojigouName}]];
+        if (isNotEmpty(hualiaojigouId)) {
+            mini.get("hualiaojigouId").setValue(hualiaojigouId);
+            mini.get("hualiaojigouId").setText(hualiaojigouName);
+        }
+
+        //诊断机构
+        var zhenduanjigouId = [[${info.scFollow.zhenduanjigouId}]];
+        var zhenduanjigouName = [[${info.scFollow.zhenduanjigouName}]];
+        if (isNotEmpty(zhenduanjigouId)) {
+            mini.get("zhenduanjigouId").setValue(zhenduanjigouId);
+            mini.get("zhenduanjigouId").setText(zhenduanjigouName);
+        }
         //保存
         function save(){
             var scFollow = new mini.Form('#scFollow');

@@ -93,7 +93,7 @@
             <td width="80%" class="text-l">
                 <input id="buzuochangjingYuanyin" name="buzuochangjingYuanyin" class="mini-radiobuttonlist fl" width="450px"
                        th:data="${#dic.generals('60029')}" th:value="${follow.buzuochangjingYuanyin}"
-                       textField="name" valueField="code" onvaluechanged="buzuochangjingYuanyinChange"/>
+                       textField="name" valueField="code" onvaluechanged="buzuochangjingYuanyinChange" enabled="false"/>
                 <input id="buzuochangjingYuanyinQita" name="buzuochangjingYuanyinQita" class="mini-textbox fl"
                        width="300px" th:value="${follow.buzuochangjingYuanyinQita}" enabled="false" maxlength="250"/>
             </td>
@@ -104,7 +104,7 @@
             <td width="80%" class="text-l">
                 <input id="wutongchangjing" name="wutongchangjing" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60013')}" th:value="${follow.wutongchangjing}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -112,13 +112,13 @@
             <td width="80%" class="text-l">
                 <input id="changjingbuwei" name="changjingbuwei" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60030')}" th:value="${follow.changjingbuwei}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
             <td width="20%">病变部位</td>
             <td width="80%" class="text-l">
-                <input id="bingbianbuw" name="bingbianbuw" class="mini-radiobuttonlist" width="80%"
+                <input id="bingbianbuw" name="bingbianbuw" class="mini-radiobuttonlist" width="90%"
                        th:data="${#dic.generals('60031')}" th:value="${follow.bingbianbuw}"
                        textField="name" valueField="code" onvaluechanged="bingbianbuwChange"/>
             </td>
@@ -158,7 +158,7 @@
             <td width="80%" class="text-l">
                 <input id="huojianjieguo" name="huojianjieguo" class="mini-radiobuttonlist" style="height:40px" width="90%"
                        th:data="${#dic.generals('60033')}" th:value="${follow.huojianjieguo}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -166,7 +166,7 @@
             <td width="80%" class="text-l">
                 <input id="liubian" name="liubian" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60034')}" th:value="${follow.liubian}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -174,7 +174,7 @@
             <td width="80%" class="text-l">
                     <input id="xirouxingzhuang" name="xirouxingzhuang" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60035')}" th:value="${follow.xirouxingzhuang}"
-                       textField="name" valueField="code" onvaluechanged="xirouxingzhuangChange"/>
+                       textField="name" valueField="code" onvaluechanged="xirouxingzhuangChange" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -182,7 +182,7 @@
             <td width="80%" class="text-l">
                 <input id="youwudi" name="youwudi" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60007')}" th:value="${follow.youwudi}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -190,7 +190,7 @@
             <td width="80%" class="text-l">
                 <input id="chuxueqingkuang" name="chuxueqingkuang" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60007')}" th:value="${follow.chuxueqingkuang}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -198,7 +198,7 @@
             <td width="80%" class="text-l">
                 <input id="huojianriq" name="huojianriq" class="mini-datepicker"
                        th:value="${#dates.format(follow.huojianriq,'yyyy-MM-dd')}"
-                       allowInput="false"/>
+                       allowInput="false" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -206,14 +206,14 @@
             <td width="80%" class="text-l">
                 <input id="bingli" name="bingli" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60013')}" th:value="${follow.bingli}" required="true"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" onvaluechanged="bingliChange"/>
             </td>
         </tr>
         <tr>
-            <td width="20%"><span class="red-span">*</span>病理类型</td>
+            <td width="20%">病理类型</td>
             <td width="20%" class="text-l">
                 <input id="binglileixing" name="binglileixing" class="mini-textbox"
-                       width="400px" th:value="${follow.binglileixing}" maxlength="500" required="true"/>
+                       width="400px" th:value="${follow.binglileixing}" maxlength="500" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -259,7 +259,7 @@
         <tr>
             <td width="20%">分化程度</td>
             <td width="80%" class="text-l">
-                <input id="fenhuachengdu" name="fenhuachengdu" class="mini-radiobuttonlist" width="90%"
+                <input id="fenhuachengdu" name="fenhuachengdu" class="mini-radiobuttonlist" width="95%"
                        th:data="${#dic.generals('60040')}" th:value="${follow.fenhuachengdu}"
                        textField="name" valueField="code" />
             </td>
@@ -269,7 +269,7 @@
             <td width="80%" class="text-l">
                 <input id="fenqiyiju" name="fenqiyiju" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60041')}" th:value="${follow.fenqiyiju}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code"/>
             </td>
         </tr>
         </tbody>
@@ -281,19 +281,19 @@
             <td class="bg-white">
                 <input id="zhongliutnmT" name="zhongliutnmT" class="mini-combobox" width="43%" showNullItem="true" emptyText="请选择"
                        th:data="${#dic.generals('60044')}" th:value="${follow.zhongliutnmT}"
-                       textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                       textField="name" valueField="code" allowInput="true" valueFromSelect="true"/>
             </td>
             <td class="bg-white">N</td>
             <td class="bg-white">
                 <input id="zhongliutnmN" name="zhongliutnmN" class="mini-combobox" width="43%" showNullItem="true" emptyText="请选择"
                        th:data="${#dic.generals('60045')}" th:value="${follow.zhongliutnmN}"
-                       textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                       textField="name" valueField="code" allowInput="true" valueFromSelect="true"/>
             </td>
             <td class="bg-white">M</td>
             <td class="bg-white">
                 <input id="zhongliutnmM" name="zhongliutnmM" class="mini-combobox" width="43%" showNullItem="true" emptyText="请选择"
                        th:data="${#dic.generals('60046')}" th:value="${follow.zhongliutnmM}"
-                       textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+                       textField="name" valueField="code" allowInput="true" valueFromSelect="true"/>
             </td>
         </tr>
     </table>
@@ -485,14 +485,16 @@
                 mini.get("wutongchangjing").set({Enabled:true});
                 //肠镜检查到达部位
                 mini.get("changjingbuwei").set({Enabled:true});
+                //未进行肠镜检查原因-其他
+                mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, value:"", isValid:true});
                 //否
             } else {
                 //未进行肠镜检查原因
                 mini.get("buzuochangjingYuanyin").set({Enabled:true, required:true});
                 //是否无痛肠镜检查
-                mini.get("wutongchangjing").set({Enabled:false});
+                mini.get("wutongchangjing").set({Enabled:false, value:""});
                 //肠镜检查到达部位
-                mini.get("changjingbuwei").set({Enabled:false});
+                mini.get("changjingbuwei").set({Enabled:false, value:""});
             }
 
             //未进行肠镜检查原因
@@ -538,7 +540,6 @@
                 mini.get("youwudi").setEnabled(true);
                 mini.get("chuxueqingkuang").setEnabled(true);
                 mini.get("huojianriq").set({enabled:true,required:true});
-                mini.get("huojianjieguo").setRequired(true);
                 //否
             } else {
                 mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
@@ -549,6 +550,7 @@
                 mini.get("huojianriq").set({enabled:false,required:false,value:"",isValid:true});
             }
 
+            //息肉形状
             var xirouxingzhuang = mini.get("xirouxingzhuang").getValue();
             if (isNotEmpty(xirouxingzhuang)) {
                 mini.get("youwudi").setRequired(true);
@@ -556,6 +558,14 @@
             } else {
                 mini.get("youwudi").setRequired(false);
                 mini.get("chuxueqingkuang").setRequired(false);
+            }
+
+            var bingli = mini.get("bingli").getValue();
+            //是否病理:是
+            if (bingli == "1") {
+                mini.get("binglileixing").set({required:true,enabled:true});
+            } else {
+                mini.get("binglileixing").set({required:false,enabled:false,value:"",isValid:true});
             }
         }
 
@@ -619,14 +629,16 @@
             mini.get("wutongchangjing").set({Enabled:true});
             //肠镜检查到达部位
             mini.get("changjingbuwei").set({Enabled:true});
+            //未进行肠镜检查原因-其他
+            mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, value:"", isValid:true});
             //否
         } else {
             //未进行肠镜检查原因
             mini.get("buzuochangjingYuanyin").set({Enabled:true, required:true});
             //是否无痛肠镜检查
-            mini.get("wutongchangjing").set({Enabled:false});
+            mini.get("wutongchangjing").set({Enabled:false, value:""});
             //肠镜检查到达部位
-            mini.get("changjingbuwei").set({Enabled:false});
+            mini.get("changjingbuwei").set({Enabled:false, value:""});
         }
     }
 
@@ -683,7 +695,6 @@
             mini.get("youwudi").setEnabled(true);
             mini.get("chuxueqingkuang").setEnabled(true);
             mini.get("huojianriq").set({enabled:true,required:true});
-            mini.get("huojianjieguo").setRequired(true);
             //否
         } else {
             mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
@@ -707,6 +718,17 @@
         }
     }
 
+    //是否病理
+    function bingliChange(e) {
+        var bingli = mini.get("bingli").getValue();
+        //是否病理:是
+        if (bingli == "1") {
+            mini.get("binglileixing").set({required:true,enabled:true});
+        } else {
+            mini.get("binglileixing").set({required:false,enabled:false,value:"",isValid:true});
+        }
+    }
+
     //保存
     function save() {
         var form = new mini.Form("#allForm");
@@ -716,8 +738,28 @@
             return;
         }
 
+        if (!checkTnm()) {
+            mini.alert('肿瘤TNM分期至少填写一个','提示!');
+            return;
+        }
+
         //提交
         submitForm("allForm", "../crcFollow/save", "refresh");
+    }
+
+    function checkTnm() {
+        var flag = true;
+        var fenqiyiju = mini.get("fenqiyiju").getValue();
+
+        var zhongliutnmT = mini.get("zhongliutnmT").getValue();
+        var zhongliutnmN = mini.get("zhongliutnmN").getValue();
+        var zhongliutnmM = mini.get("zhongliutnmM").getValue();
+        if (isNotEmpty(fenqiyiju)) {
+            if (!isNotEmpty(zhongliutnmT) && !isNotEmpty(zhongliutnmN) && !isNotEmpty(zhongliutnmM)) {
+                flag = false;
+            }
+        }
+        return flag;
     }
 
     //关闭
