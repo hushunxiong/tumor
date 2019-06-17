@@ -158,7 +158,7 @@
             <td width="80%" class="text-l">
                 <input id="huojianjieguo" name="huojianjieguo" class="mini-radiobuttonlist" style="height:40px" width="90%"
                        th:data="${#dic.generals('60033')}" th:value="${follow.huojianjieguo}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -166,7 +166,7 @@
             <td width="80%" class="text-l">
                 <input id="liubian" name="liubian" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60034')}" th:value="${follow.liubian}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -174,7 +174,7 @@
             <td width="80%" class="text-l">
                     <input id="xirouxingzhuang" name="xirouxingzhuang" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60035')}" th:value="${follow.xirouxingzhuang}"
-                       textField="name" valueField="code" onvaluechanged="xirouxingzhuangChange"/>
+                       textField="name" valueField="code" onvaluechanged="xirouxingzhuangChange" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -182,7 +182,7 @@
             <td width="80%" class="text-l">
                 <input id="youwudi" name="youwudi" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60007')}" th:value="${follow.youwudi}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -190,7 +190,7 @@
             <td width="80%" class="text-l">
                 <input id="chuxueqingkuang" name="chuxueqingkuang" class="mini-radiobuttonlist" width="80%"
                        th:data="${#dic.generals('60007')}" th:value="${follow.chuxueqingkuang}"
-                       textField="name" valueField="code" />
+                       textField="name" valueField="code" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -198,7 +198,7 @@
             <td width="80%" class="text-l">
                 <input id="huojianriq" name="huojianriq" class="mini-datepicker"
                        th:value="${#dates.format(follow.huojianriq,'yyyy-MM-dd')}"
-                       allowInput="false"/>
+                       allowInput="false" enabled="false"/>
             </td>
         </tr>
         <tr>
@@ -490,9 +490,9 @@
                 //未进行肠镜检查原因
                 mini.get("buzuochangjingYuanyin").set({Enabled:true, required:true});
                 //是否无痛肠镜检查
-                mini.get("wutongchangjing").set({Enabled:false});
+                mini.get("wutongchangjing").set({Enabled:false, value:""});
                 //肠镜检查到达部位
-                mini.get("changjingbuwei").set({Enabled:false});
+                mini.get("changjingbuwei").set({Enabled:false, value:""});
             }
 
             //未进行肠镜检查原因
@@ -538,7 +538,6 @@
                 mini.get("youwudi").setEnabled(true);
                 mini.get("chuxueqingkuang").setEnabled(true);
                 mini.get("huojianriq").set({enabled:true,required:true});
-                mini.get("huojianjieguo").setRequired(true);
                 //否
             } else {
                 mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
@@ -624,9 +623,9 @@
             //未进行肠镜检查原因
             mini.get("buzuochangjingYuanyin").set({Enabled:true, required:true});
             //是否无痛肠镜检查
-            mini.get("wutongchangjing").set({Enabled:false});
+            mini.get("wutongchangjing").set({Enabled:false, value:""});
             //肠镜检查到达部位
-            mini.get("changjingbuwei").set({Enabled:false});
+            mini.get("changjingbuwei").set({Enabled:false, value:""});
         }
     }
 
@@ -683,7 +682,6 @@
             mini.get("youwudi").setEnabled(true);
             mini.get("chuxueqingkuang").setEnabled(true);
             mini.get("huojianriq").set({enabled:true,required:true});
-            mini.get("huojianjieguo").setRequired(true);
             //否
         } else {
             mini.get("huojianjieguo").set({enabled:false,required:false,value:"",isValid:true});
