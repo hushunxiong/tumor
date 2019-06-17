@@ -883,6 +883,11 @@ public class ScreeningController extends BaseController {
         model.addAttribute("gtp",gtp);
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
+        if(bus=="1" || bus=="01"||"1".equals(bus)||"01".equals(bus)){
+            bus="阳性";
+        } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
+            bus="阴性";
+        }
         model.addAttribute("bus",bus);
         model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
         String aizheng="";
@@ -937,36 +942,15 @@ public class ScreeningController extends BaseController {
         model.addAttribute("gtp",gtp);
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
+        if(bus=="1" || bus=="01"||"1".equals(bus)||"01".equals(bus)){
+            bus="阳性";
+        } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
+            bus="阴性";
+        }
         model.addAttribute("bus",bus);
         model.addAttribute("curtime",DateUtils.getDate("yyyy-MM-dd"));
-        String aizheng="";
-        if(StringUtils.isNotBlank(aizhengs)){
-            if(aizhengs.contains("1")){
-                aizheng+="大肠癌";
-                model.addAttribute("dca",1);
-            }
-            if(aizhengs.contains("2")){
-                if(StringUtils.isNotBlank(aizheng)){
-                    aizheng+="，";
-                }
-                aizheng+="肝癌";
-            }
-            if(aizhengs.contains("3")){
-                if(StringUtils.isNotBlank(aizheng)){
-                    aizheng+="，";
-                }
-                aizheng+="胃癌";
-                model.addAttribute("wa",1);
-            }
-            if(aizhengs.contains("4")){
-                if(StringUtils.isNotBlank(aizheng)){
-                    aizheng+="，";
-                }
-                aizheng+="肺癌";
-                model.addAttribute("fa",1);
-            }
-        }
-        model.addAttribute("aizheng",aizheng);
+
+        model.addAttribute("aizheng",aizhengs);
         User user=getSessionUser();
         Hospital hos=AuthUtils.getHospitalByCode(user.getOrgCode());
 
