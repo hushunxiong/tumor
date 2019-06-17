@@ -60,7 +60,7 @@
                         <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
                             <select id="csnf" name="csnf" class="select-default radius" style="width:54%">
                                 <option value="">请选择</option>
-                                <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  ></option>
+                                <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  th:selected="${loop.index eq 0 ? true:false}"></option>
                             </select>
                         </div>
                         <div class="mini-col-3">
