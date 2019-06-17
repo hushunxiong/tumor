@@ -46,6 +46,9 @@
 		  <if test="csnf !=null and csnf !='' ">
 			  and  a.check_year=#{csnf}
 		  </if>
+		  <if test="idNumber !=null and idNumber !='' ">
+			  and  a.id_number=#{idNumber}
+		  </if>
 		  <if test="checkResult !=null and checkResult !=''">
 			  <choose>
 				  <when test="checkResult == '3'.toString()">
