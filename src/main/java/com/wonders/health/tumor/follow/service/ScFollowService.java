@@ -94,9 +94,11 @@ public class ScFollowService {
         vo.setAddress(areaService.getFullAddress(cpInfo.getAddressProvince(), cpInfo.getAddressCity(), cpInfo.getAddressCounty(), cpInfo.getAddressTown(), cpInfo.getAddressCommittee(), cpInfo.getAddressDetail()));
         //胃癌初筛信息
         ScRegcase sr=scRegcaseDao.getByManageidAndYear(manageId,checkYear);
-        vo.setRegdate(sr.getRegdate());
-        vo.setCheckResult(sr.getCheckResult());
-        vo.setScRegcaseId(sr.getId());
+        if (null!=sr){
+            vo.setRegdate(sr.getRegdate());
+            vo.setCheckResult(sr.getCheckResult());
+            vo.setScRegcaseId(sr.getId());
+        }
         return vo;
     }
     /**
@@ -121,9 +123,15 @@ public class ScFollowService {
             sc.setDelFlag("0");
             sc.setCreateBy(vo.getUser().getName());
             sc.setCreateDate(new Date());
-            sc.setShoushujigouName(AuthUtils.getHospitalByCode(sc.getShoushujigouId()).getName());
-            sc.setFangliaojigouName(AuthUtils.getHospitalByCode(sc.getFangliaojigouId()).getName());
-            sc.setHualiaojigouName(AuthUtils.getHospitalByCode(sc.getHualiaojigouId()).getName());
+            if (null!=sc.getShoushujigouId()&&!sc.getShoushujigouId().equals("")){
+                sc.setShoushujigouName(AuthUtils.getHospitalByCode(sc.getShoushujigouId()).getName());
+            }
+            if (null!=sc.getFangliaojigouId()&&!sc.getFangliaojigouId().equals("")){
+                sc.setFangliaojigouName(AuthUtils.getHospitalByCode(sc.getFangliaojigouId()).getName());
+            }
+            if (null!=sc.getHualiaojigouId()&&!sc.getHualiaojigouId().equals("")){
+                sc.setHualiaojigouName(AuthUtils.getHospitalByCode(sc.getHualiaojigouId()).getName());
+            }
             sc.setZhenduanjigouName(AuthUtils.getHospitalByCode(sc.getZhenduanjigouId()).getName());
             sc.setSuifangjigouId(vo.getUser().getOrgCode());
             sc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());

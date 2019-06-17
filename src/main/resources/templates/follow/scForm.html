@@ -326,11 +326,13 @@
                     data: json,
                     async:true,
                     success: function (response) {
-                        mini.alert(response.msg,"提示消息",function () {
-                            if (response.value){
+                        if (response.value){
+                            mini.alert(response.msg,"提示消息",function () {
                                 window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc";
-                            }
-                        })
+                            })
+                        }else{
+                            mini.alert(response.msg,"提示消息")
+                        }
                     }
                 })
             }
