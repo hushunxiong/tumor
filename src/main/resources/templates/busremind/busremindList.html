@@ -47,7 +47,7 @@
                         </div>
                         <div class="mini-col-4">
                             <label class="mr-5">业务提醒类型：</label>
-                            <input id="type" name="type" class="mini-combobox" width="49%" showNullItem="true"
+                            <input id="type" name="type" class="mini-combobox" width="49%" showNullItem="true" th:value="${type}"
                                    th:data="${#dic.generals('60052')}" emptyText="请选择" nullItemText="请选择"   textField="name" valueField="code"/>
                         </div>
                     </div>

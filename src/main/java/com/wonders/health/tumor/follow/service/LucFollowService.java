@@ -95,9 +95,11 @@ public class LucFollowService {
         vo.setAddress(areaService.getFullAddress(cpInfo.getAddressProvince(), cpInfo.getAddressCity(), cpInfo.getAddressCounty(), cpInfo.getAddressTown(), cpInfo.getAddressCommittee(), cpInfo.getAddressDetail()));
         //肺癌初筛信息
         LucRegcase lr=lucRegcaseDao.getByManageidAndYear(manageId,checkYear);
-        vo.setRegdate(lr.getRegdate());
-        vo.setCheckResult(lr.getCheckResult());
-        vo.setLucRegcaseId(lr.getId());
+        if (null!=lr){
+            vo.setRegdate(lr.getRegdate());
+            vo.setCheckResult(lr.getCheckResult());
+            vo.setLucRegcaseId(lr.getId());
+        }
         return vo;
     }
     /**
@@ -127,10 +129,16 @@ public class LucFollowService {
             luc.setUpdateDate(new Date());
             luc.setSuifangjigouId(vo.getUser().getOrgCode());
             luc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
-            luc.setHualiaojigouName(AuthUtils.getHospitalByCode(luc.getHualiaojigouId()).getName());
+            if (null!=luc.getHualiaojigouId()&&!luc.getHualiaojigouId().equals("")){
+                luc.setHualiaojigouName(AuthUtils.getHospitalByCode(luc.getHualiaojigouId()).getName());
+            }
+            if (null!=luc.getFangliaojigouId()&&!luc.getFangliaojigouId().equals("")){
+                luc.setFangliaojigouName(AuthUtils.getHospitalByCode(luc.getFangliaojigouId()).getName());
+            }
+            if (null!=luc.getShoushujigouId()&&!luc.getShoushujigouId().equals("")){
+                luc.setShoushujigouName(AuthUtils.getHospitalByCode(luc.getShoushujigouId()).getName());
+            }
             luc.setZhenduanjigouName(AuthUtils.getHospitalByCode(luc.getZhenduanjigouId()).getName());
-            luc.setShoushujigouName(AuthUtils.getHospitalByCode(luc.getShoushujigouId()).getName());
-            luc.setFangliaojigouName(AuthUtils.getHospitalByCode(luc.getFangliaojigouId()).getName());
             luc.setSuifangDate(new Date());
             luc.setDengjijigouId(vo.getUser().getOrgCode());
             luc.setDengjiDate(new Date());

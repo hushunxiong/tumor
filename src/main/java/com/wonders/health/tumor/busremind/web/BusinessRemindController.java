@@ -69,6 +69,11 @@ public class BusinessRemindController extends BaseController {
         Collections.sort(nds,Collections.reverseOrder());
         model.addAttribute("years",nds);
         model.addAttribute("orgcode", getSessionUser().getOrgCode());
+        if(crcFlag=="0" || "0".equals(crcFlag)){
+            model.addAttribute("type","02");
+        }else{
+            model.addAttribute("type","");
+        }
         return "/busremind/busremindList";
     }
 
