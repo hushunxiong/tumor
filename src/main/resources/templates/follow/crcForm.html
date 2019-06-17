@@ -479,20 +479,29 @@
             var changjing = mini.get("changjing").getValue();
             //肠镜检查:是
             if (changjing == "1") {
-                mini.get("buzuochangjingYuanyin").setRequired(false);
-                mini.get("buzuochangjingYuanyin").setValue("");
+                //未进行肠镜检查原因
+                mini.get("buzuochangjingYuanyin").set({Enabled:false, required:false, value:"", isValid:true});
+                //是否无痛肠镜检查
+                mini.get("wutongchangjing").set({Enabled:true});
+                //肠镜检查到达部位
+                mini.get("changjingbuwei").set({Enabled:true});
                 //否
             } else {
-                mini.get("buzuochangjingYuanyin").setRequired(true);
+                //未进行肠镜检查原因
+                mini.get("buzuochangjingYuanyin").set({Enabled:true, required:true});
+                //是否无痛肠镜检查
+                mini.get("wutongchangjing").set({Enabled:false});
+                //肠镜检查到达部位
+                mini.get("changjingbuwei").set({Enabled:false});
             }
 
+            //未进行肠镜检查原因
             var buzuochangjingYuanyin = mini.get("buzuochangjingYuanyin").getValue();
             //其他
             if (buzuochangjingYuanyin == "05") {
                 mini.get("buzuochangjingYuanyinQita").set({Enabled:true, required:true});
             } else {
-                mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, isValid:true});
-                mini.get("buzuochangjingYuanyinQita").setValue("");
+                mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, value:"", isValid:true});
             }
 
             var bingbianbuw = mini.get("bingbianbuw").getValue();
@@ -604,11 +613,20 @@
         var changjing = mini.get("changjing").getValue();
         //肠镜检查:是
         if (changjing == "1") {
-            mini.get("buzuochangjingYuanyin").setRequired(false);
-            mini.get("buzuochangjingYuanyin").setValue("");
+            //未进行肠镜检查原因
+            mini.get("buzuochangjingYuanyin").set({Enabled:false, required:false, value:"", isValid:true});
+            //是否无痛肠镜检查
+            mini.get("wutongchangjing").set({Enabled:true});
+            //肠镜检查到达部位
+            mini.get("changjingbuwei").set({Enabled:true});
             //否
         } else {
-            mini.get("buzuochangjingYuanyin").setRequired(true);
+            //未进行肠镜检查原因
+            mini.get("buzuochangjingYuanyin").set({Enabled:true, required:true});
+            //是否无痛肠镜检查
+            mini.get("wutongchangjing").set({Enabled:false});
+            //肠镜检查到达部位
+            mini.get("changjingbuwei").set({Enabled:false});
         }
     }
 
@@ -619,8 +637,7 @@
         if (buzuochangjingYuanyin == "05") {
             mini.get("buzuochangjingYuanyinQita").set({Enabled:true, required:true});
         } else {
-            mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, isValid:true});
-            mini.get("buzuochangjingYuanyinQita").setValue("");
+            mini.get("buzuochangjingYuanyinQita").set({Enabled:false, required:false, value:"", isValid:true});
         }
     }
 

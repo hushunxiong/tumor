@@ -67,13 +67,13 @@
                             <label class="mr-5">登记机构所属区：</label>
                             <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="46%"
                                    th:data="${#auth.getAreas(areaCode)}"
-                                   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
+                                   emptyText="请选择"   textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
                         </div>
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构：</label>
 
                             <input id="regorg" name="regorg"  class="mini-combobox" width="65%"
-                                   textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
+                                   emptyText="请选择"    textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                         </div>
 
                     </div>
@@ -81,7 +81,7 @@
                     <div class="mini-row">
                         <div class="mini-col-3">
                             <label class="mr-5">大肠癌初筛编号：</label>
-                            <input id="id" name="id" type="text" class="mini-textbox" width="42%">
+                            <input  emptyText="请输入" id="idNumber" name="idNumber" type="text" class="mini-textbox" width="42%">
                         </div>
                         <div class="mini-col-3">
                              <label class="mr-5">大肠癌判定结果：</label>
