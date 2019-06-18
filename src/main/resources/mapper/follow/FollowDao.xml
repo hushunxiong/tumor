@@ -4,7 +4,7 @@
 
     <sql id="FollowPersonInfoListColumns">
         P.ID AS id,
-        P.NAME AS "name",
+        P.NAME AS name,
         P.GENDER AS "gender",
         <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
             crc.id  as  "crcCheckId",
@@ -192,6 +192,7 @@
             t.lucCheckYear is not null or
         </if>
         1=2 )
+        ORDER BY t.name
     </sql>
 
     <select id="pageCount" resultType="java.lang.Integer"

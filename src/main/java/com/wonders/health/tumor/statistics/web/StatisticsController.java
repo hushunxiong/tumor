@@ -325,7 +325,7 @@ public class StatisticsController {
             licPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             licPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             licPositive.setZlwz(vo.getZlwz());
-            licPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            licPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
             licPositive.setCsrq(vo.getCsrq());
             return licPositive;
         }).collect(Collectors.toList());
@@ -400,7 +400,7 @@ public class StatisticsController {
             lucPositive.setRegorg(vo.getRegorg());
             lucPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
             lucPositive.setShifouLDCT(dic.generalName("60013",vo.getShifouLDCT()));
-            lucPositive.setLDCTJieguo(dic.generalName("60013",vo.getLDCTJieguo()));
+            lucPositive.setLDCTJieguo(vo.getLDCTJieguo());
             lucPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             lucPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             lucPositive.setZlwz(vo.getZlwz());
@@ -469,7 +469,7 @@ public class StatisticsController {
             scPositive.setRegorg(vo.getRegorg());
             scPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
             scPositive.setSfwj(dic.generalName("60013",vo.getSfwj()));
-            scPositive.setWjjcjg(dic.generalName("60001",vo.getWjjcjg()));
+            scPositive.setWjjcjg(vo.getWjjcjg());
             scPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             scPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             scPositive.setZlwz(vo.getZlwz());
@@ -550,8 +550,8 @@ public class StatisticsController {
             diagnoseMessage.setJcxm(vo.getJcxm());
             diagnoseMessage.setBbbw(vo.getBbbw());
             diagnoseMessage.setZldx(vo.getZldx());
-            diagnoseMessage.setSfhj(dic.generalName("60031", vo.getSfhj()));//是否活检
-            diagnoseMessage.setHjjg(dic.generalName("60033", vo.getHjjg()));//活检结果
+            diagnoseMessage.setSfhj(dic.generalName("60013", vo.getSfhj()));//是否活检
+            diagnoseMessage.setHjjg(vo.getHjjg());//活检结果
             diagnoseMessage.setSfbl(dic.generalName("60013", vo.getSfbl()));//是否病理
             diagnoseMessage.setBllx(vo.getBllx());
             diagnoseMessage.setTNMfq(vo.getTNMfq().replaceAll("null",""));

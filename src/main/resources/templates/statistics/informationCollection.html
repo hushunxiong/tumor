@@ -79,14 +79,12 @@
                         <div field="personcard" renderer="sfzhRenderer" width="200px" headerAlign="center" align="center" allowSort="false">证件号码</div>
                         <div field="regorg" sortField="regorg"autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >筛查登记机构</div>
                         <div field="jcxm" width="150px" headerAlign="center" align="center" allowSort="false">检查项目</div>
-                        <div field="zlwz" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >病变部位</div>
+                        <div field="bbbw" width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">病变部位</div>
                         <div field="zldx" width="150px" headerAlign="center" align="center" allowSort="false">肿瘤大小（最大直径）</div>
                         <div field="sfhj" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否活检
                             <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
-                                   valueField="code" th:data="${#dic.generals('60031')}"/></div>
-                        <div field="hjjg" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >活检结果
-                            <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
-                                   valueField="code" th:data="${#dic.generals('60033')}"/></div>
+                                   valueField="code" th:data="${#dic.generals('60013')}"/></div>
+                        <div field="hjjg" width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">活检结果</div>
                         <div field="sfbl" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false" >是否病理
                             <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                    valueField="code" th:data="${#dic.generals('60013')}"/></div>

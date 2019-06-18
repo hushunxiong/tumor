@@ -137,11 +137,17 @@
     mini.parse();
     var grid = mini.get("datagrid");
     var form = new mini.Form('#div1');
+    var kp = [[${kp}]];
 
     $(function () {
+        if(kp){
+            var params = mini.decode(base64decode(kp));
+            form.setData(params);
+            $("#keyword").val(params.keyword);
+            $("#csnf").val(params.csnf);
+        }
         onSearch();
         getHospitals();
-
     });
 
     var ctxStatic ='..';
@@ -208,7 +214,13 @@
 
     //跳到筛查对象
     function viewPerson(id, csnf) {
-        var url = "../follow/person?manageId="+id+"&checkYear="+csnf;
+        var kp;
+        var data = form.getData(true);
+        data.keyword=$("#keyword").val();
+        data.csnf= $("#csnf").val();
+        kp = base64encode(mini.encode(data));
+
+        var url = "../follow/person?manageId="+id+"&checkYear="+csnf+"&from=&kp="+encodeURIComponent(kp);
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',

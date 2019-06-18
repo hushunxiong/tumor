@@ -17,14 +17,16 @@
 <div class="btn-list text-c mt-10">
     <button class="my-btn my-btn-blue mr-20" onclick="back();">返回</button>
 </div>
+<input id="kp" class="mini-hidden" th:value="${kp}"/>
 </body>
 <script type="text/javascript" th:inline="javascript">
     mini.parse();
     var tabs = mini.get("tabs");
     var tabName = [[${from}]];
+
     //返回
     function back() {
-        window.location.href = "../follow/list";
+        window.location.href = "../follow/list?kp="+mini.get("kp").getValue();
     }
 
     $(function() {
