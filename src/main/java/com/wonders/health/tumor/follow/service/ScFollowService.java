@@ -110,10 +110,20 @@ public class ScFollowService {
         if (null!=sc.getId()&&!sc.getId().equals("")){
             sc.setSuifangjigouId(vo.getUser().getOrgCode());
             sc.setSuifangDate(new Date());
+            sc.setZhenduanjigouName(AuthUtils.getHospitalByCode(sc.getZhenduanjigouId()).getName());
             sc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
             sc.setSuifangyishengId(vo.getUser().getId());
+            if (null!=sc.getHualiaojigouId()&&!sc.getHualiaojigouId().equals("")){
+                sc.setHualiaojigouName(AuthUtils.getHospitalByCode(sc.getHualiaojigouId()).getName());
+            }
+            if (null!=sc.getShoushujigouId()&&!sc.getShoushujigouId().equals("")){
+                sc.setShoushujigouName(AuthUtils.getHospitalByCode(sc.getShoushujigouId()).getName());
+            }
             sc.setUpdateDate(new Date());
             sc.setUpdateBy(vo.getUser().getName());
+            if (null!=sc.getFangliaojigouId()&&!sc.getFangliaojigouId().equals("")){
+                sc.setFangliaojigouName(AuthUtils.getHospitalByCode(sc.getFangliaojigouId()).getName());
+            }
             flag=scFollowDao.update(sc);
         }else{
             //uuid生成主键

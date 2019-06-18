@@ -111,10 +111,20 @@ public class LucFollowService {
         if (null!=luc.getId()&&!luc.getId().equals("")){
             luc.setSuifangjigouId(vo.getUser().getOrgCode());
             luc.setSuifangyishengId(vo.getUser().getId());
+            if (null!=luc.getFangliaojigouId()&&!luc.getFangliaojigouId().equals("")){
+                luc.setFangliaojigouName(AuthUtils.getHospitalByCode(luc.getFangliaojigouId()).getName());
+            }
             luc.setSuifangDate(new Date());
             luc.setSuifangjigouName(AuthUtils.getHospitalByCode(vo.getUser().getOrgCode()).getName());
+            if (null!=luc.getShoushujigouId()&&!luc.getShoushujigouId().equals("")){
+                luc.setShoushujigouName(AuthUtils.getHospitalByCode(luc.getShoushujigouId()).getName());
+            }
+            if (null!=luc.getHualiaojigouId()&&!luc.getHualiaojigouId().equals("")){
+                luc.setHualiaojigouName(AuthUtils.getHospitalByCode(luc.getHualiaojigouId()).getName());
+            }
             luc.setUpdateBy(vo.getUser().getName());
             luc.setUpdateDate(new Date());
+            luc.setZhenduanjigouName(AuthUtils.getHospitalByCode(luc.getZhenduanjigouId()).getName());
             flag=lucFollowDao.update(luc);
         }else{
             //uuid生成主键

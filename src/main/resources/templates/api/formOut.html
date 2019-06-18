@@ -1717,6 +1717,7 @@
                 url: "/tumor/api/screeningout/checkHadDone?year="+checkyear+"&&type="+zjlx+"&&personcard="+zjhm+"&&areaCode="+areaCode,
                 type:'get',
                 dataType:'json',
+                async:false,
                 success:function(res){
                     mini.unmask(document.body);
                     if(!res.ok){ //检查过

@@ -55,13 +55,10 @@
                 and  crc.check_year=#{csnf}
             </if>
             <if test="beginDate !=null and beginDate !=''">
-                and  crc.regdate>=to_date(#{beginDate},'yyyy-MM-dd HH:mi:ss')
+                and  crc.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
             </if>
             <if test="endDate !=null and endDate !=''">
-                AND  crc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd HH:mi:ss')+1
-            </if>
-            <if test="crcResult !=null and crcResult !=''">
-                AND  crc.check_result=#{crcResult}
+                AND  crc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
             </if>
         </if>
         <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
@@ -76,13 +73,10 @@
                 and  lic.check_year=#{csnf}
             </if>
             <if test="beginDate !=null and beginDate !=''">
-                and  lic.regdate>=to_date(#{beginDate},'yyyy-MM-dd HH:mi:ss')
+                and  lic.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
             </if>
             <if test="endDate !=null and endDate !=''">
-                AND  lic.regdate &lt; to_date(#{endDate},'yyyy-MM-dd HH:mi:ss')+1
-            </if>
-            <if test="licResult !=null and licResult !=''">
-                AND  lic.check_result=#{licResult}
+                AND  lic.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
             </if>
         </if>
         <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
@@ -97,13 +91,10 @@
                 and  sc.check_year=#{csnf}
             </if>
             <if test="beginDate !=null and beginDate !=''">
-                and  sc.regdate>=to_date(#{beginDate},'yyyy-MM-dd HH:mi:ss')
+                and  sc.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
             </if>
             <if test="endDate !=null and endDate !=''">
-                AND  sc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd HH:mi:ss')+1
-            </if>
-            <if test="scResult !=null and scResult !=''">
-                AND  sc.check_result=#{scResult}
+                AND  sc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
             </if>
         </if>
         <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
@@ -118,13 +109,10 @@
                 and  luc.check_year=#{csnf}
             </if>
             <if test="beginDate !=null and beginDate !=''">
-                and  luc.regdate>=to_date(#{beginDate},'yyyy-MM-dd HH:mi:ss')
+                and  luc.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
             </if>
             <if test="endDate !=null and endDate !=''">
-                AND  luc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd HH:mi:ss')+1
-            </if>
-            <if test="lucResult !=null and lucResult !=''">
-                AND  luc.check_result=#{lucResult}
+                AND  luc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
             </if>
         </if>
         <where>
@@ -135,6 +123,50 @@
                 OR
                 p.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
                 )
+            </if>
+            <if test="crcResult !=null and crcResult !=''">
+                AND  crc.check_result=#{crcResult}
+            </if>
+            <if test="licResult !=null and licResult !=''">
+                AND  lic.check_result=#{licResult}
+            </if>
+            <if test="scResult !=null and scResult !=''">
+                AND  sc.check_result=#{scResult}
+            </if>
+            <if test="lucResult !=null and lucResult !=''">
+                AND  luc.check_result=#{lucResult}
+            </if>
+            <if test="crcStatus !=null and crcStatus !=''">
+                <if test="crcStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM crc_follow f1 WHERE f1.crc_check_id = crc.id AND f1.DEL_FLAG = '0')
+                </if>
+                <if test="crcStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM crc_follow f1 WHERE f1.crc_check_id = crc.id AND f1.DEL_FLAG = '0')
+                </if>
+            </if>
+            <if test="licStatus !=null and licStatus !=''">
+                <if test="licStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM lic_follow f2 WHERE f2.lic_check_id = lic.id AND f2.DEL_FLAG = '0')
+                </if>
+                <if test="licStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM lic_follow f2 WHERE f2.lic_check_id = lic.id AND f2.DEL_FLAG = '0')
+                </if>
+            </if>
+            <if test="scStatus !=null and scStatus !=''">
+                <if test="scStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM sc_follow f3 WHERE f3.sc_check_id = sc.id AND f3.DEL_FLAG = '0')
+                </if>
+                <if test="scStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM sc_follow f3 WHERE f3.sc_check_id = sc.id AND f3.DEL_FLAG = '0')
+                </if>
+            </if>
+            <if test="lucStatus !=null and lucStatus !=''">
+                <if test="lucStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM luc_follow f4 WHERE f4.luc_check_id = luc.id AND f4.DEL_FLAG = '0')
+                </if>
+                <if test="lucStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM luc_follow f4 WHERE f4.luc_check_id = luc.id AND f4.DEL_FLAG = '0')
+                </if>
             </if>
         </where>
     </sql>
