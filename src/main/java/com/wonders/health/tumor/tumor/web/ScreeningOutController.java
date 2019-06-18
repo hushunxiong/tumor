@@ -837,6 +837,12 @@ public class ScreeningOutController extends BaseController {
         model.addAttribute("ysgh",ysgh);
 
         model.addAttribute("name",name);
+
+        if(byx=="1" || byx=="01"||"1".equals(byx)||"01".equals(byx)){
+            byx="阴性";
+        } if(byx=="2" || byx=="02" ||"2".equals(byx)||"02".equals(byx)){
+            byx="阳性";
+        }
         model.addAttribute("byx",byx);
         model.addAttribute("gtp",gtp);
         model.addAttribute("hbs",hbs);

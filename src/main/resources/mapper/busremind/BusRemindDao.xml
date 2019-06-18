@@ -159,9 +159,6 @@
 				AND c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
 				AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
 			</if>
-			AND c.del_flag='0'
-			AND d.del_flag='0'
-			AND e.del_flag='0'
 		</if>
 	</sql>
 
@@ -213,12 +210,6 @@
 				AND k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
 			</if>
 		</if>
-		AND f.del_flag='0'
-		AND g.del_flag='0'
-		AND h.del_flag='0'
-		AND i.del_flag='0'
-		AND j.del_flag='0'
-		AND k.del_flag='0'
 		<if test="status!=null and status!=''">
 			AND(
 			1=2 OR
