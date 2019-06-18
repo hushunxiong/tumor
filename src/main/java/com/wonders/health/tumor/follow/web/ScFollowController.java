@@ -72,8 +72,9 @@ public class ScFollowController extends BaseController {
      * 胃癌随访页面
      */
     @RequestMapping(value = "openScFollow")
-    public String openScFollow(Model model, @RequestParam("manageId")String manageId,@RequestParam("checkYear")String checkYear,@RequestParam("flag")String flag,@RequestParam(value = "id",required = false)String id){
+    public String openScFollow(Model model, @RequestParam("manageId")String manageId,@RequestParam("checkYear")String checkYear,@RequestParam("flag")String flag,@RequestParam(value = "id",required = false)String id,@RequestParam(value = "kp",required = false)String kp){
         model.addAttribute("info", scFollowService.scFollowForm(manageId,checkYear,flag,id));
+        model.addAttribute("kp",kp);
         return "/follow/scForm";
     }
     /**

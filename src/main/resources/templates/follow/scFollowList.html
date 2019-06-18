@@ -118,26 +118,27 @@
             }
             return h;
         }
+        var kp = window.parent.mini.get("kp").getValue();
         //新增随访
         function addScFollow(){
             var manageId=[[${info.manageId}]];
             var checkYear=[[${info.checkYear}]];
             var flag="1";
-            parent.window.location.href = "../scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag;
+            parent.window.location.href = "../scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&kp="+kp;
         }
         //编辑随访
         function updateScFollow(id){
             var manageId=[[${info.manageId}]];
             var checkYear=[[${info.checkYear}]];
             var flag="2";
-            parent.window.location.href = "../scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
+            parent.window.location.href = "../scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id+"&kp="+kp;
         }
         //查看随访
         function lookScFollow(id){
             var manageId=[[${info.manageId}]];
             var checkYear=[[${info.checkYear}]];
             var flag="3";
-            parent.window.location.href = "../scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id;
+            parent.window.location.href = "../scFollow/openScFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id+"&kp="+kp;
         }
         //删除随访
         function delScFollow(id){

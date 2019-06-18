@@ -275,6 +275,7 @@
             mini.get("zhenduanjigouId").setValue(zhenduanjigouId);
             mini.get("zhenduanjigouId").setText(zhenduanjigouName);
         }
+        var kp = [[${kp}]];
         //保存
         function save(){
             var scFollow = new mini.Form('#scFollow');
@@ -298,7 +299,7 @@
                     success: function (response) {
                         mini.alert(response.msg,"提示消息",function () {
                             if (response.value){
-                                window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc";
+                                window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc&kp="+kp;
                             }
                         })
                     }
@@ -328,7 +329,7 @@
                     success: function (response) {
                         if (response.value){
                             mini.alert(response.msg,"提示消息",function () {
-                                window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc";
+                                window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc&kp="+kp;
                             })
                         }else{
                             mini.alert(response.msg,"提示消息")
@@ -339,7 +340,7 @@
         }
         //关闭页面
         function closeYM(){
-            window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc";
+            window.location.href = "../follow/person?manageId="+[[${info.manageId}]]+"&checkYear="+[[${info.checkYear}]]+"&from=sc&kp="+kp;
         }
         //是否胃镜检查
         function weijingCheck(){

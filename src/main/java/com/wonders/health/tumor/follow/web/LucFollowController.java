@@ -73,8 +73,9 @@ public class LucFollowController extends BaseController {
      * 肺癌随访页面
      */
     @RequestMapping(value = "openLucFollow")
-    public String openLucFollow(Model model, @RequestParam("manageId")String manageId,@RequestParam("checkYear")String checkYear,@RequestParam("flag")String flag,@RequestParam(value = "id",required = false)String id){
+    public String openLucFollow(Model model, @RequestParam("manageId")String manageId,@RequestParam("checkYear")String checkYear,@RequestParam("flag")String flag,@RequestParam(value = "id",required = false)String id,@RequestParam(value = "kp",required = false)String kp){
         model.addAttribute("info", lucFollowService.lucFollowForm(manageId,checkYear,flag,id));
+        model.addAttribute("kp",kp);
         return "/follow/lucForm";
     }
     /**
