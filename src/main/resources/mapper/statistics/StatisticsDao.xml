@@ -302,6 +302,8 @@
         info.telephone,
         sc.REGORG AS REGORG,
         scrisk.assessment_result AS assessmentResult,
+        scfo.SHIFOUWEIJING as sfwj,
+        scfo.WEIJING_JIEGUO as wjjcjg,
         scfo.SHIFOUQUEZHEN AS sfqz,
         scfo.SHIFOUZHILIAO AS sfzl,
         scfo.ZHONGLIUWEIZH AS zlwz,
