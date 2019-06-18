@@ -255,6 +255,7 @@
     var flag=[[${flag}]]; //操作flag 1-查看  2-修改 3-新增
     var manageId=[[${manageId}]];
     var checkYear=[[${checkYear}]];
+    var kp = [[${kp}]];
 
     $(function() {
         if (flag == '1') { //查看
@@ -378,14 +379,14 @@
 
     //关闭
     function closeSelf() {
-        window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear+"&from=lic";
+        window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear+"&from=lic&kp="+kp;
     }
 
     //回调函数
     function refresh() {
         setTimeout(function () {
             try {
-                window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear+"&from=lic";
+                window.location.href = "../follow/person?manageId="+manageId+"&checkYear="+checkYear+"&from=lic&kp="+kp;
             } catch (e) {
             }
         }, 1000);

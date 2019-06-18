@@ -153,7 +153,8 @@
 
     //新增随访
     function addFollow() {
-        var url = "../crcFollow/add?manageId=" + manageId + "&checkYear=" + checkYear + "&flag=3";
+        var kp = window.parent.mini.get("kp").getValue();
+        var url = "../crcFollow/add?manageId=" + manageId + "&checkYear=" + checkYear + "&flag=3&kp="+kp;
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',
@@ -164,7 +165,8 @@
 
     //查看或者编辑
     function viewFollow(id,flag) {
-        var url = "../crcFollow/form?id="+id+"&flag="+flag;
+        var kp = window.parent.mini.get("kp").getValue();
+        var url = "../crcFollow/form?id="+id+"&flag="+flag+"&kp="+kp;
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',
