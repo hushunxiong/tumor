@@ -156,7 +156,7 @@
         crcfo.CHANGJING as changjing,
         crcfo.SHIFOUQUEZHEN as sfqz,
         crcfo.SHIFOUZHILIAO as sfzl,
-        crcfo.LINCHUANGFENQI as zlqb,
+        crcfo.linchuangfenqi_putuo as zlqb,
         crcfo.BINGBIANBUW as zlwz,
         info.mobile as mobile,
         info.telephone,
