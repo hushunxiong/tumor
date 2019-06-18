@@ -51,7 +51,7 @@ public class FollowController extends BaseController {
      * @return
      */
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String list(Model model) {
+    public String list(Model model, String kp) {
         List<String> nds = DateUtils.getYearBefore(Integer.parseInt(DateUtils.getYear()), yearNum);
         Collections.sort(nds,Collections.reverseOrder());
         model.addAttribute("csnf",nds);
@@ -61,6 +61,7 @@ public class FollowController extends BaseController {
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
+        model.addAttribute("kp", kp);
         return "/follow/followPersonList";
     }
 
@@ -77,7 +78,7 @@ public class FollowController extends BaseController {
     }
 
     @RequestMapping(value = "person", method = RequestMethod.GET)
-    public String person(Model model, String manageId, String checkYear, String from) {
+    public String person(Model model, String manageId, String checkYear, String from, String kp) {
         model.addAttribute("crcFlag", crcFlag);
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("lucFlag", lucFlag);
@@ -85,6 +86,7 @@ public class FollowController extends BaseController {
         model.addAttribute("manageId", manageId);
         model.addAttribute("checkYear", checkYear);
         model.addAttribute("from", from);
+        model.addAttribute("kp", kp);
         return "/follow/followPerson";
     }
 }

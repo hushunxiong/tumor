@@ -92,7 +92,7 @@ public class CrcFollowController extends BaseController {
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
-    public String add(Model model, String manageId, String checkYear, String flag) {
+    public String add(Model model, String manageId, String checkYear, String flag, String kp) {
         String crcCheckId = "";
         if (StringUtils.isNotBlank(manageId) && StringUtils.isNotBlank(checkYear)) {
             //大肠癌初筛信息
@@ -113,13 +113,14 @@ public class CrcFollowController extends BaseController {
 
         model.addAttribute("follow", follow);
         model.addAttribute("flag", flag);
+        model.addAttribute("kp", kp);
         model.addAttribute("manageId", manageId);
         model.addAttribute("checkYear", checkYear);
         return "/follow/crcForm";
     }
 
     @RequestMapping(value = "form", method = RequestMethod.GET)
-    public String form(Model model, String id, String flag) {
+    public String form(Model model, String id, String flag, String kp) {
         if (StringUtils.isNotBlank(id)) {
             CrcFollow follow =  crcFollowService.getFollowById(id);
             if (follow != null) {
@@ -138,6 +139,7 @@ public class CrcFollowController extends BaseController {
             }
             model.addAttribute("follow", follow);
             model.addAttribute("flag", flag);
+            model.addAttribute("kp", kp);
         }
         return "/follow/crcForm";
     }
