@@ -208,7 +208,7 @@
         info.telephone,
         lic.REGORG AS REGORG,
         licrisk.assessment_result AS assessmentResult,
-        licac.GTP as GPT,
+        licac.GTP as GTP,
         licac.HBEG as Hbeg,
         licac.AFP AS AFP,
         licac.Bus as Bus,

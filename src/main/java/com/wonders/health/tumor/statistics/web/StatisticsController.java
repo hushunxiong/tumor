@@ -244,7 +244,7 @@ public class StatisticsController {
             exportCrcPositive.setChangjing(dic.generalName("60013",vo.getChangjing()));
             exportCrcPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             exportCrcPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
-            exportCrcPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            exportCrcPositive.setZlwz(vo.getZlwz());
             exportCrcPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
             exportCrcPositive.setCsrq(vo.getCsrq());
             return exportCrcPositive;
@@ -324,7 +324,7 @@ public class StatisticsController {
             licPositive.setBus(dic.generalName("60001",vo.getBus()));
             licPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             licPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
-            licPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            licPositive.setZlwz(vo.getZlwz());
             licPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
             licPositive.setCsrq(vo.getCsrq());
             return licPositive;
@@ -403,7 +403,7 @@ public class StatisticsController {
             lucPositive.setLDCTJieguo(dic.generalName("60013",vo.getLDCTJieguo()));
             lucPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             lucPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
-            lucPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            lucPositive.setZlwz(vo.getZlwz());
             lucPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
             lucPositive.setCsrq(vo.getCsrq());
             return lucPositive;
@@ -472,7 +472,7 @@ public class StatisticsController {
             scPositive.setWjjcjg(dic.generalName("60001",vo.getWjjcjg()));
             scPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             scPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
-            scPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
+            scPositive.setZlwz(vo.getZlwz());
             scPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
             scPositive.setCsrq(vo.getCsrq());
             return scPositive;

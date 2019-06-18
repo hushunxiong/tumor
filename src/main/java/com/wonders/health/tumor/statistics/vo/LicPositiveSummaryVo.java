@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class LicPositiveSummaryVo extends ReportBaseVo {
 
-    private String GTP;//GPT检查结果
+    private String GTP;//GTP检查结果
 
     private String Hbeg;//HBsAg检查结果
 
