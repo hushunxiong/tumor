@@ -164,17 +164,13 @@
         crc.regdate as csrq
         FROM
         crc_regcase crc
-        LEFT JOIN cancer_person_info info ON crc.manageid =info.id
-        left join crc_risk_assessment crcrisk on crc.ID =crcrisk.CRC_CHECK_ID
-        left join crc_fobt crcfobt on crc.ID=crcfobt.CRC_CHECK_ID
-        left join crc_follow crcfo on crc.ID=crcfo.CRC_CHECK_ID
+        LEFT JOIN cancer_person_info info ON crc.manageid =info.id AND info.del_flag =0
+        left join crc_risk_assessment crcrisk on crc.ID =crcrisk.CRC_CHECK_ID and crcrisk.del_flag=0
+        left join crc_fobt crcfobt on crc.ID=crcfobt.CRC_CHECK_ID and crcfobt.del_flag=0
+        left join crc_follow crcfo on crc.ID=crcfo.CRC_CHECK_ID and crcfo.del_flag=0
         WHERE
         crc.check_result =2
-        AND info.del_flag =0
         and crc.del_flag=0
-        and crcrisk.del_flag=0
-        and crcfobt.del_flag=0
-        and crcfo.del_flag=0
         <if test="csrqStart !=null">
             and crc.regdate >=#{csrqStart}
         </if>
@@ -219,17 +215,13 @@
         lic.REGDATE AS csrq
         FROM
         lic_regcase lic
-        LEFT JOIN cancer_person_info info ON info.id = lic.MANAGEID
-        LEFT JOIN lic_risk_assessment licrisk ON lic.id = licrisk.lic_CHECK_ID
-        LEFT JOIN lic_FOLLOW licfo ON lic.id = licfo.lic_CHECK_ID
-        LEFT JOIN lic_assist_check licac on lic.ID = licac.lic_check_id
+        LEFT JOIN cancer_person_info info ON info.id = lic.MANAGEID AND info.del_flag = 0
+        LEFT JOIN lic_risk_assessment licrisk ON lic.id = licrisk.lic_CHECK_ID and licrisk.del_flag = 0
+        LEFT JOIN lic_FOLLOW licfo ON lic.id = licfo.lic_CHECK_ID and licfo.del_flag = 0
+        LEFT JOIN lic_assist_check licac on lic.ID = licac.lic_check_id and licac.del_flag = 0
         WHERE
         lic.check_result = 2
-        AND info.del_flag = 0
         and lic.del_flag=0
-        and licrisk.del_flag = 0
-        and licfo.del_flag = 0
-        and licac.del_flag = 0
         <if test="csrqStart !=null">
             and lic.regdate >=#{csrqStart}
         </if>
@@ -272,15 +264,12 @@
         luc.REGDATE AS csrq
         FROM
         luc_regcase luc
-        LEFT JOIN cancer_person_info info ON info.id = luc.MANAGEID
-        LEFT JOIN luc_risk_assessment lucrisk ON luc.id = lucrisk.LUC_CHECK_ID
-        LEFT JOIN LUC_FOLLOW lucfo ON luc.id = lucfo.LUC_CHECK_ID
+        LEFT JOIN cancer_person_info info ON info.id = luc.MANAGEID AND info.del_flag = 0
+        LEFT JOIN luc_risk_assessment lucrisk ON luc.id = lucrisk.LUC_CHECK_ID and lucrisk.del_flag = 0
+        LEFT JOIN LUC_FOLLOW lucfo ON luc.id = lucfo.LUC_CHECK_ID and lucfo.del_flag = 0
         WHERE
         luc.check_result = 2
-        AND info.del_flag = 0
         and luc.del_flag = 0
-        and lucrisk.del_flag = 0
-        and lucfo.del_flag = 0
         <if test="csrqStart !=null">
             and luc.regdate >=#{csrqStart}
         </if>
@@ -320,15 +309,12 @@
         sc.REGDATE AS csrq
         FROM
         sc_regcase sc
-        LEFT JOIN cancer_person_info info ON info.id = sc.MANAGEID
-        LEFT JOIN sc_risk_assessment scrisk ON sc.id = scrisk.sc_CHECK_ID
-        LEFT JOIN sc_FOLLOW scfo ON sc.id = scfo.sc_CHECK_ID
+        LEFT JOIN cancer_person_info info ON info.id = sc.MANAGEID AND info.del_flag = 0
+        LEFT JOIN sc_risk_assessment scrisk ON sc.id = scrisk.sc_CHECK_ID and scrisk.del_flag = 0
+        LEFT JOIN sc_FOLLOW scfo ON sc.id = scfo.sc_CHECK_ID and scfo.del_flag = 0
         WHERE
         sc.check_result = 2
-        AND info.del_flag = 0
         and sc.del_flag = 0
-        and scrisk.del_flag = 0
-        and scfo.del_flag = 0
         <if test="csrqStart !=null">
             and sc.regdate >=#{csrqStart}
         </if>
