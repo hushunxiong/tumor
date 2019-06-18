@@ -400,7 +400,7 @@ public class StatisticsController {
             lucPositive.setRegorg(vo.getRegorg());
             lucPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
             lucPositive.setShifouLDCT(dic.generalName("60013",vo.getShifouLDCT()));
-            lucPositive.setLDCTJieguo(dic.generalName("60013",vo.getLDCTJieguo()));
+            lucPositive.setLDCTJieguo(vo.getLDCTJieguo());
             lucPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             lucPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             lucPositive.setZlwz(vo.getZlwz());
@@ -469,7 +469,7 @@ public class StatisticsController {
             scPositive.setRegorg(vo.getRegorg());
             scPositive.setAssessmentResult(dic.generalName("60001",vo.getAssessmentResult()));
             scPositive.setSfwj(dic.generalName("60013",vo.getSfwj()));
-            scPositive.setWjjcjg(dic.generalName("60001",vo.getWjjcjg()));
+            scPositive.setWjjcjg(vo.getWjjcjg());
             scPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             scPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             scPositive.setZlwz(vo.getZlwz());
