@@ -52,7 +52,7 @@ public class BusRemindService {
 
         List<BusRemindResultVo> list = busRemindDao.getCrcFobtRemind(personcard);
         list.stream().forEach(bus->{
-            if(bus.getFobtR()!=null){
+            if(bus!=null && bus.getFobtR()!=null){
                 String remindType1=bus.getFobtR().getFirstFobtRemindType();
                 if(StringUtils.isNotBlank(remindType1)){
                     if(generalForMap.containsKey(remindType1)){
@@ -91,7 +91,7 @@ public class BusRemindService {
 
         List<BusRemindResultVo> list = busRemindDao.getCrcDiag(personcard,crcFlag,null,null,null);
         list.stream().forEach(bus->{
-            if(bus.getCrcDiag()!=null){
+            if(bus!=null && bus.getCrcDiag()!=null){
                 String remindType1=bus.getCrcDiag().getFirstRemindType();
                 if(StringUtils.isNotBlank(remindType1)){
                     if(generalForMap.containsKey(remindType1)){
@@ -111,7 +111,7 @@ public class BusRemindService {
                     }
                 }
             }
-            if(bus.getCrcRegcase()!=null){
+            if(bus!=null && bus.getCrcRegcase()!=null){
                 Map<String, CancerDic> map=DictUtils.generalForMap("60001");
                 if(StringUtils.isNotBlank(bus.getCrcRegcase().getCheckResult())){
                     bus.getCrcRegcase().setCheckResult(map.get(bus.getCrcRegcase().getCheckResult()).getName());
@@ -126,7 +126,7 @@ public class BusRemindService {
 
         List<BusRemindResultVo> list = busRemindDao.getLicDiag(personcard,null,licFlag,null,null);
         list.stream().forEach(bus->{
-            if(bus.getLicDiag()!=null){
+            if(bus!=null && bus.getLicDiag()!=null){
                 String remindType1=bus.getLicDiag().getFirstRemindType();
                 if(StringUtils.isNotBlank(remindType1)){
                     if(generalForMap.containsKey(remindType1)){
@@ -146,7 +146,7 @@ public class BusRemindService {
                     }
                 }
             }
-            if(bus.getLicRegcase()!=null){
+            if(bus!=null && bus.getLicRegcase()!=null){
                 Map<String, CancerDic> map=DictUtils.generalForMap("60001");
                 if(StringUtils.isNotBlank(bus.getLicRegcase().getCheckResult())){
                     bus.getLicRegcase().setCheckResult(map.get(bus.getLicRegcase().getCheckResult()).getName());
@@ -161,7 +161,7 @@ public class BusRemindService {
 
         List<BusRemindResultVo> list = busRemindDao.getLucDiag(personcard,null,null,null,lucFlag);
         list.stream().forEach(bus->{
-            if(bus.getLucDiag()!=null){
+            if(bus!=null && bus.getLucDiag()!=null){
                 String remindType1=bus.getLucDiag().getFirstRemindType();
                 if(StringUtils.isNotBlank(remindType1)){
                     if(generalForMap.containsKey(remindType1)){
@@ -181,7 +181,7 @@ public class BusRemindService {
                     }
                 }
             }
-            if(bus.getLucRegcase()!=null){
+            if(bus!=null && bus.getLucRegcase()!=null){
                 Map<String, CancerDic> map=DictUtils.generalForMap("60001");
                 if(StringUtils.isNotBlank(bus.getLucRegcase().getCheckResult())){
                     bus.getLucRegcase().setCheckResult(map.get(bus.getLucRegcase().getCheckResult()).getName());
@@ -196,7 +196,7 @@ public class BusRemindService {
 
         List<BusRemindResultVo> list = busRemindDao.getScDiag(personcard,null,null,scFlag,null);
         list.stream().forEach(bus->{
-            if(bus.getScDiag()!=null){
+            if(bus!=null && bus.getScDiag()!=null){
                 String remindType1=bus.getScDiag().getFirstRemindType();
                 if(StringUtils.isNotBlank(remindType1)){
                     if(generalForMap.containsKey(remindType1)){
@@ -216,7 +216,7 @@ public class BusRemindService {
                     }
                 }
             }
-            if(bus.getScRegcase()!=null){
+            if(bus!=null && bus.getScRegcase()!=null){
                 Map<String, CancerDic> map=DictUtils.generalForMap("60001");
                 if(StringUtils.isNotBlank(bus.getScRegcase().getCheckResult())){
                     bus.getScRegcase().setCheckResult(map.get(bus.getScRegcase().getCheckResult()).getName());
