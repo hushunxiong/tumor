@@ -65,6 +65,22 @@ public class BusRemindService {
                         bus.getFobtR().setSecondFobtRemindType(generalForMap.get(remindType2).getName()+ DateUtils.formatDate(bus.getFobtR().getSecondFobtRemindDate()));
                     }
                 }
+
+                if(StringUtils.isNotBlank(bus.getCrcFobt().getFirstFobtResult())){
+                    if(bus.getCrcFobt().getFirstFobtResult()=="1" || "1".equals(bus.getCrcFobt().getFirstFobtResult())){
+                        bus.getCrcFobt().setFirstFobtResult("阴性");
+                    }else{
+                        bus.getCrcFobt().setFirstFobtResult("阳性");
+                    }
+                }
+
+                if(StringUtils.isNotBlank(bus.getCrcFobt().getSecondFobtResult())){
+                    if(bus.getCrcFobt().getSecondFobtResult()=="1" || "1".equals(bus.getCrcFobt().getSecondFobtResult())){
+                        bus.getCrcFobt().setSecondFobtResult("阴性");
+                    }else{
+                        bus.getCrcFobt().setSecondFobtResult("阳性");
+                    }
+                }
             }
         });
         return new DataGrid<BusRemindResultVo>(list.size(),list);
