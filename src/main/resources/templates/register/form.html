@@ -2207,7 +2207,7 @@
 
     function makeChushaiResult(){
         chushaiflag=true;
-        makeResult();
+        // makeResult();
         if(crcFlag=="1"){
             var dcpinggu= $("#crcRiskResult").text();//大肠癌危险度评估结果
             var byxresult=mini.get("byxResult").getValue();//便隐血辅助检查结果\
@@ -2257,6 +2257,9 @@
             }else if(wapinggu=="阴性"){
                 mini.get("checkResultName3").setValue("阴性");
                 mini.get("checkResult3").setValue("阴性");
+            }else{
+                mini.get("checkResultName3").setValue("");
+                mini.get("checkResult3").setValue("");
             }
         }
         if(lucFlag =="1"){
@@ -2267,6 +2270,9 @@
             }else if(fapinggu=="阴性"){
                 mini.get("checkResultName4").setValue("阴性");
                 mini.get("checkResult4").setValue("阴性");
+            }else{
+                mini.get("checkResultName4").setValue("");
+                mini.get("checkResult4").setValue("");
             }
         }
     }
