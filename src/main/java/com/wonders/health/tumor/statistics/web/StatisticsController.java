@@ -246,7 +246,7 @@ public class StatisticsController {
             exportCrcPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             exportCrcPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             exportCrcPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
-            exportCrcPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            exportCrcPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
             exportCrcPositive.setCsrq(vo.getCsrq().substring(0,10));
             return exportCrcPositive;
         }).collect(Collectors.toList());
