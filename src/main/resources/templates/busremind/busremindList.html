@@ -96,9 +96,9 @@
                         <div field="crcRegcase.id" name="id" visible="false">id</div>
                         <div field="fobtR.fobtRemindStatus" visible="false">提醒状态</div>
                         <div field="crcRegcase.idNumber" align="center" headerAlign="center" allowSort="false">大肠癌<BR>初筛编号</div>
-                        <div field="crcRegcase.regdate" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">大肠癌<BR>初筛登记日期</div>
-                        <div field="crcFobt.firstFobtResult" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">FOBT<BR>第一次检查结果</div>
-                        <div field="crcFobt.secondFobtResult"  renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">FOBT<BR>第二次检查结果</div>
+                        <div field="crcRegcase.regdate" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" >大肠癌<BR>初筛登记日期</div>
+                        <div field="crcFobt.firstFobtResult" align="center" headerAlign="center" allowSort="false">FOBT<BR>第一次检查结果</div>
+                        <div field="crcFobt.secondFobtResult"  align="center" headerAlign="center" allowSort="false">FOBT<BR>第二次检查结果</div>
                         <div field="fobtR.perFobtRemindDate"  align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="fobtR.firstFobtRemindType" align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="fobtR.secondFobtRemindType" align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
@@ -112,8 +112,8 @@
                         <div field="tbjgStr" visible="false">id</div>
                         <div field="crcDiag.remindStatus" visible="false">提醒状态</div>
                         <div field="crcRegcase.idNumber" align="center" headerAlign="center" allowSort="false">大肠癌<BR>初筛编号</div>
-                        <div field="crcRegcase.checkResult" sortField="crcRegcase.idNumber"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">大肠癌<BR>初筛判定结果</div>
-                        <div field="crcDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="crcRegcase.checkResult" sortField="crcRegcase.idNumber"  align="center" headerAlign="center" allowSort="false" >大肠癌<BR>初筛判定结果</div>
+                        <div field="crcDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="crcDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="crcDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
                         <div field="crcDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
@@ -124,10 +124,10 @@
                 <div id="licGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
                      url="/tumor/busremind/detailLicRemind">
                     <div property="columns">
-                        <div field="licDiag.id" name="id" visible="false">id</div>
+                        <div field="licDiag.id" visible="false">id</div>
                         <div field="licDiag.remindStatus" visible="false">提醒状态</div>
-                        <div field="licRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">肝癌<BR>初筛判定结果</div>
-                        <div field="licDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="licRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false">肝癌<BR>初筛判定结果</div>
+                        <div field="licDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="licDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="licDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
                         <div field="licDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
@@ -140,8 +140,8 @@
                     <div property="columns">
                         <div field="lucDiag.id" visible="false">id</div>
                         <div field="lucDiag.remindStatus" visible="false">提醒状态</div>
-                        <div field="lucRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">肺癌<BR>初筛判定结果</div>
-                        <div field="lucDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="lucRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" >肺癌<BR>初筛判定结果</div>
+                        <div field="lucDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="lucDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="lucDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
                         <div field="lucDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
@@ -153,8 +153,8 @@
                     <div property="columns">
                         <div field="scDiag.id" visible="false">id</div>
                         <div field="scDiag.remindStatus" visible="false">提醒状态</div>
-                        <div field="scRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" renderer="nyRenderer">胃癌<BR>初筛判定结果</div>
-                        <div field="scDiag.perRemindDate" sortField="bgzt" renderer="bgztRenderer" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
+                        <div field="scRegcase.checkResult" sortField="bgtjn"  align="center" headerAlign="center" allowSort="false" >胃癌<BR>初筛判定结果</div>
+                        <div field="scDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="scDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="scDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
                         <div field="scDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
