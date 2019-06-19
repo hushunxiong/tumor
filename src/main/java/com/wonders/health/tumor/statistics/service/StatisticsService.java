@@ -58,7 +58,7 @@ public class StatisticsService {
             }
         }
         }
-        return new DataGrid<>(summaryVoList.size(), summaryVoList);
+        return new DataGrid<>(count, summaryVoList);
     }
 
 
@@ -99,9 +99,9 @@ public class StatisticsService {
         int count = statisticsDao.pageCountLicPositive(searchVo);
         List<LicPositiveSummaryVo> licVoList = null;
         if (count>0){
-        AuthUtils a = new AuthUtils();
          licVoList= statisticsDao.getLicPositive(searchVo);
         if (licVoList != null && licVoList.size() > 0) {
+            AuthUtils a = new AuthUtils();
             for (LicPositiveSummaryVo vo : licVoList) {
                 if (vo.getRegorg() != null) {
                     vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
@@ -114,7 +114,7 @@ public class StatisticsService {
             }
         }
         }
-        return new DataGrid<>(licVoList.size(), licVoList);
+        return new DataGrid<>(count, licVoList);
     }
 
     /**
@@ -142,7 +142,7 @@ public class StatisticsService {
                 }
             }
         }
-        return new DataGrid<>(lucVoList.size(), lucVoList);
+        return new DataGrid<>(count, lucVoList);
     }
 
     /**
@@ -170,7 +170,7 @@ public class StatisticsService {
                 }
             }
         }
-        return new DataGrid<>(scVoList.size(), scVoList);
+        return new DataGrid<>(count, scVoList);
     }
 
 
