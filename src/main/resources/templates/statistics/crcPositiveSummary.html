@@ -43,6 +43,8 @@
                     <div id="formsearch" class="row mt-10">
                         <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
                         <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+                        <input id="role" th:value="${role}" class="mini-hidden">
+                        <input id="orgCode" th:value="${orgCode}" class="mini-hidden">
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构所属区：</label>
                             <input id="regarea" name="regarea" showNullItem="true" class="mini-combobox" width="46%"
@@ -181,7 +183,13 @@
                 var start = mydate.getFullYear()+"-01"+"-01";
                 mini.get('csrqStart').setValue(start);
                 mini.get('csrqEnd').setValue(getResetNow());
-                mini.get('regorg').setValue("");
+                var role = mini.get("role").getValue();
+                if(role == 'bsq'){
+                    var orgCode = mini.get("orgCode").getValue();
+                    mini.get('regorg').setValue(orgCode);
+                }else{
+                    mini.get('regorg').setValue('');
+                }
                 grid.clearRows();
             }
             function getResetNow() {

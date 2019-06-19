@@ -74,6 +74,7 @@ public class StatisticsController {
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
         model.addAttribute("tjRqStart", DateUtils.getYear() + "01" + "01");
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
         return "/statistics/negativeSummary";
     }
 
@@ -197,7 +198,7 @@ public class StatisticsController {
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
         model.addAttribute("tjRqStart", DateUtils.getYear() + "01" + "01");
-
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
         return "/statistics/crcPositiveSummary";
     }
 
@@ -245,7 +246,7 @@ public class StatisticsController {
             exportCrcPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             exportCrcPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             exportCrcPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
-            exportCrcPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            exportCrcPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
             exportCrcPositive.setCsrq(vo.getCsrq().substring(0,10));
             return exportCrcPositive;
         }).collect(Collectors.toList());
@@ -276,6 +277,7 @@ public class StatisticsController {
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
         model.addAttribute("tjRqStart", DateUtils.getYear() + "01" + "01");
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
 
         return "/statistics/licPositiveSummary";
     }
@@ -357,7 +359,7 @@ public class StatisticsController {
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
         model.addAttribute("tjRqStart", DateUtils.getYear() + "01" + "01");
-
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
         return "/statistics/lucPositiveSummary";
     }
     @ResponseBody
@@ -404,7 +406,7 @@ public class StatisticsController {
             lucPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             lucPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             lucPositive.setZlwz(vo.getZlwz());
-            lucPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            lucPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
             lucPositive.setCsrq(vo.getCsrq().substring(0,10));
             return lucPositive;
         }).collect(Collectors.toList());
@@ -433,6 +435,7 @@ public class StatisticsController {
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
         model.addAttribute("tjRqStart", DateUtils.getYear() + "01" + "01");
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
 
         return "/statistics/scPositiveSummary";
     }
@@ -473,7 +476,7 @@ public class StatisticsController {
             scPositive.setSfqz(dic.generalName("60013",vo.getSfqz()));
             scPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             scPositive.setZlwz(vo.getZlwz());
-            scPositive.setZlqb(dic.generalName("60042",vo.getZlqb()));
+            scPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
             scPositive.setCsrq(vo.getCsrq().substring(0,10));
             return scPositive;
         }).collect(Collectors.toList());
@@ -506,6 +509,7 @@ public class StatisticsController {
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("scFlag", scFlag);
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
         return "/statistics/informationCollection";
     }
     @ResponseBody

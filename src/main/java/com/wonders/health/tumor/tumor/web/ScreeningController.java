@@ -996,7 +996,7 @@ public class ScreeningController extends BaseController {
                 }else if(crcRegcase.getCheckResult()=="2" || "2".equals(crcRegcase.getCheckResult())){
                     crcRegcase.setCheckResult("阳性");
                 }
-                screeningVo.setCrcRegcase(crcRegcase);
+
                 crccheckid=crcRegcase.getId();
                 CrcRiskAssessment crcRiskAssessment=(CrcRiskAssessment)crcRiskAssessmentService.getByCheckid(crcRiskAssessmentDao,crccheckid);
                 if(crcRiskAssessment!=null){
@@ -1007,7 +1007,12 @@ public class ScreeningController extends BaseController {
                     }
                     screeningVo.setCrcRisk(crcRiskAssessment);
                 }
+            }else{
+                crcRegcase=new CrcRegcase();
+                CrcRiskAssessment crcRiskAssessment=new CrcRiskAssessment();
+                screeningVo.setCrcRisk(crcRiskAssessment);
             }
+            screeningVo.setCrcRegcase(crcRegcase);
         }
 
         //肝癌
@@ -1019,7 +1024,6 @@ public class ScreeningController extends BaseController {
                 }else if(licRegcase.getCheckResult()=="2" || "2".equals(licRegcase.getCheckResult())){
                     licRegcase.setCheckResult("阳性");
                 }
-                screeningVo.setLicRegcase(licRegcase);
                 liccheckid=licRegcase.getId();
                 LicRiskAssessment licRiskAssessment=(LicRiskAssessment)licRiskAssessmentService.getByCheckid(licRiskAssessmentDao,liccheckid);
                 if(licRiskAssessment!=null){
@@ -1030,7 +1034,12 @@ public class ScreeningController extends BaseController {
                     }
                     screeningVo.setLicRisk(licRiskAssessment);
                 }
+            }else{
+                licRegcase=new LicRegcase();
+                LicRiskAssessment licRiskAssessment=new LicRiskAssessment();
+                screeningVo.setLicRisk(licRiskAssessment);
             }
+            screeningVo.setLicRegcase(licRegcase);
         }
 
         //胃癌
@@ -1042,7 +1051,6 @@ public class ScreeningController extends BaseController {
                 }else if(scRegcase.getCheckResult()=="2" || "2".equals(scRegcase.getCheckResult())){
                     scRegcase.setCheckResult("阳性");
                 }
-                screeningVo.setScRegcase(scRegcase);
                 ScRiskAssessment scRiskAssessment=(ScRiskAssessment)scRiskAssessmentService.getByCheckid(scRiskAssessmentDao,scRegcase.getId());
                 if(scRiskAssessment!=null){
                     if(scRiskAssessment.getAssessmentResult()=="1" || "1".equals(scRiskAssessment.getAssessmentResult())){
@@ -1052,7 +1060,12 @@ public class ScreeningController extends BaseController {
                     }
                     screeningVo.setScRisk(scRiskAssessment);
                 }
+            }else{
+                scRegcase=new ScRegcase();
+                ScRiskAssessment scRiskAssessment=new ScRiskAssessment();
+                screeningVo.setScRisk(scRiskAssessment);
             }
+            screeningVo.setScRegcase(scRegcase);
         }
 
         //肺癌
@@ -1064,7 +1077,7 @@ public class ScreeningController extends BaseController {
                 }else if(lucRegcase.getCheckResult()=="2" || "2".equals(lucRegcase.getCheckResult())){
                     lucRegcase.setCheckResult("阳性");
                 }
-                screeningVo.setLucRegcase(lucRegcase);
+
                 LucRiskAssessment lucRiskAssessment=(LucRiskAssessment)lucRiskAssessmentService.getByCheckid(lucRiskAssessmentDao,lucRegcase.getId());
                 if(lucRiskAssessment!=null){
                     if(lucRiskAssessment.getAssessmentResult()=="1" || "1".equals(lucRiskAssessment.getAssessmentResult())){
@@ -1074,7 +1087,12 @@ public class ScreeningController extends BaseController {
                     }
                     screeningVo.setLucRisk(lucRiskAssessment);
                 }
+            }else{
+                lucRegcase=new LucRegcase();
+                LucRiskAssessment lucRiskAssessment=new LucRiskAssessment();
+                screeningVo.setLucRisk(lucRiskAssessment);
             }
+            screeningVo.setLucRegcase(lucRegcase);
         }
 
         //大肠癌便隐血检查表
@@ -1090,7 +1108,11 @@ public class ScreeningController extends BaseController {
                 }
             }
             screeningVo.setCrcFobt(crcFobt);
+        }else{
+            CrcFobt crcFobt=new CrcFobt(getSessionUser());
+            screeningVo.setCrcFobt(crcFobt);
         }
+
         if(StringUtils.isNotBlank(liccheckid)){
             //肝癌辅助检查表
             LicAssistCheck licAssistCheck=(LicAssistCheck)licAssistCheckService.getByCheckid(licAssistCheckDao,liccheckid);
@@ -1103,6 +1125,9 @@ public class ScreeningController extends BaseController {
                     licAssistCheck.setLicAssistResult("阴性");
                 }
             }
+            screeningVo.setLicCheck(licAssistCheck);
+        }else{
+            LicAssistCheck licAssistCheck=new LicAssistCheck(getSessionUser());
             screeningVo.setLicCheck(licAssistCheck);
         }
 
