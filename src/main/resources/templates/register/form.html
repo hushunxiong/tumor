@@ -2172,35 +2172,47 @@
     function makeByxResult(){
         var first=mini.get("firstFobtResult").getValue();
         var seconde=mini.get("secondFobtResult").getValue();
-        if(first=='2'){ //第一次就阳性
-            mini.get("byxResult").setValue("阳性");
-            mini.get("fobtResult").setValue("2");
-        }else{              //第一次阴性
-            if(seconde=='2'){//第二次阳性
+        if(first=='' && seconde==''){
+            mini.get("byxResult").setValue("");
+            mini.get("fobtResult").setValue("");
+        }else{
+            if(first=='2'){ //第一次就阳性
                 mini.get("byxResult").setValue("阳性");
                 mini.get("fobtResult").setValue("2");
-            } else{         //两次都阴性
-                mini.get("byxResult").setValue("阴性");
-                mini.get("fobtResult").setValue("1");
+            }else{              //第一次阴性
+                if(seconde=='2'){//第二次阳性
+                    mini.get("byxResult").setValue("阳性");
+                    mini.get("fobtResult").setValue("2");
+                } else{         //两次都阴性
+                    mini.get("byxResult").setValue("阴性");
+                    mini.get("fobtResult").setValue("1");
+                }
             }
         }
+
     }
     //肝癌辅助检查结果计算
     function makeLicResult(){
         var afp=mini.get("afp").getValue();
         var bus=mini.get("bus").getValue();
-        if(afp>20){
-            mini.get("licResult").setValue("阳性");
-            mini.get("licAssistResult").setValue("2");
+        if(afp=='' && bus==''){
+            mini.get("licResult").setValue("");
+            mini.get("licAssistResult").setValue("");
         }else{
-            if(bus=='2'){
+            if(afp>20){
                 mini.get("licResult").setValue("阳性");
                 mini.get("licAssistResult").setValue("2");
             }else{
-                mini.get("licResult").setValue("阴性");
-                mini.get("licAssistResult").setValue("1");
+                if(bus=='2'){
+                    mini.get("licResult").setValue("阳性");
+                    mini.get("licAssistResult").setValue("2");
+                }else{
+                    mini.get("licResult").setValue("阴性");
+                    mini.get("licAssistResult").setValue("1");
+                }
             }
         }
+
     }
 
     var chushaiflag=false;
