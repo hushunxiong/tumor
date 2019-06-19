@@ -149,7 +149,7 @@
 				AND d.regorg=#{orgCode}
 			</if>
 			<if test="status!=null and status!=''">
-				AND c.fobt_remind_status=#{status}
+				AND (c.fobt_remind_status=#{status} OR (e.remind_status=#{status}))
 			</if>
 			<if test="startDate!=null and startDate!=''">
 				AND c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
