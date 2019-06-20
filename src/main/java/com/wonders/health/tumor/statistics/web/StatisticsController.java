@@ -167,11 +167,11 @@ public class StatisticsController {
             negative.setXm(vo.getXm());
             negative.setXb(dic.generalName("60023",vo.getXb()));
             negative.setAddress(vo.getAddress());
-            negative.setBirthday(vo.getBirthday().substring(0,10));
+            negative.setBirthday(vo.getBirthday());
             negative.setMobile(vo.getMobile());
             negative.setTelephone(vo.getTelephone());
             negative.setRegorg(vo.getRegorg());
-            negative.setCsrq(vo.getCsrq().substring(0,10));
+            negative.setCsrq(vo.getCsrq());
             return negative;
         }).collect(Collectors.toList());
         if (datas == null || datas.size() == 0) {
@@ -235,7 +235,7 @@ public class StatisticsController {
             ExportCrcPositive exportCrcPositive = new ExportCrcPositive();
             exportCrcPositive.setXm(vo.getXm());
             exportCrcPositive.setXb(dic.generalName("60023",vo.getXb()));
-            exportCrcPositive.setBirthday(vo.getBirthday().substring(0,10));
+            exportCrcPositive.setBirthday(vo.getBirthday());
             exportCrcPositive.setAddress(vo.getAddress());
             exportCrcPositive.setMobile(vo.getMobile());
             exportCrcPositive.setTelephone(vo.getTelephone());
@@ -247,7 +247,7 @@ public class StatisticsController {
             exportCrcPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             exportCrcPositive.setZlwz(dic.generalName("60031",vo.getZlwz()));
             exportCrcPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
-            exportCrcPositive.setCsrq(vo.getCsrq().substring(0,10));
+            exportCrcPositive.setCsrq(vo.getCsrq());
             return exportCrcPositive;
         }).collect(Collectors.toList());
         if (datas == null || datas.size() == 0) {
@@ -314,7 +314,7 @@ public class StatisticsController {
             ExportLicPositive licPositive = new ExportLicPositive();
             licPositive.setXm(vo.getXm());
             licPositive.setXb(dic.generalName("60023",vo.getXb()));
-            licPositive.setBirthday(vo.getBirthday().substring(0,10));
+            licPositive.setBirthday(vo.getBirthday());
             licPositive.setAddress(vo.getAddress());
             licPositive.setMobile(vo.getMobile());
             licPositive.setTelephone(vo.getTelephone());
@@ -328,7 +328,7 @@ public class StatisticsController {
             licPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             licPositive.setZlwz(vo.getZlwz());
             licPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
-            licPositive.setCsrq(vo.getCsrq().substring(0,10));
+            licPositive.setCsrq(vo.getCsrq());
             return licPositive;
         }).collect(Collectors.toList());
         if (datas == null || datas.size() == 0) {
@@ -395,7 +395,7 @@ public class StatisticsController {
             ExportLucPositive lucPositive = new ExportLucPositive();
             lucPositive.setXm(vo.getXm());
             lucPositive.setXb(dic.generalName("60023",vo.getXb()));
-            lucPositive.setBirthday(vo.getBirthday().substring(0,10));
+            lucPositive.setBirthday(vo.getBirthday());
             lucPositive.setAddress(vo.getAddress());
             lucPositive.setMobile(vo.getMobile());
             lucPositive.setTelephone(vo.getTelephone());
@@ -407,7 +407,7 @@ public class StatisticsController {
             lucPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             lucPositive.setZlwz(vo.getZlwz());
             lucPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
-            lucPositive.setCsrq(vo.getCsrq().substring(0,10));
+            lucPositive.setCsrq(vo.getCsrq());
             return lucPositive;
         }).collect(Collectors.toList());
         if (datas == null || datas.size() == 0) {
@@ -465,7 +465,7 @@ public class StatisticsController {
             ExportScPositive scPositive = new ExportScPositive();
             scPositive.setXm(vo.getXm());
             scPositive.setXb(dic.generalName("60023",vo.getXb()));
-            scPositive.setBirthday(vo.getBirthday().substring(0,10));
+            scPositive.setBirthday(vo.getBirthday());
             scPositive.setAddress(vo.getAddress());
             scPositive.setMobile(vo.getMobile());
             scPositive.setTelephone(vo.getTelephone());
@@ -477,7 +477,7 @@ public class StatisticsController {
             scPositive.setSfzl(dic.generalName("60013",vo.getSfzl()));
             scPositive.setZlwz(vo.getZlwz());
             scPositive.setZlqb(dic.generalName("60051",vo.getZlqb()));
-            scPositive.setCsrq(vo.getCsrq().substring(0,10));
+            scPositive.setCsrq(vo.getCsrq());
             return scPositive;
         }).collect(Collectors.toList());
         if (datas == null || datas.size() == 0) {
@@ -559,7 +559,7 @@ public class StatisticsController {
             diagnoseMessage.setSfbl(dic.generalName("60013", vo.getSfbl()));//是否病理
             diagnoseMessage.setBllx(vo.getBllx());
             diagnoseMessage.setTNMfq(vo.getTNMfq().replaceAll("null",""));
-            diagnoseMessage.setSfrq(vo.getSfrq().substring(0,10));
+            diagnoseMessage.setSfrq(vo.getSfrq());
             return diagnoseMessage;
         }).collect(Collectors.toList());
         if (datas == null || datas.size() == 0) {
