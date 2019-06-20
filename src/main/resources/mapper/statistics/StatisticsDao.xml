@@ -7,7 +7,7 @@
         select
         info.NAME AS xm,
         info.gender AS xb,
-        info.birth AS birthday,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
         info.address_province AS addressProvince,
         info.address_city AS addressCity,
         info.address_county AS addressCounty,
@@ -28,7 +28,7 @@
             SELECT
             crc.MANAGEID as manageid,
             crc.regorg AS regorg,
-            crc.regdate AS csrq
+            to_char(crc.regdate,'yyyy-MM-dd')AS csrq
             FROM
             CRC_REGCASE crc
             where
@@ -54,7 +54,7 @@
             SELECT
             lic.MANAGEID as manageid,
             lic.regorg AS regorg,
-            lic.regdate AS csrq
+            to_char(lic.regdate,'yyyy-MM-dd')AS csrq
             FROM
             LIC_REGCASE lic
             where
@@ -80,7 +80,7 @@
             SELECT
             luc.MANAGEID as manageid,
             luc.regorg AS regorg,
-            luc.regdate AS csrq
+            to_char(luc.regdate,'yyyy-MM-dd') AS csrq
             FROM
             LUC_REGCASE luc
             where
@@ -107,7 +107,7 @@
             SELECT
             sc.MANAGEID as manageid,
             sc.regorg AS regorg,
-            sc.regdate AS csrq
+            to_char(sc.regdate,'yyyy-MM-dd') AS csrq
             FROM
             SC_REGCASE sc
             where
@@ -215,7 +215,7 @@
         SELECT
         info.NAME AS xm,
         info.gender AS xb,
-        info.birth AS birthday,
+        to_char(info.birth,'yyyy-MM-dd')AS birthday,
         info.address_province as addressProvince,
         info.address_city as addressCity,
         info.address_county as addressCounty,
@@ -232,7 +232,7 @@
         info.mobile as mobile,
         info.telephone,
         crc.regorg as regorg,
-        crc.regdate as csrq
+        to_char(crc.regdate,'yyyy-MM-dd')AS csrq
         <include refid="pageFromAndWhereCrcPositive"/>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
@@ -297,7 +297,7 @@
         SELECT
         info.NAME AS xm,
         info.gender AS xb,
-        info.birth AS birthday,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
         info.address_province AS addressProvince,
         info.address_city AS addressCity,
         info.address_county AS addressCounty,
@@ -316,7 +316,7 @@
         licfo.SHIFOUZHILIAO AS sfzl,
         licfo.ZHONGLIUWEIZH AS zlwz,
         licfo.linchuangfenqi AS zlqb,
-        lic.REGDATE AS csrq
+        to_char(lic.REGDATE,'yyyy-MM-dd')AS csrq
         <include refid="pageFromAndWhereLicPositive"/>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
@@ -380,7 +380,7 @@
         SELECT
         info.NAME AS xm,
         info.gender AS xb,
-        info.birth AS birthday,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
         info.address_province AS addressProvince,
         info.address_city AS addressCity,
         info.address_county AS addressCounty,
@@ -397,7 +397,7 @@
         lucfo.SHIFOUZHILIAO AS sfzl,
         lucfo.ZHONGLIUWEIZH AS zlwz,
         lucfo.linchuangfenqi AS zlqb,
-        luc.REGDATE AS csrq
+        to_char(luc.REGDATE,'yyyy-MM-dd') AS csrq
         <include refid="pageFromAndWhereLucPositive"/>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
@@ -461,7 +461,7 @@
         SELECT
         info.NAME AS xm,
         info.gender AS xb,
-        info.birth AS birthday,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
         info.address_province AS addressProvince,
         info.address_city AS addressCity,
         info.address_county AS addressCounty,
@@ -478,7 +478,7 @@
         scfo.SHIFOUZHILIAO AS sfzl,
         scfo.ZHONGLIUWEIZH AS zlwz,
         scfo.linchuangfenqi AS zlqb,
-        sc.REGDATE AS csrq
+        to_char(sc.REGDATE,'yyyy-MM-dd') AS csrq
         <include refid="pageFromAndWhereScPositive"/>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
@@ -537,7 +537,7 @@
             crcfo.ZHONGLIUTNM_T,
             crcfo.ZHONGLIUTNM_N,
             crcfo.ZHONGLIUTNM_M,
-            crcfo.SUIFANG_DATE AS sfrq
+            to_char(crcfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
             crc_regcase crc
             LEFT JOIN CRC_FOLLOW crcfo ON crc.ID = crcfo.CRC_CHECK_ID
@@ -547,10 +547,10 @@
             crc.del_flag = 0
             and crcfo.del_flag = 0
             <if test="csrqStart !=null">
-                and crc.regdate >=#{csrqStart}
+                and crcfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and crc.regdate &lt;=#{csrqEnd}+1
+                and crcfo.suifang_date &lt;=#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and crc.region_code=#{regarea}
@@ -576,7 +576,7 @@
             licfo.ZHONGLIUTNM_T,
             licfo.ZHONGLIUTNM_N,
             licfo.ZHONGLIUTNM_M,
-            licfo.SUIFANG_DATE AS sfrq
+            to_char(licfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
             lic_regcase lic
             LEFT JOIN lic_FOLLOW licfo ON lic.ID = licfo.LIC_CHECK_ID
@@ -584,10 +584,10 @@
             lic.del_flag = 0
             and licfo.del_flag = 0
             <if test="csrqStart !=null">
-                and lic.regdate >=#{csrqStart}
+                and licfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and lic.regdate &lt;=#{csrqEnd}+1
+                and licfo.suifang_date &lt;=#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and lic.region_code=#{regarea}
@@ -614,7 +614,7 @@
             lucfo.ZHONGLIUTNM_T,
             lucfo.ZHONGLIUTNM_N,
             lucfo.ZHONGLIUTNM_M,
-            lucfo.SUIFANG_DATE AS sfrq
+            to_char(lucfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
             luc_regcase luc
             LEFT JOIN luc_FOLLOW lucfo ON luc.ID = lucfo.luc_CHECK_ID
@@ -622,10 +622,10 @@
             luc.del_flag = 0
             and lucfo.del_flag = 0
             <if test="csrqStart !=null">
-                and luc.regdate >=#{csrqStart}
+                and lucfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and luc.regdate &lt;=#{csrqEnd}+1
+                and lucfo.suifang_date &lt;=#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and luc.region_code=#{regarea}
@@ -653,7 +653,7 @@
             scfo.ZHONGLIUTNM_T,
             scfo.ZHONGLIUTNM_N,
             scfo.ZHONGLIUTNM_M,
-            scfo.SUIFANG_DATE AS sfrq
+            to_char(scfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
             sc_regcase sc
             LEFT JOIN sc_FOLLOW scfo ON sc.ID = scfo.sc_CHECK_ID
@@ -661,10 +661,10 @@
             sc.del_flag = 0
             and scfo.del_flag = 0
             <if test="csrqStart !=null">
-                and sc.regdate >=#{csrqStart}
+                and scfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and sc.regdate &lt;=#{csrqEnd}+1
+                and scfo.suifang_date &lt;=#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and sc.region_code=#{regarea}

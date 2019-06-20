@@ -152,7 +152,7 @@ public class StatisticsService {
      * @return
      */
     public DataGrid<ScPositiveSummaryVo> getScPositive(SummarySearchVo searchVo) {
-        int count = statisticsDao.pageCountLucPositive(searchVo);
+        int count = statisticsDao.pageCountScPositive(searchVo);
         List<ScPositiveSummaryVo> scVoList =null;
         if (count>0) {
              scVoList = statisticsDao.getScPositive(searchVo);
