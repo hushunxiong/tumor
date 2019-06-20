@@ -47,10 +47,11 @@ public class BusRemindService {
     }
 
 
-    public  DataGrid<BusRemindResultVo>getCrcFobtRemind(String personcard) {
+    public  DataGrid<BusRemindResultVo>getCrcFobtRemind(String personcard,String status) {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
-        List<BusRemindResultVo> list = busRemindDao.getCrcFobtRemind(personcard);
+        List<BusRemindResultVo> list = new ArrayList<>();
+        list= busRemindDao.getCrcFobtRemind(personcard, status);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getFobtR()!=null){
                 String remindType1=bus.getFobtR().getFirstFobtRemindType();
@@ -86,10 +87,11 @@ public class BusRemindService {
         return new DataGrid<BusRemindResultVo>(list.size(),list);
     }
 
-    public  DataGrid<BusRemindResultVo>getCrcDiag(String personcard,String crcFlag) {
+    public  DataGrid<BusRemindResultVo>getCrcDiag(String personcard,String status,String crcFlag) {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
-        List<BusRemindResultVo> list = busRemindDao.getCrcDiag(personcard,crcFlag,null,null,null);
+        List<BusRemindResultVo> list = new ArrayList<>();
+        list= busRemindDao.getCrcDiag(personcard, status,crcFlag,null,null,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getCrcDiag()!=null){
                 String remindType1=bus.getCrcDiag().getFirstRemindType();
@@ -121,45 +123,62 @@ public class BusRemindService {
         return new DataGrid<BusRemindResultVo>(list.size(),list);
     }
 
-    public  DataGrid<BusRemindResultVo>getLicDiag(String personcard,String licFlag) {
+    public  DataGrid<BusRemindResultVo>getLicDiag(String personcard,String status,String licFlag) {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
-        List<BusRemindResultVo> list = busRemindDao.getLicDiag(personcard,null,licFlag,null,null);
-        list.stream().forEach(bus->{
-            if(bus!=null && bus.getLicDiag()!=null){
-                String remindType1=bus.getLicDiag().getFirstRemindType();
-                if(StringUtils.isNotBlank(remindType1)){
-                    if(generalForMap.containsKey(remindType1)){
-                        bus.getLicDiag().setFirstRemindType(generalForMap.get(remindType1).getName()+ DateUtils.formatDate(bus.getLicDiag().getFirstRemindDate()));
+        List<BusRemindResultVo> list = new ArrayList<>();
+
+        list= busRemindDao.getLicDiag(personcard, status,null,licFlag,null,null);
+
+        BusRemindResultVo bb=new BusRemindResultVo();
+        LicDiagCheckRemind li=new LicDiagCheckRemind();
+        bb.setLicDiag(li);
+        LicRegcase lr=new LicRegcase();
+        bb.setLicRegcase(lr);
+
+        if(list.size()==0){
+            list.add(bb);
+        }else if(list.get(0)==null){
+            list.add(bb);
+        }else{
+            list.stream().forEach(bus->{
+                if(bus!=null && bus.getLicDiag()!=null){
+                    String remindType1=bus.getLicDiag().getFirstRemindType();
+                    if(StringUtils.isNotBlank(remindType1)){
+                        if(generalForMap.containsKey(remindType1)){
+                            bus.getLicDiag().setFirstRemindType(generalForMap.get(remindType1).getName()+ DateUtils.formatDate(bus.getLicDiag().getFirstRemindDate()));
+                        }
+                    }
+                    String remindType2=bus.getLicDiag().getSecondRemindType();
+                    if(StringUtils.isNotBlank(remindType2)){
+                        if(generalForMap.containsKey(remindType2)){
+                            bus.getLicDiag().setSecondRemindType(generalForMap.get(remindType2).getName()+ DateUtils.formatDate(bus.getLicDiag().getSecondRemindDate()));
+                        }
+                    }
+                    String remindType3=bus.getLicDiag().getThirdRemindType();
+                    if(StringUtils.isNotBlank(remindType3)){
+                        if(generalForMap.containsKey(remindType3)){
+                            bus.getLicDiag().setThirdRemindType(generalForMap.get(remindType3).getName()+ DateUtils.formatDate(bus.getLicDiag().getThirdRemindDate()));
+                        }
                     }
                 }
-                String remindType2=bus.getLicDiag().getSecondRemindType();
-                if(StringUtils.isNotBlank(remindType2)){
-                    if(generalForMap.containsKey(remindType2)){
-                        bus.getLicDiag().setSecondRemindType(generalForMap.get(remindType2).getName()+ DateUtils.formatDate(bus.getLicDiag().getSecondRemindDate()));
+                if(bus!=null && bus.getLicRegcase()!=null){
+                    Map<String, CancerDic> map=DictUtils.generalForMap("60001");
+                    if(StringUtils.isNotBlank(bus.getLicRegcase().getCheckResult())){
+                        bus.getLicRegcase().setCheckResult(map.get(bus.getLicRegcase().getCheckResult()).getName());
                     }
                 }
-                String remindType3=bus.getLicDiag().getThirdRemindType();
-                if(StringUtils.isNotBlank(remindType3)){
-                    if(generalForMap.containsKey(remindType3)){
-                        bus.getLicDiag().setThirdRemindType(generalForMap.get(remindType3).getName()+ DateUtils.formatDate(bus.getLicDiag().getThirdRemindDate()));
-                    }
-                }
-            }
-            if(bus!=null && bus.getLicRegcase()!=null){
-                Map<String, CancerDic> map=DictUtils.generalForMap("60001");
-                if(StringUtils.isNotBlank(bus.getLicRegcase().getCheckResult())){
-                    bus.getLicRegcase().setCheckResult(map.get(bus.getLicRegcase().getCheckResult()).getName());
-                }
-            }
-        });
+            });
+        }
+
         return new DataGrid<BusRemindResultVo>(list.size(),list);
     }
 
-    public  DataGrid<BusRemindResultVo>getLucDiag(String personcard,String lucFlag) {
+    public  DataGrid<BusRemindResultVo>getLucDiag(String personcard,String status,String lucFlag) {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
-        List<BusRemindResultVo> list = busRemindDao.getLucDiag(personcard,null,null,null,lucFlag);
+        List<BusRemindResultVo> list= new ArrayList<>();
+        list=busRemindDao.getLucDiag(personcard,status,null,null,null,lucFlag);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getLucDiag()!=null){
                 String remindType1=bus.getLucDiag().getFirstRemindType();
@@ -191,10 +210,11 @@ public class BusRemindService {
         return new DataGrid<BusRemindResultVo>(list.size(),list);
     }
 
-    public  DataGrid<BusRemindResultVo>getScDiag(String personcard,String scFlag) {
+    public  DataGrid<BusRemindResultVo>getScDiag(String personcard,String status,String scFlag) {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
-        List<BusRemindResultVo> list = busRemindDao.getScDiag(personcard,null,null,scFlag,null);
+        List<BusRemindResultVo> list = new ArrayList<>();
+        list=busRemindDao.getScDiag(personcard, status,null,null,scFlag,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getScDiag()!=null){
                 String remindType1=bus.getScDiag().getFirstRemindType();

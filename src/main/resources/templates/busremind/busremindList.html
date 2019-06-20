@@ -220,6 +220,32 @@
         var scGrid=mini.get("scGrid");
         var lucGrid=mini.get("lucGrid");
 
+
+        var grid = e.sender;
+        var row = e.record;
+        var td = grid.getRowDetailCellEl(row);
+        td.appendChild(detailGridForm);
+        detailGridForm.style.display = "block";
+        var data = {};
+        data['personcard'] = row.personcard;
+        data['status']= mini.get("status").getValue();
+
+        if(type=="01"){
+            crcgrid1.load(data,gridLoadSuccess1);
+        }else if(type=="02"){
+            crcgrid2.load(data,gridLoadSuccess2);
+            licGrid.load(data,gridLoadSuccess3);
+            scGrid.load(data,gridLoadSuccess4);
+            lucGrid.load(data,gridLoadSuccess5);
+        }else{
+            crcgrid1.load(data,gridLoadSuccess1);
+            crcgrid2.load(data,gridLoadSuccess2);
+            licGrid.load(data,gridLoadSuccess3);
+            scGrid.load(data,gridLoadSuccess4);
+            lucGrid.load(data,gridLoadSuccess5);
+        }
+
+
         var type= mini.get("type").getValue();
         if(type=="01"){
             crcgrid1.show();
@@ -241,27 +267,173 @@
             lucGrid.show();
         }
 
-        var grid = e.sender;
-        var row = e.record;
-        var td = grid.getRowDetailCellEl(row);
-        td.appendChild(detailGridForm);
-        detailGridForm.style.display = "block";
-        var data = {};
-        data['personcard'] = row.personcard;
+    }
 
-        if(type=="01"){
-            crcgrid1.load(data,gridLoadSuccess,gridLoadError);
-        }else if(type=="02"){
-            crcgrid2.load(data,gridLoadSuccess,gridLoadError);
-            licGrid.load(data,gridLoadSuccess,gridLoadError);
-            scGrid.load(data,gridLoadSuccess,gridLoadError);
-            lucGrid.load(data,gridLoadSuccess,gridLoadError);
-        }else{
-            crcgrid1.load(data,gridLoadSuccess,gridLoadError);
-            crcgrid2.load(data,gridLoadSuccess,gridLoadError);
-            licGrid.load(data,gridLoadSuccess,gridLoadError);
-            scGrid.load(data,gridLoadSuccess,gridLoadError);
-            lucGrid.load(data,gridLoadSuccess,gridLoadError);
+
+    //大肠癌便隐血加载完成事件
+    function gridLoadSuccess1(sender) {
+        var crcgrid1=mini.get("crcGrid1");
+        var type= mini.get("type").getValue();
+        try {
+            if (sender.data.length == 0) {
+                var result = $.parseJSON(sender.text);
+                if (result.ok == false && result.msg == "登录超时") {
+                    window.location.href = app_ctx + "/login";
+                }else{  //没数据的便隐血
+                    if(type=="01"){
+                        crcgrid1.hide();
+                    }else if(type=="02"){
+                        crcgrid1.hide();
+                    }else{
+                        crcgrid1.hide();
+                    }
+                }
+            }else{
+                if(type=="01"){
+                    crcgrid1.show();
+                }else if(type=="02"){
+                    crcgrid1.hide();
+                }else{
+                    crcgrid1.show();
+                }
+
+            }
+        } catch (e) {
+
+        }
+    }
+    //大肠癌提醒加载完成事件
+    function gridLoadSuccess2(sender) {
+        var crcgrid2=mini.get("crcGrid2");
+        var type= mini.get("type").getValue();
+        try {
+            if (sender.data.length == 0) {
+                var result = $.parseJSON(sender.text);
+                if (result.ok == false && result.msg == "登录超时") {
+                    window.location.href = app_ctx + "/login";
+                }else{
+                    if(type=="01"){
+                        crcgrid2.hide();
+                    }else if(type=="02"){
+                        crcgrid2.hide();
+                    }else{
+                        crcgrid2.hide();
+                    }
+                }
+            }else{
+                //事实上除了未做crccase以外其他情况都不会走上面的if
+                if(sender.data[0].crcDiag.id==null){
+                    crcgrid2.hide();
+                }else{
+                    if(type=="01"){
+                        crcgrid2.hide();
+                    }else if(type=="02"){
+                        crcgrid2.show();
+                    }else{
+                        crcgrid2.show();
+                    }
+                }
+
+            }
+        } catch (e) {
+        }
+    }
+
+    //肝癌提醒加载完成事件
+    function gridLoadSuccess3(sender) {
+        var licGrid=mini.get("licGrid");
+        var type= mini.get("type").getValue();
+        try {
+            if (sender.data.length == 0) {
+                var result = $.parseJSON(sender.text);
+                if (result.ok == false && result.msg == "登录超时") {
+                    window.location.href = app_ctx + "/login";
+                }else{
+                    if(type=="01"){
+                        licGrid.hide();
+                    }else if(type=="02"){
+                        licGrid.show();
+                    }else{
+                        licGrid.show();
+                    }
+                }
+            }else{
+                //事实上除了未做regcase以外其他情况都不会走上面的if
+                if(sender.data[0].licDiag.id==null){
+                    licGrid.hide();
+                }else{
+                    if(type=="01"){
+                        licGrid.hide();
+                    }else if(type=="02"){
+                        licGrid.show();
+                    }else{
+                        licGrid.show();
+                    }
+                }
+            }
+        } catch (e) {
+        }
+    }
+
+    //胃癌提醒加载完成事件
+    function gridLoadSuccess4(sender) {
+        var scGrid=mini.get("scGrid");
+        var type= mini.get("type").getValue();
+        try {
+            if (sender.data.length == 0) {
+                var result = $.parseJSON(sender.text);
+                if (result.ok == false && result.msg == "登录超时") {
+                    window.location.href = app_ctx + "/login";
+                }else{
+                    scGrid.hide();
+                }
+            }else{
+                //事实上除了未做scgcase以外其他情况都不会走上面的if
+                if(sender.data[0].scDiag.id==null){
+                    scGrid.hide();
+                }else{
+                    if(type=="01"){
+                        scGrid.hide();
+                    }else if(type=="02"){
+                        scGrid.show();
+                    }else{
+                        scGrid.show();
+                    }
+                }
+
+            }
+        } catch (e) {
+        }
+    }
+
+    //肺癌提醒加载完成事件
+    function gridLoadSuccess5(sender) {
+        var lucGrid=mini.get("lucGrid");
+        var type= mini.get("type").getValue();
+        try {
+            if (sender.data.length == 0) {
+                var result = $.parseJSON(sender.text);
+                if (result.ok == false && result.msg == "登录超时") {
+                    window.location.href = app_ctx + "/login";
+                }else{
+                    lucGrid.hide();
+                }
+            }else{
+                //事实上除了未做lucregcase以外其他情况都不会走上面的if
+                if(sender.data[0].lucDiag.id==null){
+                    lucGrid.hide();
+                }else{
+                    if(type=="01"){
+                        lucGrid.hide();
+                    }else if(type=="02"){
+                        lucGrid.show();
+                    }else{
+                        lucGrid.show();
+                    }
+                }
+
+            }
+        } catch (e) {
         }
     }
 

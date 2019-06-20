@@ -148,9 +148,24 @@
 			<if test="orgCode!=null and orgCode!=''">
 				AND d.regorg=#{orgCode}
 			</if>
-			<if test="status!=null and status!=''">
-				AND (c.fobt_remind_status=#{status} OR (e.remind_status=#{status}))
+
+			<if test="remindType == '01'.toString()">
+				<if test="status!=null and status!=''">
+					AND c.fobt_remind_status=#{status}
+				</if>
 			</if>
+			<if test="remindType == '02'.toString()">
+				<if test="status!=null and status!=''">
+					AND e.remind_status=#{status}
+				</if>
+			</if>
+
+			<if test="remindType == '' or remindType==null">
+				<if test="status!=null and status!=''">
+					AND (c.fobt_remind_status=#{status} or e.remind_status=#{status})
+				</if>
+			</if>
+
 			<if test="startDate!=null and startDate!=''">
 				AND c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
 				AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
@@ -163,7 +178,11 @@
 	</sql>
 
 	<sql id="pageWhereOther">
+		<if test="crcFlag!='' and crcFlag!=null">
+			AND d.check_result='2'
+		</if>
 		<if test="licFlag!='' and licFlag!=null">
+			AND f.check_result='2'
 			<if test="year!=null and year!=''">
 				AND f.check_year=#{year}
 			</if>
@@ -180,6 +199,7 @@
 		</if>
 
 		<if test="scFlag!='' and scFlag!=null">
+			AND h.check_result='2'
 			<if test="year!=null and year!=''">
 				AND h.check_year=#{year}
 			</if>
@@ -196,6 +216,7 @@
 		</if>
 
 		<if test="lucFlag!='' and lucFlag!=null">
+			AND j.check_result='2'
 			<if test="year!=null and year!=''">
 				AND j.check_year=#{year}
 			</if>
@@ -315,6 +336,9 @@
 		<include refid="pageFromCrcfobt"/>
 		WHERE
 			a.personcard=#{personcard}
+		<if test="status!=null and status!=''">
+			AND c.fobt_remind_status=#{status}
+		</if>
 	</select>
 
 	<select id="getCrcDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
@@ -325,6 +349,10 @@
 		<include refid="pageFromOther"/>
 		WHERE
 		a.personcard=#{personcard}
+		AND d.check_result='2'
+		<if test="status!=null and status!=''">
+			AND	e.remind_status=#{status}
+		</if>
 	</select>
 
 	<select id="getLicDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
@@ -335,6 +363,10 @@
 		<include refid="pageFromOther"/>
 		WHERE
 		a.personcard=#{personcard}
+		AND f.check_result='2'
+		<if test="status!=null and status!=''">
+			AND	g.remind_status=#{status}
+		</if>
 	</select>
 
 	<select id="getScDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
@@ -345,6 +377,10 @@
 		<include refid="pageFromOther"/>
 		WHERE
 		a.personcard=#{personcard}
+		AND h.check_result='2'
+		<if test="status!=null and status!=''">
+			AND	i.remind_status=#{status}
+		</if>
 	</select>
 
 	<select id="getLucDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
@@ -355,6 +391,10 @@
 		<include refid="pageFromOther"/>
 		WHERE
 		a.personcard=#{personcard}
+		AND j.check_result='2'
+		<if test="status!=null and status!=''">
+			AND	k.remind_status=#{status}
+		</if>
 	</select>
 
 
