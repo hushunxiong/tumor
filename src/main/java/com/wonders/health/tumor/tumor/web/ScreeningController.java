@@ -501,8 +501,8 @@ public class ScreeningController extends BaseController {
 
             CrcRiskAssessment crcrisk=screeningVo.getCrcRisk();
             if(crcrisk!=null && !checkObjAllFieldsIsNull(crcrisk)){
-                crcrisk.setAssessmentDocName(AuthUtils.getUserById(crcrisk.getAssessmentDoc()).getName());
-
+                crcrisk.setAssessmentDoc(screeningVo.getPersonInfo().getRegdoc());
+                crcrisk.setAssessmentDocName(AuthUtils.getUserById(screeningVo.getPersonInfo().getRegdoc()).getName());
                 if(crcrisk.getAssessmentResult()=="阴性" || "阴性".equals(crcrisk.getAssessmentResult())){
                     crcrisk.setAssessmentResult("1");
                 }else  if(crcrisk.getAssessmentResult()=="阳性" || "阳性".equals(crcrisk.getAssessmentResult())){
@@ -516,6 +516,7 @@ public class ScreeningController extends BaseController {
                     crcrisk.setCrcCheckId(crcRegcase.getId());
                     crcrisk.setRiskQualityFlag("1");
                     crcrisk.setCreateBy(user.getId());
+                    crcrisk.setAssessmentDate(new Date());
                     crcrisk.init();
                     crcRiskAssessmentService.insert(crcRiskAssessmentDao,crcrisk);
                 }
@@ -569,7 +570,8 @@ public class ScreeningController extends BaseController {
             }
             LicRiskAssessment licrisk=screeningVo.getLicRisk();
             if(licrisk!=null && !checkObjAllFieldsIsNull(licrisk)){
-                licrisk.setAssessmentDocName(AuthUtils.getUserById(licrisk.getAssessmentDoc()).getName());
+                licrisk.setAssessmentDoc(screeningVo.getPersonInfo().getRegdoc());
+                licrisk.setAssessmentDocName(AuthUtils.getUserById(screeningVo.getPersonInfo().getRegdoc()).getName());
                 if(licrisk.getAssessmentResult()=="阴性" || "阴性".equals(licrisk.getAssessmentResult())){
                     licrisk.setAssessmentResult("1");
                 }else  if(licrisk.getAssessmentResult()=="阳性" || "阳性".equals(licrisk.getAssessmentResult())){
@@ -582,6 +584,7 @@ public class ScreeningController extends BaseController {
                     licrisk.setLicCheckId(licRegcase.getId());
                     licrisk.setRiskQualityFlag("1");
                     licrisk.setCreateBy(user.getId());
+                    licrisk.setAssessmentDate(new Date());
                     licrisk.init();
                     licRiskAssessmentService.insert(licRiskAssessmentDao,licrisk);
                 }
@@ -633,7 +636,9 @@ public class ScreeningController extends BaseController {
             }
             LucRiskAssessment lucrisk=screeningVo.getLucRisk();
             if(lucrisk!=null  && !checkObjAllFieldsIsNull(lucrisk)){
-                lucrisk.setAssessmentDocName(AuthUtils.getUserById(lucrisk.getAssessmentDoc()).getName());
+                lucrisk.setAssessmentDoc(screeningVo.getPersonInfo().getRegdoc());
+                lucrisk.setAssessmentDocName(AuthUtils.getUserById(screeningVo.getPersonInfo().getRegdoc()).getName());
+
                 if(lucrisk.getAssessmentResult()=="阴性" || "阴性".equals(lucrisk.getAssessmentResult())){
                     lucrisk.setAssessmentResult("1");
                 }else  if(lucrisk.getAssessmentResult()=="阳性" || "阳性".equals(lucrisk.getAssessmentResult())){
@@ -646,6 +651,7 @@ public class ScreeningController extends BaseController {
                     lucrisk.setLucCheckId(lucRegcase.getId());
                     lucrisk.setRiskQualityFlag("1");
                     lucrisk.setCreateBy(user.getId());
+                    lucrisk.setAssessmentDate(new Date());
                     lucrisk.init();
                     lucRiskAssessmentService.insert(lucRiskAssessmentDao,lucrisk);
                 }
@@ -700,7 +706,9 @@ public class ScreeningController extends BaseController {
 
             ScRiskAssessment scrisk=screeningVo.getScRisk();
             if(scrisk!=null && !checkObjAllFieldsIsNull(scrisk)){
-                scrisk.setAssessmentDocName(AuthUtils.getUserById(scrisk.getAssessmentDoc()).getName());
+                scrisk.setAssessmentDoc(screeningVo.getPersonInfo().getRegdoc());
+                scrisk.setAssessmentDocName(AuthUtils.getUserById(screeningVo.getPersonInfo().getRegdoc()).getName());
+
                 if(scrisk.getAssessmentResult()=="阴性" || "阴性".equals(scrisk.getAssessmentResult())){
                     scrisk.setAssessmentResult("1");
                 }else  if(scrisk.getAssessmentResult()=="阳性" || "阳性".equals(scrisk.getAssessmentResult())){
@@ -713,6 +721,7 @@ public class ScreeningController extends BaseController {
                     scrisk.setScCheckId(scRegcase.getId());
                     scrisk.setRiskQualityFlag("1");
                     scrisk.setCreateBy(user.getId());
+                    scrisk.setAssessmentDate(new Date());
                     scrisk.init();
                     scRiskAssessmentService.insert(scRiskAssessmentDao,screeningVo.getScRisk());
                 }
@@ -765,25 +774,16 @@ public class ScreeningController extends BaseController {
 
                     if(StringUtils.isNotBlank(crcFobt.getFirstFobtResult())&&(StringUtils.isNotBlank(crcFobt.getSecondFobtResult()))){ //两次都做
                         if("2".equals(crcFobt.getFobtResult())){//若大肠癌初筛结果为阳性  大肠癌诊断结果提醒表插入数据
-                            if(crcCheckRemind==null || StringUtils.isBlank(crcCheckRemind.getId())){//修改：提醒表中无记录  其实新增的时候也没有
-                                CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
-                                cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
-                                cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                                cdcr.setCreateDate(new Date());
-                                cdcr.setRemindStatus("01");
-                                cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
-                                cdcr.init();
-                                crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
-                            }else if(StringUtils.isBlank(fobtRemind.getId())){  //新增
-                                CrcDiagCheckRemind cdcr=new CrcDiagCheckRemind();
-                                cdcr.setCrcCheckId(screeningVo.getCrcRegcase().getId());
-                                cdcr.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
-                                cdcr.setCreateDate(new Date());
-                                cdcr.setRemindStatus("01");
-                                cdcr.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
-                                cdcr.init();
-                                crcDiagCheckRemindService.saveOrUpdate(cdcr,user.getId());
+                            if(crcCheckRemind==null || StringUtils.isBlank(crcCheckRemind.getId())){
+                                crcCheckRemind=new CrcDiagCheckRemind();
+                                crcCheckRemind.setCrcCheckId(screeningVo.getCrcRegcase().getId());
+                                crcCheckRemind.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
+                                crcCheckRemind.setCreateDate(new Date());
                             }
+                            crcCheckRemind.setRemindStatus("01");
+                            crcCheckRemind.setPerRemindDate(DateUtils.parseDate(DateUtils.beforNumberDay(new Date(),30)));
+                            crcCheckRemind.init();
+                            crcDiagCheckRemindService.saveOrUpdate(crcCheckRemind,user.getId());
                         }
                         fobtRemind.setFobtRemindStatus("02");
                         crcFobtRemindService.saveOrUpdate(fobtRemind,user.getId());  //提醒表插入数据
