@@ -902,12 +902,15 @@ public class ScreeningOutController extends BaseController {
     public ModelAndView printSuggest1(Model model, String name, String aizhengs, String byx, String gtp, String hbs, String afp, String bus,String ysgh,String yljg){
         User user = authService.findUserByOrgCodeAndJobNo(yljg, ysgh);
 
-        ModelAndView mav = new ModelAndView("/api/printSuggest");
+        ModelAndView mav = new ModelAndView("/api/printSuggestPage");
         model.addAttribute("name",name);
         model.addAttribute("byx",byx);
         model.addAttribute("gtp",gtp);
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
+        model.addAttribute("year",LocalDate.now().getYear());
+        model.addAttribute("month",LocalDate.now().getMonthValue());
+        model.addAttribute("day",LocalDate.now().getDayOfMonth());
         if(bus=="1" || bus=="01"||"1".equals(bus)||"01".equals(bus)){
             bus="阴性";
         } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
