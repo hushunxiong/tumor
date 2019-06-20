@@ -37,7 +37,7 @@ public class StatisticsService {
      * @return
      */
     public DataGrid<NegativeSummaryVo> getNegative(NegativeSearchVo searchVo) {
-        int count = statisticsDao.pageCountCrcPositive(searchVo);
+        int count = statisticsDao.pageCountNegative(searchVo);
 
         List<NegativeSummaryVo> summaryVoList=null;
         if (count>0){

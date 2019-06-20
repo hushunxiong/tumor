@@ -541,12 +541,10 @@
             FROM
             crc_regcase crc
             LEFT JOIN CRC_FOLLOW crcfo ON crc.ID = crcfo.CRC_CHECK_ID
-            left join cancer_dic dic on crcfo.BINGBIANBUW = dic.code
-            left join cancer_dic dict on crcfo.huojianjieguo = dict.code
+            left join  (select code,name from cancer_dic where id = '60031') dic on crcfo.BINGBIANBUW = dic.code
+            left join (select code,name from cancer_dic where id = '60033') dict on crcfo.huojianjieguo = dict.code
             where
             crc.del_flag = 0
-            and dic.id='60031'
-            and dict.id='60033'
             and crcfo.del_flag = 0
             <if test="csrqStart !=null">
                 and crc.regdate >=#{csrqStart}
