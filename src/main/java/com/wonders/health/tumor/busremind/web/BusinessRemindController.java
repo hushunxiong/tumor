@@ -91,8 +91,8 @@ public class BusinessRemindController extends BaseController {
     //获取采便器送回提醒下的fobt
     @ResponseBody
     @RequestMapping(value = "detailFobtRemind", produces = "application/json; charset=utf-8")
-    public DataGrid<BusRemindResultVo> detailFobtRemind(String personcard) {
-        DataGrid<BusRemindResultVo> grid = busRemindService.getCrcFobtRemind(personcard);
+    public DataGrid<BusRemindResultVo> detailFobtRemind(String personcard,String status) {
+        DataGrid<BusRemindResultVo> grid = busRemindService.getCrcFobtRemind(personcard,status);
         return grid;
     }
 
@@ -101,32 +101,32 @@ public class BusinessRemindController extends BaseController {
     //获取诊断检查提醒下的crcDiag
     @ResponseBody
     @RequestMapping(value = "detailCrcRemind", produces = "application/json; charset=utf-8")
-    public DataGrid<BusRemindResultVo> detailCrcRemind(String personcard) {
-        DataGrid<BusRemindResultVo> grid = busRemindService.getCrcDiag(personcard,crcFlag);
+    public DataGrid<BusRemindResultVo> detailCrcRemind(String personcard,String status) {
+        DataGrid<BusRemindResultVo> grid = busRemindService.getCrcDiag(personcard,status,crcFlag);
         return grid;
     }
 
     //获取诊断检查提醒下的licDiag
     @ResponseBody
     @RequestMapping(value = "detailLicRemind", produces = "application/json; charset=utf-8")
-    public DataGrid<BusRemindResultVo> detailLicRemind(String personcard) {
-        DataGrid<BusRemindResultVo> grid = busRemindService.getLicDiag(personcard,licFlag);
+    public DataGrid<BusRemindResultVo> detailLicRemind(String personcard,String status) {
+        DataGrid<BusRemindResultVo> grid = busRemindService.getLicDiag(personcard,status,licFlag);
         return grid;
     }
 
     //获取诊断检查提醒下的scDiag
     @ResponseBody
     @RequestMapping(value = "detailScRemind", produces = "application/json; charset=utf-8")
-    public DataGrid<BusRemindResultVo> detailScRemind(String personcard) {
-        DataGrid<BusRemindResultVo> grid = busRemindService.getScDiag(personcard,scFlag);
+    public DataGrid<BusRemindResultVo> detailScRemind(String personcard,String status) {
+        DataGrid<BusRemindResultVo> grid = busRemindService.getScDiag(personcard,status,scFlag);
         return grid;
     }
 
     //获取诊断检查提醒下的lucDiag
     @ResponseBody
     @RequestMapping(value = "detaillLucRemind", produces = "application/json; charset=utf-8")
-    public DataGrid<BusRemindResultVo> detaillLucRemind(String personcard) {
-        DataGrid<BusRemindResultVo> grid = busRemindService.getLucDiag(personcard,lucFlag);
+    public DataGrid<BusRemindResultVo> detaillLucRemind(String personcard,String status) {
+        DataGrid<BusRemindResultVo> grid = busRemindService.getLucDiag(personcard,status,lucFlag);
         return grid;
     }
 
