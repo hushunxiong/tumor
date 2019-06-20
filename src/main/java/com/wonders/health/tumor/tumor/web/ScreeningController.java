@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
-import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.*;
@@ -28,10 +27,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -936,12 +933,15 @@ public class ScreeningController extends BaseController {
 
     @RequestMapping(value = {"", "printSuggest1"}, method = RequestMethod.GET)
     public ModelAndView printSuggest1(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
-        ModelAndView mav = new ModelAndView("/register/printSuggest");
+        ModelAndView mav = new ModelAndView("/register/printSuggestPage");
         model.addAttribute("name",name);
         model.addAttribute("byx",byx);
         model.addAttribute("gtp",gtp);
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
+        model.addAttribute("year",LocalDate.now().getYear());
+        model.addAttribute("month",LocalDate.now().getMonthValue());
+        model.addAttribute("day",LocalDate.now().getDayOfMonth());
         if(bus=="1" || bus=="01"||"1".equals(bus)||"01".equals(bus)){
             bus="阴性";
         } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){

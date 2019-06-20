@@ -20,7 +20,7 @@
     <div class="content pd-10">
         <h2>普陀区肿瘤早发现</h2>
         <h1>肺部CT/胃镜/肠镜建议书</h1>
-    <p>尊敬的<span id="namespan" style="margin-left: 0px"></span> ：</p>
+    <p>尊敬的<span id="namespan" style="margin-left: 0px" th:text="${name}"></span> ：</p>
         <div>感谢您参加普陀区肿瘤早发现项目！
         </div>
         <div>收到本建议书说明您的筛查结果为<b>阳性</b>，其中危险因素评估<BR>
@@ -73,7 +73,7 @@
     </div>
     </center>
 <script type="text/javascript" th:inline="javascript">
-    mini.parse();
+
     var name=[[${name}]];
     $("#namespan").html(name);
 
