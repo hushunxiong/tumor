@@ -210,7 +210,10 @@
 
 			<if test="remindType == '' or remindType==null">
 				<if test="status!=null and status!=''">
-					AND (c.fobt_remind_status=#{status} or e.remind_status=#{status})
+					AND ((c.fobt_remind_status=#{status} AND c.fobt_remind_status IS NOT NULL) or (e.remind_status=#{status} AND e.remind_status IS NOT NULL))
+				</if>
+				<if test="status==null or status==''">
+					AND ((c.fobt_remind_status IS NOT NULL) or (e.remind_status IS NOT NULL))
 				</if>
 			</if>
 
@@ -230,21 +233,57 @@
 			AND(
 			1=2 OR
 			<if test="crcFlag!='' and crcFlag!=null">
-				(e.remind_status=#{status}) OR
+				e.remind_status=#{status} OR
 			</if>
 			1=2 OR
 			<if test="licFlag!='' and licFlag!=null">
-				(g.remind_status=#{status}) OR
+				g.remind_status=#{status}  OR
 			</if>
 			1=2 OR
 			<if test="scFlag!='' and scFlag!=null">
-				(i.remind_status=#{status}) OR
+				i.remind_status=#{status}  OR
 			</if>
 			1=2 OR
 			<if test="lucFlag!='' and lucFlag!=null">
-				(k.remind_status=#{status}) OR
+				k.remind_status=#{status} OR
 			</if>
 			1=2)
+			AND(
+			 1=1
+			  AND(
+					<if test="crcFlag!='' and crcFlag!=null">
+						E .remind_status IS NOT NULL OR
+					</if>
+					<if test="licFlag!='' and licFlag!=null">
+						G .remind_status IS NOT NULL OR
+					</if>
+					<if test="scFlag!='' and scFlag!=null">
+						I .remind_status IS NOT NULL OR
+					</if>
+					<if test="lucFlag!='' and lucFlag!=null">
+						K .remind_status IS NOT NULL OR
+					</if>
+					1=2
+			  )
+			)
+		</if>
+		<if test="status==null or status==''">
+			and 1=1
+			AND(
+				<if test="crcFlag!='' and crcFlag!=null">
+					E .remind_status IS NOT NULL OR
+				</if>
+				<if test="licFlag!='' and licFlag!=null">
+					G .remind_status IS NOT NULL OR
+				</if>
+				<if test="scFlag!='' and scFlag!=null">
+					I .remind_status IS NOT NULL OR
+				</if>
+				<if test="lucFlag!='' and lucFlag!=null">
+					K .remind_status IS NOT NULL OR
+				</if>
+				1=2
+			)
 		</if>
 	</sql>
 
@@ -261,7 +300,7 @@
 		</choose>
 		<choose>
 			<when test="remindType == null or remindType == ''.toString()">
-				SELECT
+				SELECT DISTINCT
 				<include refid="CancerPersonInfoColumns"/>
 				<include refid="pageFromBase"/>
 				<include refid="pageFromCrcfobt"/>
@@ -280,7 +319,7 @@
 				<include refid="pageWhereOther"/>
 			</when>
 			<otherwise>
-				SELECT
+				SELECT DISTINCT
 				<include refid="CancerPersonInfoColumns"/>
 				<include refid="pageFromBase"/>
 				<choose>
@@ -345,6 +384,7 @@
 		WHERE
 		a.personcard=#{personcard}
 		AND d.check_result='2'
+		AND	e.remind_status IS NOT NULL
 		<if test="status!=null and status!=''">
 			AND	e.remind_status=#{status}
 		</if>
@@ -359,6 +399,7 @@
 		WHERE
 		a.personcard=#{personcard}
 		AND f.check_result='2'
+		AND	g.remind_status IS NOT NULL
 		<if test="status!=null and status!=''">
 			AND	g.remind_status=#{status}
 		</if>
@@ -373,6 +414,7 @@
 		WHERE
 		a.personcard=#{personcard}
 		AND h.check_result='2'
+		AND	i.remind_status IS NOT NULL
 		<if test="status!=null and status!=''">
 			AND	i.remind_status=#{status}
 		</if>
@@ -387,6 +429,7 @@
 		WHERE
 		a.personcard=#{personcard}
 		AND j.check_result='2'
+		AND	k.remind_status IS NOT NULL
 		<if test="status!=null and status!=''">
 			AND	k.remind_status=#{status}
 		</if>
