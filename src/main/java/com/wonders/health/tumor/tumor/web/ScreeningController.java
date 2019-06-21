@@ -876,10 +876,16 @@ public class ScreeningController extends BaseController {
     @RequestMapping(value = {"", "printSuggest"}, method = RequestMethod.GET)
     public String printSuggest(Model model,String name,String aizhengs,String byx,String gtp,String hbs,String afp,String bus){
         model.addAttribute("name",name);
+        if(byx=="1" || byx=="01"||"1".equals(byx)||"01".equals(byx)){
+            byx="阴性";
+        } if(byx=="2" || byx=="02" ||"2".equals(byx)||"02".equals(byx)){
+            byx="阳性";
+        }
         model.addAttribute("byx",byx);
         model.addAttribute("gtp",gtp);
         model.addAttribute("hbs",hbs);
         model.addAttribute("afp",afp);
+
         if(bus=="1" || bus=="01"||"1".equals(bus)||"01".equals(bus)){
             bus="阴性";
         } if(bus=="2" || bus=="02" ||"2".equals(bus)||"02".equals(bus)){
