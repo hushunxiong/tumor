@@ -40,10 +40,21 @@ public class BusRemindService {
     private BusRemindDao busRemindDao;
 
     public DataGrid<CancerPersonInfo> findPersoninfo(DataGridSearch search) {
+        int pageindex=search.getPageIndex();
+        int pageSize=search.getPageSize();
+
+        search.setPageIndex(0);
+        search.setPageSize(999999999);
+        List<BusRemindResultVo> pagelist = busRemindDao.getBasic(search);
+
+        search.setPageIndex(pageindex);
+        search.setPageSize(pageSize);
         List<BusRemindResultVo> list = busRemindDao.getBasic(search);
+
         List<CancerPersonInfo> reslist= new ArrayList<>();
         reslist=list.stream().map(bus->{return bus.getCancerPersonInfo();}).collect(Collectors.toList());
-        return new DataGrid<CancerPersonInfo>(reslist.size(),reslist);
+
+        return new DataGrid<CancerPersonInfo>(pagelist.size(),reslist);
     }
 
 
@@ -91,7 +102,7 @@ public class BusRemindService {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
         List<BusRemindResultVo> list = new ArrayList<>();
-        list= busRemindDao.getCrcDiag(personcard, status,crcFlag,null,null,null);
+        list= busRemindDao.getCrcDiag(personcard, status,crcFlag,null,null,null,null,null,null,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getCrcDiag()!=null){
                 String remindType1=bus.getCrcDiag().getFirstRemindType();
@@ -128,7 +139,7 @@ public class BusRemindService {
 
         List<BusRemindResultVo> list = new ArrayList<>();
 
-        list= busRemindDao.getLicDiag(personcard, status,null,licFlag,null,null);
+        list= busRemindDao.getLicDiag(personcard, status,null,licFlag,null,null,null,null,null,null);
 
         BusRemindResultVo bb=new BusRemindResultVo();
         LicDiagCheckRemind li=new LicDiagCheckRemind();
@@ -178,7 +189,7 @@ public class BusRemindService {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
         List<BusRemindResultVo> list= new ArrayList<>();
-        list=busRemindDao.getLucDiag(personcard,status,null,null,null,lucFlag);
+        list=busRemindDao.getLucDiag(personcard,status,null,null,null,lucFlag,null,null,null,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getLucDiag()!=null){
                 String remindType1=bus.getLucDiag().getFirstRemindType();
@@ -214,7 +225,7 @@ public class BusRemindService {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
         List<BusRemindResultVo> list = new ArrayList<>();
-        list=busRemindDao.getScDiag(personcard, status,null,null,scFlag,null);
+        list=busRemindDao.getScDiag(personcard, status,null,null,scFlag,null,null,null,null,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getScDiag()!=null){
                 String remindType1=bus.getScDiag().getFirstRemindType();

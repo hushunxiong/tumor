@@ -31,28 +31,44 @@ public interface BusRemindDao{
 											  @Param("crcFlag")String crcFlag,
 											  @Param("licFlag")String licFlag,
 											  @Param("scFlag")String scFlag,
-											  @Param("lucFlag")String lucFlag);
+											  @Param("lucFlag")String lucFlag,
+											  @Param("year")String year,
+											  @Param("orgCode")String orgCode,
+											  @Param("startDate")String startDate,
+											  @Param("endDate")String endDate);
 
 	public List<BusRemindResultVo> getLicDiag(@Param("personcard") String personcard,
 											  @Param("status")String status,
 											  @Param("crcFlag")String crcFlag,
 											  @Param("licFlag")String licFlag,
 											  @Param("scFlag")String scFlag,
-											  @Param("lucFlag")String lucFlag);
+											  @Param("lucFlag")String lucFlag,
+											  @Param("year")String year,
+											  @Param("orgCode")String orgCode,
+											  @Param("startDate")String startDate,
+											  @Param("endDate")String endDate);
 
 	public List<BusRemindResultVo> getLucDiag(@Param("personcard") String personcard,
 											  @Param("status")String status,
 											  @Param("crcFlag")String crcFlag,
 											  @Param("licFlag")String licFlag,
 											  @Param("scFlag")String scFlag,
-											  @Param("lucFlag")String lucFlag);
+											  @Param("lucFlag")String lucFlag,
+											  @Param("year")String year,
+											  @Param("orgCode")String orgCode,
+											  @Param("startDate")String startDate,
+											  @Param("endDate")String endDate);
 
 	public List<BusRemindResultVo> getScDiag(@Param("personcard") String personcard,
 											 @Param("status")String status,
 											 @Param("crcFlag")String crcFlag,
 											 @Param("licFlag")String licFlag,
 											 @Param("scFlag")String scFlag,
-											 @Param("lucFlag")String lucFlag);
+											 @Param("lucFlag")String lucFlag,
+											 @Param("year")String year,
+											 @Param("orgCode")String orgCode,
+											 @Param("startDate")String startDate,
+											 @Param("endDate")String endDate);
 
 
     public int delete(@Param("id") String id);

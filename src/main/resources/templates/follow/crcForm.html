@@ -515,12 +515,14 @@
                 mini.get("bingbiandaxiao").set({enabled:false, value:""});
 
             } else {
-                mini.get("bingbianshu").set({enabled:false, value:""});
+                mini.get("bingbianshu").set({enabled:false});
                 mini.get("gangjuli").setEnabled(true);
                 mini.get("bingbiandaxiao").setEnabled(true);
                 //多发
                 if (bingbianbuw == "12") {
                     mini.get("bingbianshu").setEnabled(true);
+                } else {
+                    mini.get("bingbianshu").setValue("");
                 }
             }
 

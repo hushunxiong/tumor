@@ -111,19 +111,74 @@
 	<sql id="pageFromOther">
 		<if test="crcFlag!='' and crcFlag!=null">
 			LEFT JOIN crc_regcase d on a.id=d.manageid
+			AND d.check_result='2'
+			<if test="year!=null and year!=''">
+				AND d.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND d.regorg=#{orgCode}
+			</if>
+
 			LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
+
 		</if>
 		<if test="licFlag!='' and licFlag!=null">
 			LEFT JOIN lic_regcase f on a.id=f.manageid
+			AND f.check_result='2'
+			<if test="year!=null and year!=''">
+				AND f.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND f.regorg=#{orgCode}
+			</if>
+
 			LEFT JOIN lic_diag_check_remind g on f.id=g.lic_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
 		</if>
 		<if test="scFlag!='' and scFlag!=null">
 			LEFT JOIN sc_regcase h on a.id=h.manageid
+			AND h.check_result='2'
+			<if test="year!=null and year!=''">
+				AND h.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND h.regorg=#{orgCode}
+			</if>
 			LEFT JOIN sc_diag_check_remind i on h.id=i.sc_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
 		</if>
 		<if test="lucFlag!='' and lucFlag!=null">
 			LEFT JOIN luc_regcase j on a.id=j.manageid
+			AND j.check_result='2'
+			<if test="year!=null and year!=''">
+				AND j.check_year=#{year}
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				AND j.regorg=#{orgCode}
+			</if>
 			LEFT JOIN luc_diag_check_remind k on j.id=k.luc_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
 		</if>
 	</sql>
 
@@ -142,13 +197,6 @@
 
 	<sql id="pageWhereCrcFobt">
 		<if test="crcFlag!='' and crcFlag!=null">
-			<if test="year!=null and year!=''">
-				AND d.check_year=#{year}
-			</if>
-			<if test="orgCode!=null and orgCode!=''">
-				AND d.regorg=#{orgCode}
-			</if>
-
 			<if test="remindType == '01'.toString()">
 				<if test="status!=null and status!=''">
 					AND c.fobt_remind_status=#{status}
@@ -178,59 +226,6 @@
 	</sql>
 
 	<sql id="pageWhereOther">
-		<if test="crcFlag!='' and crcFlag!=null">
-			AND d.check_result='2'
-		</if>
-		<if test="licFlag!='' and licFlag!=null">
-			AND f.check_result='2'
-			<if test="year!=null and year!=''">
-				AND f.check_year=#{year}
-			</if>
-			<if test="orgCode!=null and orgCode!=''">
-				AND f.regorg=#{orgCode}
-			</if>
-
-			<if test="startDate!=null and startDate!=''">
-				AND g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
-		</if>
-
-		<if test="scFlag!='' and scFlag!=null">
-			AND h.check_result='2'
-			<if test="year!=null and year!=''">
-				AND h.check_year=#{year}
-			</if>
-			<if test="orgCode!=null and orgCode!=''">
-				AND h.regorg=#{orgCode}
-			</if>
-
-			<if test="startDate!=null and startDate!=''">
-				AND i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
-		</if>
-
-		<if test="lucFlag!='' and lucFlag!=null">
-			AND j.check_result='2'
-			<if test="year!=null and year!=''">
-				AND j.check_year=#{year}
-			</if>
-			<if test="orgCode!=null and orgCode!=''">
-				AND j.regorg=#{orgCode}
-			</if>
-
-			<if test="startDate!=null and startDate!=''">
-				AND k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
-		</if>
 		<if test="status!=null and status!=''">
 			AND(
 			1=2 OR
