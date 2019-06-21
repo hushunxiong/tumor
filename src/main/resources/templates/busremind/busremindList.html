@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div id="datagrid" url="/tumor/busremind/data" class="mini-datagrid"  onshowrowdetail="onShowRowDetail"  style="overflow: auto;width: 99%;height: auto"
+            <div id="datagrid" url="/tumor/busremind/data" class="mini-datagrid"  onshowrowdetail="onShowRowDetail"  style="overflow: auto;width: 99%;height: auto;"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
                     <div type="expandcolumn" width="60px">选择列</div>
@@ -90,7 +90,7 @@
             </div>
 
             <div id="detailGridForm" style="display:none;">
-                <div id="crcGrid1" class="mini-datagrid" style="width:100%;height:auto;" showpager="false" allowCellWrap="true"
+                <div id="crcGrid1" class="mini-datagrid" style="width:100%;height:auto;display: none;" showpager="false" allowCellWrap="true"
                      url="/tumor/busremind/detailFobtRemind">
                     <div property="columns">
                         <div field="crcRegcase.id" name="id" visible="false">id</div>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
 
-                <div id="crcGrid2" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                <div id="crcGrid2" class="mini-datagrid" style="width:100%;height:auto;display: none;" showpager="false"
                      url="/tumor/busremind/detailCrcRemind">
                     <div property="columns">
                         <div field="tbjgStr" visible="false">id</div>
@@ -116,12 +116,11 @@
                         <div field="crcDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="crcDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="crcDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
-                        <div field="crcDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
                         <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
                     </div>
                 </div>
 
-                <div id="licGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                <div id="licGrid" class="mini-datagrid" style="width:100%;height:auto;display: none;" showpager="false"
                      url="/tumor/busremind/detailLicRemind">
                     <div property="columns">
                         <div field="licDiag.id" visible="false">id</div>
@@ -130,12 +129,11 @@
                         <div field="licDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="licDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="licDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
-                        <div field="licDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
                         <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
                     </div>
                 </div>
 
-                <div id="lucGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                <div id="lucGrid" class="mini-datagrid" style="width:100%;height:auto;display: none;" showpager="false"
                      url="/tumor/busremind/detaillLucRemind">
                     <div property="columns">
                         <div field="lucDiag.id" visible="false">id</div>
@@ -144,11 +142,10 @@
                         <div field="lucDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="lucDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="lucDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
-                        <div field="lucDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
                         <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
                     </div>
                 </div>
-                <div id="scGrid" class="mini-datagrid" style="width:100%;height:auto;" showpager="false"
+                <div id="scGrid" class="mini-datagrid" style="width:100%;height:auto;display: none;" showpager="false"
                      url="/tumor/busremind/detailScRemind">
                     <div property="columns">
                         <div field="scDiag.id" visible="false">id</div>
@@ -157,7 +154,6 @@
                         <div field="scDiag.perRemindDate" sortField="bgzt" align="center" headerAlign="center" allowSort="false">计划提醒日期</div>
                         <div field="scDiag.firstRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第一次提醒日期</div>
                         <div field="scDiag.secondRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第二次提醒日期</div>
-                        <div field="scDiag.thirdRemindType" sortField="qjbtgyy"  align="center" headerAlign="center" allowSort="false">第三次提醒日期</div>
                         <div align="center" headerAlign="center" allowSort="false" field="action" renderer="actionRenderer">操作</div>
                     </div>
                 </div>
@@ -213,7 +209,9 @@
         mini.get("orgCode").setUrl(url);
     }
 
+    var personcard='';
     function onShowRowDetail(e) {
+        personcard='';
         var crcgrid1=mini.get("crcGrid1");
         var crcgrid2=mini.get("crcGrid2");
         var licGrid=mini.get("licGrid");
@@ -229,7 +227,7 @@
         var data = {};
         data['personcard'] = row.personcard;
         data['status']= mini.get("status").getValue();
-
+        personcard=row.personcard;
         if(type=="01"){
             crcgrid1.load(data,gridLoadSuccess1);
         }else if(type=="02"){
@@ -244,32 +242,14 @@
             scGrid.load(data,gridLoadSuccess4);
             lucGrid.load(data,gridLoadSuccess5);
         }
-
-
-        var type= mini.get("type").getValue();
-        if(type=="01"){
-            crcgrid1.show();
-            crcgrid2.hide();
-            licGrid.hide();
-            scGrid.hide();
-            lucGrid.hide();
-        }else if(type=="02"){
-            crcgrid1.hide();
-            crcgrid2.show();
-            licGrid.show();
-            scGrid.show();
-            lucGrid.show();
-        }else{
-            crcgrid1.show();
-            crcgrid2.show();
-            licGrid.show();
-            scGrid.show();
-            lucGrid.show();
-        }
-
     }
 
 
+    var fobtHide=0;
+    var crcHide=0;
+    var licHide=0;
+    var scHide=0;
+    var lucHide=0;
     //大肠癌便隐血加载完成事件
     function gridLoadSuccess1(sender) {
         var crcgrid1=mini.get("crcGrid1");
@@ -281,22 +261,33 @@
                     window.location.href = app_ctx + "/login";
                 }else{  //没数据的便隐血
                     if(type=="01"){
+                        fobtHide=1;
                         crcgrid1.hide();
                     }else if(type=="02"){
+                        fobtHide=1;
                         crcgrid1.hide();
                     }else{
+                        fobtHide=1;
                         crcgrid1.hide();
                     }
                 }
             }else{
-                if(type=="01"){
-                    crcgrid1.show();
-                }else if(type=="02"){
+                //事实上除了未做crccase以外其他情况都不会走上面的if
+                if(sender.data[0].fobtR==null){
                     crcgrid1.hide();
+                    fobtHide=1;
                 }else{
-                    crcgrid1.show();
+                    if(type=="01"){
+                        fobtHide=0;
+                        crcgrid1.show();
+                    }else if(type=="02"){
+                        fobtHide=1;
+                        crcgrid1.hide();
+                    }else{
+                        fobtHide=0;
+                        crcgrid1.show();
+                    }
                 }
-
             }
         } catch (e) {
 
@@ -313,19 +304,24 @@
                     window.location.href = app_ctx + "/login";
                 }else{
                     if(type=="01"){
+                        crcHide=1;
                         crcgrid2.hide();
                     }else if(type=="02"){
+                        crcHide=1;
                         crcgrid2.hide();
                     }else{
+                        crcHide=1;
                         crcgrid2.hide();
                     }
                 }
             }else{
                 //事实上除了未做crccase以外其他情况都不会走上面的if
                 if(sender.data[0].crcDiag.id==null){
+                    crcHide=1;
                     crcgrid2.hide();
                 }else{
                     if(type=="01"){
+                        crcHide=1;
                         crcgrid2.hide();
                     }else if(type=="02"){
                         crcgrid2.show();
@@ -350,23 +346,30 @@
                     window.location.href = app_ctx + "/login";
                 }else{
                     if(type=="01"){
+                        licHide=1;
                         licGrid.hide();
                     }else if(type=="02"){
+                        licHide=0;
                         licGrid.show();
                     }else{
+                        licHide=0;
                         licGrid.show();
                     }
                 }
             }else{
                 //事实上除了未做regcase以外其他情况都不会走上面的if
                 if(sender.data[0].licDiag.id==null){
+                    licHide=1;
                     licGrid.hide();
                 }else{
                     if(type=="01"){
+                        licHide=1;
                         licGrid.hide();
                     }else if(type=="02"){
+                        licHide=0;
                         licGrid.show();
                     }else{
+                        licHide=0;
                         licGrid.show();
                     }
                 }
@@ -385,22 +388,26 @@
                 if (result.ok == false && result.msg == "登录超时") {
                     window.location.href = app_ctx + "/login";
                 }else{
+                    scHide=1;
                     scGrid.hide();
                 }
             }else{
                 //事实上除了未做scgcase以外其他情况都不会走上面的if
                 if(sender.data[0].scDiag.id==null){
+                    scHide=1;
                     scGrid.hide();
                 }else{
                     if(type=="01"){
+                        scHide=1;
                         scGrid.hide();
                     }else if(type=="02"){
+                        scHide=0;
                         scGrid.show();
                     }else{
+                        scHide=0;
                         scGrid.show();
                     }
                 }
-
             }
         } catch (e) {
         }
@@ -416,22 +423,26 @@
                 if (result.ok == false && result.msg == "登录超时") {
                     window.location.href = app_ctx + "/login";
                 }else{
+                    lucHide=1;
                     lucGrid.hide();
                 }
             }else{
                 //事实上除了未做lucregcase以外其他情况都不会走上面的if
                 if(sender.data[0].lucDiag.id==null){
                     lucGrid.hide();
+                    lucHide=1;
                 }else{
                     if(type=="01"){
+                        lucHide=1;
                         lucGrid.hide();
                     }else if(type=="02"){
+                        lucHide=0;
                         lucGrid.show();
                     }else{
+                        lucHide=0;
                         lucGrid.show();
                     }
                 }
-
             }
         } catch (e) {
         }
@@ -471,29 +482,29 @@
         }else if(r.crcDiag!=null){  //大肠癌诊断检查提醒
             if(r.crcDiag.remindStatus!=null){
                 if(r.crcDiag.remindStatus=="03"){
-                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+ r.crcDiag.id + '\',\'' + '1' + '\',\'' + r.crcDiag.firstRemindType + '\',\'' + r.crcDiag.secondRemindType+ '\',\'' +r.crcDiag.thirdRemindType + '\')">电话</div>';
-                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.crcDiag.id  + '\',\'' + 1 + '\',\'' + r.crcDiag.firstRemindType + '\',\'' + r.crcDiag.secondRemindType+ '\',\'' + r.crcDiag.thirdRemindType+ '\')">上门</div>';
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+ r.crcDiag.id + '\',\'' + '1' + '\',\'' + r.crcDiag.firstRemindType + '\',\'' + r.crcDiag.secondRemindType+  '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.crcDiag.id  + '\',\'' + 1 + '\',\'' + r.crcDiag.firstRemindType + '\',\'' + r.crcDiag.secondRemindType+  '\')">上门</div>';
                 }
             }
         }else if(r.licDiag!=null){  //肝癌诊断检查提醒
             if(r.licDiag.remindStatus!=null){
                 if(r.licDiag.remindStatus=="03"){
-                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+ r.licDiag.id + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+ '\',\'' + r.licDiag.thirdRemindDate+'\')">电话</div>';
-                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.licDiag.id  + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+ '\',\'' + r.licDiag.thirdRemindDate+'\')">上门</div>';
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+ r.licDiag.id + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+ '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.licDiag.id  + '\',\'' + 2 + '\',\'' + r.licDiag.firstRemindDate + '\',\'' + r.licDiag.secondRemindDate+ '\')">上门</div>';
                 }
             }
         }else if(r.lucDiag!=null){  //肺癌诊断检查提醒
             if(r.lucDiag.remindStatus!=null){
                 if(r.lucDiag.remindStatus=="03"){
-                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+r.lucDiag.id + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+ '\',\'' + r.lucDiag.thirdRemindDate+  '\')">电话</div>';
-                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.lucDiag.id  + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+ '\',\'' + r.lucDiag.thirdRemindDate+  '\')">上门</div>';
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+r.lucDiag.id + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+  '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.lucDiag.id  + '\',\'' + 3 + '\',\'' + r.lucDiag.firstRemindDate + '\',\'' + r.lucDiag.secondRemindDate+ '\')">上门</div>';
                 }
             }
         }else if(r.scDiag!=null){   //胃癌诊断检查提醒
             if(r.scDiag.remindStatus!=null){
                 if(r.scDiag.remindStatus=="03"){
-                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+r.scDiag.id + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\',\'' + r.scDiag.thirdRemindDate+ '\')">电话</div>';
-                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.scDiag.id  + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\',\'' + r.scDiag.thirdRemindDate+ '\')">上门</div>';
+                    h+='<div class="my-btn my-btn-blue" style="min-width: 0px;width:30px" onclick="doit(1+ \'\',\''+r.scDiag.id + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\')">电话</div>';
+                    h+='<div class="my-btn my-btn-blue " style="min-width: 30px;width:30px" onclick="doit(2+ \'\',\''+ r.scDiag.id  + '\',\'' + 4 + '\',\'' + r.scDiag.firstRemindDate + '\',\'' + r.scDiag.secondRemindDate+ '\')">上门</div>';
                 }
             }
         }
@@ -531,7 +542,11 @@
                         timeout: 2000
                     });
                 } else {
-                    crcgrid1.reload();
+                    var params = {};
+                    params['personcard'] = personcard;
+                    params['status']= mini.get("status").getValue();
+                    crcgrid1.load(params,gridLoadSuccess1);
+
                     mini.showTips({
                         content: res.msg,
                         state: "success",
@@ -544,7 +559,7 @@
         });
     }
 
-    function doit(opType,id,type,first,second,third){
+    function doit(opType,id,type,first,second){
         var crcgrid2=mini.get("crcGrid2");
         var licGrid=mini.get("licGrid");
         var scGrid=mini.get("scGrid");
@@ -554,7 +569,6 @@
         data.id=id;
         data.first=first;
         data.second=second;
-        data.third=third;
 
         if(opType==1){
             data.type="01";
@@ -571,7 +585,6 @@
         }else if(type==4|| type=='4'){
             url='/tumor/busremind/updateScDiag';
         }
-
         $.ajax({
             url: url,
             type:"post",
@@ -587,15 +600,6 @@
                         timeout: 2000
                     });
                 } else {
-                    if(type==1|| type=='1'){
-                        crcgrid2.reload();
-                    }else if(type==2|| type=='2'){
-                        licGrid.reload();
-                    }else if(type==3|| type=='3'){
-                        scGrid.reload();
-                    }else if(type==4|| type=='4'){
-                        lucGrid.reload();
-                    }
                     mini.showTips({
                         content: res.msg,
                         state: "success",
@@ -603,6 +607,28 @@
                         y: "center",
                         timeout: 2000
                     });
+
+                    var params = {};
+                    params['personcard'] = personcard;
+                    params['status']= mini.get("status").getValue();
+
+                    if(type==1|| type=='1'){
+                        crcHide=1;
+                        crcgrid2.load(params,gridLoadSuccess2);
+                    }else if(type==2|| type=='2'){
+                        licHide=1;
+                        licGrid.load(params,gridLoadSuccess3);
+                    }else if(type==3|| type=='3'){
+                        lucHide=1;
+                        lucGrid.load(params,gridLoadSuccess5);
+                    }else if(type==4|| type=='4'){
+                        scHide=1;
+                        scGrid.load(params,gridLoadSuccess4);
+                    }
+
+                    if((parseInt(fobtHide)+parseInt(crcHide)+parseInt(licHide)+parseInt(scHide)+parseInt(lucHide))==5){
+                        setTimeout(function(){ onSearch();},2000)
+                    }
                 }
             }
         });
