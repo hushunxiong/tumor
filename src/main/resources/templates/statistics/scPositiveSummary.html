@@ -216,13 +216,15 @@
                     var  regorg=mini.get("regorg").getValue();
                     var csrqStart= mini.formatDate(mini.get("#csrqStart").getValue(),"yyyy-MM-dd HH:MM:SS");
                     var csrqEnd= mini.formatDate(mini.get("#csrqEnd").getValue(),"yyyy-MM-dd HH:MM:SS");
-                    /*var  csrqStart=mini.get("csrqStart").getValue();
-                    var  csrqEnd=mini.get("csrqEnd").getValue();*/
+                    var pageIndex= mini.get("datagrid").getPageIndex();
+                    var pageSize= mini.get("datagrid").getPageSize();
                     var param ='?';
                     param += 'regarea='+regarea;
                     param += '&regorg='+regorg;
                     param += '&csrqStart='+csrqStart;
                     param += '&csrqEnd='+csrqEnd;
+                    param += '&pageIndex='+pageIndex;
+                    param += '&pageSize='+pageSize;
                     window.location.href="../statistics/exportScPositiveData"+param;
                 }
 

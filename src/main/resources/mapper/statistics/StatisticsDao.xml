@@ -38,7 +38,7 @@
                 and crc.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and crc.regdate &lt;=#{csrqEnd}+1
+                and crc.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and crc.region_code=#{regarea}
@@ -64,7 +64,7 @@
                 and lic.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and lic.regdate &lt;=#{csrqEnd}+1
+                and lic.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and lic.region_code=#{regarea}
@@ -90,7 +90,7 @@
                 and luc.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and luc.regdate &lt;=#{csrqEnd}+1
+                and luc.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and luc.region_code=#{regarea}
@@ -117,7 +117,7 @@
                 and sc.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and sc.regdate &lt;=#{csrqEnd}+1
+                and sc.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and sc.region_code=#{regarea}
@@ -188,7 +188,7 @@
             and crc.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and crc.regdate &lt;=#{csrqEnd}+1
+            and crc.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and crc.region_code=#{regarea}
@@ -268,7 +268,7 @@
             and lic.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and lic.regdate &lt;=#{csrqEnd}+1
+            and lic.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and lic.region_code=#{regarea}
@@ -352,7 +352,7 @@
             and luc.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and luc.regdate &lt;=#{csrqEnd}+1
+            and luc.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and luc.region_code=#{regarea}
@@ -432,7 +432,7 @@
             and sc.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and sc.regdate &lt;=#{csrqEnd}+1
+            and sc.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and sc.region_code=#{regarea}
@@ -550,7 +550,7 @@
                 and crcfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and crcfo.suifang_date &lt;=#{csrqEnd}+1
+                and crcfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and crc.region_code=#{regarea}
@@ -587,7 +587,7 @@
                 and licfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and licfo.suifang_date &lt;=#{csrqEnd}+1
+                and licfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and lic.region_code=#{regarea}
@@ -625,7 +625,7 @@
                 and lucfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and lucfo.suifang_date &lt;=#{csrqEnd}+1
+                and lucfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and luc.region_code=#{regarea}
@@ -664,7 +664,7 @@
                 and scfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and scfo.suifang_date &lt;=#{csrqEnd}+1
+                and scfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and sc.region_code=#{regarea}
