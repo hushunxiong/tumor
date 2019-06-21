@@ -131,6 +131,8 @@ public class StatisticsController {
                                       @RequestParam(required = false) boolean lic,
                                       @RequestParam(required = false) boolean luc,
                                       @RequestParam(required = false) boolean sc,
+                                      @RequestParam(required = false) int pageIndex,
+                                      @RequestParam(required = false) int pageSize,
                                       HttpServletResponse response) {
         NegativeSearchVo searchVo = new NegativeSearchVo();
         Integer count = 0;
@@ -159,6 +161,8 @@ public class StatisticsController {
         searchVo.setLic(lic);
         searchVo.setLuc(luc);
         searchVo.setSc(sc);
+        searchVo.setPageIndex(pageIndex);
+        searchVo.setPageSize(pageSize);
 
         DataGrid<NegativeSummaryVo> list = statisticsService.getNegative(searchVo);
         DictData dic = new DictData();
@@ -220,14 +224,19 @@ public class StatisticsController {
     @ResponseBody
     @RequestMapping("/exportCrcPositiveData")
     public void exportCrcPositiveData(@RequestParam(required = false) String regarea,
-                                   @RequestParam(required = false) String regorg,
-                                   @RequestParam(required = false) String csrqStart,
-                                   @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
+                                      @RequestParam(required = false) String regorg,
+                                      @RequestParam(required = false) String csrqStart,
+                                      @RequestParam(required = false) String csrqEnd,
+                                      @RequestParam(required = false) int pageIndex,
+                                      @RequestParam(required = false) int pageSize,
+                                      HttpServletResponse response) {
         SummarySearchVo searchVo = new SummarySearchVo();
         searchVo.setCsrqStart(foramt(csrqStart));
         searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
+        searchVo.setPageIndex(pageIndex);
+        searchVo.setPageSize(pageSize);
 
         DataGrid<CrcPositiveSummaryVo> list = statisticsService.getCrcPositive(searchVo);
         DictData dic = new DictData();
@@ -301,12 +310,18 @@ public class StatisticsController {
     public void exportLicPositiveData(@RequestParam(required = false) String regarea,
                                       @RequestParam(required = false) String regorg,
                                       @RequestParam(required = false) String csrqStart,
-                                      @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
+                                      @RequestParam(required = false) String csrqEnd,
+                                      @RequestParam(required = false) int pageIndex,
+                                      @RequestParam(required = false) int pageSize,
+                                      HttpServletResponse response) {
+
         SummarySearchVo searchVo = new SummarySearchVo();
         searchVo.setCsrqStart(foramt(csrqStart));
         searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
+        searchVo.setPageIndex(pageIndex);
+        searchVo.setPageSize(pageSize);
 
         DataGrid<LicPositiveSummaryVo> list = statisticsService.getLicPositive(searchVo);
         DictData dic = new DictData();
@@ -382,12 +397,17 @@ public class StatisticsController {
     public void exportLucPositiveData(@RequestParam(required = false) String regarea,
                                       @RequestParam(required = false) String regorg,
                                       @RequestParam(required = false) String csrqStart,
-                                      @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
+                                      @RequestParam(required = false) String csrqEnd,
+                                      @RequestParam(required = false) int pageIndex,
+                                      @RequestParam(required = false) int pageSize,
+                                      HttpServletResponse response) {
         SummarySearchVo searchVo = new SummarySearchVo();
         searchVo.setCsrqStart(foramt(csrqStart));
         searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
+        searchVo.setPageIndex(pageIndex);
+        searchVo.setPageSize(pageSize);
 
         DataGrid<LucPositiveSummaryVo> list = statisticsService.getLucPositive(searchVo);
         DictData dic = new DictData();
@@ -452,12 +472,17 @@ public class StatisticsController {
     public void exportScPositiveData(@RequestParam(required = false) String regarea,
                                       @RequestParam(required = false) String regorg,
                                       @RequestParam(required = false) String csrqStart,
-                                      @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
+                                      @RequestParam(required = false) String csrqEnd,
+                                     @RequestParam(required = false) int pageIndex,
+                                     @RequestParam(required = false) int pageSize,
+                                     HttpServletResponse response) {
         SummarySearchVo searchVo = new SummarySearchVo();
         searchVo.setCsrqStart(foramt(csrqStart));
         searchVo.setCsrqEnd(foramt(csrqEnd));
         searchVo.setRegarea(regarea);
         searchVo.setRegorg(regorg);
+        searchVo.setPageIndex(pageIndex);
+        searchVo.setPageSize(pageSize);
 
         DataGrid<ScPositiveSummaryVo> list = statisticsService.getScPositive(searchVo);
         DictData dic = new DictData();
@@ -533,7 +558,10 @@ public class StatisticsController {
     public void exportDynamicData2(@RequestParam(required = false) String regarea,
                                    @RequestParam(required = false) String regorg,
                                    @RequestParam(required = false) String csrqStart,
-                                   @RequestParam(required = false) String csrqEnd, HttpServletResponse response) {
+                                   @RequestParam(required = false) String csrqEnd,
+                                   @RequestParam(required = false) int pageIndex,
+                                   @RequestParam(required = false) int pageSize,
+                                   HttpServletResponse response) {
         InfomationSearchVo searchVo = new InfomationSearchVo();
         searchVo.setCsrqStart(foramt(csrqStart));
         searchVo.setCsrqEnd(foramt(csrqEnd));
@@ -543,6 +571,8 @@ public class StatisticsController {
         searchVo.setLicFlag(licFlag);
         searchVo.setLucFlag(lucFlag);
         searchVo.setScFlag(scFlag);
+        searchVo.setPageIndex(pageIndex);
+        searchVo.setPageSize(pageSize);
         DataGrid<InformationCollectionVo> list = statisticsService.getInformation(searchVo);
         DictData dic = new DictData();
         List<DiagnoseMessage> datas = list.getData().stream().map(vo -> {

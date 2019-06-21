@@ -38,7 +38,7 @@
                 and crc.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and crc.regdate &lt;=#{csrqEnd}+1
+                and crc.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and crc.region_code=#{regarea}
@@ -64,7 +64,7 @@
                 and lic.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and lic.regdate &lt;=#{csrqEnd}+1
+                and lic.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and lic.region_code=#{regarea}
@@ -90,7 +90,7 @@
                 and luc.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and luc.regdate &lt;=#{csrqEnd}+1
+                and luc.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and luc.region_code=#{regarea}
@@ -117,7 +117,7 @@
                 and sc.regdate >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and sc.regdate &lt;=#{csrqEnd}+1
+                and sc.regdate &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and sc.region_code=#{regarea}
@@ -188,7 +188,7 @@
             and crc.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and crc.regdate &lt;=#{csrqEnd}+1
+            and crc.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and crc.region_code=#{regarea}
@@ -268,7 +268,7 @@
             and lic.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and lic.regdate &lt;=#{csrqEnd}+1
+            and lic.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and lic.region_code=#{regarea}
@@ -352,7 +352,7 @@
             and luc.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and luc.regdate &lt;=#{csrqEnd}+1
+            and luc.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and luc.region_code=#{regarea}
@@ -432,7 +432,7 @@
             and sc.regdate >=#{csrqStart}
         </if>
         <if test="csrqEnd !=null">
-            and sc.regdate &lt;=#{csrqEnd}+1
+            and sc.regdate &lt;#{csrqEnd}+1
         </if>
         <if test="regarea !=null and regarea!=''">
             and sc.region_code=#{regarea}
@@ -539,8 +539,8 @@
             crcfo.ZHONGLIUTNM_M,
             to_char(crcfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
-            crc_regcase crc
-            LEFT JOIN CRC_FOLLOW crcfo ON crc.ID = crcfo.CRC_CHECK_ID
+            CRC_FOLLOW crcfo
+            LEFT JOIN crc_regcase crc ON crc.ID = crcfo.CRC_CHECK_ID
             left join  (select code,name from cancer_dic where id = '60031') dic on crcfo.BINGBIANBUW = dic.code
             left join (select code,name from cancer_dic where id = '60033') dict on crcfo.huojianjieguo = dict.code
             where
@@ -550,7 +550,7 @@
                 and crcfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and crcfo.suifang_date &lt;=#{csrqEnd}+1
+                and crcfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and crc.region_code=#{regarea}
@@ -578,8 +578,8 @@
             licfo.ZHONGLIUTNM_M,
             to_char(licfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
-            lic_regcase lic
-            LEFT JOIN lic_FOLLOW licfo ON lic.ID = licfo.LIC_CHECK_ID
+            lic_FOLLOW licfo
+            LEFT JOIN lic_regcase lic  ON lic.ID = licfo.LIC_CHECK_ID
             where
             lic.del_flag = 0
             and licfo.del_flag = 0
@@ -587,7 +587,7 @@
                 and licfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and licfo.suifang_date &lt;=#{csrqEnd}+1
+                and licfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and lic.region_code=#{regarea}
@@ -616,8 +616,8 @@
             lucfo.ZHONGLIUTNM_M,
             to_char(lucfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
-            luc_regcase luc
-            LEFT JOIN luc_FOLLOW lucfo ON luc.ID = lucfo.luc_CHECK_ID
+             luc_FOLLOW lucfo
+            LEFT JOIN luc_regcase luc ON luc.ID = lucfo.luc_CHECK_ID
             where
             luc.del_flag = 0
             and lucfo.del_flag = 0
@@ -625,7 +625,7 @@
                 and lucfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and lucfo.suifang_date &lt;=#{csrqEnd}+1
+                and lucfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and luc.region_code=#{regarea}
@@ -655,8 +655,8 @@
             scfo.ZHONGLIUTNM_M,
             to_char(scfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
             FROM
-            sc_regcase sc
-            LEFT JOIN sc_FOLLOW scfo ON sc.ID = scfo.sc_CHECK_ID
+            sc_FOLLOW scfo
+            LEFT JOIN sc_regcase sc  ON sc.ID = scfo.sc_CHECK_ID
             where
             sc.del_flag = 0
             and scfo.del_flag = 0
@@ -664,7 +664,7 @@
                 and scfo.suifang_date >=#{csrqStart}
             </if>
             <if test="csrqEnd !=null">
-                and scfo.suifang_date &lt;=#{csrqEnd}+1
+                and scfo.suifang_date &lt;#{csrqEnd}+1
             </if>
             <if test="regarea !=null and regarea!=''">
                 and sc.region_code=#{regarea}
@@ -677,7 +677,6 @@
         LEFT JOIN CANCER_PERSON_INFO info ON t.MANAGEID = info.ID
         WHERE
         info.DEL_FLAG =0) information
-
     </sql>
     <select id="pageCountInformation" resultType="java.lang.Integer"
             parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
@@ -702,7 +701,7 @@
                 ORDER BY ${sortField} ${sortOrder}
             </when>
             <otherwise>
-                ORDER BY  information.sfrq asc
+                ORDER BY  information.sfrq,information.personcard asc
             </otherwise>
         </choose>
         <choose>

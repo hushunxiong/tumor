@@ -510,12 +510,12 @@
             var bingbianbuw = mini.get("bingbianbuw").getValue();
             //病变部位:无
             if (bingbianbuw == "01") {
-                mini.get("bingbianshu").setEnabled(false);
-                mini.get("gangjuli").setEnabled(false);
-                mini.get("bingbiandaxiao").setEnabled(false);
+                mini.get("bingbianshu").set({enabled:false, value:""});
+                mini.get("gangjuli").set({enabled:false, value:""});
+                mini.get("bingbiandaxiao").set({enabled:false, value:""});
 
             } else {
-                mini.get("bingbianshu").setEnabled(false);
+                mini.get("bingbianshu").set({enabled:false, value:""});
                 mini.get("gangjuli").setEnabled(true);
                 mini.get("bingbiandaxiao").setEnabled(true);
                 //多发
@@ -659,12 +659,12 @@
         var bingbianbuw = mini.get("bingbianbuw").getValue();
         //病变部位:无
         if (bingbianbuw == "01") {
-            mini.get("bingbianshu").setEnabled(false);
-            mini.get("gangjuli").setEnabled(false);
-            mini.get("bingbiandaxiao").setEnabled(false);
+            mini.get("bingbianshu").set({enabled:false, value:""});
+            mini.get("gangjuli").set({enabled:false, value:""});
+            mini.get("bingbiandaxiao").set({enabled:false, value:""});
 
         } else {
-            mini.get("bingbianshu").setEnabled(false);
+            mini.get("bingbianshu").set({enabled:false, value:""});
             mini.get("gangjuli").setEnabled(true);
             mini.get("bingbiandaxiao").setEnabled(true);
             //多发
