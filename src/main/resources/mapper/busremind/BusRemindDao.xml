@@ -118,7 +118,15 @@
 			<if test="orgCode!=null and orgCode!=''">
 				AND d.regorg=#{orgCode}
 			</if>
+
 			LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
+
 		</if>
 		<if test="licFlag!='' and licFlag!=null">
 			LEFT JOIN lic_regcase f on a.id=f.manageid
@@ -131,6 +139,12 @@
 			</if>
 
 			LEFT JOIN lic_diag_check_remind g on f.id=g.lic_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
 		</if>
 		<if test="scFlag!='' and scFlag!=null">
 			LEFT JOIN sc_regcase h on a.id=h.manageid
@@ -142,6 +156,12 @@
 				AND h.regorg=#{orgCode}
 			</if>
 			LEFT JOIN sc_diag_check_remind i on h.id=i.sc_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
 		</if>
 		<if test="lucFlag!='' and lucFlag!=null">
 			LEFT JOIN luc_regcase j on a.id=j.manageid
@@ -152,8 +172,13 @@
 			<if test="orgCode!=null and orgCode!=''">
 				AND j.regorg=#{orgCode}
 			</if>
-
 			LEFT JOIN luc_diag_check_remind k on j.id=k.luc_check_id
+			<if test="startDate!=null and startDate!=''">
+				AND k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				AND k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+			</if>
 		</if>
 	</sql>
 
@@ -201,35 +226,6 @@
 	</sql>
 
 	<sql id="pageWhereOther">
-
-		<if test="licFlag!='' and licFlag!=null">
-
-			<if test="startDate!=null and startDate!=''">
-				AND g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
-		</if>
-
-		<if test="scFlag!='' and scFlag!=null">
-			<if test="startDate!=null and startDate!=''">
-				AND i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
-		</if>
-
-		<if test="lucFlag!='' and lucFlag!=null">
-
-			<if test="startDate!=null and startDate!=''">
-				AND k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
-		</if>
 		<if test="status!=null and status!=''">
 			AND(
 			1=2 OR

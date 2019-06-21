@@ -102,7 +102,7 @@ public class BusRemindService {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
         List<BusRemindResultVo> list = new ArrayList<>();
-        list= busRemindDao.getCrcDiag(personcard, status,crcFlag,null,null,null,null,null);
+        list= busRemindDao.getCrcDiag(personcard, status,crcFlag,null,null,null,null,null,null,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getCrcDiag()!=null){
                 String remindType1=bus.getCrcDiag().getFirstRemindType();
@@ -139,7 +139,7 @@ public class BusRemindService {
 
         List<BusRemindResultVo> list = new ArrayList<>();
 
-        list= busRemindDao.getLicDiag(personcard, status,null,licFlag,null,null,null,null);
+        list= busRemindDao.getLicDiag(personcard, status,null,licFlag,null,null,null,null,null,null);
 
         BusRemindResultVo bb=new BusRemindResultVo();
         LicDiagCheckRemind li=new LicDiagCheckRemind();
@@ -189,7 +189,7 @@ public class BusRemindService {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
         List<BusRemindResultVo> list= new ArrayList<>();
-        list=busRemindDao.getLucDiag(personcard,status,null,null,null,lucFlag,null,null);
+        list=busRemindDao.getLucDiag(personcard,status,null,null,null,lucFlag,null,null,null,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getLucDiag()!=null){
                 String remindType1=bus.getLucDiag().getFirstRemindType();
@@ -225,7 +225,7 @@ public class BusRemindService {
         Map<String, CancerDic> generalForMap=DictUtils.generalForMap("60047");
 
         List<BusRemindResultVo> list = new ArrayList<>();
-        list=busRemindDao.getScDiag(personcard, status,null,null,scFlag,null,null,null);
+        list=busRemindDao.getScDiag(personcard, status,null,null,scFlag,null,null,null,null,null);
         list.stream().forEach(bus->{
             if(bus!=null && bus.getScDiag()!=null){
                 String remindType1=bus.getScDiag().getFirstRemindType();

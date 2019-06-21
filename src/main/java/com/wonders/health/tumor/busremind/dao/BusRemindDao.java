@@ -33,7 +33,9 @@ public interface BusRemindDao{
 											  @Param("scFlag")String scFlag,
 											  @Param("lucFlag")String lucFlag,
 											  @Param("year")String year,
-											  @Param("orgCode")String orgCode);
+											  @Param("orgCode")String orgCode,
+											  @Param("startDate")String startDate,
+											  @Param("endDate")String endDate);
 
 	public List<BusRemindResultVo> getLicDiag(@Param("personcard") String personcard,
 											  @Param("status")String status,
@@ -42,7 +44,9 @@ public interface BusRemindDao{
 											  @Param("scFlag")String scFlag,
 											  @Param("lucFlag")String lucFlag,
 											  @Param("year")String year,
-											  @Param("orgCode")String orgCode);
+											  @Param("orgCode")String orgCode,
+											  @Param("startDate")String startDate,
+											  @Param("endDate")String endDate);
 
 	public List<BusRemindResultVo> getLucDiag(@Param("personcard") String personcard,
 											  @Param("status")String status,
@@ -51,7 +55,9 @@ public interface BusRemindDao{
 											  @Param("scFlag")String scFlag,
 											  @Param("lucFlag")String lucFlag,
 											  @Param("year")String year,
-											  @Param("orgCode")String orgCode);
+											  @Param("orgCode")String orgCode,
+											  @Param("startDate")String startDate,
+											  @Param("endDate")String endDate);
 
 	public List<BusRemindResultVo> getScDiag(@Param("personcard") String personcard,
 											 @Param("status")String status,
@@ -60,7 +66,9 @@ public interface BusRemindDao{
 											 @Param("scFlag")String scFlag,
 											 @Param("lucFlag")String lucFlag,
 											 @Param("year")String year,
-											 @Param("orgCode")String orgCode);
+											 @Param("orgCode")String orgCode,
+											 @Param("startDate")String startDate,
+											 @Param("endDate")String endDate);
 
 
     public int delete(@Param("id") String id);
