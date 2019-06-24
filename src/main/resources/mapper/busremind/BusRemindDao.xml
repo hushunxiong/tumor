@@ -186,14 +186,29 @@
 					AND (c.fobt_remind_status=#{status} or e.remind_status=#{status})
 				</if>
 			</if>
-
 			<if test="startDate!=null and startDate!=''">
-				AND (c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
-				OR e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss'))
+				<if test="remindType == '01'.toString()">
+					AND c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+				</if>
+				<if test="remindType == '02'.toString()">
+					AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+				</if>
+				<if test="remindType == '' or remindType==null">
+					AND (c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+					OR e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss'))
+				</if>
 			</if>
 			<if test="endDate!=null and endDate!=''">
-				AND (c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
-				OR e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss'))
+				<if test="remindType == '01'.toString()">
+					AND c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+				</if>
+				<if test="remindType == '02'.toString()">
+					AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+				</if>
+				<if test="remindType == '' or remindType==null">
+					AND (c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+					OR e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss'))
+				</if>
 			</if>
 			<if test="year!=null and year!=''">
 				AND d.check_year=#{year}
