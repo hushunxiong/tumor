@@ -24,7 +24,9 @@ public interface BusRemindDao{
 
 	public List<BusRemindResultVo> getBasic(DataGridSearch search);
 
-	public List<BusRemindResultVo> getCrcFobtRemind(@Param("personcard") String personcard,@Param("status") String status);
+	public List<BusRemindResultVo> getCrcFobtRemind(@Param("personcard") String personcard,
+													@Param("status") String status,
+													@Param("year")String year);
 
 	public List<BusRemindResultVo> getCrcDiag(@Param("personcard")String personcard,
 											  @Param("status")String status,

@@ -227,6 +227,7 @@
         var data = {};
         data['personcard'] = row.personcard;
         data['status']= mini.get("status").getValue();
+        data['year']=$("#year").val();
         personcard=row.personcard;
         if(type=="01"){
             crcgrid1.load(data,gridLoadSuccess1);
