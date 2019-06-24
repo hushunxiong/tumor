@@ -67,7 +67,7 @@
 		g.second_remind_date AS "licDiag.secondRemindDate",g.second_remind_type AS "licDiag.secondRemindType",
 		g.third_remind_date AS "licDiag.thirdRemindDate",g.third_remind_type AS "licDiag.thirdRemindType"
 	</sql>
-	
+
 	<!--查询项目：胃癌诊断提醒-->
 	<sql id="ScRegcaseColumns">
 		h.check_result as "scRegcase.checkResult",
@@ -95,7 +95,7 @@
 		k.per_remind_date AS "lucDiag.perRemindDate",k.remind_status AS "lucDiag.remindStatus"
 	</sql>
 
-	
+
 	<!-- from模块 -->
 	<sql id="pageFromBase">
       FROM cancer_person_info a
@@ -188,12 +188,12 @@
 			</if>
 
 			<if test="startDate!=null and startDate!=''">
-				AND (c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-				OR e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd'))
+				AND (c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+				OR e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss'))
 			</if>
 			<if test="endDate!=null and endDate!=''">
-				AND (c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-				OR e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd'))
+				AND (c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+				OR e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss'))
 			</if>
 			<if test="year!=null and year!=''">
 				AND d.check_year=#{year}
@@ -262,16 +262,16 @@
 			OR(
 			1=2 OR
 			<if test="crcFlag!='' and crcFlag!=null">
-				e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd') OR
+				e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss') OR
 			</if>
 			<if test="licFlag!='' and licFlag!=null">
-				g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')  OR
+				g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')  OR
 			</if>
 			<if test="scFlag!='' and scFlag!=null">
-				i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')  OR
+				i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')  OR
 			</if>
 			<if test="lucFlag!='' and lucFlag!=null">
-				k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd') OR
+				k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss') OR
 			</if>
 			1=2
 			)
@@ -282,16 +282,16 @@
 			OR(
 			1=2 OR
 			<if test="crcFlag!='' and crcFlag!=null">
-				e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd') OR
+				e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss') OR
 			</if>
 			<if test="licFlag!='' and licFlag!=null">
-				g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')  OR
+				g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')  OR
 			</if>
 			<if test="scFlag!='' and scFlag!=null">
-				i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')  OR
+				i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')  OR
 			</if>
 			<if test="lucFlag!='' and lucFlag!=null">
-				k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd') OR
+				k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss') OR
 			</if>
 			1=2
 			)
