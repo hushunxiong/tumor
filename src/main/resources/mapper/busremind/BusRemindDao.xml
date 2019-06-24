@@ -67,7 +67,7 @@
 		g.second_remind_date AS "licDiag.secondRemindDate",g.second_remind_type AS "licDiag.secondRemindType",
 		g.third_remind_date AS "licDiag.thirdRemindDate",g.third_remind_type AS "licDiag.thirdRemindType"
 	</sql>
-	
+
 	<!--查询项目：胃癌诊断提醒-->
 	<sql id="ScRegcaseColumns">
 		h.check_result as "scRegcase.checkResult",
@@ -95,140 +95,128 @@
 		k.per_remind_date AS "lucDiag.perRemindDate",k.remind_status AS "lucDiag.remindStatus"
 	</sql>
 
-	
+
 	<!-- from模块 -->
 	<sql id="pageFromBase">
       FROM cancer_person_info a
     </sql>
 
 	<sql id="pageFromCrcfobt">
-	  LEFT JOIN crc_regcase d on a.id=d.manageid
-	  LEFT JOIN crc_fobt_remind c on d.id=c.crc_check_id
-	  LEFT JOIN crc_fobt b on d.id=b.crc_check_id
-	  LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id
+	  LEFT JOIN crc_regcase d on a.id=d.manageid AND d .del_flag = '0'
+	  LEFT JOIN crc_fobt_remind c on d.id=c.crc_check_id AND c.del_flag = '0'
+	  LEFT JOIN crc_fobt b on d.id=b.crc_check_id AND b.del_flag = '0'
+	  LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id AND e.del_flag = '0'
 	</sql>
 
 	<sql id="pageFromOther">
 		<if test="crcFlag!='' and crcFlag!=null">
-			LEFT JOIN crc_regcase d on a.id=d.manageid
+			LEFT JOIN crc_regcase d on a.id=d.manageid AND d .del_flag = '0'
 			AND d.check_result='2'
-			<if test="year!=null and year!=''">
-				AND d.check_year=#{year}
-			</if>
 			<if test="orgCode!=null and orgCode!=''">
 				AND d.regorg=#{orgCode}
 			</if>
-
-			LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id
-			<if test="startDate!=null and startDate!=''">
-				AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
-
+			LEFT JOIN crc_diag_check_remind e on d.id=e.crc_check_id  AND e.del_flag = '0'
 		</if>
+
 		<if test="licFlag!='' and licFlag!=null">
-			LEFT JOIN lic_regcase f on a.id=f.manageid
+			LEFT JOIN lic_regcase f on a.id=f.manageid AND f.del_flag='0'
 			AND f.check_result='2'
-			<if test="year!=null and year!=''">
-				AND f.check_year=#{year}
-			</if>
 			<if test="orgCode!=null and orgCode!=''">
 				AND f.regorg=#{orgCode}
 			</if>
+			LEFT JOIN lic_diag_check_remind g on f.id=g.lic_check_id AND g.del_flag='0'
 
-			LEFT JOIN lic_diag_check_remind g on f.id=g.lic_check_id
-			<if test="startDate!=null and startDate!=''">
-				AND g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
 		</if>
 		<if test="scFlag!='' and scFlag!=null">
-			LEFT JOIN sc_regcase h on a.id=h.manageid
+			LEFT JOIN sc_regcase h on a.id=h.manageid AND h.del_flag='0'
 			AND h.check_result='2'
-			<if test="year!=null and year!=''">
-				AND h.check_year=#{year}
-			</if>
+
 			<if test="orgCode!=null and orgCode!=''">
 				AND h.regorg=#{orgCode}
 			</if>
-			LEFT JOIN sc_diag_check_remind i on h.id=i.sc_check_id
-			<if test="startDate!=null and startDate!=''">
-				AND i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
+			LEFT JOIN sc_diag_check_remind i on h.id=i.sc_check_id AND i.del_flag='0'
+
 		</if>
 		<if test="lucFlag!='' and lucFlag!=null">
-			LEFT JOIN luc_regcase j on a.id=j.manageid
+			LEFT JOIN luc_regcase j on a.id=j.manageid AND j.del_flag='0'
 			AND j.check_result='2'
-			<if test="year!=null and year!=''">
-				AND j.check_year=#{year}
-			</if>
+
 			<if test="orgCode!=null and orgCode!=''">
 				AND j.regorg=#{orgCode}
 			</if>
-			LEFT JOIN luc_diag_check_remind k on j.id=k.luc_check_id
-			<if test="startDate!=null and startDate!=''">
-				AND k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-			</if>
+			LEFT JOIN luc_diag_check_remind k on j.id=k.luc_check_id AND k.del_flag='0'
+
 		</if>
 	</sql>
 
 	<!-- where模块 -->
 	<sql id="pageWhereBase">
-		1=1
+		a.del_flag='0'
 		<if test="keyword!=null and keyword!='' ">
 			AND (
 				a.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
 				OR
-				a.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+				a.personcard LIKE CONCAT(CONCAT('%',#{keyword}),'%')
 			)
-			AND a.del_flag='0'
 		</if>
 	</sql>
 
 	<sql id="pageWhereCrcFobt">
 		<if test="crcFlag!='' and crcFlag!=null">
+			AND d.del_flag='0'
+			AND ((c.fobt_remind_status IS NOT NULL) or (e.remind_status IS NOT NULL))
 			<if test="remindType == '01'.toString()">
+				<if test="year!=null and year!=''">
+					AND c.check_year=#{year}
+				</if>
 				<if test="status!=null and status!=''">
 					AND c.fobt_remind_status=#{status}
 				</if>
 			</if>
 			<if test="remindType == '02'.toString()">
+				<if test="year!=null and year!=''">
+					AND e.check_year=#{year}
+				</if>
 				<if test="status!=null and status!=''">
 					AND e.remind_status=#{status}
 				</if>
 			</if>
-
 			<if test="remindType == '' or remindType==null">
 				<if test="status!=null and status!=''">
-					AND ((c.fobt_remind_status=#{status} AND c.fobt_remind_status IS NOT NULL) or (e.remind_status=#{status} AND e.remind_status IS NOT NULL))
-				</if>
-				<if test="status==null or status==''">
-					AND ((c.fobt_remind_status IS NOT NULL) or (e.remind_status IS NOT NULL))
+					AND (c.fobt_remind_status=#{status} or e.remind_status=#{status})
 				</if>
 			</if>
 
 			<if test="startDate!=null and startDate!=''">
-				AND c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
-				AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd')
+				AND (c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+				OR e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss'))
 			</if>
 			<if test="endDate!=null and endDate!=''">
-				AND c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
-				AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd')
+				AND (c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+				OR e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss'))
+			</if>
+			<if test="year!=null and year!=''">
+				AND d.check_year=#{year}
 			</if>
 		</if>
 	</sql>
 
 	<sql id="pageWhereOther">
+		AND(
+		<if test="crcFlag!='' and crcFlag!=null">
+			E .remind_status IS NOT NULL OR
+		</if>
+		<if test="licFlag!='' and licFlag!=null">
+			G .remind_status IS NOT NULL OR
+		</if>
+		<if test="scFlag!='' and scFlag!=null">
+			I .remind_status IS NOT NULL OR
+		</if>
+		<if test="lucFlag!='' and lucFlag!=null">
+			K .remind_status IS NOT NULL OR
+		</if>
+		1=2
+		)
 		<if test="status!=null and status!=''">
 			AND(
 			1=2 OR
@@ -248,41 +236,64 @@
 				k.remind_status=#{status} OR
 			</if>
 			1=2)
-			AND(
-			 1=1
-			  AND(
-					<if test="crcFlag!='' and crcFlag!=null">
-						E .remind_status IS NOT NULL OR
-					</if>
-					<if test="licFlag!='' and licFlag!=null">
-						G .remind_status IS NOT NULL OR
-					</if>
-					<if test="scFlag!='' and scFlag!=null">
-						I .remind_status IS NOT NULL OR
-					</if>
-					<if test="lucFlag!='' and lucFlag!=null">
-						K .remind_status IS NOT NULL OR
-					</if>
-					1=2
-			  )
-			)
 		</if>
-		<if test="status==null or status==''">
-			and 1=1
-			AND(
-				<if test="crcFlag!='' and crcFlag!=null">
-					E .remind_status IS NOT NULL OR
-				</if>
-				<if test="licFlag!='' and licFlag!=null">
-					G .remind_status IS NOT NULL OR
-				</if>
-				<if test="scFlag!='' and scFlag!=null">
-					I .remind_status IS NOT NULL OR
-				</if>
-				<if test="lucFlag!='' and lucFlag!=null">
-					K .remind_status IS NOT NULL OR
-				</if>
-				1=2
+
+		<if test="year!=null and year!=''">
+			AND (1=2
+			OR(
+			1=2 OR
+			<if test="crcFlag!='' and crcFlag!=null">
+				(d.check_year=#{year} AND E .check_year =#{year} )OR
+			</if>
+			<if test="licFlag!='' and licFlag!=null">
+				(f.check_year=#{year} AND g.check_year=#{year} ) OR
+			</if>
+			<if test="scFlag!='' and scFlag!=null">
+				(h.check_year=#{year} AND i.check_year=#{year} ) OR
+			</if>
+			<if test="lucFlag!='' and lucFlag!=null">
+				(j.check_year=#{year} AND k.check_year=#{year} )OR
+			</if>
+			1=2
+			))
+		</if>
+		<if test="startDate!=null and startDate!=''">
+			AND 1=2
+			OR(
+			1=2 OR
+			<if test="crcFlag!='' and crcFlag!=null">
+				e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss') OR
+			</if>
+			<if test="licFlag!='' and licFlag!=null">
+				g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+			</if>
+			<if test="scFlag!='' and scFlag!=null">
+				i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+			</if>
+			<if test="lucFlag!='' and lucFlag!=null">
+				k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss') OR
+			</if>
+			1=2
+			)
+
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			AND 1=2
+			OR(
+			1=2 OR
+			<if test="crcFlag!='' and crcFlag!=null">
+				e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss') OR
+			</if>
+			<if test="licFlag!='' and licFlag!=null">
+				g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+			</if>
+			<if test="scFlag!='' and scFlag!=null">
+				i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+			</if>
+			<if test="lucFlag!='' and lucFlag!=null">
+				k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss') OR
+			</if>
+			1=2
 			)
 		</if>
 	</sql>
@@ -373,6 +384,10 @@
 		<if test="status!=null and status!=''">
 			AND c.fobt_remind_status=#{status}
 		</if>
+		<if test="year!=null and year!=''">
+			AND c.check_year=#{year}
+			AND d.check_year=#{year}
+		</if>
 	</select>
 
 	<select id="getCrcDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
@@ -387,6 +402,10 @@
 		AND	e.remind_status IS NOT NULL
 		<if test="status!=null and status!=''">
 			AND	e.remind_status=#{status}
+		</if>
+		<if test="year!=null and year!=''">
+			AND d.check_year=#{year}
+			AND e.check_year=#{year}
 		</if>
 	</select>
 
@@ -403,6 +422,10 @@
 		<if test="status!=null and status!=''">
 			AND	g.remind_status=#{status}
 		</if>
+		<if test="year!=null and year!=''">
+			AND f.check_year=#{year}
+			AND g.check_year=#{year}
+		</if>
 	</select>
 
 	<select id="getScDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
@@ -418,6 +441,10 @@
 		<if test="status!=null and status!=''">
 			AND	i.remind_status=#{status}
 		</if>
+		<if test="year!=null and year!=''">
+			AND h.check_year=#{year}
+			AND i.check_year=#{year}
+		</if>
 	</select>
 
 	<select id="getLucDiag" resultType="com.wonders.health.tumor.busremind.vo.BusRemindResultVo" parameterType="java.lang.String">
@@ -432,6 +459,10 @@
 		AND	k.remind_status IS NOT NULL
 		<if test="status!=null and status!=''">
 			AND	k.remind_status=#{status}
+		</if>
+		<if test="year!=null and year!=''">
+			AND j.check_year=#{year}
+			AND k.check_year=#{year}
 		</if>
 	</select>
 
