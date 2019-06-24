@@ -258,7 +258,7 @@
 			))
 		</if>
 		<if test="startDate!=null and startDate!=''">
-			AND 1=2
+			AND (1=2
 			OR(
 			1=2 OR
 			<if test="crcFlag!='' and crcFlag!=null">
@@ -274,11 +274,11 @@
 				k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss') OR
 			</if>
 			1=2
-			)
+			))
 
 		</if>
 		<if test="endDate!=null and endDate!=''">
-			AND 1=2
+			AND (1=2
 			OR(
 			1=2 OR
 			<if test="crcFlag!='' and crcFlag!=null">
@@ -294,7 +294,7 @@
 				k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss') OR
 			</if>
 			1=2
-			)
+			))
 		</if>
 	</sql>
 
