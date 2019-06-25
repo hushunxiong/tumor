@@ -26,7 +26,9 @@ public interface BusRemindDao{
 
 	public List<BusRemindResultVo> getCrcFobtRemind(@Param("personcard") String personcard,
 													@Param("status") String status,
-													@Param("year")String year);
+													@Param("year")String year,
+													@Param("startDate")String startDate,
+													@Param("endDate")String endDate);
 
 	public List<BusRemindResultVo> getCrcDiag(@Param("personcard")String personcard,
 											  @Param("status")String status,
