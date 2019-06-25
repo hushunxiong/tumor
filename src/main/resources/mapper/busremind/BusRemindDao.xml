@@ -188,26 +188,68 @@
 			</if>
 			<if test="startDate!=null and startDate!=''">
 				<if test="remindType == '01'.toString()">
-					AND c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+					AND (
+						c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+						<if test="status!=null and status!=''">
+							AND c.fobt_remind_status=#{status}
+						</if>
+					)
 				</if>
 				<if test="remindType == '02'.toString()">
-					AND e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+					AND (
+						e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+						<if test="status!=null and status!=''">
+							AND e.remind_status=#{status}
+						</if>
+					)
 				</if>
 				<if test="remindType == '' or remindType==null">
-					AND (c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
-					OR e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss'))
+					AND (
+						(c.per_fobt_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+							<if test="status!=null and status!=''">AND c.fobt_remind_status=#{status}
+							</if>
+						)
+						OR (
+							e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+							<if test="status!=null and status!=''">
+								AND e.remind_status=#{status}
+							</if>
+						)
+					)
 				</if>
 			</if>
 			<if test="endDate!=null and endDate!=''">
 				<if test="remindType == '01'.toString()">
-					AND c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+					AND (
+						c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+						<if test="status!=null and status!=''">
+							AND c.fobt_remind_status=#{status}
+						</if>
+					)
 				</if>
 				<if test="remindType == '02'.toString()">
-					AND e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+					AND (
+						e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+						<if test="status!=null and status!=''">
+							AND e.remind_status=#{status}
+						</if>
+					)
 				</if>
 				<if test="remindType == '' or remindType==null">
-					AND (c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
-					OR e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss'))
+					AND (
+						(
+						c.per_fobt_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+						<if test="status!=null and status!=''">
+							AND c.fobt_remind_status=#{status}
+						</if>
+						)
+					OR (
+						e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+						<if test="status!=null and status!=''">
+							AND e.remind_status=#{status}
+						</if>
+						)
+					)
 				</if>
 			</if>
 			<if test="year!=null and year!=''">
@@ -277,16 +319,36 @@
 			OR(
 			1=2 OR
 			<if test="crcFlag!='' and crcFlag!=null">
-				e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss') OR
+				(
+					e.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND e.remind_status=#{status}
+					</if>
+				)OR
 			</if>
 			<if test="licFlag!='' and licFlag!=null">
-				g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+				(
+					g.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND g.remind_status=#{status}
+					</if>
+				)OR
 			</if>
 			<if test="scFlag!='' and scFlag!=null">
-				i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+				(
+					i.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND i.remind_status=#{status}
+					</if>
+				)  OR
 			</if>
 			<if test="lucFlag!='' and lucFlag!=null">
-				k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss') OR
+				(
+					k.per_remind_date >= to_date(#{startDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND k.remind_status=#{status}
+					</if>
+				) OR
 			</if>
 			1=2
 			))
@@ -297,16 +359,36 @@
 			OR(
 			1=2 OR
 			<if test="crcFlag!='' and crcFlag!=null">
-				e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss') OR
+				(
+					e.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND e.remind_status=#{status}
+					</if>
+				)OR
 			</if>
 			<if test="licFlag!='' and licFlag!=null">
-				g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+				(
+					g.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND g.remind_status=#{status}
+					</if>
+				)OR
 			</if>
 			<if test="scFlag!='' and scFlag!=null">
-				i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')  OR
+				(
+					i.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND i.remind_status=#{status}
+					</if>
+				)OR
 			</if>
 			<if test="lucFlag!='' and lucFlag!=null">
-				k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss') OR
+				(
+					k.per_remind_date &lt;= to_date(#{endDate},'yyyy-MM-dd HH24:Mi:ss')
+					<if test="status!=null and status!=''">
+						AND k.remind_status=#{status}
+					</if>
+				)OR
 			</if>
 			1=2
 			))
