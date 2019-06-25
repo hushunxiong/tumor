@@ -231,6 +231,9 @@
         data['personcard'] = row.personcard;
         data['status']= mini.get("status").getValue();
         data['year']=$("#year").val();
+        data['startDate']= mini.get("startDate").getFormValue();
+        data['endDate']= mini.get("endDate").getFormValue();
+
         personcard=row.personcard;
         if(type=="01"){
             crcgrid1.load(data,gridLoadSuccess1);
