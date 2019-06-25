@@ -211,6 +211,9 @@
 
     var personcard='';
     function onShowRowDetail(e) {
+
+        var type= mini.get("type").getValue();
+
         personcard='';
         var crcgrid1=mini.get("crcGrid1");
         var crcgrid2=mini.get("crcGrid2");
@@ -231,17 +234,31 @@
         personcard=row.personcard;
         if(type=="01"){
             crcgrid1.load(data,gridLoadSuccess1);
+            crcgrid2.hide();
+            licGrid.hide();
+            scGrid.hide();
+            lucGrid.hide();
         }else if(type=="02"){
+            crcgrid1.hide();
             crcgrid2.load(data,gridLoadSuccess2);
             licGrid.load(data,gridLoadSuccess3);
             scGrid.load(data,gridLoadSuccess4);
             lucGrid.load(data,gridLoadSuccess5);
-        }else{
+        }else if(type==""){
             crcgrid1.load(data,gridLoadSuccess1);
             crcgrid2.load(data,gridLoadSuccess2);
             licGrid.load(data,gridLoadSuccess3);
             scGrid.load(data,gridLoadSuccess4);
             lucGrid.load(data,gridLoadSuccess5);
+        }else{
+            mini.showTips({
+                content: "未能识别的业务提醒类型",
+                state: "warning",
+                x: "center",
+                y: "center",
+                timeout: "2000"
+            });
+            return;
         }
     }
 
@@ -284,9 +301,12 @@
                     }else if(type=="02"){
                         fobtHide=1;
                         crcgrid1.hide();
-                    }else{
+                    }else  if(type==""){
                         fobtHide=0;
                         crcgrid1.show();
+                    }else{
+                        fobtHide=1;
+                        crcgrid1.hide();
                     }
                 }
             }
@@ -310,6 +330,9 @@
                     }else if(type=="02"){
                         crcHide=1;
                         crcgrid2.hide();
+                    }else if(type==""){
+                        crcHide=1;
+                        crcgrid2.hide();
                     }else{
                         crcHide=1;
                         crcgrid2.hide();
@@ -326,8 +349,11 @@
                         crcgrid2.hide();
                     }else if(type=="02"){
                         crcgrid2.show();
-                    }else{
+                    }else  if(type==""){
                         crcgrid2.show();
+                    }else{
+                        crcHide=1;
+                        crcgrid2.hide();
                     }
                 }
 
@@ -352,9 +378,12 @@
                     }else if(type=="02"){
                         licHide=0;
                         licGrid.show();
-                    }else{
+                    }else if(type==""){
                         licHide=0;
                         licGrid.show();
+                    }else{
+                        licHide=1;
+                        licGrid.hide();
                     }
                 }
             }else{
@@ -369,9 +398,12 @@
                     }else if(type=="02"){
                         licHide=0;
                         licGrid.show();
-                    }else{
+                    }else if(type==""){
                         licHide=0;
                         licGrid.show();
+                    }else{
+                        licHide=1;
+                        licGrid.hide();
                     }
                 }
             }
@@ -404,9 +436,12 @@
                     }else if(type=="02"){
                         scHide=0;
                         scGrid.show();
-                    }else{
+                    }else if(type==""){
                         scHide=0;
                         scGrid.show();
+                    }else{
+                        scHide=1;
+                        scGrid.hide();
                     }
                 }
             }
@@ -439,9 +474,12 @@
                     }else if(type=="02"){
                         lucHide=0;
                         lucGrid.show();
-                    }else{
+                    }else if(type==""){
                         lucHide=0;
                         lucGrid.show();
+                    }else{
+                        lucHide=1;
+                        lucGrid.hide();
                     }
                 }
             }
