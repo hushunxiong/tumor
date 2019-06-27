@@ -35,57 +35,6 @@ public class XkyyRegisterService {
     String soapActionURI = "http://www.winning.com.cn/KWS/WebBusiness";
 
     /**
-     * axis方式调用
-     */
-    public XhPatientResultVo callApiByAxis(CancerPersonInfo info) throws Exception{
-        org.apache.axis.client.Service service = new org.apache.axis.client.Service();
-        Call call;
-        XhPatientReturnVo returnVo = null;
-
-        try {
-            call = (Call) service.createCall();
-            call.setTargetEndpointAddress(url);
-            call.setUseSOAPAction(true);
-            call.setSOAPActionURI(soapActionURI);
-            call.setOperationName(new QName(namespace, methodName));
-            call.addParameter(new QName(namespace, "TranCode"), XMLType.XSD_STRING, ParameterMode.IN);
-            call.addParameter(new QName(namespace, "InXml"), XMLType.XSD_STRING, ParameterMode.IN);
-            call.setReturnType(XMLType.XSD_STRING);
-
-
-
-
-            //对传入的参数进行赋值操作
-            String[] param = new String[2];
-            param[0] = "B101";
-            param[1] = getPatientXml(info);
-
-            //开始调用服务
-            Object obj = call.invoke(param);
-            String result = (String) obj;
-
-            if (StringUtils.isNotBlank(result)) {
-                //解析xml
-                returnVo = XmlUtils.fromXml(result, XhPatientReturnVo.class);
-                if (StringUtils.equals("1", returnVo.getResultCode())) {
-                    throw new Exception("调用徐汇胸科医院接口失败");
-                }
-            }
-
-        } catch (ServiceException e) {
-            throw e;
-        } catch (RemoteException e) {
-            throw e;
-        } catch (Exception e) {
-            throw e;
-        }
-        if (returnVo != null) {
-            return returnVo.getResult();
-        }
-        return null;
-    }
-
-    /**
      * cxf基本参数类型调用
      */
     public XhPatientResultVo callApiByBasic(CancerPersonInfo info) throws Exception{
@@ -119,43 +68,6 @@ public class XkyyRegisterService {
         return null;
     }
 
-    /**
-     * cxf对象调用
-     */
-    public XhPatientResultVo callApiByObject(CancerPersonInfo info) throws Exception{
-        JaxWsDynamicClientFactory clientFactory = JaxWsDynamicClientFactory.newInstance();
-        Client client = clientFactory.createClient(url);
-        XhPatientReturnVo returnVo = null;
-
-        try {
-            String xml = getPatientXml(info);
-
-            Object requestVo = Thread.currentThread().getContextClassLoader().loadClass("com.wonders.health.tumor.tumor.vo.XhPatientRequestVo").newInstance();
-            Method m1 = requestVo.getClass().getMethod("setTranCode", String.class);
-            m1.invoke(requestVo, "B101");
-            Method m2 = requestVo.getClass().getMethod("setInXml", String.class);
-            m2.invoke(requestVo, xml);
-
-            Object[] res = client.invoke("WebBusiness", requestVo);
-
-            String result = (String) res[0];
-
-            if (StringUtils.isNotBlank(result)) {
-                //解析xml
-                returnVo = XmlUtils.fromXml(result, XhPatientReturnVo.class);
-                if (StringUtils.equals("1", returnVo.getResultCode())) {
-                    throw new Exception("调用徐汇胸科医院接口失败");
-                }
-            }
-        } catch (Exception e) {
-            throw e;
-        }
-
-        if (returnVo != null) {
-            return returnVo.getResult();
-        }
-        return null;
-    }
 
     public XhPatientResultVo callApiByProxy(CancerPersonInfo info) throws Exception {
         XhPatientReturnVo returnVo = null;
@@ -206,7 +118,12 @@ public class XkyyRegisterService {
         //xml拼接
         StringBuffer sb = new StringBuffer();
         sb.append("<request><partner></partner><sign></sign><timestamp></timestamp><operid>fazb</operid><password></password><kfsdm></kfsdm>");
-        sb.append(XmlUtils.toXml(vo));
+        String xml = XmlUtils.toXml(vo);
+        if (xml.indexOf("<params>") >=0) {
+            xml = xml.substring(xml.indexOf("<params>"));
+        }
+
+        sb.append(xml);
         sb.append("</request>");
         return sb.toString();
     }
