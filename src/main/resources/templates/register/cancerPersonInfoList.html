@@ -43,6 +43,7 @@
                             <div class="keyword">
                                 <input id="keyword" name="keyword" class="radius" placeholder="可按照姓名或者证件号码模糊查询" data-tooltip="输入身份证号时至少6位" type="text">
                                 <div class="my-btn my-btn-blue" onclick="onSearch()">搜索</div>
+                                <button shiro:hasPermission="tumor:cancerPersonInfo:save" class="my-btn my-btn-blue"  style="width: 10%;height: 50%;" onclick="goto('','','3')">新增初筛登记</button>
                             </div>
                         </td>
                         <td width="100px" align="center">
@@ -163,7 +164,6 @@
                     </div>
                     <div class="mini-row" >
                         <div class="mini-col-4">
-                            <button shiro:hasPermission="tumor:cancerPersonInfo:save" class="my-btn my-btn-blue" onclick="goto('','','3')">新增初筛登记</button>
                             <!--初筛管理一览 删除权限  -->
                             <input  name="hideInput" shiro:hasPermission="tumor:cancerPersonInfo:del" value="1" class="mini-hidden"/>
                             <!--初筛管理一览 编辑权限  -->
