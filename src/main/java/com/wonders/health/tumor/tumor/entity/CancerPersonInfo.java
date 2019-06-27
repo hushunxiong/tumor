@@ -113,6 +113,11 @@ public class CancerPersonInfo extends BaseEntity {
 	@Length(max=1)
 	private String ischange;	// 更新标志cdc_dic_personinfo id=60013 code=1：是；code=2：否
 
+	@Length(max=12)
+	private String patid;
+
+	@Length(max=12)
+	private String blh;
 
 	private  String crcCheckId; //大肠癌初筛信息登记id
 
@@ -657,5 +662,23 @@ public class CancerPersonInfo extends BaseEntity {
 
 	public void setIsNew(String isNew) {
 		this.isNew = isNew;
+	}
+
+	@JsonProperty("patid")
+	public String getPatid() {
+		return patid;
+	}
+
+	public void setPatid(String patid) {
+		this.patid = patid;
+	}
+
+	@JsonProperty("blh")
+	public String getBlh() {
+		return blh;
+	}
+
+	public void setBlh(String blh) {
+		this.blh = blh;
 	}
 }
