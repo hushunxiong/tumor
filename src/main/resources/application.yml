@@ -125,6 +125,7 @@ crc_switch_flag: 0
 lic_switch_flag: 0
 sc_switch_flag: 0
 luc_switch_flag: 1
+
 #是否新增筛查时可以向健康档案插入个人信息
 archieve_add_flag: 1
 
@@ -150,11 +151,12 @@ health_base_url: http://xuhui-web:9071/health
 casServerUrlPrefix: http://192.168.30.169:9071/cas
 shiroServerUrlPrefix: http://192.168.30.169:9071
 
-#初筛诊断(crc_switch_flag：大肠癌  lic_switch_flag：肝癌 sc_switch_flag：胃癌  luc_switch_flag：肺癌     )
+#初筛诊断(crc_switch_flag：大肠癌  lic_switch_flag：肝癌 sc_switch_flag：胃癌  luc_switch_flag：肺癌 )
 crc_switch_flag: 0
 lic_switch_flag: 0
 sc_switch_flag: 0
 luc_switch_flag: 1
+
 #是否新增筛查时可以向健康档案插入个人信息
 archieve_add_flag: 1
 
