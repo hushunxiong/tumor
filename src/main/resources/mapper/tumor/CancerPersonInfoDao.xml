@@ -41,6 +41,7 @@
 			1 as "luc",
 			luc.CHECK_RESULT AS "lucResult",
 		</if>
+		P.patid as patid,
 		P .PERSONCARD AS "personCard"
 	</sql>
 
