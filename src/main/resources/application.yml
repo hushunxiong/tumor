@@ -143,9 +143,9 @@ spring:
   profiles: xuhui
   datasource:
     # 填写你数据库的url、登录名、密码和数据库名
-    url: jdbc:oracle:thin:@:1521:ora11g
-    username:
-    password:
+    url: jdbc:oracle:thin:@xuhui-db:1521:orcl
+    username: zlzfx
+    password: zlzfx_XH_04
 
 health_base_url: http://xuhui-web:9071/health
 casServerUrlPrefix: http://192.168.30.169:9071/cas
