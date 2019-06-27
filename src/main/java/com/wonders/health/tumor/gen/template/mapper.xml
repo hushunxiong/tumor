@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>mapper</name>
+	<fileName>${ClassName}Dao.xml</fileName>
+	<content><![CDATA[
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${packageName}.${moduleName}.dao.${ClassName}Dao">
+    
+    <#-- 输出字段列 -->
+	<sql id="${ClassName}Columns">
+		<#list table.columns as c>a.${c.name} AS "${c.javaField}"<#if c_index &lt; table.columns?size-1>,</#if></#list>
+	</sql>
+
+	<select id="get" resultType="${packageName}.${moduleName}.entity.${ClassName}">
+		SELECT 
+			<include refid="${ClassName}Columns"/>
+		FROM ${table.name} a
+		WHERE<#list table.columnPks as p><#if (p_index > 0)> and</#if> a.${p.name} = ${"#"}{${p.javaField}}</#list>
+	</select>
+
+	<select id="findAll" resultType="${packageName}.${moduleName}.entity.${ClassName}">
+		SELECT 
+			<include refid="${ClassName}Columns"/>
+		FROM ${table.name} a
+		<where>
+			<#if table.delFlagExists>a.${table.delFlagSqlCol} = '0'</#if>
+		</where>		
+		<#if table.updateDateExists>
+			ORDER BY a.${table.updateDateSqlCol} DESC
+		</#if>
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM ${table.name} a
+      <where>
+		<#if table.delFlagExists>a.${table.delFlagSqlCol} = '0'</#if>
+		<#list table.columns as c>
+			<#if (c.query?? && c.query == "1")>
+				<#if c.queryType == "between">
+		<if test="begin${c.javaField?cap_first} != null">
+		AND a.${c.name} &gt;= ${"#"}{begin${c.javaField?cap_first}}
+		</if>
+		<if test="end${c.javaField?cap_first} != null">
+		AND a.${c.name} &lt; ${"#"}{end${c.javaField?cap_first}}
+		</if>
+				<#else>
+		<if test="${c.javaField} != null and ${c.javaField} != ''">
+				<#if c.queryType == 'like'>
+		AND a.${c.name} LIKE <#if dbName == 'oracle'>'%'||${"#"}{${c.javaField}}||'%'</#if><#if dbName == 'mysql'>concat('%',${"#"}{${c.javaField}},'%')</#if><#if dbName == 'sqlserver'>'%' + ${"#"}{${c.javaField}} + '%'</#if>
+				<#elseif c.queryType == 'left_like'>
+		AND a.${c.name} LIKE <#if dbName == 'oracle'>'%'||${"#"}{${c.javaField}}</#if><#if dbName == 'mysql'>concat('%',${"#"}{${c.javaField}})</#if><#if dbName == 'sqlserver'>'%' + ${"#"}{${c.javaField}}</#if>
+				<#elseif c.queryType == 'right_like'>
+		AND a.${c.name} LIKE <#if dbName == 'oracle'>${"#"}{${c.javaField}}||'%'</#if><#if dbName == 'mysql'>concat(${"#"}{${c.javaField}},'%')</#if><#if dbName == 'sqlserver'>${"#"}{${c.javaField}} + '%'</#if>
+				<#else>
+		AND a.${c.name} ${c.queryType} ${"#"}{${c.javaField}}
+				</#if>
+		</if>
+				</#if>
+			</#if>
+		</#list>
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="${packageName}.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="${packageName}.${moduleName}.entity.${ClassName}"
+            parameterType="${packageName}.common.model.DataGridSearch">
+		<#if dbName == 'oracle'>
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+		</#if>
+        select
+			<include refid="${ClassName}Columns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${"$"}{sortField} ${"$"}{sortOrder}
+			</when>
+			<otherwise>
+				<#if table.updateDateExists>
+				ORDER BY a.update_date DESC
+				</#if>
+			</otherwise>
+		</choose>
+		<#if dbName == 'mysql'>
+		<choose>
+			<when test="startRecord == 0">
+        	limit ${"#"}{pageSize}
+			</when>
+			<otherwise>
+        	limit ${"#"}{startRecord},${"#"}{pageSize}
+			</otherwise>
+		</choose>
+		</#if>
+		<#if dbName == 'oracle'>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= ${"#"}{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= ${"#"}{endRecord}) where rownum_ &gt; ${"#"}{startRecord}
+			</otherwise>
+		</choose>
+		</#if>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO ${table.name}(
+		<#list table.columns as c>${c.name}<#if c_index &lt; table.columns?size-1>,</#if></#list>
+		) VALUES (
+		<#list table.columns as c>${"#"}{${c.javaField}}<#if c_index &lt; table.columns?size-1>,</#if></#list>
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ${table.name} SET
+		<#list table.columns as c>${c.name} = ${"#"}{${c.javaField}}<#if c_index &lt; table.columns?size-1>,</#if></#list>
+		WHERE<#list table.columnPks as p><#if (p_index > 0)> and</#if> ${p.name} = ${"#"}{${p.javaField}}</#list>
+	</update>
+
+	<#if table.delFlagExists>
+	<update id="delete">
+	    UPDATE ${table.name} SET ${table.delFlagSqlCol} = '1'
+	    WHERE<#list table.columnPks as p><#if (p_index > 0)> and</#if> ${p.name} = ${"#"}{${p.javaField}}</#list>
+	</update>
+	<#else>
+	<delete id="delete">
+		DELETE FROM ${table.name}
+	    WHERE<#list table.columnPks as p><#if (p_index > 0)> and</#if> ${p.name} = ${"#"}{${p.javaField}}</#list>
+	</delete>
+	</#if>
+
+	
+</mapper>]]>
+	</content>
+</template>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CancerDicHospitalInfoDao">
+    
+	<sql id="CancerDicHospitalInfoColumns">
+		a.hospital_id AS "hospitalId",a.hospital_name AS "hospitalName",a.hospital_type AS "hospitalType",a.hospital_level AS "hospitalLevel",a.address_county AS "addressCounty",a.del_flag AS "delFlag",a.source_id AS "sourceId",a.hospital_id_22 AS "hospitalId22"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo">
+		SELECT 
+			<include refid="CancerDicHospitalInfoColumns"/>
+		FROM CANCER_DIC_HOSPITAL_INFO a
+		WHERE a.hospital_id = #{hospitalId}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo">
+		SELECT 
+			<include refid="CancerDicHospitalInfoColumns"/>
+		FROM CANCER_DIC_HOSPITAL_INFO a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM CANCER_DIC_HOSPITAL_INFO a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CancerDicHospitalInfoColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO CANCER_DIC_HOSPITAL_INFO(
+		hospital_id,hospital_name,hospital_type,hospital_level,address_county,del_flag,source_id,hospital_id_22
+		) VALUES (
+		#{hospitalId},#{hospitalName},#{hospitalType},#{hospitalLevel},#{addressCounty},#{delFlag},#{sourceId},#{hospitalId22}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE CANCER_DIC_HOSPITAL_INFO SET
+		hospital_id = #{hospitalId},hospital_name = #{hospitalName},hospital_type = #{hospitalType},hospital_level = #{hospitalLevel},address_county = #{addressCounty},del_flag = #{delFlag},source_id = #{sourceId},hospital_id_22 = #{hospitalId22}
+		WHERE hospital_id = #{hospitalId}
+	</update>
+
+	<update id="delete">
+	    UPDATE CANCER_DIC_HOSPITAL_INFO SET del_flag = '1'
+	    WHERE hospital_id = #{hospitalId}
+	</update>
+
+	<select id="queryName" resultType="com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo">
+		SELECT
+		<include refid="CancerDicHospitalInfoColumns"/>
+		FROM CANCER_DIC_HOSPITAL_INFO a
+		<where>
+			a.del_flag = '0'
+			AND a.hospital_name like '%' || #{name} || '%'
+		</where>
+	</select>
+</mapper>

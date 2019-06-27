@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title,links,scripts)">
+    <meta charset="UTF-8">
+    <!--<title th:replace="${title}">肿瘤早发现</title>-->
+    <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
+    <script src="../static/js/common.js" th:src="@{/js/common.js}" type="text/javascript"></script>
+
+    <script src="../static/lib/miniui/miniui.js" th:src="@{/lib/miniui/miniui.js}" type="text/javascript"></script>
+    <link href="../static/lib/miniui/themes/icons.css" th:href="@{/lib/miniui/themes/icons.css}" rel="stylesheet" type="text/css" />
+    <link href="../static/lib/miniui/themes/default/miniui.css" th:href="@{/lib/miniui/themes/default/miniui.css}" rel="stylesheet" type="text/css" />
+
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" type="text/css" />
+    <link href="../static/css/my-mini.css" th:href="@{/css/my-mini.css}" rel="stylesheet" type="text/css" />
+
+    <!--[if lt IE 9]>
+    <script src="../js/html5shiv.min.js" th:src="@{/js/html5shiv.min.js}"></script>
+    <script src="../js/respond.js" th:src="@{/js/respond.js}"></script>
+    <![endif]-->
+    <!--[if lte IE 11]>
+    <script type="text/javascript" src="../static/js/flexie.js" th:src="@{/js/flexie.js}"></script>
+    <script type="text/javascript" src="../static/js/selectivizr.js" th:src="@{/js/selectivizr.js}"></script>
+    <script type="text/javascript" src="../static/js/PIE_IE678.js" th:src="@{/js/PIE_IE678.js}"></script>
+    <![endif]-->
+    <link href="../lib/font-awesome/css/font-awesome.min.css" th:href="@{/lib/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css" />
+
+ <!--   <th:block th:replace="${links}" />
+    <th:block th:replace="${scripts}" />-->
+</head>
+<body>
+
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div class="mini-row" style="text-align: center">
+        <div class="mini-col-3" th:if="${crcFlag==1&&(vo!=null&&vo.crcCheckId!=null&&vo.crcCheckId!='')?true:false}">
+            <input  id="crc" name="crc" type="text" text="大肠癌"  class="mini-checkbox" >
+        </div>
+        <div class="mini-col-3" th:if="${licFlag==1&&(vo!=null&&vo.licCheckId!=null&&vo.licCheckId!='')?true:false}">
+            <input  id="lic" name="lic" type="text" text="肝癌"  class="mini-checkbox" >
+        </div>
+        <div class="mini-col-3"  th:if="${lucFlag==1&&(vo!=null&&vo.lucCheckId!=null&&vo.lucCheckId!='')?true:false}">
+            <input  id="sc" name="sc" type="text" text="胃癌"  class="mini-checkbox" >
+        </div>
+        <div class="mini-col-3" th:if="${scFlag==1&&(vo!=null&&vo.scCheckId!=null&&vo.scCheckId!='')?true:false}">
+            <input  id="luc" name="luc" type="text" text="肺癌"  class="mini-checkbox">
+        </div>
+    </div>
+    <div class="mini-row" style="text-align: center;margin-top: 5%;">
+        <div class="mini-col-12" >
+            <button class="my-btn my-btn-blue"  onclick="delAction()">删除</button>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+
+    function getData() {
+        var crc="";
+        var luc="";
+        var sc="";
+        var lic="";
+        var historyDelflag=0;
+        var data ={};
+        data.id=[[${vo.id}]];
+        data.csnf=[[${vo.csnf}]];
+        if([[${vo.crcCheckId}]]!=null&&[[${vo.crcCheckId}]]!=''){
+            historyDelflag=historyDelflag+1;
+            crc = mini.get("crc").getValue();
+        }
+        if([[${vo.lucCheckId}]]!=null&&[[${vo.lucCheckId}]]!=''){
+            historyDelflag=historyDelflag+1;
+            luc = mini.get("luc").getValue();
+        }
+
+        if([[${vo.scCheckId}]]!=null&&[[${vo.scCheckId}]]!=''){
+            historyDelflag=historyDelflag+1;
+             sc = mini.get("sc").getValue();
+        }
+
+        if([[${vo.licCheckId}]]!=null&&[[${vo.licCheckId}]]!=''){
+            historyDelflag=historyDelflag+1;
+            lic = mini.get("lic").getValue();
+        }
+
+        if(crc=='true'){
+            data.crcCheckId = [[${vo.crcCheckId}]];
+            historyDelflag=historyDelflag-1;
+        }
+        if(luc=='true'){
+            data.lucCheckId = [[${vo.lucCheckId}]];
+            historyDelflag=historyDelflag-1;
+        }
+        if(sc=='true'){
+            data.scCheckId = [[${vo.scCheckId}]];
+            historyDelflag=historyDelflag-1;
+        }
+        if(lic=='true'){
+            data.licCheckId = [[${vo.licCheckId}]];
+            historyDelflag=historyDelflag-1;
+        }
+        data.historyDelflag=historyDelflag;
+        return data;
+    }
+
+    function CloseWindow(action) {
+        if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+        else window.close();
+    }
+
+    function delAction() {
+        var data=getData();
+        if(JSON.stringify(data) == "{}"){
+            mini.alert("请选择删除对象！");
+            return;
+        }else{
+            data.id=[[${vo.id}]];
+            CloseWindow("save");
+
+        }
+    }
+
+</script>
+
+</html>
+

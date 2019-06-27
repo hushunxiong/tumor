@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="address(prefix,provinceName,provinceValue,cityName,cityValue,countyName,countyValue,townName,townValue,committeeName,committeeValue,detailName,detailValue,sameFlag)">
+    <table class="table_new3 table_new5" style="width: 100%; border: none;">
+        <tr th:if="${sameFlag eq true}">
+            <td class="bg-white text-l">
+                <input id="sameFlag" class="mini-checkbox" onvaluechanged="sameChange">同户籍地址
+            </td>
+        </tr>
+
+        <tr>
+            <td class="bg-white text-l">省（自治区、直辖市）</td>
+            <td>
+                <div th:replace="/common/address :: province(${prefix},${provinceName},${provinceValue},true,true)"></div>
+            </td>
+            <td class="bg-white" width="15%">市（地区/州）</td>
+            <td>
+                <div th:replace="/common/address :: city(${prefix},${cityName},${provinceValue},${cityValue},true,true)"></div>
+            </td>
+            <td class="bg-white">县（区）</td>
+            <td>
+                <div th:replace="/common/address :: county(${prefix},${countyName},${cityValue},${countyValue},true,true)"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="bg-white text-l">乡（镇、街道）</td>
+            <td>
+                <div th:replace="/common/address :: town(${prefix},${townName},${countyValue},${townValue},true,true)"></div>
+            </td>
+            <td class="bg-white">居委（村）</td>
+            <td colspan="3">
+                <div th:replace="/common/address :: committee(${prefix},${committeeName},${townValue},${committeeValue},true,true)"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="bg-white text-l">详细地址</td>
+            <td colspan="5">
+                <input class="mini-textbox" th:id="${prefix} + 'detail'" required="required"
+                       th:name="${detailName}" th:value="${detailValue}" style="width:47%" maxlength="100"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<span th:fragment="province(prefix,name,value,required,enabled)">
+    <input th:id="${prefix} + 'province'" th:name="${name}" th:value="${value}"
+           th:attr="required=${required == true},onvaluechanged='Address.setAddressCity(\''+${prefix}+'\');'"
+           url="Address.getProvinceUrl();" style="width:47%;"
+           showNullItem="true" allowInput="true" valueFromSelect="true" class="mini-combobox"/>
+</span>
+<span th:fragment="city(prefix,name,pvalue,value,required,enabled)">
+    <input th:id="${prefix} + 'city'" th:name="${name}" th:value="${value}"
+           th:attr="required=${required == true},onvaluechanged='Address.setAddressCounty(\''+${prefix}+'\');'"
+           th:url="${#strings.isEmpty(pvalue)?'':'Address.getCityUrl('+pvalue+');'}" style="width:47%;"
+           showNullItem="true" allowInput="true" valueFromSelect="true" class="mini-combobox"/>
+</span>
+<span th:fragment="county(prefix,name,pvalue,value,required,enabled)">
+    <input th:id="${prefix} + 'county'" th:name="${name}" th:value="${value}"
+           th:attr="required=${required == true},onvaluechanged='Address.setAddressTown(\''+${prefix}+'\');'"
+           th:url="${#strings.isEmpty(pvalue)?'':'Address.getCountyUrl('+pvalue+');'}" style="width:47%;"
+           showNullItem="true" allowInput="true" valueFromSelect="true" class="mini-combobox"/>
+</span>
+<span th:fragment="town(prefix,name,pvalue,value,required,enabled)">
+    <input th:id="${prefix} + 'town'" th:name="${name}" th:value="${value}"
+           th:url="${#strings.isEmpty(pvalue)?'':'Address.getTownUrl('+pvalue+');'}"
+           th:attr="required=${required == true},onvaluechanged='Address.setAddressCommittee(\''+${prefix}+'\');'"
+           style="width:47%;" showNullItem="true" allowInput="true" valueFromSelect="true" class="mini-combobox"/>
+</span>
+<span th:fragment="committee(prefix,name,pvalue,value,required,enabled)">
+    <input th:id="${prefix} + 'committee'" th:name="${name}" th:value="${value}" th:attr="required=${required == true}"
+           th:url="${#strings.isEmpty(pvalue)?'':'Address.getCommitteeUrl('+pvalue+');'}"
+           style="width:47%;" showNullItem="true" allowInput="true" valueFromSelect="true" class="mini-combobox"/>
+</span>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.follow.dao.FollowDao">
+
+    <sql id="FollowPersonInfoListColumns">
+        P.ID AS id,
+        P.NAME AS name,
+        P.GENDER AS "gender",
+        <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+            crc.id  as  "crcCheckId",
+            crc.check_year as  crcCheckYear,
+            crc.check_result as  crcResult,
+        </if>
+        <if test=" licFlag !=null and licFlag !='' and licFlag=='1'.toString()" >
+            lic.id  as  "licCheckId",
+            lic.check_year as  licCheckYear,
+            lic.check_result as  licResult,
+        </if>
+        <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+            sc.id  as  "scCheckId",
+            sc.check_year as  scCheckYear,
+            sc.check_result as  scResult,
+        </if>
+        <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+            luc.id  as  "lucCheckId",
+            luc.check_year as  lucCheckYear,
+            luc.check_result as  lucResult,
+        </if>
+        P.PERSONCARD_TYPE AS "personcardType",
+        P.PERSONCARD AS "personCard",
+        P.birth AS "birth",
+        P.ADDRESS_PROVINCE AS "addressProvince",
+        P.ADDRESS_CITY AS "addressCity",
+        P.ADDRESS_COUNTY AS "addressCounty",
+        P.ADDRESS_TOWN AS "addressTown",
+        P.ADDRESS_COMMITTEE AS "addressCommittee",
+        P.ADDRESS_DETAIL AS "addressDetail",
+        P.MOBILE AS "mobile",
+        P.TELEPHONE AS "telephone"
+    </sql>
+
+
+    <!-- 分页模块 -->
+    <sql id="pageFromAndWhere">
+        FROM cancer_person_info P
+        <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+            LEFT JOIN CRC_REGCASE crc ON (P.ID = crc.MANAGEID) AND crc.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   crc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   crc.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  crc.check_year=#{csnf}
+            </if>
+            <if test="beginDate !=null and beginDate !=''">
+                and  crc.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
+            </if>
+            <if test="endDate !=null and endDate !=''">
+                AND  crc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
+            </if>
+        </if>
+        <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
+            LEFT JOIN LIC_REGCASE lic ON (P.ID = lic.MANAGEID) AND lic.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   lic.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   lic.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  lic.check_year=#{csnf}
+            </if>
+            <if test="beginDate !=null and beginDate !=''">
+                and  lic.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
+            </if>
+            <if test="endDate !=null and endDate !=''">
+                AND  lic.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
+            </if>
+        </if>
+        <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+            LEFT JOIN SC_REGCASE sc ON (P.ID = sc.MANAGEID)  AND sc.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   sc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   sc.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  sc.check_year=#{csnf}
+            </if>
+            <if test="beginDate !=null and beginDate !=''">
+                and  sc.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
+            </if>
+            <if test="endDate !=null and endDate !=''">
+                AND  sc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
+            </if>
+        </if>
+        <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+            LEFT JOIN LUC_REGCASE luc ON (P.ID = luc.MANAGEID)  AND luc.DEL_FLAG='0'
+            <if test="regarea !=null and regarea!=''">
+                and   luc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg!='' ">
+                and   luc.regorg=#{regorg}
+            </if>
+            <if test="csnf !=null and csnf !='' ">
+                and  luc.check_year=#{csnf}
+            </if>
+            <if test="beginDate !=null and beginDate !=''">
+                and  luc.regdate &gt;= to_date(#{beginDate},'yyyy-MM-dd')
+            </if>
+            <if test="endDate !=null and endDate !=''">
+                AND  luc.regdate &lt; to_date(#{endDate},'yyyy-MM-dd') + 1
+            </if>
+        </if>
+        <where>
+            P.DEL_FLAG = '0'
+            <if test="keyword!=null and keyword!='' ">
+                AND (
+                p.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+                OR
+                p.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+                )
+            </if>
+            <if test="crcResult !=null and crcResult !=''">
+                AND  crc.check_result=#{crcResult}
+            </if>
+            <if test="licResult !=null and licResult !=''">
+                AND  lic.check_result=#{licResult}
+            </if>
+            <if test="scResult !=null and scResult !=''">
+                AND  sc.check_result=#{scResult}
+            </if>
+            <if test="lucResult !=null and lucResult !=''">
+                AND  luc.check_result=#{lucResult}
+            </if>
+            <if test="crcStatus !=null and crcStatus !=''">
+                <if test="crcStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM crc_follow f1 WHERE f1.crc_check_id = crc.id AND f1.DEL_FLAG = '0')
+                </if>
+                <if test="crcStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM crc_follow f1 WHERE f1.crc_check_id = crc.id AND f1.DEL_FLAG = '0')
+                </if>
+            </if>
+            <if test="licStatus !=null and licStatus !=''">
+                <if test="licStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM lic_follow f2 WHERE f2.lic_check_id = lic.id AND f2.DEL_FLAG = '0')
+                </if>
+                <if test="licStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM lic_follow f2 WHERE f2.lic_check_id = lic.id AND f2.DEL_FLAG = '0')
+                </if>
+            </if>
+            <if test="scStatus !=null and scStatus !=''">
+                <if test="scStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM sc_follow f3 WHERE f3.sc_check_id = sc.id AND f3.DEL_FLAG = '0')
+                </if>
+                <if test="scStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM sc_follow f3 WHERE f3.sc_check_id = sc.id AND f3.DEL_FLAG = '0')
+                </if>
+            </if>
+            <if test="lucStatus !=null and lucStatus !=''">
+                <if test="lucStatus =='1'.toString()">
+                    AND EXISTS (SELECT 1 FROM luc_follow f4 WHERE f4.luc_check_id = luc.id AND f4.DEL_FLAG = '0')
+                </if>
+                <if test="lucStatus =='2'.toString()">
+                    AND NOT EXISTS (SELECT 1 FROM luc_follow f4 WHERE f4.luc_check_id = luc.id AND f4.DEL_FLAG = '0')
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="pageVo">
+        select * from (
+        select
+        <include refid="FollowPersonInfoListColumns"/>
+        <include refid="pageFromAndWhere"/>
+        ) t
+        where
+        1=1 and (
+        <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+            t.crcCheckYear is not null or
+        </if>
+        <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
+            t.licCheckYear is not null or
+        </if>
+        <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+            t.scCheckYear is not null  or
+        </if>
+        <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+            t.lucCheckYear is not null or
+        </if>
+        1=2 )
+        ORDER BY t.name
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1) from (
+        <include refid="pageVo"/>
+        )
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        <choose>
+            <when test="startRecord == 0">
+                select * from (
+            </when>
+            <otherwise>
+                select * from ( select row_.*, rownum rownum_ from (
+            </otherwise>
+        </choose>
+        <include refid="pageVo"/>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+                ORDER BY ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="startRecord == 0">
+                ) row_ where rownum &lt;= #{pageSize}
+            </when>
+            <otherwise>
+                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+            </otherwise>
+        </choose>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>vo</name>
+	<fileName>${ClassName}SearchVo.java</fileName>
+	<content><![CDATA[
+/**
+ * 
+ */
+package ${packageName}.${moduleName}.vo;
+
+<#list table.searchIm as i>
+import ${i};
+</#list>
+
+import ${packageName}.common.model.DataGridSearch;
+import ${packageName}.common.utils.DateUtils;
+
+/**
+ * ${functionName}搜索
+ * @author ${functionAuthor}
+ */
+public class ${ClassName}SearchVo extends DataGridSearch {
+
+	<#list table.columns as c>
+		<#if c.query?? && c.query == "1">
+		<#if c.queryType == "between">
+	private ${c.javaType} begin${c.javaField?cap_first};	<#if c.comments??>// 开始 ${c.comments}</#if>
+	private ${c.javaType} end${c.javaField?cap_first};		<#if c.comments??>// 结束 ${c.comments}</#if>
+		<#else>
+	private ${c.javaType} ${c.javaField};		<#if c.comments??>// ${c.comments}</#if>
+		</#if>
+		</#if>
+	</#list>
+
+
+	<#-- 生成get和set方法 -->
+	<#list table.columns as c>
+		<#if c.query?? && c.query == "1">
+		<#if c.queryType == "between">
+
+		<#if c.showType == "date">
+	public ${c.javaType} getBegin${c.javaField?cap_first}() {
+		return begin${c.javaField?cap_first};
+	}
+
+	public void setBegin${c.javaField?cap_first}(${c.javaType} begin${c.javaField?cap_first}) {
+		this.begin${c.javaField?cap_first} = begin${c.javaField?cap_first};
+	}
+
+	public ${c.javaType} getEnd${c.javaField?cap_first}() {
+        if (end${c.javaField?cap_first} != null && end${c.javaField?cap_first} instanceof Date) {
+            try {
+                return DateUtils.addDays(DateUtils.parseDate(DateUtils.formatDate(end${c.javaField?cap_first}, "yyyy-MM-dd"), "yyyy-MM-dd"), 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+		return end${c.javaField?cap_first};
+	}
+
+	public void setEnd${c.javaField?cap_first}(${c.javaType} end${c.javaField?cap_first}) {
+		this.end${c.javaField?cap_first} = end${c.javaField?cap_first};
+	}
+		<#else>
+	public ${c.javaType} getBegin${c.javaField?cap_first}() {
+		return begin${c.javaField?cap_first};
+	}
+
+	public void setBegin${c.javaField?cap_first}(${c.javaType} begin${c.javaField?cap_first}) {
+		this.begin${c.javaField?cap_first} = begin${c.javaField?cap_first};
+	}
+
+	public ${c.javaType} getEnd${c.javaField?cap_first}() {
+		return end${c.javaField?cap_first};
+	}
+
+	public void setEnd${c.javaField?cap_first}(${c.javaType} end${c.javaField?cap_first}) {
+		this.end${c.javaField?cap_first} = end${c.javaField?cap_first};
+	}
+		</#if>
+
+
+		<#else>
+	public ${c.javaType} ${c.methodGet()}() {
+		return ${c.javaField};
+	}
+
+	public void ${c.methodSet()}(${c.javaType} ${c.javaField}) {
+		this.${c.javaField} = ${c.javaField};
+	}
+		</#if>
+		</#if>
+	</#list>
+}]]>
+	</content>
+</template>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CrcRegcaseIdDao">
+
+    <sql id="CrcRegcaseIdColumns">
+        a.id AS "id",a.code AS "code",a.name AS "name",a.address_county AS "addressCounty"
+    </sql>
+
+    <select id="get" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcaseId">
+        SELECT
+        <include refid="CrcRegcaseIdColumns"/>
+        FROM crc_regcase_id a
+        WHERE a.id = #{id}
+        AND a.del_flag = '0'
+    </select>
+
+    <select id="getByAreacode" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcaseId">
+        SELECT
+        <include refid="CrcRegcaseIdColumns"/>
+        FROM crc_regcase_id a
+        WHERE a.address_county = #{areaCode}
+        AND a.del_flag = '0'
+    </select>
+
+    <select id="getByJgcode" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcaseId">
+        SELECT
+        <include refid="CrcRegcaseIdColumns"/>
+        FROM crc_regcase_id a
+        WHERE a.regorg = #{jgCode}
+        AND a.del_flag = '0'
+    </select>
+
+</mapper>

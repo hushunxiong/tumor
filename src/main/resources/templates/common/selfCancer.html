@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div th:fragment="selfSelect">
+
+    <script type="text/javascript">
+
+        //增加行
+        function addSelfRow(data) {
+            if (data == null) {
+                data = {index: 0};
+            } else {
+                data.index = 0;
+            }
+
+            $('#azsBody tr').each(function (i, a) {
+
+                var idx = parseInt($(this).attr("index"));
+                if (data.index == undefined) {
+                    data.index = idx;
+                } else if (data.index <= idx) {
+                    data.index = idx + 1;
+                }
+
+            });
+
+            if (data.sort == undefined) {
+                data.sort = data.index + 1;
+            }
+            var tpl = $('#selfRowTpl').html();
+            var html = template.render(tpl, data);
+
+            $('#azsBody').append(html);
+            mini.parse();
+        }
+
+        //删除行
+        function delSelfRow(index) {
+            // if(index == 0){
+            //     return;
+            // }
+            // if ($('#azsBody').children().length == 2) {
+            //     return;
+            // }
+
+            // var id=mini.get("historyId"+index).getValue();//后台删除记录
+            //
+            // if(id!=null && id!=''){
+            //     var personid=mini.get("id").getValue();
+            //     var checkYear=mini.get("checkYear").getValue();
+            //     $.ajax({
+            //         url: "/tumor/screening/deleteSelfHistory?id="+id+"&&checkId="+personid+"&&checkYear="+checkYear,
+            //         type:'get',
+            //         dataType:'text',
+            //         success:function(res) {
+            //             if (res=="2") { //删除失败
+            //                 mini.showTips({
+            //                     content: '删除癌症史失败',
+            //                     state: "warning",
+            //                     x: "center",
+            //                     y: "center",
+            //                     timeout: 2000
+            //                 });
+            //                 return;
+            //             }
+            //         }
+            //     })
+            // }
+            $("#selfRow" + index).remove();
+            if ($('#azsBody').children().length == 1) {
+                mini.get("azsHistory").setValue(2);
+            }
+        }
+
+    </script>
+
+    <script id="selfRowTpl" type="text/template" style="display: none;">
+        <tr id="selfRow{{index}}" index="{{index}}">
+            <td colspan="2" class="bg-white" style="padding:0px;">
+                <table class="table_new table_new6 table_new_border">
+                    <tr>
+                        <td class="bg-white" style="border: none;">
+                            <a href="javascript:void(0);" style="text-decoration:none;margin-right:15px" onclick="addSelfRow(null);">+</a>
+                            <a href="javascript:void(0);" style="text-decoration:none;" onclick="delSelfRow({{index}});">-</a>
+                        </td>
+                        <td>癌症种类</td>
+                        <td class="bg-white">
+                            <input id="historyId{{index}}" name="historyList[{{index}}].id" value="{{id}}" class="mini-hidden"/>
+                            <input id="icd10{{index}}" name="historyList[{{index}}].icd10" value="{{icd10}}"
+                                   class="mini-combobox" showNullItem="true" width="43%" emptyText="请选择"
+                                   th:data="${#dic.generals('60020')}"
+                                   textField="name" valueField="code" allowInput="true" valueFromSelect="true" />
+
+                        </td>
+                        <td>发病年龄</td>
+                        <td width="15%" class="bg-white">
+                            <input id="age{{index}}" name="historyList[{{index}}].age" value="{{age}}" class="mini-textbox" width="100" vtype="int" />
+                        </td>
+                        <td>诊断医院</td>
+                        <td width="25%" class="bg-white">
+                            <input id="hospitalCode{{index}}" class="mini-autocomplete" style="width:100%" name="historyList[{{index}}].hospitalCode" value="{{hospitalCode}}"
+                                   textField="text" valueField="id" searchField="name" popupEmptyText="未找到数据"
+                                   th:url="@{/hospital/queryName}" showNullItem="false" allowInput="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </script>
+
+    <table id="azsTable" class="table_new table_new5 mt-10">
+        <tbody id="azsBody">
+        <tr>
+            <td width="20%">有无癌症史</td>
+            <td width="80%" class="text-l">
+                <input id="azsHistory" class="mini-radiobuttonlist"
+                       th:data="${#dic.generals('60007')}"  th:value="${historyListFlag}"
+                       textField="name" valueField="code"
+                       onvaluechanged="azsChanged"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

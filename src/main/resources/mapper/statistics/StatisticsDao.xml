@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.statistics.dao.StatisticsDao">
+    <!--初筛信息汇总表（阴性）-->
+    <sql id="pageFromAndWhereNegative">
+        from (
+        select
+        info.NAME AS xm,
+        info.gender AS xb,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
+        info.address_province AS addressProvince,
+        info.address_city AS addressCity,
+        info.address_county AS addressCounty,
+        info.address_town AS addressTown,
+        info.address_committee AS addressCommittee,
+        info.address_detail AS addressDetail,
+        info.mobile AS mobile,
+        info.telephone,
+        t2.REGORG as REGORG,
+        t2.csrq as csrq
+        from (
+        SELECT
+        t.REGORG,
+        t.csrq,
+        t.manageid
+        FROM(
+        <if test="crc==true">
+            SELECT
+            crc.MANAGEID as manageid,
+            crc.regorg AS regorg,
+            to_char(crc.regdate,'yyyy-MM-dd')AS csrq
+            FROM
+            CRC_REGCASE crc
+            where
+            crc.CHECK_RESULT=1
+            and crc.del_flag=0
+            <if test="csrqStart !=null">
+                and crc.regdate >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and crc.regdate &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and crc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg !=''">
+                and crc.regorg=#{regorg}
+            </if>
+            <if test="sc==true or luc==true or lic==true ">
+                union all
+            </if>
+        </if>
+        <if test="lic==true">
+            SELECT
+            lic.MANAGEID as manageid,
+            lic.regorg AS regorg,
+            to_char(lic.regdate,'yyyy-MM-dd')AS csrq
+            FROM
+            LIC_REGCASE lic
+            where
+            lic.CHECK_RESULT=1
+            and lic.del_flag=0
+            <if test="csrqStart !=null">
+                and lic.regdate >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and lic.regdate &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and lic.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg !=''">
+                and lic.regorg=#{regorg}
+            </if>
+            <if test="sc==true or luc==true ">
+                union all
+            </if>
+        </if>
+        <if test="luc==true">
+            SELECT
+            luc.MANAGEID as manageid,
+            luc.regorg AS regorg,
+            to_char(luc.regdate,'yyyy-MM-dd') AS csrq
+            FROM
+            LUC_REGCASE luc
+            where
+            luc.CHECK_RESULT=1
+            and luc.del_flag=0
+            <if test="csrqStart !=null">
+                and luc.regdate >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and luc.regdate &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and luc.region_code=#{regarea}
+            </if>
+
+            <if test="regorg != null and regorg !=''">
+                and luc.regorg=#{regorg}
+            </if>
+            <if test="sc==true">
+                union all
+            </if>
+        </if>
+        <if test="sc==true">
+            SELECT
+            sc.MANAGEID as manageid,
+            sc.regorg AS regorg,
+            to_char(sc.regdate,'yyyy-MM-dd') AS csrq
+            FROM
+            SC_REGCASE sc
+            where
+            sc.CHECK_RESULT=1
+            and sc.del_flag=0
+            <if test="csrqStart !=null">
+                and sc.regdate >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and sc.regdate &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and sc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg !=''">
+                and sc.regorg=#{regorg}
+            </if>
+        </if>
+
+        ) t
+        GROUP BY
+        t.REGORG,
+        t.CSRQ,
+        t.MANAGEID having count(1)=#{count}
+        ) t2 left join cancer_person_info info on t2.MANAGEID=info.ID
+        where info.del_flag=0) negative
+    </sql>
+
+    <select id="pageCountNegative" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhereNegative"/>
+    </select>
+    <select id="getNegative" parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo"
+            resultType="com.wonders.health.tumor.statistics.vo.NegativeSummaryVo">
+        <choose>
+            <when test="startRecord == 0">
+                select * from (
+            </when>
+            <otherwise>
+                select * from ( select row_.*, rownum rownum_ from (
+            </otherwise>
+        </choose>
+        SELECT
+        *
+        <include refid="pageFromAndWhereNegative"/>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+                ORDER BY ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY  negative.csrq asc
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="startRecord == 0">
+                ) row_ where rownum &lt;= #{pageSize}
+            </when>
+            <otherwise>
+                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <!--初筛信息汇总（阳性大肠癌）-->
+    <sql id="pageFromAndWhereCrcPositive">
+        FROM
+        crc_regcase crc
+        LEFT JOIN cancer_person_info info ON crc.manageid =info.id AND info.del_flag =0
+        left join crc_risk_assessment crcrisk on crc.ID =crcrisk.CRC_CHECK_ID and crcrisk.del_flag=0
+        left join crc_fobt crcfobt on crc.ID=crcfobt.CRC_CHECK_ID and crcfobt.del_flag=0
+        left join crc_follow crcfo on crc.ID=crcfo.CRC_CHECK_ID and crcfo.del_flag=0
+        WHERE
+        crc.check_result =2
+        and crc.del_flag=0
+        <if test="csrqStart !=null">
+            and crc.regdate >=#{csrqStart}
+        </if>
+        <if test="csrqEnd !=null">
+            and crc.regdate &lt;#{csrqEnd}+1
+        </if>
+        <if test="regarea !=null and regarea!=''">
+            and crc.region_code=#{regarea}
+        </if>
+        <if test="regorg != null and regorg !=''">
+            and crc.regorg=#{regorg}
+        </if>
+    </sql>
+    <select id="pageCountCrcPositive" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhereCrcPositive"/>
+    </select>
+    <select id="getCrcPositive" parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo"
+            resultType="com.wonders.health.tumor.statistics.vo.CrcPositiveSummaryVo">
+        <choose>
+            <when test="startRecord == 0">
+                select * from (
+            </when>
+            <otherwise>
+                select * from ( select row_.*, rownum rownum_ from (
+            </otherwise>
+        </choose>
+        SELECT
+        info.NAME AS xm,
+        info.gender AS xb,
+        to_char(info.birth,'yyyy-MM-dd')AS birthday,
+        info.address_province as addressProvince,
+        info.address_city as addressCity,
+        info.address_county as addressCounty,
+        info.address_town as addressTown,
+        info.address_committee as addressCommittee,
+        info.address_detail as addressDetail,
+        crcrisk.ASSESSMENT_RESULT as assessmentResult,
+        crcfobt.FOBT_RESULT as fobtResult,
+        crcfo.CHANGJING as changjing,
+        crcfo.SHIFOUQUEZHEN as sfqz,
+        crcfo.SHIFOUZHILIAO as sfzl,
+        crcfo.linchuangfenqi_putuo as zlqb,
+        crcfo.BINGBIANBUW as zlwz,
+        info.mobile as mobile,
+        info.telephone,
+        crc.regorg as regorg,
+        to_char(crc.regdate,'yyyy-MM-dd')AS csrq
+        <include refid="pageFromAndWhereCrcPositive"/>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+                ORDER BY ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY  crc.regdate asc
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="startRecord == 0">
+                ) row_ where rownum &lt;= #{pageSize}
+            </when>
+            <otherwise>
+                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!--初筛信息汇总（阳性肝癌）-->
+    <sql id="pageFromAndWhereLicPositive">
+        FROM
+        lic_regcase lic
+        LEFT JOIN cancer_person_info info ON info.id = lic.MANAGEID AND info.del_flag = 0
+        LEFT JOIN lic_risk_assessment licrisk ON lic.id = licrisk.lic_CHECK_ID and licrisk.del_flag = 0
+        LEFT JOIN lic_FOLLOW licfo ON lic.id = licfo.lic_CHECK_ID and licfo.del_flag = 0
+        LEFT JOIN lic_assist_check licac on lic.ID = licac.lic_check_id and licac.del_flag = 0
+        WHERE
+        lic.check_result = 2
+        and lic.del_flag=0
+        <if test="csrqStart !=null">
+            and lic.regdate >=#{csrqStart}
+        </if>
+        <if test="csrqEnd !=null">
+            and lic.regdate &lt;#{csrqEnd}+1
+        </if>
+        <if test="regarea !=null and regarea!=''">
+            and lic.region_code=#{regarea}
+        </if>
+        <if test="regorg != null and regorg !=''">
+            and lic.regorg=#{regorg}
+        </if>
+    </sql>
+
+    <select id="pageCountLicPositive" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhereLicPositive"/>
+    </select>
+
+    <select id="getLicPositive" parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo"
+            resultType="com.wonders.health.tumor.statistics.vo.LicPositiveSummaryVo">
+        <choose>
+            <when test="startRecord == 0">
+                select * from (
+            </when>
+            <otherwise>
+                select * from ( select row_.*, rownum rownum_ from (
+            </otherwise>
+        </choose>
+        SELECT
+        info.NAME AS xm,
+        info.gender AS xb,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
+        info.address_province AS addressProvince,
+        info.address_city AS addressCity,
+        info.address_county AS addressCounty,
+        info.address_town AS addressTown,
+        info.address_committee AS addressCommittee,
+        info.address_detail AS addressDetail,
+        info.mobile AS mobile,
+        info.telephone,
+        lic.REGORG AS REGORG,
+        licrisk.assessment_result AS assessmentResult,
+        licac.GTP as GTP,
+        licac.HBEG as Hbeg,
+        licac.AFP AS AFP,
+        licac.Bus as Bus,
+        licfo.SHIFOUQUEZHEN AS sfqz,
+        licfo.SHIFOUZHILIAO AS sfzl,
+        licfo.ZHONGLIUWEIZH AS zlwz,
+        licfo.linchuangfenqi AS zlqb,
+        to_char(lic.REGDATE,'yyyy-MM-dd')AS csrq
+        <include refid="pageFromAndWhereLicPositive"/>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+                ORDER BY ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY  lic.regdate asc
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="startRecord == 0">
+                ) row_ where rownum &lt;= #{pageSize}
+            </when>
+            <otherwise>
+                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+            </otherwise>
+        </choose>
+
+    </select>
+
+
+    <!--初筛信息汇总（阳性肺癌）-->
+    <sql id="pageFromAndWhereLucPositive">
+        FROM
+        luc_regcase luc
+        LEFT JOIN cancer_person_info info ON info.id = luc.MANAGEID AND info.del_flag = 0
+        LEFT JOIN luc_risk_assessment lucrisk ON luc.id = lucrisk.LUC_CHECK_ID and lucrisk.del_flag = 0
+        LEFT JOIN LUC_FOLLOW lucfo ON luc.id = lucfo.LUC_CHECK_ID and lucfo.del_flag = 0
+        WHERE
+        luc.check_result = 2
+        and luc.del_flag = 0
+        <if test="csrqStart !=null">
+            and luc.regdate >=#{csrqStart}
+        </if>
+        <if test="csrqEnd !=null">
+            and luc.regdate &lt;#{csrqEnd}+1
+        </if>
+        <if test="regarea !=null and regarea!=''">
+            and luc.region_code=#{regarea}
+        </if>
+        <if test="regorg != null and regorg !=''">
+            and luc.regorg=#{regorg}
+        </if>
+    </sql>
+    <select id="pageCountLucPositive" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhereLucPositive"/>
+    </select>
+
+    <select id="getLucPositive" parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo"
+            resultType="com.wonders.health.tumor.statistics.vo.LucPositiveSummaryVo">
+        <choose>
+            <when test="startRecord == 0">
+                select * from (
+            </when>
+            <otherwise>
+                select * from ( select row_.*, rownum rownum_ from (
+            </otherwise>
+        </choose>
+        SELECT
+        info.NAME AS xm,
+        info.gender AS xb,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
+        info.address_province AS addressProvince,
+        info.address_city AS addressCity,
+        info.address_county AS addressCounty,
+        info.address_town AS addressTown,
+        info.address_committee AS addressCommittee,
+        info.address_detail AS addressDetail,
+        info.mobile AS mobile,
+        info.telephone,
+        luc.REGORG AS REGORG,
+        lucrisk.assessment_result AS assessmentResult,
+        lucfo.shifouLDCT AS shifouLDCT,
+        lucfo.LDCT_jieguo AS LDCTJieguo,
+        lucfo.SHIFOUQUEZHEN AS sfqz,
+        lucfo.SHIFOUZHILIAO AS sfzl,
+        lucfo.ZHONGLIUWEIZH AS zlwz,
+        lucfo.linchuangfenqi AS zlqb,
+        to_char(luc.REGDATE,'yyyy-MM-dd') AS csrq
+        <include refid="pageFromAndWhereLucPositive"/>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+                ORDER BY ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY  luc.REGDATE asc
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="startRecord == 0">
+                ) row_ where rownum &lt;= #{pageSize}
+            </when>
+            <otherwise>
+                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!--初筛信息汇总（阳性胃癌）-->
+    <sql id="pageFromAndWhereScPositive">
+        FROM
+        sc_regcase sc
+        LEFT JOIN cancer_person_info info ON info.id = sc.MANAGEID AND info.del_flag = 0
+        LEFT JOIN sc_risk_assessment scrisk ON sc.id = scrisk.sc_CHECK_ID and scrisk.del_flag = 0
+        LEFT JOIN sc_FOLLOW scfo ON sc.id = scfo.sc_CHECK_ID and scfo.del_flag = 0
+        WHERE
+        sc.check_result = 2
+        and sc.del_flag = 0
+        <if test="csrqStart !=null">
+            and sc.regdate >=#{csrqStart}
+        </if>
+        <if test="csrqEnd !=null">
+            and sc.regdate &lt;#{csrqEnd}+1
+        </if>
+        <if test="regarea !=null and regarea!=''">
+            and sc.region_code=#{regarea}
+        </if>
+        <if test="regorg != null and regorg !=''">
+            and sc.regorg=#{regorg}
+        </if>
+    </sql>
+
+    <select id="pageCountScPositive" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhereScPositive"/>
+    </select>
+
+    <select id="getScPositive" parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo"
+            resultType="com.wonders.health.tumor.statistics.vo.ScPositiveSummaryVo">
+        <choose>
+            <when test="startRecord == 0">
+                select * from (
+            </when>
+            <otherwise>
+                select * from ( select row_.*, rownum rownum_ from (
+            </otherwise>
+        </choose>
+        SELECT
+        info.NAME AS xm,
+        info.gender AS xb,
+        to_char(info.birth,'yyyy-MM-dd') AS birthday,
+        info.address_province AS addressProvince,
+        info.address_city AS addressCity,
+        info.address_county AS addressCounty,
+        info.address_town AS addressTown,
+        info.address_committee AS addressCommittee,
+        info.address_detail AS addressDetail,
+        info.mobile AS mobile,
+        info.telephone,
+        sc.REGORG AS REGORG,
+        scrisk.assessment_result AS assessmentResult,
+        scfo.SHIFOUWEIJING as sfwj,
+        scfo.WEIJING_JIEGUO as wjjcjg,
+        scfo.SHIFOUQUEZHEN AS sfqz,
+        scfo.SHIFOUZHILIAO AS sfzl,
+        scfo.ZHONGLIUWEIZH AS zlwz,
+        scfo.linchuangfenqi AS zlqb,
+        to_char(sc.REGDATE,'yyyy-MM-dd') AS csrq
+        <include refid="pageFromAndWhereScPositive"/>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+                ORDER BY ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY  sc.REGDATE asc
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="startRecord == 0">
+                ) row_ where rownum &lt;= #{pageSize}
+            </when>
+            <otherwise>
+                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+            </otherwise>
+        </choose>
+    </select>
+    <!--诊断信息收集表-->
+    <sql id="pageFromAndWhereInformation">
+        FROM
+        (SELECT
+        info.NAME AS xm,
+        info.PERSONCARD_TYPE AS personcardType,
+        info.PERSONCARD AS personcard,
+        t.MANAGEID AS MANAGEID,
+        t.REGORG AS REGORG,
+        t.CHANGJING as changjing,
+        t.SHIFOULDCT as SHIFOULDCT,
+        t.SHIFOUWEIJING as SHIFOUWEIJING,
+        t.bbbw AS bbbw,
+        t.zldx AS zldx,
+        t.sfhj AS sfhj,
+        t.hjjg AS hjjg,
+        t.sfbl AS sfbl,
+        t.bllx AS bllx,
+        t.ZHONGLIUTNM_T,
+        t.ZHONGLIUTNM_N,
+        t.ZHONGLIUTNM_M,
+        t.sfrq AS sfrq
+        FROM
+        (
+        <if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()">
+            SELECT
+            crc.MANAGEID AS MANAGEID,
+            crc.REGORG AS REGORG,
+            crcfo.changjing as changjing,
+            null as shifouLDCT,
+            null as shifouweijing,
+            dic.NAME AS bbbw,
+            crcfo.bingbianDaXiao AS zldx,
+            crcfo.huojian AS sfhj,
+            dict.NAME AS hjjg,
+            crcfo.BINGLI AS sfbl,
+            crcfo.binglileixing AS bllx,
+            crcfo.ZHONGLIUTNM_T,
+            crcfo.ZHONGLIUTNM_N,
+            crcfo.ZHONGLIUTNM_M,
+            to_char(crcfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
+            FROM
+            CRC_FOLLOW crcfo
+            LEFT JOIN crc_regcase crc ON crc.ID = crcfo.CRC_CHECK_ID
+            left join  (select code,name from cancer_dic where id = '60031') dic on crcfo.BINGBIANBUW = dic.code
+            left join (select code,name from cancer_dic where id = '60033') dict on crcfo.huojianjieguo = dict.code
+            where
+            crc.del_flag = 0
+            and crcfo.del_flag = 0
+            <if test="csrqStart !=null">
+                and crcfo.suifang_date >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and crcfo.suifang_date &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and crc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg !=''">
+                and crc.regorg=#{regorg}
+            </if>
+            UNION ALL
+        </if>
+        <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()">
+            SELECT
+            lic.MANAGEID AS MANAGEID,
+            lic.REGORG AS REGORG,
+            null as changjing,
+            null as shifouLDCT,
+            null as shifouweijing,
+            licfo.zhongliuweizh AS bbbw,
+            licfo.zhongliudaxiao AS zldx,
+            licfo.huojian AS sfhj,
+            licfo.huojianjieguo AS hjjg,
+            licfo.BINGLI AS sfbl,
+            licfo.binglileixing AS bllx,
+            licfo.ZHONGLIUTNM_T,
+            licfo.ZHONGLIUTNM_N,
+            licfo.ZHONGLIUTNM_M,
+            to_char(licfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
+            FROM
+            lic_FOLLOW licfo
+            LEFT JOIN lic_regcase lic  ON lic.ID = licfo.LIC_CHECK_ID
+            where
+            lic.del_flag = 0
+            and licfo.del_flag = 0
+            <if test="csrqStart !=null">
+                and licfo.suifang_date >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and licfo.suifang_date &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and lic.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg !=''">
+                and lic.regorg=#{regorg}
+            </if>
+            UNION ALL
+        </if>
+        <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()">
+
+            SELECT
+            luc.MANAGEID AS MANAGEID,
+            luc.REGORG AS REGORG,
+            null as changjing,
+            lucfo.shifouLDCT as shifouLDCT,
+            null as shifouweijing,
+            lucfo.zhongliuweizh AS bbbw,
+            lucfo.zhongliudaxiao AS zldx,
+            lucfo.huojian AS sfhj,
+            lucfo.huojianjieguo AS hjjg,
+            lucfo.BINGLI AS sfbl,
+            lucfo.binglileixing AS bllx,
+            lucfo.ZHONGLIUTNM_T,
+            lucfo.ZHONGLIUTNM_N,
+            lucfo.ZHONGLIUTNM_M,
+            to_char(lucfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
+            FROM
+             luc_FOLLOW lucfo
+            LEFT JOIN luc_regcase luc ON luc.ID = lucfo.luc_CHECK_ID
+            where
+            luc.del_flag = 0
+            and lucfo.del_flag = 0
+            <if test="csrqStart !=null">
+                and lucfo.suifang_date >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and lucfo.suifang_date &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and luc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg !=''">
+                and luc.regorg=#{regorg}
+            </if>
+            UNION ALL
+        </if>
+
+        <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()">
+
+            SELECT
+            sc.MANAGEID AS MANAGEID,
+            sc.REGORG AS REGORG,
+            null as changjing ,
+            null as shifouLDCT,
+            scfo.shifouweijing as shifouweijing,
+            scfo.zhongliuweizh AS bbbw,
+            scfo.zhongliudaxiao AS zldx,
+            scfo.huojian AS sfhj,
+            scfo.huojianjieguo AS hjjg,
+            scfo.BINGLI AS sfbl,
+            scfo.binglileixing AS bllx,
+            scfo.ZHONGLIUTNM_T,
+            scfo.ZHONGLIUTNM_N,
+            scfo.ZHONGLIUTNM_M,
+            to_char(scfo.SUIFANG_DATE,'yyyy-MM-dd') AS sfrq
+            FROM
+            sc_FOLLOW scfo
+            LEFT JOIN sc_regcase sc  ON sc.ID = scfo.sc_CHECK_ID
+            where
+            sc.del_flag = 0
+            and scfo.del_flag = 0
+            <if test="csrqStart !=null">
+                and scfo.suifang_date >=#{csrqStart}
+            </if>
+            <if test="csrqEnd !=null">
+                and scfo.suifang_date &lt;#{csrqEnd}+1
+            </if>
+            <if test="regarea !=null and regarea!=''">
+                and sc.region_code=#{regarea}
+            </if>
+            <if test="regorg != null and regorg !=''">
+                and sc.regorg=#{regorg}
+            </if>
+        </if>
+        ) t
+        LEFT JOIN CANCER_PERSON_INFO info ON t.MANAGEID = info.ID
+        WHERE
+        info.DEL_FLAG =0) information
+    </sql>
+    <select id="pageCountInformation" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhereInformation"/>
+    </select>
+    <select id="getInformation" parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo"
+            resultType="com.wonders.health.tumor.statistics.vo.InformationCollectionVo">
+        <choose>
+            <when test="startRecord == 0">
+                select * from (
+            </when>
+            <otherwise>
+                select * from ( select row_.*, rownum rownum_ from (
+            </otherwise>
+        </choose>
+        SELECT
+            *
+        <include refid="pageFromAndWhereInformation"/>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+                ORDER BY ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY  information.sfrq,information.personcard asc
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="startRecord == 0">
+                ) row_ where rownum &lt;= #{pageSize}
+            </when>
+            <otherwise>
+                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

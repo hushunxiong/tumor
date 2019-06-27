@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>form</name>
+	<fileName>${ClassName?uncap_first}Form.jsp</fileName>
+	<content><![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/include/taglib.jsp" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${functionName}表单</title>
+    <jsp:include page="/WEB-INF/include/head.jsp"/>
+</head>
+<body>
+<div id="form1" class="formDiv">
+	<%@include file="/WEB-INF/include/token.jsp" %>
+	<#if table.pkIsId>
+	<input name="id" value="${"$"}{${ClassName?uncap_first}.id}" visible="false" class="mini-textbox" />
+	</#if>
+
+	<table border="0" cellpadding="1" cellspacing="2" class="form-layout">
+	<#list table.columns as c>
+	<#if c.edit?? && c.edit == "1">
+		<tr>
+			<td style="text-align: right;width: 30%;"><#if c.comments??>${c.comments}</#if>：</td>
+			<td>
+			<#if c.showType == "input">
+				<input id="${c.javaField}" name="${c.javaField}" value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" style="width: 60%;" <#if c.required?? && c.required == "true">required="true"</#if> vtype="<#if c.vtype??>${c.vtype}</#if>" placeholder="<#if c.comments??>${c.comments}</#if>" class="mini-textbox"/>
+			<#elseif c.showType == "textarea">
+				<textarea id="${c.javaField}" name="${c.javaField}" style="width: 60%;" <#if c.required?? && c.required == "true">required="true"</#if> vtype="<#if c.vtype??>${c.vtype}</#if>" cols="" rows="" class="mini-textarea">${"$"}{${ClassName?uncap_first}.${c.javaField}}</textarea>
+			<#elseif c.showType == "select">
+				<input id="${c.javaField}" name="${c.javaField}" value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" style="width: 60%;" <#if c.required?? && c.required == "true">required="true"</#if> vtype="<#if c.vtype??>${c.vtype}</#if>" valueFromSelect="true" pinyinField="pinyin" showNullItem="true" allowInput="true" class="mini-combobox"
+					data='${"$"}{fns:toJson(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))}' />
+			<#elseif c.showType == "checkbox">
+				<span id="${c.javaField}" name="${c.javaField}" value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" <#if c.required?? && c.required == "true">required="true"</#if> vtype="<#if c.vtype??>${c.vtype}</#if>" class="mini-checkboxlist fl mt-6"
+					data='${"$"}{fns:toJson(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))}' ></span>
+			<#elseif c.showType == "radio">
+				<span id="${c.javaField}" name="${c.javaField}" value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" <#if c.required?? && c.required == "true">required="true"</#if> vtype="<#if c.vtype??>${c.vtype}</#if>" class="mini-radiobuttonlist fl mt-6"
+					data='${"$"}{fns:toJson(fns:optionList('<#if c.dictType??>${c.dictType}</#if>'))}' ></span>
+			<#elseif c.showType == "date">
+				<input id="${c.javaField}" name="${c.javaField}" value="<fmt:formatDate value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" />" style="width: 60%;" <#if c.required?? && c.required == "true">required="true"</#if> vtype="date:yyyy-MM-dd;<#if c.vtype??>${c.vtype}</#if>" placeholder="<#if c.comments??>${c.comments}</#if>" class="mini-datepicker"/>
+			<#elseif c.showType == "datetime">
+				<input id="${c.javaField}" name="${c.javaField}" value="<fmt:formatDate value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" style="width: 60%;" pattern="yyyy-MM-dd HH:mm:ss"/>" <#if c.required?? && c.required == "true">required="true"</#if> vtype="date:yyyy-MM-dd HH:mm:ss;<#if c.vtype??>${c.vtype}</#if>" placeholder="<#if c.comments??>${c.comments}</#if>" class="mini-datepicker" format="yyyy-MM-dd H:mm:ss" timeFormat="H:mm:ss" showTime="true" showOkButton="true" showClearButton="false"/>
+			<#elseif c.showType == "user">
+				<input id="${c.javaField}" name="${c.javaField}" value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" style="width: 60%;" <#if c.required?? && c.required == "true">required="true"</#if> vtype="<#if c.vtype??>${c.vtype}</#if>" valueFromSelect="true" pinyinField="pinyin" showNullItem="true" allowInput="true" class="mini-combobox"
+					data='${"$"}{fns:toJson(fns:getOfficeUser())}'/>
+			<#elseif c.showType == "organ">
+			<#elseif c.showType == "pid">
+				<input name="${c.javaField}" value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" class="mini-treeselect" multiSelect="false" valueFromSelect="true"
+					   textField="name" valueField="id" parentField="pid" allowInput="true" expandOnLoad="true"
+					   url="${"$"}{ctx}/${ClassName?uncap_first}/data"  style="width: 60%;"/>
+			<#else>
+				<input id="${c.javaField}" name="${c.javaField}" value="${"$"}{${ClassName?uncap_first}.${c.javaField}}" style="width: 60%;" <#if c.required?? && c.required == "true">required="true"</#if> vtype="<#if c.vtype??>${c.vtype}</#if>" placeholder="<#if c.comments??>${c.comments}</#if>" class="mini-textbox"/>
+			</#if>
+			</td>
+		</tr>
+	</#if>
+	</#list>
+	</table>
+	<div class="hd-30 mt-20" style="text-align: center">
+		<a class="mini-button" iconCls="icon-save" onclick="submitForm('form1','${"$"}{ctx}/${ClassName?uncap_first}/save');">保 存</a>
+		<a class="mini-button" iconCls="icon-close" onclick="closeForm();">取 消</a>
+	</div>
+</div>
+</body>
+</html>
+
+]]>
+	</content>
+</template>

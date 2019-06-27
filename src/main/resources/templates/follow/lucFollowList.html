@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>肺癌随访一览</title>
+    <link>
+    <script>
+    </script>
+</head>
+<body>
+<div class="content pd-10">
+    <table class="table_new table_new5 mt-10">
+        <tbody>
+        <tr>
+            <td>筛查年份</td>
+            <td>
+                <span th:text="${info.checkYear}"></span>
+            </td>
+            <td>证件类型</td>
+            <td>
+                <span th:text="${#dic.generalName('60022', info.personcardType)}"></span>
+            </td>
+            <td>证件号码</td>
+            <td>
+                <span th:text="${info.personcard}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>姓&nbsp;&nbsp;名</td>
+            <td>
+                <span th:text="${info.name}"></span>
+            </td>
+            <td>性&nbsp;&nbsp;别</td>
+            <td>
+                <span th:text="${#dic.generalName('60023', info.gender)}"></span>
+            </td>
+            <td>出生日期</td>
+            <td>
+                <span th:text="${#dates.format(info.birth, 'yyyy-MM-dd')}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>移动电话</td>
+            <td>
+                <span th:text="${info.mobile}"></span>
+            </td>
+            <td>固定电话</td>
+            <td>
+                <span th:text="${info.telephone}"></span>
+            </td>
+            <td>居住地址</td>
+            <td>
+                <span th:text="${info.address}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>肺癌初筛登记日期</td>
+            <td>
+                <span th:text="${info.regdate==null ? '' : #dates.format(info.regdate, 'yyyy-MM-dd')}"></span>
+            </td>
+            <td>肺癌判定结果</td>
+            <td>
+                <span th:text="${#dic.generalName('60001',info.checkResult)}"></span>
+            </td>
+            <td>肺癌诊断状态</td>
+            <td>
+                <span th:text="${info.zdzt}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${info.checkResult=='2'}">
+        <span>肺癌随访信息</span>
+        <button id="add" shiro:hasPermission="tumor:follow:add" class="my-btn my-btn-blue mr-20" style="float: right;" onclick="addLucFollow()">新增随访</button>
+        <!--肺癌管理一览 编辑权限  -->
+        <input  name="hideInput" shiro:hasPermission="tumor:follow:edit" value="1" class="mini-hidden"/>
+        <!--肺癌管理一览 删除权限  -->
+        <input  name="hideInput" shiro:hasPermission="tumor:follow:delete" value="2" class="mini-hidden"/>
+    </div>
+    <div id="datagrid" class="mini-datagrid" style="width:99%; height:auto;"
+         allowResize="false" url="getLucData" idField="id" multiSelect="false" showPager="false">
+        <div property="columns">
+            <div field="id" width="10" headerAlign="center" align="center" visible="false">随访编号</div>
+            <div field="suifangDate" width="20" headerAlign="center" align="center">随访日期</div>
+            <div field="suifangyishengName" width="20" headerAlign="center" align="center">随访医生</div>
+            <div field="suifangjigouName" width="20" headerAlign="center" align="center">随访医疗机构</div>
+            <div type="action" width="30" renderer="actionRender" headerAlign="center" align="center">操作</div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+        mini.parse();
+        var lucRegcaseId=[[${info.lucRegcaseId}]];
+        var grid = mini.get("datagrid");
+        if (null!=lucRegcaseId){
+            grid.load({lucRegcaseId:lucRegcaseId});
+        }
+        //获取权限标识 1--编辑；2--删除
+        var els = mini.getsByName("hideInput");
+        var hideValue='';
+        for (var i = 0; i < els.length; i++) {
+            var el = els[i];
+            hideValue +=el.value;
+            hideValue +=",";
+        }
+        //操作列
+        function actionRender(e) {
+            var r = e.record;
+            var h = '';
+            if (r!=null) {
+                h += '<button class="my-btn my-btn-blue mr-20" onclick="lookLucFollow(\''+r.id+'\')">查看</button>';
+                if (hideValue.indexOf('1') != -1){
+                    h += '<button class="my-btn my-btn-blue mr-20" onclick="updateLucFollow(\''+r.id+'\')">编辑</button>';
+                }
+                if (hideValue.indexOf('2') != -1){
+                    h += '<button class="my-btn my-btn-blue mr-20" onclick="delLucFollow(\''+r.id+'\')">删除</button>';
+                }
+            }
+            return h;
+        }
+        var kp = window.parent.mini.get("kp").getValue();
+        //新增随访
+        function addLucFollow(){
+            var manageId=[[${info.manageId}]];
+            var checkYear=[[${info.checkYear}]];
+            var flag="1";
+            parent.window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&kp="+kp;
+        }
+        //编辑随访
+        function updateLucFollow(id){
+            var manageId=[[${info.manageId}]];
+            var checkYear=[[${info.checkYear}]];
+            var flag="2";
+            parent.window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id+"&kp="+kp;
+        }
+        //查看随访
+        function lookLucFollow(id){
+            var manageId=[[${info.manageId}]];
+            var checkYear=[[${info.checkYear}]];
+            var flag="3";
+            parent.window.location.href = "/tumor/lucFollow/openLucFollow?manageId="+manageId+"&checkYear="+checkYear+"&flag="+flag+"&id="+id+"&kp="+kp;
+        }
+        //删除随访
+        function delLucFollow(id){
+            mini.confirm("确定删除这条数据吗？", "提示信息",
+                function (action) {
+                    if (action == "ok") {
+                        $.ajax({
+                            url:'/tumor/lucFollow/delLucFollow?id='+id,
+                            type:'get',
+                            async:true,
+                            success: function (response) {
+                                mini.alert(response.msg,"提示消息",function () {
+                                    if (response.value){
+                                        grid.load({lucRegcaseId:lucRegcaseId});
+                                    }
+                                });
+                            }
+                        })
+                    }
+                }
+            )
+        }
+    </script>
+</div>
+</body>
+</html>

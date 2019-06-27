@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.CrcRegcaseDao">
+    
+	<sql id="CrcRegcaseColumns">
+		a.id AS "id",a.manageid AS "manageid",a.id_number AS "idNumber",
+		a.cbq_return_date1 as cbqReturnDate1,
+		a.cbq_return_date2 as cbqReturnDate2,
+		a.check_year AS "checkYear",a.check_result AS "checkResult",
+		a.region_code AS "regionCode",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",
+		a.submits_status AS "submitsStatus",a.submit_date AS "submitDate",
+		a.trans_date AS "transDate",
+		a.print_date AS "printDate",
+		a.close_status AS "closeStatus",
+		a.close_date AS "closeDate",a.close_result AS "closeResult",
+		a.check_quality_flag AS "checkQualityFlag",
+		a.checkresult_quality_flag AS "checkresultQualityFlag",
+		a.upload_time AS "uploadTime",a.source_id AS "sourceId",a.ischange AS "ischange",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase">
+		SELECT 
+			<include refid="CrcRegcaseColumns"/>
+		FROM crc_regcase a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByManageidAndYear" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase">
+		SELECT
+		<include refid="CrcRegcaseColumns"/>
+		FROM crc_regcase a
+		WHERE a.manageid = #{manageid}
+		and a.del_flag='0'
+		and a.check_year=#{checkyear}
+	</select>
+
+	<select id="checkIdnumber" resultType="java.lang.String">
+		SELECT
+		id_number as id
+		FROM crc_regcase a
+		WHERE
+		 a.del_flag='0'
+		<if test="manageid != null and manageid != ''">
+			and a.manageid != #{manageid}
+		 </if>
+		and a.Id_number=#{idnumber}
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO crc_regcase(
+		id,manageid,cbq_return_date1,cbq_return_date2,
+		id_number,check_year,check_result,
+		region_code,regorg,regdoc,
+		regdate,submits_status,submit_date,
+		trans_date,print_date,
+		close_status,close_date,close_result,
+		check_quality_flag,checkresult_quality_flag,
+		upload_time,source_id,
+		ischange,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{manageid},#{cbqReturnDate1},#{cbqReturnDate2},
+		#{idNumber},#{checkYear},#{checkResult},
+		#{regionCode},#{regorg},#{regdoc},
+		#{regdate},#{submitsStatus},#{submitDate},
+		#{transDate},#{printDate},
+		#{closeStatus},#{closeDate},#{closeResult},
+		#{checkQualityFlag},#{checkresultQualityFlag},
+		#{uploadTime},#{sourceId},
+		#{ischange},'0',#{createBy},SYSDATE
+		)
+	</insert>
+	<update id="update">
+		UPDATE crc_regcase
+		SET
+		<if test="idNumber !=null and idNumber!=''">
+			Id_number = #{idNumber},
+		</if>
+		<if test="regorg !=null and regorg!=''">
+			regorg = #{regorg},
+		</if>
+		<if test="regdoc !=null and regdoc!=''">
+			regdoc = #{regdoc},
+		</if>
+		<if test="regdate !=null">
+			regdate = #{regdate},
+		</if>
+		<if test="ischange !=null">
+			ischange = #{ischange},
+		</if>
+		cbq_return_date1=#{cbqReturnDate1},
+		cbq_return_date2=#{cbqReturnDate2},
+		check_result = #{checkResult}
+
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase">
+		SELECT 
+			<include refid="CrcRegcaseColumns"/>
+		FROM crc_regcase a
+		<where>
+			a.del_flag = '0'
+		</where>		
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM crc_regcase a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.CrcRegcase"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="CrcRegcaseColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert1">
+		INSERT INTO crc_regcase(
+		id,manageid,id_number,check_year,check_result,cbq_return_date1,cbq_return_date2,region_code,regorg,regdoc,regdate,submits_status,submit_date,trans_date,print_date,close_status,close_date,close_result,check_quality_flag,checkresult_quality_flag,upload_time,source_id,ischange,del_flag,create_by,create_date
+		) VALUES (
+		#{id},#{manageid},#{idNumber},#{checkYear},#{checkResult},#{cbqReturnDate1},#{cbqReturnDate2},#{regionCode},#{regorg},#{regdoc},#{regdate},#{submitsStatus},#{submitDate},#{transDate},#{printDate},#{closeStatus},#{closeDate},#{closeResult},#{checkQualityFlag},#{checkresultQualityFlag},#{uploadTime},#{sourceId},#{ischange},#{delFlag},#{createBy},#{createDate}
+		)
+	</insert>
+
+	<update id="update1">
+		UPDATE crc_regcase SET
+		id = #{id},manageid = #{manageid},id_number = #{idNumber},check_year = #{checkYear},check_result = #{checkResult},cbq_return_date1 = #{cbqReturnDate1},cbq_return_date2 = #{cbqReturnDate2},region_code = #{regionCode},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},submits_status = #{submitsStatus},submit_date = #{submitDate},trans_date = #{transDate},print_date = #{printDate},close_status = #{closeStatus},close_date = #{closeDate},close_result = #{closeResult},check_quality_flag = #{checkQualityFlag},checkresult_quality_flag = #{checkresultQualityFlag},upload_time = #{uploadTime},source_id = #{sourceId},ischange = #{ischange},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE crc_regcase SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>

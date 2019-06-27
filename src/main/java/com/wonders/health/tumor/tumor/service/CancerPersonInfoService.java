@@ -1,0 +1,213 @@
+/**
+ * 
+ */
+package com.wonders.health.tumor.tumor.service;
+
+
+import com.wonders.health.tumor.tumor.dao.*;
+import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.common.model.AjaxReturn;
+import com.wonders.health.tumor.common.model.BaseEntity;
+import com.wonders.health.tumor.common.utils.IdGen;
+import com.wonders.health.tumor.tumor.vo.XhPatientResultVo;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Map;
+
+import com.wonders.health.tumor.common.model.DataGrid;
+import com.wonders.health.tumor.common.model.DataGridSearch;
+
+/**
+ * 初筛对象信息Service
+ * @author zhaomeng
+ */
+@Service
+@Transactional(readOnly = true)
+public class CancerPersonInfoService {
+
+    @Autowired
+    private CancerPersonInfoDao cancerPersonInfoDao;
+
+    @Autowired
+    private CrcRegcaseDao crcRegcaseDao;
+
+    @Autowired
+    private CrcRiskAssessmentDao crcRiskAssessmentDao;
+
+    @Autowired
+    private CrcFobtDao crcFobtDao;
+
+    @Autowired
+    private LicRegcaseDao licRegcaseDao;
+
+    @Autowired
+    private LicRiskAssessmentDao licRiskAssessmentDao;
+
+    @Autowired
+    private LicAssistCheckDao licAssistCheckDao;
+
+    @Autowired
+    private ScRegcaseDao scRegcaseDao;
+
+    @Autowired
+    private ScRiskAssessmentDao scRiskAssessmentDao;
+
+    @Autowired
+    private LucRegcaseDao lucRegcaseDao;
+
+    @Autowired
+    private LucRiskAssessmentDao lucRiskAssessmentDao;
+
+    @Autowired
+    private FamilyCancerHistoryDao familyCancerHistoryDao;
+
+    @Autowired
+    private  CancerHistoryDao cancerHistoryDao;
+
+    @Value("${area_code}")
+    private String areaCode;
+
+    @Autowired
+    private XkyyRegisterService xkyyRegisterService;
+
+    public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
+        List<CancerPersonInfo> list=null;
+        Integer count=cancerPersonInfoDao.pageCount(search);
+        if(count>0){
+            list=cancerPersonInfoDao.pageList(search);
+        }
+        if(list!=null&&list.size()>0){
+            for(CancerPersonInfo info:list){
+                    Integer delRecordsFlag=0;
+                    if(StringUtils.isNotBlank(info.getCrcCheckYear())){
+                        info.setCsnf(info.getCrcCheckYear());
+                        delRecordsFlag++;
+                    }
+                    if(StringUtils.isNotBlank(info.getLucCheckYear())){
+                        info.setCsnf(info.getLucCheckYear());
+                        delRecordsFlag++;
+                    }
+                    if(StringUtils.isNotBlank(info.getLicCheckYear())){
+                        info.setCsnf(info.getLicCheckYear());
+                        delRecordsFlag++;
+                    }
+                    if(StringUtils.isNotBlank(info.getScCheckYear())){
+                        info.setCsnf(info.getScCheckYear());
+                        delRecordsFlag++;
+                    }
+                    info.setDelRecordsFlag(delRecordsFlag);
+            }
+        }
+        return new DataGrid<CancerPersonInfo>(count,list);
+    }
+
+
+
+    public CancerPersonInfo findById(String id) {
+        return cancerPersonInfoDao.get(id);
+    }
+
+    public CancerPersonInfo findByInfoId(String id,String csnf) {
+        return cancerPersonInfoDao.getById(id,csnf);
+    }
+
+
+    @Transactional(readOnly = false)
+    public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId)  {
+
+
+        if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
+            CancerPersonInfo po = cancerPersonInfoDao.get(vo.getId());
+            if (po != null) {
+                BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
+                po.initByUpdate(userId);
+                cancerPersonInfoDao.update(po);
+                return new AjaxReturn<Map<String, String>>(true, "修改成功");
+            } else {
+                return new AjaxReturn<Map<String, String>>(false, "传入ID无法找到记录");
+            }
+        } else { //新增
+            vo.setId(IdGen.uuid());
+            vo.init(userId);
+            //徐汇区
+            if (StringUtils.equals("310104000000", areaCode)) {
+                //调用接口
+                XhPatientResultVo resultVo = null;
+                try {
+                    resultVo = xkyyRegisterService.callApiByAxis(vo);
+                    //resultVo = xkyyRegisterService.callApiByBasic(vo);
+                    //resultVo = xkyyRegisterService.callApiByObject(vo);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    //return new AjaxReturn<Map<String, String>>(false, "调用接口失败");
+                }
+                if (resultVo != null) {
+                    vo.setPatid(resultVo.getPatid());
+                    vo.setBlh(resultVo.getBlh());
+                }
+                cancerPersonInfoDao.insert(vo);
+            } else {
+                cancerPersonInfoDao.insert(vo);
+            }
+            return new AjaxReturn<Map<String, String>>(true, "保存成功");
+        }
+
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteById(String id) {
+        cancerPersonInfoDao.delete(id);
+    }
+
+    /**
+     * 初筛信息删除
+     * @param info
+     */
+    @Transactional(readOnly = false)
+    public void deleteByRegcaseId(CancerPersonInfo info) {
+
+	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
+	        crcRegcaseDao.delete(info.getCrcCheckId());
+	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
+	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
+	        familyCancerHistoryDao.deleteByCheckId(info.getCrcCheckId());
+        }
+	    if(StringUtils.isNotBlank(info.getLicCheckId())){
+	        licRegcaseDao.delete(info.getLicCheckId());
+	        licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
+	        licRiskAssessmentDao.delete(info.getLicCheckId());
+	        familyCancerHistoryDao.deleteByCheckId(info.getLicCheckId());
+        }
+        if(StringUtils.isNotBlank(info.getLucCheckId())){
+            lucRegcaseDao.delete(info.getLucCheckId());
+            lucRiskAssessmentDao.deleteByCheckId(info.getLucCheckId());
+            familyCancerHistoryDao.deleteByCheckId(info.getLucCheckId());
+
+        }
+        if(StringUtils.isNotBlank(info.getScCheckId())){
+            scRegcaseDao.delete(info.getScCheckId());
+            scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
+            familyCancerHistoryDao.deleteByCheckId(info.getScCheckId());
+        }
+
+        /**
+         * 四种癌症初筛信息都不存在
+         * 删除危险度评估-癌症史表信息
+         */
+        if(info.getHistoryDelflag()<=0){
+            cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());
+        }
+
+    }
+
+    public void updateChange(String id){
+        cancerPersonInfoDao.updateChange(id);
+    }
+
+
+}

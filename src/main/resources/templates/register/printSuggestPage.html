@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>打印诊断建议书</title>
+    <link>
+    <script></script>
+</head>
+<body>
+<style>
+    .pd-10 {
+        padding: 10px;
+    }
+    .clearfix {
+        *zoom: 1
+    }
+    .fr {
+        float: right
+    }
+    .fl {
+        float: left
+    }
+    .content {width: 137mm; margin: 0 auto;text-align: center;}
+    *{line-height: 1.5em; font-family:'宋体';}
+    .content h1 { font-size: 22px!important; margin:20px 0px;}
+    .content div,.content p{ font-size: 18px;text-align: left!important;text-indent: 2em;line-height: 1.8em;}
+    .content p { text-indent: 0em;}
+    .content span{display: inline-block;width:auto;min-width:0px;margin-left:-38px;margin-right:1px; word-break: normal;text-align: center}
+</style>
+
+    <div class="content pd-10">
+        <h2>普陀区肿瘤早发现</h2>
+        <p style="font-size: 22px;width:100%; text-align:center!important;font-weight: bolder">肺部CT/胃镜/肠镜建议书</p>
+    <p>尊敬的<span id="namespan" style="margin-left: 0px" th:text="${name}"></span> ：</p>
+        <div>感谢您参加普陀区肿瘤早发现项目！
+        </div>
+        <div>收到本建议书说明您的筛查结果为<b>阳性</b>，其中危险因素评估<BR>
+            显示您具有<span id="aizhengs" style="width: 256px"  th:text="${aizheng}"></span>危险因素，FOBT检查结果为<span id="fobt" style="width: 80px;margin-right:0px"  th:text="${byx}"></span>，GPT检查结果为<span id="gpt" style="width:50px;margin-left:-10px;margin-right:35px" th:text="${gtp}"></span>，HBsAg检查结果为<span id="hbs" style="width: 50px;margin-left:-10px;margin-right:35px" th:text="${hbs}"></span>，<BR>
+            AFP检查结果为<span id="afp" style="width: 50px;margin-left:0px;margin-right:35px" th:text="${afp}"></span>，肝脏B超检查结果为<span id="bus" style="width: 110px;margin-left:-20px;margin-right:10px"  th:text="${bus}"></span>。有<BR>
+            很多原因会导致上述检查出现阳性结果，本结果并不意味着您已<BR>
+            经患上了肿瘤。为了明确您阳性结果原因，我们强烈建议您前往<BR>
+            医院接受 肺部低剂量螺旋CT/胃镜/肠镜检查。
+
+        </div>
+        <div>
+            您居住地附近的<span style="width:110px;border-bottom:1px solid #333;display: inline-block;margin-left:0px"></span>医院是普陀区肿瘤早发现项目<BR>
+            的指定医院，携带本建议书前往上述指定医院接受 肺部CT/胃镜<BR>
+            /肠镜 检查可享受便民措施，并可凭检查结果前往社区卫生服务<BR>
+
+            中心领取补贴。
+        </div>
+
+    <div>如果您对建议书上相关内容有任何疑问，请咨询社区卫生服<BR>
+        务中心的工作人员。</div>
+        <div><b>再次感谢您的参与！</b></div>
+        <div class="clearfix">
+            <b class="fr" style="width:100%;">
+                <span id="hos" style="width:55%;text-align:right;float: left;margin-left:-5px" th:text="${hosName}"></span>
+                <span  style="width:45%;margin-right:40px;float: right">社区卫生服务中心
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </b>
+        </div>
+
+        <div class="fr" style="margin-right:25px;"><b>
+            <span id="year" style="width:30px;margin-left:10px;margin-right:50px" th:text="${year}"></span>年
+            <span id="month" style="width:30px;margin-right:30px" th:text="${month}"></span>月
+            <span id="day" style="width:30px;margin-right:30px" th:text="${day}"></span>日</b></div>
+        <p style="clear: both; width: 100%;">
+            <b class="fl">地址：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 电话：&nbsp;&nbsp;</b>
+        </p>
+    </div>
+<BR>
+
+
+</body>
+</html>
