@@ -281,6 +281,10 @@
                     h += '<a  onclick="deleteRecord(\'' +r.id + '\',\''+ r.csnf + '\',\''+ r.crcCheckId +'\',\''+ r.lucCheckId +'\',\''+ r.licCheckId +'\',\''+ r.scCheckId +'\')" style="color:blue;cursor:pointer">删除</a>&nbsp;';
                 }
             }
+
+            if (r.luc == "1" && r.patid != '' && r.patid != null) {
+                h += '<a onclick="lctView(\'' + r.patid + '\')" style="color:blue;cursor:pointer">预约LDCT</a>&nbsp;';
+            }
         }
         return h;
     }
@@ -409,8 +413,21 @@
         );
     }
 
-
-
+    //预约LDCT
+    function lctView(patid) {
+        mini.open({
+            url:'http://192.168.30.155:8087/bbxt/queryYyks.action?patid='+patid,
+            showMaxButton: false,
+            title: "预约",
+            height:700,
+            width: 1000,
+            showCloseButton: true,
+            showModal: true,
+            ondestroy: function (action) {  //弹出页面关闭前
+                mini.alert("预约成功");
+            }
+        });
+    }
 </script>
 
 </html>
