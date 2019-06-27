@@ -119,7 +119,7 @@ public class CancerPersonInfoService {
 
     @Transactional(readOnly = false)
     public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId)  {
-
+        boolean flag = true;
 
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
             CancerPersonInfo po = cancerPersonInfoDao.get(vo.getId());
@@ -139,11 +139,14 @@ public class CancerPersonInfoService {
                 //调用接口
                 XhPatientResultVo resultVo = null;
                 try {
-                    resultVo = xkyyRegisterService.callApiByAxis(vo);
                     //resultVo = xkyyRegisterService.callApiByBasic(vo);
-                    //resultVo = xkyyRegisterService.callApiByObject(vo);
+                    //阳性的并且是身份证的人调用接口
+                    if (StringUtils.equals("01", vo.getPersoncardType()) && StringUtils.equals("2", vo.getLucResult())) {
+                        resultVo = xkyyRegisterService.callApiByProxy(vo);
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    flag = false;
                     //return new AjaxReturn<Map<String, String>>(false, "调用接口失败");
                 }
                 if (resultVo != null) {
@@ -153,6 +156,9 @@ public class CancerPersonInfoService {
                 cancerPersonInfoDao.insert(vo);
             } else {
                 cancerPersonInfoDao.insert(vo);
+            }
+            if (!flag) {
+                return new AjaxReturn<Map<String, String>>(true, "保存成功, 首诊患者建档注册不成功");
             }
             return new AjaxReturn<Map<String, String>>(true, "保存成功");
         }
