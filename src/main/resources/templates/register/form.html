@@ -1013,10 +1013,15 @@
             </tr>
         </table>
     </div>
-    <div class="btn-list text-c mt-30">
+
+    <div class="btn-list text-c mt-30" th:if="${areaCode} ne '310104000000'">
         <button class="my-btn my-btn-blue mr-20" onclick="save()" id="savebtn">保存</button>
         <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
         <button th:if="${operation} ne '3'" class="my-btn my-btn-blue mr-20" onclick="printSuggest()">打印诊断建议书</button>
+    </div>
+    <div class="btn-list text-c mt-30" th:if="${areaCode} eq '310104000000'">
+        <button class="my-btn my-btn-blue mr-20" onclick="save()" id="savebtn">保存</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">关闭</button>
     </div>
 
 
