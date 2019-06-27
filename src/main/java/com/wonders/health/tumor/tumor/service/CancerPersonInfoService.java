@@ -141,7 +141,7 @@ public class CancerPersonInfoService {
                 try {
                     //resultVo = xkyyRegisterService.callApiByBasic(vo);
                     //阳性的并且是身份证的人调用接口
-                    if (StringUtils.equals("01", vo.getPersoncardType()) && StringUtils.equals("2", vo.getLucResult())) {
+                    if (StringUtils.equals("01", vo.getPersoncardType())) {
                         resultVo = xkyyRegisterService.callApiByProxy(vo);
                     }
                 } catch (Exception ex) {
