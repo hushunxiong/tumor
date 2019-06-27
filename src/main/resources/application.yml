@@ -26,7 +26,7 @@ spring:
         # 初始化大小，最小，最大
         initial-size: 5
         min-idle: 5
-        maxActive: 20
+        maxActive: 200
         # 配置获取连接等待超时的时间
         maxWait: 60000
         # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
@@ -83,6 +83,7 @@ spring:
       url: jdbc:oracle:thin:@10.240.21.10:1521:ora11g
       username: zlzfx
       password: ZLZFX
+
 health_base_url: http://10.1.93.111/health
 casServerUrlPrefix: http://10.1.93.111/cas
 shiroServerUrlPrefix: http://localhost:8080
@@ -102,7 +103,7 @@ area_code: '310104000000'
 #最近n年
 yearNum: 10
 
-
+#健康档案内网地址
 healthArchive: http://10.1.93.110/archive
 
 
@@ -114,6 +115,7 @@ spring:
       url: jdbc:oracle:thin:@10.240.21.10:1521:ora11g
       username: zlzfx_test
       password: ZLZFX_TEST
+
 health_base_url: http://10.1.93.110/health
 casServerUrlPrefix: http://10.1.93.110/cas
 shiroServerUrlPrefix: http://10.1.93.110
@@ -132,12 +134,35 @@ area_code: '310104000000'
 #最近n年
 yearNum: 10
 
-
+#健康档案内网地址
 healthArchive: http://10.1.93.110/archive
 
 ---
 spring:
-  profiles: jingan
-health_base_url: http://jingan-web:9071/health
-casServerUrlPrefix: http://192.168.9.114:9071/cas
-shiroServerUrlPrefix: http://192.168.9.74:9071
+  profiles: xuhui
+  datasource:
+    # 填写你数据库的url、登录名、密码和数据库名
+    url: jdbc:oracle:thin:@:1521:ora11g
+    username:
+    password:
+
+health_base_url: http://xuhui-web:9071/health
+casServerUrlPrefix: http://192.168.30.169:9071/cas
+shiroServerUrlPrefix: http://192.168.30.169:9071
+
+#初筛诊断(crc_switch_flag：大肠癌  lic_switch_flag：肝癌 sc_switch_flag：胃癌  luc_switch_flag：肺癌     )
+crc_switch_flag: 0
+lic_switch_flag: 0
+sc_switch_flag: 0
+luc_switch_flag: 1
+#是否新增筛查时可以向健康档案插入个人信息
+archieve_add_flag: 1
+
+#区域代码（310104000000=徐汇)
+area_code: '310104000000'
+
+#最近n年
+yearNum: 10
+
+#健康档案内网地址
+healthArchive: http://xuhui-web:9071/archive
