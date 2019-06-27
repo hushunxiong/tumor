@@ -9,9 +9,11 @@ import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
+import com.wonders.health.tumor.tumor.vo.XhPatientResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -67,7 +69,11 @@ public class CancerPersonInfoService {
     @Autowired
     private  CancerHistoryDao cancerHistoryDao;
 
+    @Value("${area_code}")
+    private String areaCode;
 
+    @Autowired
+    private XkyyRegisterService xkyyRegisterService;
 
     public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
         List<CancerPersonInfo> list=null;
@@ -112,7 +118,9 @@ public class CancerPersonInfoService {
 
 
     @Transactional(readOnly = false)
-    public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId) {
+    public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId)  {
+
+
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
             CancerPersonInfo po = cancerPersonInfoDao.get(vo.getId());
             if (po != null) {
@@ -126,9 +134,29 @@ public class CancerPersonInfoService {
         } else { //新增
             vo.setId(IdGen.uuid());
             vo.init(userId);
-            cancerPersonInfoDao.insert(vo);
+            //徐汇区
+            if (StringUtils.equals("310104000000", areaCode)) {
+                //调用接口
+                XhPatientResultVo resultVo = null;
+                try {
+                    resultVo = xkyyRegisterService.callApiByAxis(vo);
+                    //resultVo = xkyyRegisterService.callApiByBasic(vo);
+                    //resultVo = xkyyRegisterService.callApiByObject(vo);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    //return new AjaxReturn<Map<String, String>>(false, "调用接口失败");
+                }
+                if (resultVo != null) {
+                    vo.setPatid(resultVo.getPatid());
+                    vo.setBlh(resultVo.getBlh());
+                }
+                cancerPersonInfoDao.insert(vo);
+            } else {
+                cancerPersonInfoDao.insert(vo);
+            }
             return new AjaxReturn<Map<String, String>>(true, "保存成功");
         }
+
     }
 
     @Transactional(readOnly = false)
