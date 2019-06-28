@@ -415,8 +415,11 @@
 
     //预约LDCT
     function lctView(patid) {
+        var ip = [[${ip}]];
+        ip = ip.substring(0, ip.lastIndexOf(":"));
+
         mini.open({
-            url:'http://192.168.30.155:8087/xkyy/queryYyks.action?patid='+patid,
+            url:ip + ':8071/xkyy/queryYyks.action?patid='+patid,
             showMaxButton: false,
             title: "预约",
             height:700,
@@ -424,7 +427,7 @@
             showCloseButton: true,
             showModal: true,
             ondestroy: function (action) {  //弹出页面关闭前
-                mini.alert("预约成功");
+                //mini.alert("预约成功");
             }
         });
     }
