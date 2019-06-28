@@ -124,9 +124,32 @@ public class CancerPersonInfoService {
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
             CancerPersonInfo po = cancerPersonInfoDao.get(vo.getId());
             if (po != null) {
+                vo.setPatid(po.getPatid());
                 BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
                 po.initByUpdate(userId);
+
+                //调用接口
+                XhPatientResultVo resultVo = null;
+                try {
+                    //阳性的并且是身份证的人调用接口
+                    if (StringUtils.equals("01", vo.getPersoncardType())
+                            && StringUtils.equals("2", vo.getLucResult())
+                            && StringUtils.isBlank(vo.getPatid())) {
+                        resultVo = xkyyRegisterService.callApiByProxy(vo);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    flag = false;
+                }
+                if (resultVo != null) {
+                    po.setPatid(resultVo.getPatid());
+                    po.setBlh(resultVo.getBlh());
+                }
                 cancerPersonInfoDao.update(po);
+
+                if (!flag) {
+                    return new AjaxReturn<Map<String, String>>(true, "修改成功, 首诊患者建档注册不成功");
+                }
                 return new AjaxReturn<Map<String, String>>(true, "修改成功");
             } else {
                 return new AjaxReturn<Map<String, String>>(false, "传入ID无法找到记录");
@@ -139,7 +162,6 @@ public class CancerPersonInfoService {
                 //调用接口
                 XhPatientResultVo resultVo = null;
                 try {
-                    //resultVo = xkyyRegisterService.callApiByBasic(vo);
                     //阳性的并且是身份证的人调用接口
                     if (StringUtils.equals("01", vo.getPersoncardType()) && StringUtils.equals("2", vo.getLucResult())) {
                         resultVo = xkyyRegisterService.callApiByProxy(vo);
@@ -147,7 +169,6 @@ public class CancerPersonInfoService {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     flag = false;
-                    //return new AjaxReturn<Map<String, String>>(false, "调用接口失败");
                 }
                 if (resultVo != null) {
                     vo.setPatid(resultVo.getPatid());
