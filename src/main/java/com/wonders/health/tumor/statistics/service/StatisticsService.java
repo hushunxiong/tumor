@@ -43,10 +43,9 @@ public class StatisticsService {
         if (count>0){
         summaryVoList = statisticsDao.getNegative(searchVo);
         if (summaryVoList != null && summaryVoList.size() > 0) {
-            AuthUtils a = new AuthUtils();
             for (NegativeSummaryVo vo : summaryVoList) {
                 if (vo.getRegorg() != null) {
-                    vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                    vo.setRegorg(AuthUtils.getHospitalByCode(vo.getRegorg()).getName());
                 }
                 if (vo != null) {
                     //循环将居住地址拼接放入
@@ -74,10 +73,9 @@ public class StatisticsService {
         if(count>0){
             crcVoList = statisticsDao.getCrcPositive(searchVo);
             if (crcVoList != null && crcVoList.size() > 0) {
-                AuthUtils a = new AuthUtils();
                 for (CrcPositiveSummaryVo vo : crcVoList) {
                     if (vo.getRegorg() != null) {
-                        vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                        vo.setRegorg(AuthUtils.getHospitalByCode(vo.getRegorg()).getName());
                     }
                     //循环拼接写入居住地址
                     vo.setAddress(areaService.getFullAddress(
@@ -101,10 +99,9 @@ public class StatisticsService {
         if (count>0){
          licVoList= statisticsDao.getLicPositive(searchVo);
         if (licVoList != null && licVoList.size() > 0) {
-            AuthUtils a = new AuthUtils();
             for (LicPositiveSummaryVo vo : licVoList) {
                 if (vo.getRegorg() != null) {
-                    vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                    vo.setRegorg(AuthUtils.getHospitalByCode(vo.getRegorg()).getName());
                 }
                 if (vo != null) {
                     vo.setAddress(areaService.getFullAddress(
@@ -129,10 +126,9 @@ public class StatisticsService {
         if (count>0) {
             lucVoList = statisticsDao.getLucPositive(searchVo);
             if (lucVoList != null && lucVoList.size() > 0) {
-                AuthUtils a = new AuthUtils();
                 for (LucPositiveSummaryVo vo : lucVoList) {
                     if (vo.getRegorg() != null) {
-                        vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                        vo.setRegorg(AuthUtils.getHospitalByCode(vo.getRegorg()).getName());
                     }
                     if (vo != null) {
                         vo.setAddress(areaService.getFullAddress(
@@ -157,10 +153,9 @@ public class StatisticsService {
         if (count>0) {
              scVoList = statisticsDao.getScPositive(searchVo);
             if (scVoList != null && scVoList.size() > 0) {
-                AuthUtils a = new AuthUtils();
                 for (ScPositiveSummaryVo vo : scVoList) {
                     if (vo.getRegorg() != null) {
-                        vo.setRegorg(a.getHospitalByCode(vo.getRegorg()).getName());
+                        vo.setRegorg(AuthUtils.getHospitalByCode(vo.getRegorg()).getName());
                     }
                     if (vo != null) {
                         vo.setAddress(areaService.getFullAddress(
@@ -186,7 +181,6 @@ public class StatisticsService {
         if(count>0){
             scVoList = statisticsDao.getInformation(searchVo);
             if (scVoList != null && scVoList.size() > 0) {
-                AuthUtils authUtils = new AuthUtils();
                 DictData dic = new DictData();
                 String tnm ;
                 for (InformationCollectionVo vo : scVoList) {
@@ -210,7 +204,7 @@ public class StatisticsService {
                             vo.setJcxm("LDCT");
                     }
                     if (vo.getRegorg() != null) {
-                        vo.setRegorg(authUtils.getHospitalByCode(vo.getRegorg()).getName());
+                        vo.setRegorg(AuthUtils.getHospitalByCode(vo.getRegorg()).getName());
                     }
                 }
             }
