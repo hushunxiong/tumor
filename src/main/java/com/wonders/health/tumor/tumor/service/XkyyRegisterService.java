@@ -68,7 +68,9 @@ public class XkyyRegisterService {
         return null;
     }
 
-
+    /**
+     * 代理模式调用
+     */
     public XhPatientResultVo callApiByProxy(CancerPersonInfo info) throws Exception {
         XhPatientReturnVo returnVo = null;
         try {
@@ -97,6 +99,9 @@ public class XkyyRegisterService {
         return null;
     }
 
+    /**
+     * xml构造
+     */
     private String getPatientXml(CancerPersonInfo info) {
         XhPatientParamVo vo = new XhPatientParamVo();
 

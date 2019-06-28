@@ -317,6 +317,20 @@ public class ScreeningController extends BaseController {
 
         //基本信息处理
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
+
+        LucRegcase lucReg =screeningVo.getLucRegcase();
+        if (lucReg != null) {
+            String result1 = lucReg.getCheckResult();
+            if (StringUtils.isNotBlank(result1)) {
+                if(StringUtils.equals("阴性",result1)){
+                    result1 = "1";
+                }else if(StringUtils.equals("阳性",result1)){
+                    result1 = "2";
+                }
+            }
+            personInfo.setLucResult(result1);
+        }
+
         if(StringUtils.isBlank(personInfo.getId())){
             CancerPersonInfo personInfoBase=screeningService.getBaseInfoByCardnoAndType(personInfo.getPersoncard(),personInfo.getPersoncardType());
             if(StringUtils.isNotBlank(personInfoBase.getId())){
