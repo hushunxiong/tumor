@@ -3,6 +3,7 @@
  */
 package com.wonders.health.tumor.tumor.web;
 
+import com.wonders.health.auth.client.AuthServiceI;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
@@ -41,6 +42,8 @@ public class CancerPersonInfoController extends BaseController {
 
     @Autowired
     private CancerPersonInfoService cancerPersonInfoService;
+    @Autowired
+    private AuthServiceI authServiceI;
 
     @Value("${area_code}")
     private String areaCode;
@@ -72,6 +75,8 @@ public class CancerPersonInfoController extends BaseController {
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
+        model.addAttribute("ip", authServiceI.findBaseUrl("肿瘤早发现", getSessionUser().getOrgCode()));
+
         return "/register/cancerPersonInfoList";
     }
 
