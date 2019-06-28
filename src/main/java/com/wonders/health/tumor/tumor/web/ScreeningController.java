@@ -337,6 +337,7 @@ public class ScreeningController extends BaseController {
                 personInfo.setId(personInfoBase.getId());
             }
         }
+
         if(personInfo.getId()==null|| "".equals(personInfo.getId()) || personInfo.getPersoncardType()=="02" || "02".equals( personInfo.getPersoncardType())){   //新增
             String isNew=personInfo.getIsNew();
             if(StringUtils.isNotBlank(isNew) && !("02".equals( personInfo.getPersoncardType()))){  //这个人应该调用健康档案接口
