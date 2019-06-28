@@ -24,4 +24,10 @@ public class LoginController {
         logger.error(ae.getMessage());
         return "/500";
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/monitor")
+    public String monitor() {
+        return "success";
+    }
 }
