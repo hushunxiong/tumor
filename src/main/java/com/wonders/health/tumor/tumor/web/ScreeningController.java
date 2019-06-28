@@ -317,12 +317,27 @@ public class ScreeningController extends BaseController {
 
         //基本信息处理
         CancerPersonInfo personInfo=screeningVo.getPersonInfo();
+
+        LucRegcase lucReg =screeningVo.getLucRegcase();
+        if (lucReg != null) {
+            String result1 = lucReg.getCheckResult();
+            if (StringUtils.isNotBlank(result1)) {
+                if(StringUtils.equals("阴性",result1)){
+                    result1 = "1";
+                }else if(StringUtils.equals("阳性",result1)){
+                    result1 = "2";
+                }
+            }
+            personInfo.setLucResult(result1);
+        }
+
         if(StringUtils.isBlank(personInfo.getId())){
             CancerPersonInfo personInfoBase=screeningService.getBaseInfoByCardnoAndType(personInfo.getPersoncard(),personInfo.getPersoncardType());
             if(StringUtils.isNotBlank(personInfoBase.getId())){
                 personInfo.setId(personInfoBase.getId());
             }
         }
+
         if(personInfo.getId()==null|| "".equals(personInfo.getId()) || personInfo.getPersoncardType()=="02" || "02".equals( personInfo.getPersoncardType())){   //新增
             String isNew=personInfo.getIsNew();
             if(StringUtils.isNotBlank(isNew) && !("02".equals( personInfo.getPersoncardType()))){  //这个人应该调用健康档案接口
