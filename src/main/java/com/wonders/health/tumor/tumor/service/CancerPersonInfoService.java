@@ -125,6 +125,7 @@ public class CancerPersonInfoService {
             CancerPersonInfo po = cancerPersonInfoDao.get(vo.getId());
             if (po != null) {
                 vo.setPatid(po.getPatid());
+                vo.setBlh(po.getBlh());
                 BeanUtils.copyProperties(vo, po, BaseEntity.IGNORES);
                 po.initByUpdate(userId);
 
