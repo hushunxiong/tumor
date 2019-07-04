@@ -127,6 +127,37 @@ function getBirthDayAndSex(idcard) {
     return {"birthday": "", "sex": ""}
 }
 
+function ages(str) {
+    var r = str.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+    if (r == null) return "";
+    var birth = new Date(r[1], r[3] - 1, r[4]);
+    if (birth.getFullYear() == r[1] && (birth.getMonth() + 1) == r[3] && birth.getDate() == r[4]) {
+        var now = new Date();
+        var yearNow = now.getFullYear();
+        var monthNow = now.getMonth() + 1;
+        var dayOfMonthNow = now.getDate()
+
+        var yearBirth = birth.getFullYear();
+        var monthBirth = birth.getMonth() + 1;
+        var dayOfMonthBirth = birth.getDate()
+
+        var age = yearNow - yearBirth;
+
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) {
+                    age--;
+                }
+            } else {
+                age--;
+            }
+        }
+
+        return age;
+    }
+    return "";
+}
+
 function closeForm() {
     try{
         window.parent.window.loadList();

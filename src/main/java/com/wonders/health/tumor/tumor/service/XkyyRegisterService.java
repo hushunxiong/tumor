@@ -113,6 +113,7 @@ public class XkyyRegisterService {
         } else {
             vo.setYbdm("");
         }
+        vo.setCardno(info.getPaymentNo());
         vo.setSex(info.getGender());
         vo.setSfzh(info.getPersoncard());
         vo.setBirth(DateUtils.formatDate(info.getBirth(),"yyyyMMdd"));

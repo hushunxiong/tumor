@@ -43,6 +43,9 @@
 		</if>
 		P.patid as patid,
 		P.blh as blh,
+		P.payment_no as paymentNo,
+		P.mobile as mobile,
+		P.telephone as telephone,
 		P .PERSONCARD AS "personCard"
 	</sql>
 
