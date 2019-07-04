@@ -59,6 +59,9 @@ public class CancerPersonInfo extends BaseEntity {
 	@Length(max=2)
 	private String paymentSituation;	// 医疗保险类型 cdc_dic_personinfo id=00241
 
+	@Length(max=32)
+	private String paymentNo;	// 医保卡号
+
 	@Length(max=2)
 	private String profession;	// 职业代码,参照cdc_dic_personinfo,id=00007，pcode is not null 第一级代码
 
@@ -282,6 +285,15 @@ public class CancerPersonInfo extends BaseEntity {
 
 	public void setPaymentSituation(String paymentSituation) {
 		this.paymentSituation = paymentSituation;
+	}
+
+	@JsonProperty("paymentNo")
+	public String getPaymentNo() {
+		return paymentNo;
+	}
+
+	public void setPaymentNo(String paymentNo) {
+		this.paymentNo = paymentNo;
 	}
 
 	@JsonProperty("profession")

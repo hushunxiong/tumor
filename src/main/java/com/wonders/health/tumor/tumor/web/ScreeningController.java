@@ -1,9 +1,11 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.*;
@@ -30,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 新增筛查登记Controller
@@ -131,6 +134,7 @@ public class ScreeningController extends BaseController {
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
     public String form(Model model, String manageId, String checkYear,String operation) {
+        Gson gson = new Gson();
         User user=getSessionUser();
         if(StringUtils.isBlank(checkYear)){
             checkYear= DateUtils.getYear();
@@ -147,6 +151,16 @@ public class ScreeningController extends BaseController {
         model.addAttribute("years", AuthUtils.toJson(years));
         model.addAttribute("checkYear", checkYear);
         model.addAttribute("operation", operation);
+
+        List<CancerDic> cancerDicList = DictUtils.generals("60027");
+        //徐汇区
+        if (StringUtils.equals("310104000000",areaCode)){
+            List<CancerDic> paymentSituationList = cancerDicList.stream().filter(a -> StringUtils.equals("01", a.getCode())
+                    || StringUtils.equals("02", a.getCode())).collect(Collectors.toList());
+            model.addAttribute("paymentSituation", gson.toJson(paymentSituationList));
+        } else {
+            model.addAttribute("paymentSituation", gson.toJson(cancerDicList));
+        }
 
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
