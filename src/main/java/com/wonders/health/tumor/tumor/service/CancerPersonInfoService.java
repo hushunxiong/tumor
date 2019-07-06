@@ -4,11 +4,14 @@
 package com.wonders.health.tumor.tumor.service;
 
 
+import com.wonders.health.auth.client.vo.User;
+import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.BaseEntity;
 import com.wonders.health.tumor.common.utils.IdGen;
+import com.wonders.health.tumor.tumor.entity.LucAppLdctXh;
 import com.wonders.health.tumor.tumor.vo.XhPatientResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +72,10 @@ public class CancerPersonInfoService {
     private FamilyCancerHistoryDao familyCancerHistoryDao;
 
     @Autowired
-    private  CancerHistoryDao cancerHistoryDao;
+    private CancerHistoryDao cancerHistoryDao;
+
+    @Autowired
+    private LucAppLdctXhDao lucAppLdctXhDao;
 
     @Value("${area_code}")
     private String areaCode;
@@ -237,5 +245,27 @@ public class CancerPersonInfoService {
         cancerPersonInfoDao.updateChange(id);
     }
 
+    @Transactional(readOnly = false)
+    public void insertAppCheck(String manageId, String checkCode, String checkDate, String checkTime, User user) {
+        LucAppLdctXh ldct = new LucAppLdctXh();
+        ldct.setId(IdGen.uuid());
+        ldct.init(user.getId());
+        ldct.setManageid(manageId);
+        ldct.setAppCheckCode(checkCode);
+        ldct.setAppCheckDate(DateUtils.parseDate(checkDate));
+        ldct.setAppCheckTime(checkTime);
+        ldct.setAppointmentDoc(user.getId());
+        ldct.setAppointmentOrg(user.getOrgCode());
+        ldct.setAppointmentDate(new Date());
+        lucAppLdctXhDao.insert(ldct);
+    }
+
+    public LucAppLdctXh getLdctInfo(String id) {
+        List<LucAppLdctXh> list = lucAppLdctXhDao.findByManageId(id);
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
 
 }

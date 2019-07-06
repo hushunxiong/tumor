@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>打印检查预约单</title>
+    <link>
+    <script></script>
+</head>
+<body>
+<style>
+    .pd-30 {
+        padding:30px;
+    }
+    .clearfix {
+        *zoom: 1
+    }
+    .fr {
+        float: right
+    }
+    .fl {
+        float: left
+    }
+    .content {width: 137mm; margin: 0 auto;text-align: center;}
+    *{line-height: 1.5em; font-family:'宋体';}
+    .content h1 { font-size: 22px!important; margin:20px 0px;}
+    .content div,.content p{ font-size: 18px;text-align: left!important;text-indent: 2em;line-height: 1.8em;}
+    .content p { text-indent: 0em;}
+    .content span{display: inline-block;width:auto;min-width:0px;margin-left:-38px;margin-right:1px; word-break: normal;text-align: center}
+</style>
+<div class="content pd-30">
+    <p><br></p>
+    <h2>社区居民肺癌筛查检查预约单</h2>
+    <p><br></p>
+    <p>尊敬的<span style="margin-left: 0px" th:text="${name}"></span> 感谢您参加徐汇区社区肺癌筛查：</p>
+    <div>
+        收到本预约单说明您的问卷评估结果为高危人群，为了进一步明确诊断，我们强烈建议您前往定点医院接受进一步的检查。
+    </div>
+    <div>
+        根据项目安排，上海市胸科医院为本次筛查项目指定医院，前往指定医院接受检查可以享受绿色通道、优先预约、挂号检查一站式完成等优惠政策。
+    </div>
+    <div th:text="${yyPeriod}">
+    </div>
+    <div>
+        <b>为了您可以顺利地接受检查，请在前往指定医院时务必携带本预约单。再次感谢您的参与！</b>
+    </div>
+    <div class="fr" style="margin-right:25px;">
+        <b>
+            <span style="width:100%;margin-right:20px;float: right" th:text="${hospitalName}"></span>
+        </b>
+    </div>
+
+    <div class="fr" style="margin-right:25px;">
+        <b>
+        <span id="year" style="width:30px;margin-left:10px;margin-right:50px" th:text="${year}"></span>年
+        <span id="month" style="width:30px;margin-right:30px" th:text="${month}"></span>月
+        <span id="day" style="width:30px;margin-right:30px" th:text="${day}"></span>日
+        </b>
+    </div>
+    <p><br><br>检查流程：</p>
+    <div>
+        1.居民携带身份证、医保卡、预约单至胸科医院挂号、付费
+    </div>
+    <div>
+        2.至1号楼排队等候低剂量螺旋CT检查
+    </div>
+    <div th:text="${thirdStep}">
+    </div>
+    <br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br>
+    <p>上海市胸科医院地址：淮海西路241号</p>
+</div>
+
+</body>
+</html>

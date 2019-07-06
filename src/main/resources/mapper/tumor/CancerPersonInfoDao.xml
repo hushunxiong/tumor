@@ -10,6 +10,8 @@
 		P . ID AS id,
 		P . NAME AS "name",
 		P .GENDER AS "gender",
+		ldct.ID AS "ldctId",
+		ldct.APP_CHECK_CODE AS "checkCode",
 		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
 			crc.id  as  "crcCheckId",
 			crc.check_year as  crcCheckYear,
@@ -219,6 +221,7 @@
 				AND  luc.regdate &lt; to_date(#{endDateFrom},'yyyy-MM-dd HH:mi:ss')+1
 			</if>
 		</if>
+		LEFT JOIN LUC_APP_LDCT_XH ldct ON P.ID = ldct.MANAGEID AND ldct.DEL_FLAG='0'
       <where>
 		  P .DEL_FLAG = '0'
 		  <if test=" id !=null and id !='' " >

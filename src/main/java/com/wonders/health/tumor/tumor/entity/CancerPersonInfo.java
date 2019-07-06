@@ -164,6 +164,10 @@ public class CancerPersonInfo extends BaseEntity {
 
     private String isNew;	//检查是否为健康档案及表以外的新增信息
 
+	private String ldctId;  //徐汇肺癌LDCT预约记录表ID
+
+	private String checkCode; //LDCT预约检查号
+
 
 	public CancerPersonInfo() {
 		super();
@@ -692,5 +696,21 @@ public class CancerPersonInfo extends BaseEntity {
 
 	public void setBlh(String blh) {
 		this.blh = blh;
+	}
+
+	public String getLdctId() {
+		return ldctId;
+	}
+
+	public void setLdctId(String ldctId) {
+		this.ldctId = ldctId;
+	}
+
+	public String getCheckCode() {
+		return checkCode;
+	}
+
+	public void setCheckCode(String checkCode) {
+		this.checkCode = checkCode;
 	}
 }

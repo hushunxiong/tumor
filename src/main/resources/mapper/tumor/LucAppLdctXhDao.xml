@@ -87,5 +87,12 @@
 	    WHERE id = #{id}
 	</update>
 
-	
+	<select id="findByManageId" resultType="com.wonders.health.tumor.tumor.entity.LucAppLdctXh">
+		SELECT
+		<include refid="LucAppLdctXhColumns"/>
+		FROM luc_app_ldct_xh a
+		WHERE a.manageid = #{manageid}
+		AND a.del_flag = '0'
+	</select>
+
 </mapper>
