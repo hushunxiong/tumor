@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.LucAppLdctXhDao">
+    
+	<sql id="LucAppLdctXhColumns">
+		a.id AS "id",a.manageid AS "manageid",a.app_check_code AS "appCheckCode",a.app_check_date AS "appCheckDate",a.app_check_time AS "appCheckTime",a.appointment_doc AS "appointmentDoc",a.appointment_org AS "appointmentOrg",a.appointment_date AS "appointmentDate",a.del_flag AS "delFlag",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.LucAppLdctXh">
+		SELECT 
+			<include refid="LucAppLdctXhColumns"/>
+		FROM luc_app_ldct_xh a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LucAppLdctXh">
+		SELECT 
+			<include refid="LucAppLdctXhColumns"/>
+		FROM luc_app_ldct_xh a
+		<where>
+			a.del_flag = '0'
+		</where>		
+			ORDER BY a.update_date DESC
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM luc_app_ldct_xh a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.LucAppLdctXh"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="LucAppLdctXhColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO luc_app_ldct_xh(
+		id,manageid,app_check_code,app_check_date,app_check_time,appointment_doc,appointment_org,appointment_date,del_flag,create_by,create_date,update_by,update_date
+		) VALUES (
+		#{id},#{manageid},#{appCheckCode},#{appCheckDate},#{appCheckTime},#{appointmentDoc},#{appointmentOrg},#{appointmentDate},#{delFlag},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE luc_app_ldct_xh SET
+		id = #{id},manageid = #{manageid},app_check_code = #{appCheckCode},app_check_date = #{appCheckDate},app_check_time = #{appCheckTime},appointment_doc = #{appointmentDoc},appointment_org = #{appointmentOrg},appointment_date = #{appointmentDate},del_flag = #{delFlag},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE luc_app_ldct_xh SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>

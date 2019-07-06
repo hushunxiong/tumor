@@ -8,7 +8,7 @@ function getRootPath_dc() {
     if(webName){
         webName = "/"+webName;
     }else{
-        webName = "/mrpt";
+        webName = "/tumor";
     }
     return webName;
 }
