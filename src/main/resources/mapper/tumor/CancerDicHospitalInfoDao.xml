@@ -3,13 +3,15 @@
 <mapper namespace="com.wonders.health.tumor.tumor.dao.CancerDicHospitalInfoDao">
     
 	<sql id="CancerDicHospitalInfoColumns">
-		a.hospital_id AS "hospitalId",a.hospital_name AS "hospitalName",a.hospital_type AS "hospitalType",a.hospital_level AS "hospitalLevel",a.address_county AS "addressCounty",a.del_flag AS "delFlag",a.source_id AS "sourceId",a.hospital_id_22 AS "hospitalId22"
+		a.hospital_id AS "hospitalId",a.hospital_name AS "hospitalName",a.hospital_type AS "hospitalType",a.hospital_level AS "hospitalLevel",a.address_county AS "addressCounty",a.del_flag AS "delFlag",a.source_id AS "sourceId",a.hospital_id_22 AS "hospitalId22",b.town AS "town"
 	</sql>
 
 	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo">
 		SELECT 
 			<include refid="CancerDicHospitalInfoColumns"/>
 		FROM CANCER_DIC_HOSPITAL_INFO a
+		LEFT JOIN MAPPING_TOWNHOSPITAL b
+		ON    a.hospital_id = b.hospitalid
 		WHERE a.hospital_id = #{hospitalId}
 	</select>
 

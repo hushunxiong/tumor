@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.LucPushXhDao">
+    
+	<sql id="LucPushXhColumns">
+		a.pushid AS "pushid",a.pushtime AS "pushtime",a.personcard AS "personcard",a.name AS "name",a.gender AS "gender",a.telephone AS "telephone",a.mobile AS "mobile",a.signorg AS "signorg",a.manageorg AS "manageorg",a.hospitalid AS "hospitalid",a.province AS "province",a.city AS "city",a.county AS "county",a.town AS "town",a.committee AS "committee",a.detail AS "detail",a.signstatus AS "signstatus",a.signtype AS "signtype",a.verifystatus AS "verifystatus",a.origin AS "origin",a.del_flag AS "delFlag",a.source_id AS "sourceId",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.LucPushXh">
+		SELECT 
+			<include refid="LucPushXhColumns"/>
+		FROM luc_push_xh a
+		WHERE a.pushid = #{pushid}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LucPushXh">
+		SELECT 
+			<include refid="LucPushXhColumns"/>
+		FROM luc_push_xh a
+		<where>
+			a.del_flag = '0'
+		</where>		
+			ORDER BY a.update_date DESC
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM luc_push_xh a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.LucPushXh"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="LucPushXhColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO luc_push_xh(
+		pushid,pushtime,personcard,name,gender,telephone,mobile,signorg,manageorg,hospitalid,province,city,county,town,committee,detail,signstatus,signtype,verifystatus,origin,del_flag,source_id,create_by,create_date,update_by,update_date
+		) VALUES (
+		#{pushid},#{pushtime},#{personcard},#{name},#{gender},#{telephone},#{mobile},#{signorg},#{manageorg},#{hospitalid},#{province},#{city},#{county},#{town},#{committee},#{detail},#{signstatus},#{signtype},#{verifystatus},#{origin},#{delFlag},#{sourceId},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE luc_push_xh SET
+		pushid = #{pushid},pushtime = #{pushtime},personcard = #{personcard},name = #{name},gender = #{gender},telephone = #{telephone},mobile = #{mobile},signorg = #{signorg},manageorg = #{manageorg},hospitalid = #{hospitalid},province = #{province},city = #{city},county = #{county},town = #{town},committee = #{committee},detail = #{detail},signstatus = #{signstatus},signtype = #{signtype},verifystatus = #{verifystatus},origin = #{origin},del_flag = #{delFlag},source_id = #{sourceId},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		WHERE pushid = #{pushid}
+	</update>
+
+	<update id="delete">
+	    UPDATE luc_push_xh SET del_flag = '1'
+	    WHERE pushid = #{pushid}
+	</update>
+
+	
+</mapper>
