@@ -27,6 +27,27 @@
       FROM luc_push_xh a
       <where>
 		a.del_flag = '0'
+		  AND a.verifystatus = '0'
+		  AND a.hospitalid = #{orgcode}
+		  <if test="keyword!=null and keyword!='' ">
+			  AND (
+			  a.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+			  OR
+			  a.personcard LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
+			  )
+		  </if>
+		  <if test="gender !=null and gender !=''" >
+			  AND a.gender = #{gender}
+		  </if>
+		  <if test="jzdcounty !=null and jzdcounty !=''" >
+			  AND a.county = #{jzdcounty}
+		  </if>
+		  <if test="jzdtown !=null and jzdtown !=''" >
+			  AND a.town = #{jzdtown}
+		  </if>
+		  <if test="jzdcommittee !=null and jzdcommittee !=''" >
+			  AND a.committee = #{jzdcommittee}
+		  </if>
 	  </where>
     </sql>
 

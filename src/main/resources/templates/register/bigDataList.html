@@ -74,15 +74,15 @@
             <div id="datagrid" url="../bigData/data" class="mini-datagrid" style=" overflow: auto;width: calc(100vw - 25px);height: auto"
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
-                    <div field="name" width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
-                    <div field="personcard" renderer="sfzhRenderer" width="200px" headerAlign="center" align="center" allowSort="false">身份证号</div>
+                    <div field="name" width="70px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
+                    <div field="personcard" renderer="sfzhRenderer" width="150px" headerAlign="center" align="center" allowSort="false">身份证号</div>
                     <div field="gender" type="comboboxcolumn" width="50px" headerAlign="center" align="center" allowSort="false">性别
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60023')}"/></div>
                     <div field="addressDetail" width="350px" headerAlign="center" align="center" allowSort="false">居住地址</div>
-                    <div field="mobile" width="150px" headerAlign="center" align="center" allowSort="false">联系方式</div>
-                    <div field="riskAccount" width="100px" headerAlign="center" align="center" allowSort="false">高危因素</div>
-                    <div type="action" renderer="actionRenderer" style="width:100%;"  width="150px" headerAlign="center" align="center" allowSort="false">操作</div>
+                    <div field="mobile" width="90px" headerAlign="center" align="center" allowSort="false">联系方式</div>
+                    <div field="riskAccount" width="200px" headerAlign="center" align="center" allowSort="false">高危因素</div>
+                    <div type="action" renderer="actionRenderer" width="90px" headerAlign="center" align="center" allowSort="false">操作</div>
                 </div>
             </div>
         </div>
@@ -94,8 +94,7 @@
     var grid = mini.get("datagrid");
     var form = new mini.Form('#div1');
     var kp = [[${kp}]];
-    var town = [[${town}]];
-
+    var orgCode = [[${orgCode}]];
 
     $(function () {
         if(kp){
@@ -103,9 +102,8 @@
             form.setData(params);
             $("#keyword").val(params.keyword);
         }
-        //mini.get("jzdtown").setValue(town);
         townChange();
-        //onSearch();
+        onSearch();
     });
 
     function countyChange(e) {
@@ -132,7 +130,8 @@
         if (!validateKey(keyword)) {
             return;
         }
-        data.keyword=keyword;
+        data.keyword = keyword;
+        data.orgcode = orgCode;
         grid.load(data, gridLoadSuccess, gridLoadError);
     }
 

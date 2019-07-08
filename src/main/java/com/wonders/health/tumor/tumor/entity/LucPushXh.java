@@ -90,6 +90,8 @@ public class LucPushXh extends BaseEntity {
 
 	private String riskAccount;  //危险因素科目
 
+	private String addressDetail; //居住详细地址
+
 	public LucPushXh() {
 		super();
 	}
@@ -284,6 +286,14 @@ public class LucPushXh extends BaseEntity {
 		this.sourceId = sourceId;
 	}
 
+	public String getAddressDetail() {
+		return addressDetail;
+	}
+
+	public void setAddressDetail(String addressDetail) {
+		this.addressDetail = addressDetail;
+	}
+
 	public String getRiskAccount() {
 		return riskAccount;
 	}
@@ -291,4 +301,5 @@ public class LucPushXh extends BaseEntity {
 	public void setRiskAccount(String riskAccount) {
 		this.riskAccount = riskAccount;
 	}
+
 }

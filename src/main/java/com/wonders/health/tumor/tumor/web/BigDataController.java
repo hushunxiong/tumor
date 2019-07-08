@@ -4,12 +4,16 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.entity.CancerDicArea;
+import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.service.AreaService;
 import com.wonders.health.tumor.common.service.HospitalDicService;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.tumor.entity.CancerDicHospitalInfo;
+import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.tumor.entity.LucPushXh;
 import com.wonders.health.tumor.tumor.service.BigDataService;
+import com.wonders.health.tumor.tumor.vo.BigDataSearchVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -58,4 +63,15 @@ public class BigDataController extends BaseController {
         model.addAttribute("orgCode", getSessionUser().getOrgCode());
         return "/register/bigDataList";
     }
+
+    @ResponseBody
+    @RequestMapping(value = "data", produces = "application/json; charset=utf-8")
+    public DataGrid<LucPushXh> data(BigDataSearchVo search) {
+        String[] risks = search.getRisk().split(",");
+        search.setRisks(risks);
+
+        DataGrid<LucPushXh> grid = bigDataService.findPage(search);
+        return grid;
+    }
+
 }
