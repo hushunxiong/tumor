@@ -40,6 +40,8 @@ public class LucPushriskXh extends BaseEntity {
 	@Length(max=4)
 	private String sourceId;	// 来源代码
 
+	private String riskFlag;
+
 
 	public LucPushriskXh() {
 		super();
@@ -99,5 +101,11 @@ public class LucPushriskXh extends BaseEntity {
 		this.sourceId = sourceId;
 	}
 
+	public String getRiskFlag() {
+		return riskFlag;
+	}
 
+	public void setRiskFlag(String riskFlag) {
+		this.riskFlag = riskFlag;
+	}
 }

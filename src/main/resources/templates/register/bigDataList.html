@@ -93,16 +93,20 @@
     mini.parse();
     var grid = mini.get("datagrid");
     var form = new mini.Form('#div1');
-    var kp = [[${kp}]];
     var orgCode = [[${orgCode}]];
 
     $(function () {
+        var kp = [[${kp}]];
         if(kp){
             var params = mini.decode(base64decode(kp));
             form.setData(params);
             $("#keyword").val(params.keyword);
         }
         townChange();
+        if(kp){
+            var params1 = mini.decode(base64decode(kp));
+            mini.get("jzdcommittee").setValue(params1.jzdcommittee);
+        }
         onSearch();
     });
 
@@ -174,8 +178,25 @@
         var hideValue = mini.get("hideInput").getValue();
 
         if (hideValue == "1"){
-            h += '<a  onclick="check(\'' +r.pushid + '\')" style="color:blue;cursor:pointer">核实登记</a>&nbsp;';
+            h += '<a  onclick="checkReg(\'' +r.pushid + '\')" style="color:blue;cursor:pointer">核实登记</a>&nbsp;';
         }
+        return h;
+    }
+
+    //核实登记
+    function checkReg(pushid) {
+        var kp;
+        var data = form.getData(true);
+        data.keyword=$("#keyword").val();
+        kp = base64encode(mini.encode(data));
+
+        var url = "../bigData/form?id="+pushid+"&kp="+encodeURIComponent(kp);
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        window.location.href =url;
     }
 </script>
 </body>

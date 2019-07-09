@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>大数据筛查核实</title>
+    <link>
+    <script></script>
+</head>
+<body>
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div class="content pd-10" style="width:auto; overflow: hidden;" id="allForm">
+
+    <div class="title_tip mt-30">基本信息</div>
+    <table class="table_new table_new5 mt-10">
+        <tbody>
+        <tr>
+            <td width="10%">姓&nbsp;&nbsp;名</td>
+            <td width="20%">
+                <span th:text="${base.name}"></span>
+            </td>
+            <td width="10%">性&nbsp;&nbsp;别</td>
+            <td width="20%">
+                <span th:text="${#dic.generalName('60023', base.gender)}"></span>
+            </td>
+            <td width="10%">出生日期</td>
+            <td>
+                <span th:text="${#dates.format(base.birth, 'yyyy-MM-dd')}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">证件号码</td>
+            <td width="20%">
+                <span th:text="${base.personcard}"></span>
+            </td>
+
+            <td width="10%">移动电话</td>
+            <td width="20%">
+                <span th:text="${base.mobile}"></span>
+            </td>
+            <td width="10%">固定电话</td>
+            <td width="20%">
+                <span th:text="${base.telephone}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">居住地址</td>
+            <td>
+                <span th:text="${base.addressDetail}"></span>
+            </td>
+            <td colspan="4"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="title_tip mt-30">高危因素</div>
+    <table class="table_new mt-10">
+        <tbody>
+            <tr>
+                <td width="50%">项目</td>
+                <td width="50%">是否满足</td>
+            </tr>
+            <tr th:each="risk :${riskList}">
+                <td width="50%">
+                    <span th:text="${#dic.generalName('60054', risk.riskAccount)}"></span>
+                </td>
+                <td width="50%">
+                    <span th:if="${risk.riskFlag eq '1'}" style="color:blue;font-weight: bold;font-size:20px">✔</span>
+                    <span th:if="${risk.riskFlag eq '0'}"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    核实处理：
+    <input id="status" name="status" class="mini-combobox" width="200px" showNullItem="true" emptyText="请选择" required="true"
+           th:data="${statusList}" textField="name" valueField="code" allowInput="true" valueFromSelect="true"/>
+    <input id="pushid" name="pushid" class="mini-hidden" th:value="${pushid}"/>
+    <div class="btn-list text-c mt-30">
+        <button id="save" class="my-btn my-btn-blue mr-20" onclick="save()">保存</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="back()">返回</button>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    mini.parse();
+    var kp = [[${kp}]];
+
+    //保存
+    function save() {
+        var form = new mini.Form("#allForm");
+        form.validate();
+        if (form.isValid() == false) {
+            mini.alert('请填写必要信息','提示!');
+            return;
+        }
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        //提交数据
+        var status = mini.get("status").getValue();
+        var pushid = mini.get("pushid").getValue();
+        $.ajax({
+            url: "../bigData/save",
+            type: "post",
+            data: {"pushid":pushid,"status":status},
+            dataType: "json",
+            success: function (result) {
+                mini.unmask(document.body);
+                if (result.ok) {
+                    mini.showTips({
+                        content: result.msg,
+                        state: "success",
+                        x: "center",
+                        y: "center",
+                        timeout: 500
+                    });
+                    refresh();
+                }
+            }
+        });
+    }
+
+    //返回
+    function back() {
+        window.location.href = "../bigData/list?kp="+kp;
+    }
+
+    function refresh() {
+        var status = mini.get("status").getValue();
+        var pushid = mini.get("pushid").getValue();
+        var url = "";
+        if (status == "1") {
+            url = "../screening/form?manageId=&checkYear=&operation=3&pushid="+pushid;
+        } else {
+            url = "../bigData/list?kp="+kp;
+        }
+        setTimeout(function () {
+            try {
+                window.location.href = url;
+            } catch (e) {
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>

@@ -129,11 +129,13 @@ public class ScreeningController extends BaseController {
     private ScDiagCheckRemindService scDiagCheckRemindService;
     @Autowired
     private LucDiagCheckRemindService lucDiagCheckRemindService;
+    @Autowired
+    private BigDataService bigDataService;
 
 
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
-    public String form(Model model, String manageId, String checkYear,String operation) {
+    public String form(Model model, String manageId, String checkYear,String operation,String pushid) {
         Gson gson = new Gson();
         User user=getSessionUser();
         if(StringUtils.isBlank(checkYear)){
@@ -165,12 +167,30 @@ public class ScreeningController extends BaseController {
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
             CancerPersonInfo personInfo = new CancerPersonInfo();
-            personInfo.setRegdoc(user.getId());
-            personInfo.setRegorg(user.getOrgCode());
-            personInfo.setRegdate(new Date());
-            personInfo.setPersoncardType("01");
-            personInfo.setAddressCounty(areaCode);
-            personInfo.setPaddressCounty(areaCode);
+
+            if (StringUtils.isNotBlank(pushid)) {
+                LucPushXh push =bigDataService.getPushData(pushid);
+                BeanUtils.copyProperties(push, personInfo);
+                personInfo.setPersoncardType("01");
+                personInfo.setAddressProvince(push.getProvince());
+                personInfo.setAddressCity(push.getCity());
+                personInfo.setAddressCounty(push.getCounty());
+                personInfo.setAddressTown(push.getTown());
+                personInfo.setAddressCommittee(push.getCommittee());
+                personInfo.setAddressDetail(push.getDetail());
+
+                personInfo.setRegdoc(user.getId());
+                personInfo.setRegorg(user.getOrgCode());
+                personInfo.setRegdate(new Date());
+                personInfo.setPaddressCounty(areaCode);
+            } else {
+                personInfo.setRegdoc(user.getId());
+                personInfo.setRegorg(user.getOrgCode());
+                personInfo.setRegdate(new Date());
+                personInfo.setPersoncardType("01");
+                personInfo.setAddressCounty(areaCode);
+                personInfo.setPaddressCounty(areaCode);
+            }
 
             model.addAttribute("personInfo", personInfo);
             model.addAttribute("lucRisk", new LucRiskAssessment(getSessionUser()));

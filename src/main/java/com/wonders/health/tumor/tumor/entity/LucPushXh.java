@@ -32,6 +32,8 @@ public class LucPushXh extends BaseEntity {
 	@Length(max=32)
 	private String personcard;	// 身份证
 
+	private Date birth;  //生日
+
 	@Length(max=50)
 	private String name;	// 姓名
 
@@ -122,6 +124,16 @@ public class LucPushXh extends BaseEntity {
 
 	public void setPersoncard(String personcard) {
 		this.personcard = personcard;
+	}
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonProperty("birth")
+	public Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
 	}
 
 	@JsonProperty("name")

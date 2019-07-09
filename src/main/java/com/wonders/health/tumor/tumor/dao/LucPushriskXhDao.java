@@ -21,4 +21,6 @@ public interface LucPushriskXhDao extends BaseDao<LucPushriskXh> {
 	public LucPushriskXh get(@Param("id") String id);
 
     public int delete(@Param("id") String id);
+
+    public List<LucPushriskXh> getRiskData(@Param("pushid") String pushid);
 }

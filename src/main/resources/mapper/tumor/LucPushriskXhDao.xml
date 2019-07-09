@@ -86,4 +86,15 @@
 	    UPDATE luc_pushrisk_xh SET del_flag = '1'
 	    WHERE id = #{id}
 	</update>
+
+	<select id="getRiskData" resultType="com.wonders.health.tumor.tumor.entity.LucPushriskXh">
+		SELECT
+		   b.risk_account AS "riskAccount"
+		FROM luc_push_xh a
+		LEFT JOIN luc_pushrisk_xh b
+		ON a.personcard = b.personcard AND b.del_flag = '0'
+		WHERE a.pushid = #{pushid}
+		AND a.del_flag = '0'
+	</select>
+
 </mapper>
