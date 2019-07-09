@@ -19,4 +19,5 @@ public interface LucPushXhDao extends BaseDao<LucPushXh> {
 
     public int delete(@Param("pushid") String pushid);
 
+    public LucPushXh getByPersoncard(@Param("personcard") String personcard);
 }

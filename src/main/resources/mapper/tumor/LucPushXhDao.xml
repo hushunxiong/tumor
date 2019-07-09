@@ -6,6 +6,10 @@
 		a.pushid AS "pushid",a.pushtime AS "pushtime",a.personcard AS "personcard",a.name AS "name",a.gender AS "gender",a.telephone AS "telephone",a.mobile AS "mobile",a.signorg AS "signorg",a.manageorg AS "manageorg",a.hospitalid AS "hospitalid",a.province AS "province",a.city AS "city",a.county AS "county",a.town AS "town",a.committee AS "committee",a.detail AS "detail",a.signstatus AS "signstatus",a.signtype AS "signtype",a.verifystatus AS "verifystatus",a.origin AS "origin",a.del_flag AS "delFlag",a.source_id AS "sourceId",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
 	</sql>
 
+	<sql id="LucPushXhListColumns">
+		a.personcard AS "personcard",WM_CONCAT(b.risk_account) AS "riskAccount"
+	</sql>
+
 	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.LucPushXh">
 		SELECT 
 			<include refid="LucPushXhColumns"/>
@@ -24,7 +28,11 @@
 	</select>
 	<!-- 分页模块 -->
 	<sql id="pageFromAndWhere">
+	  SELECT
+			<include refid="LucPushXhListColumns"/>
       FROM luc_push_xh a
+	  LEFT JOIN luc_pushrisk_xh b
+	  ON a.personcard = b.personcard AND b.del_flag = '0'
       <where>
 		a.del_flag = '0'
 		  AND a.verifystatus = '0'
@@ -48,13 +56,22 @@
 		  <if test="jzdcommittee !=null and jzdcommittee !=''" >
 			  AND a.committee = #{jzdcommittee}
 		  </if>
+
+		  AND EXISTS(SELECT ID FROM luc_pushrisk_xh WHERE del_flag = '0' AND personcard = b.personcard
+		  <if test="risk !=null and risk !=''">
+			  AND risk_account in
+			  <foreach collection="risks" open="(" separator="," close=")" item="r">
+				  #{r}
+			  </foreach>
+		  </if>
+		  )
 	  </where>
+	  GROUP BY a.personcard
     </sql>
 
     <select id="pageCount" resultType="java.lang.Integer"
             parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
-        select count(1)
-        <include refid="pageFromAndWhere"/>
+        select count(1) FROM(<include refid="pageFromAndWhere"/>)
     </select>
 
 
@@ -68,15 +85,13 @@
 		select * from ( select row_.*, rownum rownum_ from (
 			</otherwise>
 		</choose>
-        select
-			<include refid="LucPushXhColumns"/>
         <include refid="pageFromAndWhere"/>
 		<choose>
 			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
 				ORDER BY ${sortField} ${sortOrder}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.personcard
 			</otherwise>
 		</choose>
 		<choose>
@@ -108,5 +123,13 @@
 	    WHERE pushid = #{pushid}
 	</update>
 
-	
+	<select id="getByPersoncard" resultType="com.wonders.health.tumor.tumor.entity.LucPushXh">
+		SELECT
+		<include refid="LucPushXhColumns"/>
+		FROM luc_push_xh a
+		<where>
+			a.del_flag = '0'
+			AND a.personcard = #{personcard}
+		</where>
+	</select>
 </mapper>
