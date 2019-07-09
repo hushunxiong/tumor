@@ -5,6 +5,7 @@ package com.wonders.health.tumor.tumor.service;
 
 
 import com.wonders.health.auth.client.vo.User;
+import com.wonders.health.tumor.common.Constants;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
@@ -258,6 +259,14 @@ public class CancerPersonInfoService {
         ldct.setAppointmentOrg(user.getOrgCode());
         ldct.setAppointmentDate(new Date());
         lucAppLdctXhDao.insert(ldct);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteAppCheck(String ldctid, User user) {
+        LucAppLdctXh ldct = lucAppLdctXhDao.get(ldctid);
+        ldct.initByUpdate(user.getId());
+        ldct.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
+        lucAppLdctXhDao.update(ldct);
     }
 
     public LucAppLdctXh getLdctInfo(String id) {

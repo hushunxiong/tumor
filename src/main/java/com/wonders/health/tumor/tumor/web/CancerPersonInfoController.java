@@ -12,6 +12,7 @@ import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 
 import com.wonders.health.tumor.tumor.entity.LucAppLdctXh;
 import com.wonders.health.tumor.tumor.service.XkyyRegisterService;
+import com.wonders.health.tumor.tumor.service.XkyyReserveService;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import com.wonders.health.tumor.tumor.service.CancerPersonInfoService;
 
@@ -49,7 +50,7 @@ public class CancerPersonInfoController extends BaseController {
     private CancerPersonInfoService cancerPersonInfoService;
 
     @Autowired
-    private XkyyRegisterService xkyyRegisterService;
+    private XkyyReserveService xkyyReserveService;
 
     @Autowired
     private AuthServiceI authServiceI;
@@ -196,17 +197,20 @@ public class CancerPersonInfoController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "cancelReserve", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-    public AjaxReturn<String> cancelReserve(String patid, String checkCode) {
+    public AjaxReturn<String> cancelReserve(String ldctid,String patid, String checkCode) {
         try {
+            boolean flag = true;
+            //boolean flag = xkyyReserveService.cancelReserve(patid, checkCode);
+            if (flag) {
+                cancerPersonInfoService.deleteAppCheck(ldctid, getSessionUser());
+            }
 
-            xkyyRegisterService.cancelReserve(patid, checkCode);
             return new AjaxReturn<String>(true, "取消预约记录成功");
         } catch (Exception e) {
             logger.error("", e);
             return new AjaxReturn<String>(false, "取消预约记录异常");
         }
     }
-
 
     @RequestMapping(value = "printReserve", method = RequestMethod.GET)
     public ModelAndView printReserve(Model model, String id) {

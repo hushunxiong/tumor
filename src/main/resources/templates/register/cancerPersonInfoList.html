@@ -319,8 +319,8 @@
                 h += '<a onclick="lctView(\'' + r.id + '\',\'' + r.patid + '\',\'' + r.blh+ '\',\'' + r.name+ '\',\'' + r.gender+ '\',\'' + ages(getBirthDayAndSex(r.personcard).birthday)+ '\',\'' + r.paymentNo+ '\',\'' + phone + '\',\'' + r.personcard + '\',\'' + getBirthDayAndSex(r.personcard).birthday+ '\')" style="color:blue;cursor:pointer">预约LDCT</a>&nbsp;';
             }
             if (r.ldctId != null && r.ldctId != "") {
-                h += '<a onclick="printReserve(\'' + r.id + '\',\'' + r.checkCode + '\')" style="color:blue;cursor:pointer">打印预约单</a>';
-                //h += '<a onclick="cancelReserve(\'' + r.patid + '\',\'' + r.checkCode + '\')" style="color:blue;cursor:pointer">取消预约</a>';
+                h += '<a onclick="printReserve(\'' + r.id + '\',\'' + r.checkCode + '\')" style="color:blue;cursor:pointer">打印预约单</a>&nbsp;';
+                h += '<a onclick="cancelReserve(\'' + r.ldctId + '\', \'' + r.patid + '\',\'' + r.checkCode + '\')" style="color:blue;cursor:pointer">取消预约</a>';
             }
         }
         return h;
@@ -522,10 +522,10 @@
     }
 
     //取消预约
-    function cancelReserve(patid, checkCode) {
+    function cancelReserve(ldctid, patid, checkCode) {
         $.ajax({
             url : "../cancerPersonInfo/cancelReserve",
-            data:{patid:patid, checkCode:checkCode},
+            data:{ldctid:ldctid, patid:patid, checkCode:checkCode},
             dataType: "json",
             success : function(res) {
                 if (res.ok) {
