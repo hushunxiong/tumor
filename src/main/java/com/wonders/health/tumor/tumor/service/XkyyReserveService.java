@@ -44,7 +44,7 @@ public class XkyyReserveService {
                     if (cancelVo != null) {
                         XhCancelItem item = cancelVo.getItem();
                         if (item != null) {
-                            if (StringUtils.equals("true", item.getMessage())) {
+                            if (StringUtils.equals("true", item.getSuccess())) {
                                 return true;
                             }
                         }
@@ -73,7 +73,7 @@ public class XkyyReserveService {
         sb.append("</PrePatUniqueNo><BookSID>");
         sb.append(checkCode);
         sb.append("</BookSID>");
-        sb.append("<OperatorCode>fazb</OperatorCode><OperatorName></OperatorName>");
+        sb.append("<OperatorCode>fazb</OperatorCode><OperatorName>fazb</OperatorName>");
         sb.append("</Request>");
         return sb.toString();
     }
