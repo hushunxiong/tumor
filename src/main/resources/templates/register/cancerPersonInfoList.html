@@ -232,21 +232,20 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
     mini.parse();
-    //var messenger = new Messenger('parent', 'tumor');
-    var messenger = new Messenger('parent', 'tcm');
+    var messenger = new Messenger('parent', 'tumor');
+    //var messenger = new Messenger('parent', 'tcm');
     var iframe  = document.getElementById('frame1');
-    //messenger.addTarget(iframe.contentWindow, 'addYy');
-    messenger.addTarget(iframe.contentWindow, 'addTcm');
+    messenger.addTarget(iframe.contentWindow, 'addYy');
+    //messenger.addTarget(iframe.contentWindow, 'addTcm');
 
     messenger.listen(function (msg) {
         var tbs=JSON.parse(msg);
+        console.log(tbs);
         if(tbs.ok==true){
-            //tbs.bookId
-            //tbs.bookDate
-            //tbs.bookTime
-            var checkCode = "B20190706001";
-            var checkDate = "2019-07-20";
-            var checkTime = "11:00";
+
+            var checkCode = tbs.bookId;
+            var checkDate = tbs.bookDate;
+            var checkTime = tbs.bookTime;
             var manageId = mini.get("manageId").getValue();
             insertCheckRecord(manageId,checkCode,checkDate,checkTime);
             onSearch();
@@ -470,11 +469,8 @@
 
         mini.get("manageId").setValue(id);
 
-        /*******ip = "http://192.168.30.117";******/
-        //var url = ip + ':8071/xkyy/queryYyks.action?patid='+patid+'&blh='+blh+"&name="+encodeURIComponent(encodeURIComponent(name));
-        //url += "&sex="+sex+"&age="+age+"&cardNo="+cardNo+"&phone="+phone+"&sfzh="+sfzh+"&birth="+birth;
-        //var url = ip + ':8071/xkyy/queryYyks.action?param='+JSON.stringify(obj);
-        var url = "http://10.1.93.110/tcm/api/addTbs?age=65";
+        var url = ip + ':8071/xkyy/queryYyks.action?param='+encodeURIComponent(JSON.stringify(obj));
+        //var url = 'http://192.168.30.117:8071/xkyy/queryYyks.action?param='+encodeURIComponent(JSON.stringify(obj));
 
         $("#frame1").attr("src", url);
         mini.get("yy-window").show();
