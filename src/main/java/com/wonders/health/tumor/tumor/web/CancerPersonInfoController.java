@@ -182,10 +182,10 @@ public class CancerPersonInfoController extends BaseController {
     public AjaxReturn<String> insertAppCheck(String manageId, String checkCode, String checkDate, String checkTime) {
         try {
             cancerPersonInfoService.insertAppCheck(manageId, checkCode, checkDate, checkTime, getSessionUser());
-            return new AjaxReturn<String>(true, "新增预约记录表成功");
+            return new AjaxReturn<String>(true, "预约成功");
         } catch (Exception e) {
             logger.error("", e);
-            return new AjaxReturn<String>(false, "新增预约记录表异常");
+            return new AjaxReturn<String>(false, "预约异常");
         }
     }
 
@@ -199,13 +199,14 @@ public class CancerPersonInfoController extends BaseController {
     @RequestMapping(value = "cancelReserve", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public AjaxReturn<String> cancelReserve(String ldctid,String patid, String checkCode) {
         try {
-            boolean flag = true;
-            //boolean flag = xkyyReserveService.cancelReserve(patid, checkCode);
+            //boolean flag = true;
+            boolean flag = xkyyReserveService.cancelReserve(patid, checkCode);
             if (flag) {
                 cancerPersonInfoService.deleteAppCheck(ldctid, getSessionUser());
+                return new AjaxReturn<String>(true, "取消预约记录成功");
+            } else {
+                return new AjaxReturn<String>(false, "取消预约记录异常");
             }
-
-            return new AjaxReturn<String>(true, "取消预约记录成功");
         } catch (Exception e) {
             logger.error("", e);
             return new AjaxReturn<String>(false, "取消预约记录异常");

@@ -36,7 +36,7 @@
       <where>
 		a.del_flag = '0'
 		  AND a.verifystatus = '0'
-		  AND a.hospitalid = #{orgcode}
+		  AND a.signorg = #{orgcode}
 		  <if test="keyword!=null and keyword!='' ">
 			  AND (
 			  a.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')

@@ -37,19 +37,26 @@ public class XkyyReserveService {
             String result = service.cancelBook(getCancelXml(patid,checkCode));
             if (StringUtils.isNotBlank(result)) {
                 //解析xml
+
                 returnVo = XmlUtils.fromXml(result, XhCancelReturnVo.class);
                 if (returnVo != null) {
                     XhCancelVo cancelVo = returnVo.getItemList();
                     if (cancelVo != null) {
-                        List<XhCancelItem> itemList = cancelVo.getItem();
-                        if (itemList != null && itemList.size() > 0) {
-                            XhCancelItem item = itemList.get(0);
+                        XhCancelItem item = cancelVo.getItem();
+                        if (item != null) {
                             if (StringUtils.equals("true", item.getMessage())) {
                                 return true;
                             }
                         }
                     }
                 }
+
+                /*
+                String aa = result.substring(result.indexOf("<Success>") + 9,result.indexOf("</Success>"));
+                if (StringUtils.equalsIgnoreCase("true", aa)) {
+                    return true;
+                }
+                */
             }
         } catch (Exception e) {
             throw e;
@@ -61,13 +68,13 @@ public class XkyyReserveService {
     private String getCancelXml(String patid, String checkCode) {
         //xml拼接
         StringBuffer sb = new StringBuffer();
-        sb.append("<request><PrePatUniqueNo>");
+        sb.append("<Request><PrePatUniqueNo>");
         sb.append(patid);
         sb.append("</PrePatUniqueNo><BookSID>");
         sb.append(checkCode);
         sb.append("</BookSID>");
-        sb.append("<OperatorCode></OperatorCode><OperatorName></OperatorName>");
-        sb.append("</request>");
+        sb.append("<OperatorCode>fazb</OperatorCode><OperatorName></OperatorName>");
+        sb.append("</Request>");
         return sb.toString();
     }
 }
