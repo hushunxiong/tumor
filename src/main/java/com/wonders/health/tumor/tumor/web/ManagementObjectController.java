@@ -1,15 +1,27 @@
 package com.wonders.health.tumor.tumor.web;
 
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.wonders.health.auth.client.AuthServiceI;
+import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.DataGrid;
+import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
-import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
+import com.wonders.health.tumor.common.utils.DictUtils;
+import com.wonders.health.tumor.common.utils.StringUtils;
+import com.wonders.health.tumor.tumor.entity.*;
 import com.wonders.health.tumor.tumor.service.CancerPersonInfoService;
+import com.wonders.health.tumor.tumor.service.LucRegcaseService;
+import com.wonders.health.tumor.tumor.service.LucRiskAssessmentService;
+import com.wonders.health.tumor.tumor.service.ManagementObjectService;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
+import com.wonders.health.tumor.tumor.vo.ScreeningVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,10 +31,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 管理对象信息Controller
+ *
  * @author sot wangyixian
  */
 @Controller
@@ -33,6 +48,10 @@ public class ManagementObjectController extends BaseController {
 
     @Autowired
     private CancerPersonInfoService cancerPersonInfoService;
+
+    @Autowired
+    private ManagementObjectService managementObjectService;
+
     @Autowired
     private AuthServiceI authServiceI;
 
@@ -40,25 +59,25 @@ public class ManagementObjectController extends BaseController {
     private String areaCode;
 
     @Value("${crc_switch_flag}")
-    private  Integer crcFlag;
+    private Integer crcFlag;
 
     @Value("${luc_switch_flag}")
-    private  Integer lucFlag;
+    private Integer lucFlag;
 
     @Value("${lic_switch_flag}")
-    private  Integer licFlag;
+    private Integer licFlag;
 
     @Value("${sc_switch_flag}")
-    private  Integer scFlag;
+    private Integer scFlag;
 
     @Value("${yearNum}")
-    private  Integer yearNum;
+    private Integer yearNum;
 
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Model model) {
         List<String> nds = DateUtils.getYearBefore(Integer.parseInt(DateUtils.getYear()), yearNum);
-        Collections.sort(nds,Collections.reverseOrder());
-        model.addAttribute("csnf",nds);
+        Collections.sort(nds, Collections.reverseOrder());
+        model.addAttribute("csnf", nds);
         model.addAttribute("role", AuthUtils.judgeRole(AuthUtils.getUser().getOrgCode()));
         model.addAttribute("areaList", AuthUtils.getAreas(areaCode));
         model.addAttribute("areaCode", areaCode);
@@ -80,5 +99,17 @@ public class ManagementObjectController extends BaseController {
         search.setScFlag(scFlag.toString());
         DataGrid<CancerPersonInfo> grid = cancerPersonInfoService.findPage(search);
         return grid;
+    }
+
+    @RequestMapping(value = {"", "detail"}, method = RequestMethod.GET)
+    public String detail(Model model, String manageId) {
+        List<LucRegcase> lucRegcaseList = managementObjectService.getLucRegcaseListByManageId(manageId);
+        model.addAttribute("lucRegcaseList", lucRegcaseList);
+
+        // 获得徐汇肺癌LDCT预约记录表
+        List<LucAppLdctXh> lucAppLdctXhList =managementObjectService.getLucAppLdctXhListByManageId(manageId);
+        model.addAttribute("lucAppLdctXhList", lucAppLdctXhList);
+
+        return "/management/detail";
     }
 }

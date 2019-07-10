@@ -193,7 +193,7 @@
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
                     <div field="lucDiagCheckResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false">肺癌诊断结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
-                               valueField="code" th:data="${#dic.generals('60001')}"/></div>
+                               valueField="code" th:data="${#dic.generals('60013')}"/></div>
                     <div type="action" renderer="actionRenderer" style="width:100%;"  width="150px" headerAlign="center" align="center" allowSort="false">操作</div>
                 </div>
                 </div>
@@ -261,7 +261,7 @@
         if(id==null||id==''||id==undefined){
             csnf=$("#csnf").val();
         }
-        var url = "../screening/form/?manageId="+id+"&checkYear="+csnf+"&&operation="+operation;
+        var url = "../managementObject/detail/?manageId="+id;
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',
