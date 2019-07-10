@@ -93,6 +93,7 @@
                 <tr th:each="ldctCheck :${lucLDCTCheckXHSList}">
                     <td>
                         <a href="javascript:void(0)"
+                           th:onclick = "'javascript:gotoLDCTCheckDetail( \''+${ldctCheck.lucAppLdctXh.manageid}+'\', \''+${ldctCheck.ldctOrderId}+'\')'"
                            th:text="${#dates.format(ldctCheck.ldctCheckDate, 'yyyy-MM-dd')}">
                         </a>
                     </td>
@@ -121,6 +122,16 @@
             csnf = $("#csnf").val();
         }
         var url = "../../screening/form/?manageId=" + id + "&checkYear=" + csnf + "&operation=" + operation;
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        window.location.href = url;
+    }
+
+    function gotoLDCTCheckDetail(manageId, ldcdOrderId) {
+        var url = "../../managementObject/ldctCheckDetail/?manageId=" + manageId + "&ldcdOrderId=" + ldcdOrderId;
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',

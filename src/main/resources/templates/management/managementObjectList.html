@@ -179,19 +179,19 @@
                     <div field="gender" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name" valueField="code" th:data="${#dic.generals('60023')}"/>
                     </div>
-                    <div field="addressDetail" autoShowPopup="true"  width="100px"  headerAlign="center" align="center"  allowSort="false">居住地址</div>
+                    <div field="addressDetail" autoShowPopup="true"  width="200px"  headerAlign="center" align="center"  allowSort="false">居住地址</div>
                     <div field="mobile" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false">联系方式</div>
-                    <div field="regorg" autoShowPopup="true"  width="150px" headerAlign="center" align="center"  allowSort="false">管理医疗机构
+                    <div field="regorg" autoShowPopup="true"  width="250px" headerAlign="center" align="center"  allowSort="false">管理医疗机构
 <!--                        <input property="editor" class="mini-combobox" style="width:100%;" textField="name" valueField="code" th:data="${#auth.getHospitalByCode(regorg)}"/>-->
 <!--                        <input id="regorgName" class="mini-textbox" style="width: 100%;" th:value="${#auth.getHospitalByCode(regorg).name}" allowInput="false"/>-->
                     </div>
-                    <div field="lucAssessmentResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center"  allowSort="false">问卷初筛
+                    <div field="lucAssessmentResult" type="comboboxcolumn" autoShowPopup="true" width="100px" headerAlign="center" align="center"  allowSort="false">问卷初筛
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="lucLdctResultType" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center"  allowSort="false">LDCT结果
+                    <div field="lucLdctResultType" type="comboboxcolumn" autoShowPopup="true" width="100px" headerAlign="center" align="center"  allowSort="false">LDCT结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60001')}"/></div>
-                    <div field="lucDiagCheckResult" type="comboboxcolumn" autoShowPopup="true" width="150px" headerAlign="center" align="center" allowSort="false">肺癌诊断结果
+                    <div field="lucDiagCheckResult" type="comboboxcolumn" autoShowPopup="true" width="100px" headerAlign="center" align="center" allowSort="false">肺癌诊断结果
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60013')}"/></div>
                     <div type="action" renderer="actionRenderer" style="width:100%;"  width="150px" headerAlign="center" align="center" allowSort="false">操作</div>
@@ -251,7 +251,7 @@
         var r = e.record;
         var h = '';
         if(r.crc+r.luc+r.lic+r.sc>=1){
-            h += '<a onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\',\'' + '1'+ '\')" style="color:blue;cursor:pointer">详细</a>&nbsp;';
+            h += '<button class="my-btn my-btn-blue" onclick="goto(\'' + r.id+ '\',\'' + r.csnf+ '\',\'' + '1'+ '\')" style="cursor:pointer">详细</button>&nbsp;';
         }
         return h;
     }

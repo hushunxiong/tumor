@@ -3,11 +3,13 @@ package com.wonders.health.tumor.tumor.web;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.wonders.health.auth.client.AuthServiceI;
+import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.model.DataOption;
+import com.wonders.health.tumor.common.service.AreaService;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.DictUtils;
@@ -51,10 +53,16 @@ public class ManagementObjectController extends BaseController {
     private ManagementObjectService managementObjectService;
 
     @Autowired
+    private LucAppLdctXhService lucAppLdctXhService;
+
+    @Autowired
     private LucLDCTCheckXHService lucLDCTCheckXHService;
 
     @Autowired
     private AuthServiceI authServiceI;
+
+    @Autowired
+    private AreaService areaService;
 
     @Value("${area_code}")
     private String areaCode;
@@ -108,14 +116,14 @@ public class ManagementObjectController extends BaseController {
         model.addAttribute("lucRegcaseList", lucRegcaseList);
 
         // 获得徐汇肺癌LDCT预约记录表
-        List<LucAppLdctXh> lucAppLdctXhList =managementObjectService.getLucAppLdctXhListByManageId(manageId);
+        List<LucAppLdctXh> lucAppLdctXhList = managementObjectService.getLucAppLdctXhListByManageId(manageId);
         model.addAttribute("lucAppLdctXhList", lucAppLdctXhList);
 
         // 低密度螺旋CT检查信息
         List<LucLDCTCheckXH> lucLDCTCheckXHSList = new ArrayList<>();
-        for (LucAppLdctXh item : lucAppLdctXhList){
+        for (LucAppLdctXh item : lucAppLdctXhList) {
             LucLDCTCheckXH lucLDCTCheckXH = lucLDCTCheckXHService.findByOrderId(item.getId());
-            if (lucLDCTCheckXH != null){
+            if (lucLDCTCheckXH != null) {
                 lucLDCTCheckXH.setLucAppLdctXh(item);
                 lucLDCTCheckXHSList.add(lucLDCTCheckXH);
             }
@@ -123,5 +131,42 @@ public class ManagementObjectController extends BaseController {
         model.addAttribute("lucLDCTCheckXHSList", lucLDCTCheckXHSList);
 
         return "/management/detail";
+    }
+
+    @RequestMapping(value = {"", "ldctCheckDetail"}, method = RequestMethod.GET)
+    public String ldctCheckDetail(Model model, String manageId, String ldcdOrderId) {
+        CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findById(manageId);
+        if (cancerPersonInfo != null) {
+            //居住地址拼接
+            cancerPersonInfo.setAddressDetail(areaService.getFullAddress(
+                    cancerPersonInfo.getAddressProvince(), cancerPersonInfo.getAddressCity(), cancerPersonInfo.getAddressCounty(),
+                    cancerPersonInfo.getAddressTown(), cancerPersonInfo.getAddressCommittee(), cancerPersonInfo.getAddressDetail()));
+            model.addAttribute("personInfo", cancerPersonInfo);
+        } else {
+            model.addAttribute("personInfo", new CancerPersonInfo());
+        }
+
+        LucAppLdctXh lucAppLdctXh = lucAppLdctXhService.findById(ldcdOrderId);
+        if (lucAppLdctXh != null) {
+            // 管理医疗机构的获取
+            Hospital hos = AuthUtils.getHospitalByCode(lucAppLdctXh.getAppointmentOrg());
+            if (hos != null) {
+                lucAppLdctXh.setAppointmentOrg(hos.getName());
+            }
+
+            model.addAttribute("ldctApp", lucAppLdctXh);
+
+            LucLDCTCheckXH lucLDCTCheckXH = lucLDCTCheckXHService.findByOrderId(lucAppLdctXh.getId());
+            if (lucLDCTCheckXH != null) {
+                model.addAttribute("ldctCheck", lucLDCTCheckXH);
+            } else {
+                model.addAttribute("ldctCheck", new LucLDCTCheckXH());
+            }
+        } else {
+            model.addAttribute("ldctApp", new LucAppLdctXh());
+            model.addAttribute("ldctCheck", new LucLDCTCheckXH());
+        }
+
+        return "/management/ldctCheckDetail";
     }
 }
