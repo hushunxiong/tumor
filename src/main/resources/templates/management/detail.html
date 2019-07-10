@@ -78,6 +78,39 @@
                 </tbody>
             </table>
 
+            <div class="title_tip mt-30">低密度螺旋CT检查信息</div>
+            <table class="table_new mt-10">
+                <thead>
+                <tr>
+                    <th width="20%">检查日期</th>
+                    <th width="15%">医生</th>
+                    <th width="35%">检查医疗机构</th>
+                    <th width="15%">检查结果</th>
+                    <th width="15%">随访建议</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ldctCheck :${lucLDCTCheckXHSList}">
+                    <td>
+                        <a href="javascript:void(0)"
+                           th:text="${#dates.format(ldctCheck.ldctCheckDate, 'yyyy-MM-dd')}">
+                        </a>
+                    </td>
+                    <td>
+                        <span th:text="${ldctCheck.ldctCheckDoctor}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${ldctCheck.lucAppLdctXh.appointmentOrg}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dic.generalName('60001', ldctCheck.ldctResultType)}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dic.generalName('60061', ldctCheck.ldctResult)}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

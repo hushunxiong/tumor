@@ -13,10 +13,7 @@ import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.DictUtils;
 import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.tumor.entity.*;
-import com.wonders.health.tumor.tumor.service.CancerPersonInfoService;
-import com.wonders.health.tumor.tumor.service.LucRegcaseService;
-import com.wonders.health.tumor.tumor.service.LucRiskAssessmentService;
-import com.wonders.health.tumor.tumor.service.ManagementObjectService;
+import com.wonders.health.tumor.tumor.service.*;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import com.wonders.health.tumor.tumor.vo.ScreeningVo;
 import org.slf4j.Logger;
@@ -30,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +49,9 @@ public class ManagementObjectController extends BaseController {
 
     @Autowired
     private ManagementObjectService managementObjectService;
+
+    @Autowired
+    private LucLDCTCheckXHService lucLDCTCheckXHService;
 
     @Autowired
     private AuthServiceI authServiceI;
@@ -109,6 +110,17 @@ public class ManagementObjectController extends BaseController {
         // 获得徐汇肺癌LDCT预约记录表
         List<LucAppLdctXh> lucAppLdctXhList =managementObjectService.getLucAppLdctXhListByManageId(manageId);
         model.addAttribute("lucAppLdctXhList", lucAppLdctXhList);
+
+        // 低密度螺旋CT检查信息
+        List<LucLDCTCheckXH> lucLDCTCheckXHSList = new ArrayList<>();
+        for (LucAppLdctXh item : lucAppLdctXhList){
+            LucLDCTCheckXH lucLDCTCheckXH = lucLDCTCheckXHService.findByOrderId(item.getId());
+            if (lucLDCTCheckXH != null){
+                lucLDCTCheckXH.setLucAppLdctXh(item);
+                lucLDCTCheckXHSList.add(lucLDCTCheckXH);
+            }
+        }
+        model.addAttribute("lucLDCTCheckXHSList", lucLDCTCheckXHSList);
 
         return "/management/detail";
     }
