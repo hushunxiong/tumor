@@ -10,6 +10,8 @@
 		P . ID AS id,
 		P . NAME AS "name",
 		P .GENDER AS "gender",
+		P.address_detail AS "addressDetail",
+		P.regorg AS "regorg",
 		ldct.ID AS "ldctId",
 		ldct.APP_CHECK_CODE AS "checkCode",
 		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
@@ -42,6 +44,9 @@
 			luc.check_year as  lucCheckYear,
 			1 as "luc",
 			luc.CHECK_RESULT AS "lucResult",
+			lucas.assessment_result AS "lucAssessmentResult",
+			ldctchk.ldct_result_type AS "lucLdctResultType",
+			lucDiagCheck.is_luc AS "lucDiagCheckResult",
 		</if>
 		P.patid as patid,
 		P.blh as blh,
@@ -220,8 +225,11 @@
 			<if test="endDateFrom !=null and endDateFrom !=''">
 				AND  luc.regdate &lt; to_date(#{endDateFrom},'yyyy-MM-dd HH:mi:ss')+1
 			</if>
+			LEFT JOIN LUC_RISK_ASSESSMENT lucas ON (luc.ID = lucas.LUC_CHECK_ID) AND lucas.DEL_FLAG='0'
 		</if>
 		LEFT JOIN LUC_APP_LDCT_XH ldct ON P.ID = ldct.MANAGEID AND ldct.DEL_FLAG='0'
+		LEFT JOIN LUC_LDCT_CHECK_XH ldctchk ON (ldct.ID = ldctchk.LDCT_ORDER_ID) AND ldctchk.DEL_FLAG='0'
+		LEFT JOIN LUC_DIAG_CHECK_XH lucDiagCheck ON (P.ID = lucDiagCheck.MANAGEID) AND lucDiagCheck.DEL_FLAG='0'
       <where>
 		  P .DEL_FLAG = '0'
 		  <if test=" id !=null and id !='' " >

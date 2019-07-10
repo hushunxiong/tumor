@@ -1,11 +1,13 @@
 /**
- * 
+ *
  */
 package com.wonders.health.tumor.tumor.service;
 
 
+import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.Constants;
+import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.dao.*;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
@@ -85,49 +87,59 @@ public class CancerPersonInfoService {
     private XkyyRegisterService xkyyRegisterService;
 
     public DataGrid<CancerPersonInfo> findPage(DataGridSearch search) {
-        List<CancerPersonInfo> list=null;
-        Integer count=cancerPersonInfoDao.pageCount(search);
-        if(count>0){
-            list=cancerPersonInfoDao.pageList(search);
+        List<CancerPersonInfo> list = null;
+        Integer count = cancerPersonInfoDao.pageCount(search);
+        if (count > 0) {
+            list = cancerPersonInfoDao.pageList(search);
         }
-        if(list!=null&&list.size()>0){
-            for(CancerPersonInfo info:list){
-                    Integer delRecordsFlag=0;
-                    if(StringUtils.isNotBlank(info.getCrcCheckYear())){
-                        info.setCsnf(info.getCrcCheckYear());
-                        delRecordsFlag++;
-                    }
-                    if(StringUtils.isNotBlank(info.getLucCheckYear())){
-                        info.setCsnf(info.getLucCheckYear());
-                        delRecordsFlag++;
-                    }
-                    if(StringUtils.isNotBlank(info.getLicCheckYear())){
-                        info.setCsnf(info.getLicCheckYear());
-                        delRecordsFlag++;
-                    }
-                    if(StringUtils.isNotBlank(info.getScCheckYear())){
-                        info.setCsnf(info.getScCheckYear());
-                        delRecordsFlag++;
-                    }
-                    info.setDelRecordsFlag(delRecordsFlag);
+        if (list != null && list.size() > 0) {
+            for (CancerPersonInfo info : list) {
+                // 联系电话，如果手机号没有，则显示固定电话
+                if (StringUtils.isBlank(info.getMobile())) {
+                    info.setMobile(info.getTelephone());
+                }
+
+                // 管理医疗机构的获取
+                Hospital hos = AuthUtils.getHospitalByCode(info.getRegorg());
+                if (hos != null) {
+                    info.setRegorg(hos.getName());
+                }
+
+                Integer delRecordsFlag = 0;
+                if (StringUtils.isNotBlank(info.getCrcCheckYear())) {
+                    info.setCsnf(info.getCrcCheckYear());
+                    delRecordsFlag++;
+                }
+                if (StringUtils.isNotBlank(info.getLucCheckYear())) {
+                    info.setCsnf(info.getLucCheckYear());
+                    delRecordsFlag++;
+                }
+                if (StringUtils.isNotBlank(info.getLicCheckYear())) {
+                    info.setCsnf(info.getLicCheckYear());
+                    delRecordsFlag++;
+                }
+                if (StringUtils.isNotBlank(info.getScCheckYear())) {
+                    info.setCsnf(info.getScCheckYear());
+                    delRecordsFlag++;
+                }
+                info.setDelRecordsFlag(delRecordsFlag);
             }
         }
-        return new DataGrid<CancerPersonInfo>(count,list);
+        return new DataGrid<CancerPersonInfo>(count, list);
     }
-
 
 
     public CancerPersonInfo findById(String id) {
         return cancerPersonInfoDao.get(id);
     }
 
-    public CancerPersonInfo findByInfoId(String id,String csnf) {
-        return cancerPersonInfoDao.getById(id,csnf);
+    public CancerPersonInfo findByInfoId(String id, String csnf) {
+        return cancerPersonInfoDao.getById(id, csnf);
     }
 
 
     @Transactional(readOnly = false)
-    public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId)  {
+    public AjaxReturn<Map<String, String>> saveOrUpdate(CancerPersonInfo vo, String userId) {
         boolean flag = true;
 
         if (vo != null && StringUtils.isNotBlank(vo.getId())) { //修改
@@ -208,25 +220,25 @@ public class CancerPersonInfoService {
     @Transactional(readOnly = false)
     public void deleteByRegcaseId(CancerPersonInfo info) {
 
-	    if(StringUtils.isNotBlank(info.getCrcCheckId())){
-	        crcRegcaseDao.delete(info.getCrcCheckId());
-	        crcFobtDao.deleteByCheckId(info.getCrcCheckId());
-	        crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
-	        familyCancerHistoryDao.deleteByCheckId(info.getCrcCheckId());
+        if (StringUtils.isNotBlank(info.getCrcCheckId())) {
+            crcRegcaseDao.delete(info.getCrcCheckId());
+            crcFobtDao.deleteByCheckId(info.getCrcCheckId());
+            crcRiskAssessmentDao.deleteByCheckId(info.getCrcCheckId());
+            familyCancerHistoryDao.deleteByCheckId(info.getCrcCheckId());
         }
-	    if(StringUtils.isNotBlank(info.getLicCheckId())){
-	        licRegcaseDao.delete(info.getLicCheckId());
-	        licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
-	        licRiskAssessmentDao.delete(info.getLicCheckId());
-	        familyCancerHistoryDao.deleteByCheckId(info.getLicCheckId());
+        if (StringUtils.isNotBlank(info.getLicCheckId())) {
+            licRegcaseDao.delete(info.getLicCheckId());
+            licAssistCheckDao.deleteByCheckId(info.getLicCheckId());
+            licRiskAssessmentDao.delete(info.getLicCheckId());
+            familyCancerHistoryDao.deleteByCheckId(info.getLicCheckId());
         }
-        if(StringUtils.isNotBlank(info.getLucCheckId())){
+        if (StringUtils.isNotBlank(info.getLucCheckId())) {
             lucRegcaseDao.delete(info.getLucCheckId());
             lucRiskAssessmentDao.deleteByCheckId(info.getLucCheckId());
             familyCancerHistoryDao.deleteByCheckId(info.getLucCheckId());
 
         }
-        if(StringUtils.isNotBlank(info.getScCheckId())){
+        if (StringUtils.isNotBlank(info.getScCheckId())) {
             scRegcaseDao.delete(info.getScCheckId());
             scRiskAssessmentDao.deleteByCheckId(info.getScCheckId());
             familyCancerHistoryDao.deleteByCheckId(info.getScCheckId());
@@ -236,13 +248,13 @@ public class CancerPersonInfoService {
          * 四种癌症初筛信息都不存在
          * 删除危险度评估-癌症史表信息
          */
-        if(info.getHistoryDelflag()<=0){
-            cancerHistoryDao.deleteByManageIdAndYear(info.getId(),info.getCsnf());
+        if (info.getHistoryDelflag() <= 0) {
+            cancerHistoryDao.deleteByManageIdAndYear(info.getId(), info.getCsnf());
         }
 
     }
 
-    public void updateChange(String id){
+    public void updateChange(String id) {
         cancerPersonInfoDao.updateChange(id);
     }
 
