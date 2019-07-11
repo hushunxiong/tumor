@@ -3,6 +3,7 @@ package com.wonders.health.tumor.common.service;
 import com.wonders.health.tumor.common.dao.CancerDicAreaDao;
 import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.entity.CancerDicArea;
+import com.wonders.health.tumor.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,9 @@ public class AreaService {
         if (committeeArea != null) {
             sb.append(committeeArea.getCname());
         }
-        sb.append(detail);
+        if (StringUtils.isNotBlank(detail)) {
+            sb.append(detail);
+        }
         return sb.toString();
     }
 
