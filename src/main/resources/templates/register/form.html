@@ -2178,6 +2178,10 @@
                 $("#lucRiskResult").text("阴性");
                 $("#assessmentResult4").val("1");
             }
+
+            if (areaCode == '310104000000') {        //徐汇区单独判断
+                makeChushaiResult();
+            }
         }
     }
     //辅助检查结果计算
