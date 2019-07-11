@@ -19,4 +19,8 @@ public class HospitalDicService {
     public List<CancerDicHospitalInfo> queryName(String name) {
         return cancerDicHospitalInfoDao.queryName(name);
     }
+
+    public CancerDicHospitalInfo getHospital(String hospitalId) {
+        return cancerDicHospitalInfoDao.get(hospitalId);
+    }
 }

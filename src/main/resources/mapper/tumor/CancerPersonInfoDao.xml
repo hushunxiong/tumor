@@ -3,13 +3,17 @@
 <mapper namespace="com.wonders.health.tumor.tumor.dao.CancerPersonInfoDao">
     
 	<sql id="CancerPersonInfoColumns">
-		a.id AS "id",a.personcard_type AS "personcardType",a.personcard AS "personcard",a.name AS "name",a.gender AS "gender",a.birth AS "birth",a.telephone AS "telephone",a.mobile AS "mobile",a.nation AS "nation",a.nation_other AS "nationOther",a.marriage AS "marriage",a.education AS "education",a.payment_situation AS "paymentSituation",a.profession AS "profession",a.other_profession AS "otherProfession",a.paddress_province AS "paddressProvince",a.paddress_city AS "paddressCity",a.paddress_county AS "paddressCounty",a.paddress_town AS "paddressTown",a.paddress_committee AS "paddressCommittee",a.paddress_detail AS "paddressDetail",a.address_province AS "addressProvince",a.address_city AS "addressCity",a.address_county AS "addressCounty",a.address_town AS "addressTown",a.address_committee AS "addressCommittee",a.address_detail AS "addressDetail",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.del_flag AS "delFlag",a.ischange AS "ischange",a.patid AS "patid",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+		a.id AS "id",a.personcard_type AS "personcardType",a.personcard AS "personcard",a.name AS "name",a.gender AS "gender",a.birth AS "birth",a.telephone AS "telephone",a.mobile AS "mobile",a.nation AS "nation",a.nation_other AS "nationOther",a.marriage AS "marriage",a.education AS "education",a.payment_situation AS "paymentSituation",a.payment_no AS "paymentNo",a.profession AS "profession",a.other_profession AS "otherProfession",a.paddress_province AS "paddressProvince",a.paddress_city AS "paddressCity",a.paddress_county AS "paddressCounty",a.paddress_town AS "paddressTown",a.paddress_committee AS "paddressCommittee",a.paddress_detail AS "paddressDetail",a.address_province AS "addressProvince",a.address_city AS "addressCity",a.address_county AS "addressCounty",a.address_town AS "addressTown",a.address_committee AS "addressCommittee",a.address_detail AS "addressDetail",a.regorg AS "regorg",a.regdoc AS "regdoc",a.regdate AS "regdate",a.del_flag AS "delFlag",a.ischange AS "ischange",a.patid AS "patid",a.blh AS "blh",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
 	</sql>
 
 	<sql id="CancerPersonInfoListColumns">
 		P . ID AS id,
 		P . NAME AS "name",
 		P .GENDER AS "gender",
+		P.address_detail AS "addressDetail",
+		P.regorg AS "regorg",
+		ldct.ID AS "ldctId",
+		ldct.APP_CHECK_CODE AS "checkCode",
 		<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
 			crc.id  as  "crcCheckId",
 			crc.check_year as  crcCheckYear,
@@ -40,8 +44,15 @@
 			luc.check_year as  lucCheckYear,
 			1 as "luc",
 			luc.CHECK_RESULT AS "lucResult",
+			lucas.assessment_result AS "lucAssessmentResult",
+			ldctchk.ldct_result_type AS "lucLdctResultType",
+			lucDiagCheck.is_luc AS "lucDiagCheckResult",
 		</if>
 		P.patid as patid,
+		P.blh as blh,
+		P.payment_no as paymentNo,
+		P.mobile as mobile,
+		P.telephone as telephone,
 		P .PERSONCARD AS "personCard"
 	</sql>
 
@@ -214,7 +225,11 @@
 			<if test="endDateFrom !=null and endDateFrom !=''">
 				AND  luc.regdate &lt; to_date(#{endDateFrom},'yyyy-MM-dd HH:mi:ss')+1
 			</if>
+			LEFT JOIN LUC_RISK_ASSESSMENT lucas ON (luc.ID = lucas.LUC_CHECK_ID) AND lucas.DEL_FLAG='0'
 		</if>
+		LEFT JOIN LUC_APP_LDCT_XH ldct ON P.ID = ldct.MANAGEID AND ldct.DEL_FLAG='0'
+		LEFT JOIN LUC_LDCT_CHECK_XH ldctchk ON (ldct.ID = ldctchk.LDCT_ORDER_ID) AND ldctchk.DEL_FLAG='0'
+		LEFT JOIN LUC_DIAG_CHECK_XH lucDiagCheck ON (P.ID = lucDiagCheck.MANAGEID) AND lucDiagCheck.DEL_FLAG='0'
       <where>
 		  P .DEL_FLAG = '0'
 		  <if test=" id !=null and id !='' " >
@@ -337,15 +352,15 @@
 	
 	<insert id="insert">
 		INSERT INTO cancer_person_info(
-		id,personcard_type,personcard,name,gender,birth,telephone,mobile,nation,nation_other,marriage,education,payment_situation,profession,other_profession,paddress_province,paddress_city,paddress_county,paddress_town,paddress_committee,paddress_detail,address_province,address_city,address_county,address_town,address_committee,address_detail,regorg,regdoc,regdate,del_flag,ischange,patid,blh,create_by,create_date,update_by,update_date
+		id,personcard_type,personcard,name,gender,birth,telephone,mobile,nation,nation_other,marriage,education,payment_situation,payment_no,profession,other_profession,paddress_province,paddress_city,paddress_county,paddress_town,paddress_committee,paddress_detail,address_province,address_city,address_county,address_town,address_committee,address_detail,regorg,regdoc,regdate,del_flag,ischange,patid,blh,create_by,create_date,update_by,update_date
 		) VALUES (
-		#{id},#{personcardType},#{personcard},#{name},#{gender},#{birth},#{telephone},#{mobile},#{nation},#{nationOther},#{marriage},#{education},#{paymentSituation},#{profession},#{otherProfession},#{paddressProvince},#{paddressCity},#{paddressCounty},#{paddressTown},#{paddressCommittee},#{paddressDetail},#{addressProvince},#{addressCity},#{addressCounty},#{addressTown},#{addressCommittee},#{addressDetail},#{regorg},#{regdoc},#{regdate},#{delFlag},#{ischange},#{patid},#{blh},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		#{id},#{personcardType},#{personcard},#{name},#{gender},#{birth},#{telephone},#{mobile},#{nation},#{nationOther},#{marriage},#{education},#{paymentSituation},#{paymentNo},#{profession},#{otherProfession},#{paddressProvince},#{paddressCity},#{paddressCounty},#{paddressTown},#{paddressCommittee},#{paddressDetail},#{addressProvince},#{addressCity},#{addressCounty},#{addressTown},#{addressCommittee},#{addressDetail},#{regorg},#{regdoc},#{regdate},#{delFlag},#{ischange},#{patid},#{blh},#{createBy},#{createDate},#{updateBy},#{updateDate}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE cancer_person_info SET
-		id = #{id},personcard_type = #{personcardType},personcard = #{personcard},name = #{name},gender = #{gender},birth = #{birth},telephone = #{telephone},mobile = #{mobile},nation = #{nation},nation_other = #{nationOther},marriage = #{marriage},education = #{education},payment_situation = #{paymentSituation},profession = #{profession},other_profession = #{otherProfession},paddress_province = #{paddressProvince},paddress_city = #{paddressCity},paddress_county = #{paddressCounty},paddress_town = #{paddressTown},paddress_committee = #{paddressCommittee},paddress_detail = #{paddressDetail},address_province = #{addressProvince},address_city = #{addressCity},address_county = #{addressCounty},address_town = #{addressTown},address_committee = #{addressCommittee},address_detail = #{addressDetail},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},del_flag = #{delFlag},ischange = #{ischange},patid=#{patid},blh=#{blh},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		id = #{id},personcard_type = #{personcardType},personcard = #{personcard},name = #{name},gender = #{gender},birth = #{birth},telephone = #{telephone},mobile = #{mobile},nation = #{nation},nation_other = #{nationOther},marriage = #{marriage},education = #{education},payment_situation = #{paymentSituation},payment_no = #{paymentNo},profession = #{profession},other_profession = #{otherProfession},paddress_province = #{paddressProvince},paddress_city = #{paddressCity},paddress_county = #{paddressCounty},paddress_town = #{paddressTown},paddress_committee = #{paddressCommittee},paddress_detail = #{paddressDetail},address_province = #{addressProvince},address_city = #{addressCity},address_county = #{addressCounty},address_town = #{addressTown},address_committee = #{addressCommittee},address_detail = #{addressDetail},regorg = #{regorg},regdoc = #{regdoc},regdate = #{regdate},del_flag = #{delFlag},ischange = #{ischange},patid=#{patid},blh=#{blh},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
 		WHERE id = #{id}
 	</update>
 
