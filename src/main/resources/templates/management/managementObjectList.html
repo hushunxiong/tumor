@@ -56,9 +56,6 @@
                 </table>
                 <div id="div1" style=" display: none;" class="mt-10">
                     <div class="mini-row">
-                        <div class="mini-col-3"><label class="mr-5">ID编号：</label>
-                            <input id="id" name="id" type="text" class="mini-textbox" width="63%">
-                        </div>
                         <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
                             <select id="csnf" name="csnf" class="select-default radius" style="width:55%">
                                     <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  ></option>
@@ -175,7 +172,7 @@
                  sizeList="[10,20,50]" pageSize="20" idField="id">
                 <div property="columns" >
                     <div field="name"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">姓名</div>
-                    <div field="personcard" sortField="personcard" renderer="sfzhRenderer" width="150px" headerAlign="center" align="center" allowSort="false">身份证号</div>
+                    <div field="personcard" sortField="personcard" renderer="sfzhRenderer" width="200px" headerAlign="center" align="center" allowSort="false">身份证号</div>
                     <div field="gender" type="comboboxcolumn" autoShowPopup="true" width="50px" headerAlign="center" align="center" allowSort="false">性别
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name" valueField="code" th:data="${#dic.generals('60023')}"/>
                     </div>

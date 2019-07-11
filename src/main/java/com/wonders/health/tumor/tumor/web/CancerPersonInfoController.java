@@ -58,6 +58,9 @@ public class CancerPersonInfoController extends BaseController {
     @Value("${area_code}")
     private String areaCode;
 
+    @Value("${shiroServerUrlPrefix}")
+    private String prefix;
+
     @Value("${crc_switch_flag}")
     private  Integer crcFlag;
 
@@ -86,7 +89,14 @@ public class CancerPersonInfoController extends BaseController {
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
         model.addAttribute("orgCode", getSessionUser().getOrgCode());
-        model.addAttribute("ip", authServiceI.findBaseUrl("肿瘤早发现", getSessionUser().getOrgCode()));
+        String baseUrl = authServiceI.findBaseUrl("肿瘤早发现", getSessionUser().getOrgCode());
+
+        if (StringUtils.equals(prefix, baseUrl)){
+            model.addAttribute("ip", "");
+        } else {
+            model.addAttribute("ip", baseUrl);
+        }
+
         return "/register/cancerPersonInfoList";
     }
 
