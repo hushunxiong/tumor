@@ -453,7 +453,11 @@
     function lctView(id,patid,blh,name,sex,age,cardNo,phone,sfzh,birth) {
         var ip = [[${ip}]];
         var orgCode = [[${orgCode}]];
-        ip = ip.substring(0, ip.lastIndexOf(":"));
+        if (ip == "") {
+            ip = "http://192.168.30.117";
+        } else {
+            ip = ip.substring(0, ip.lastIndexOf(":"));
+        }
         var obj = {};
         obj.patid = patid;
         obj.blh = blh;
