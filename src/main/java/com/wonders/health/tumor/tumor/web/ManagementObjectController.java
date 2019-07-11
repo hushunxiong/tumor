@@ -112,8 +112,17 @@ public class ManagementObjectController extends BaseController {
 
     @RequestMapping(value = {"", "detail"}, method = RequestMethod.GET)
     public String detail(Model model, String manageId) {
+
+        CancerPersonInfo cancerPersonInfo = cancerPersonInfoService.findById(manageId);
+        model.addAttribute("personInfo", cancerPersonInfo);
+
         List<LucRegcase> lucRegcaseList = managementObjectService.getLucRegcaseListByManageId(manageId);
         model.addAttribute("lucRegcaseList", lucRegcaseList);
+
+        // 取最后一个筛查登记作为筛查年份
+        if (lucRegcaseList.size() > 0) {
+            model.addAttribute("checkYear", lucRegcaseList.get(lucRegcaseList.size() - 1).getCheckYear());
+        }
 
         // 获得徐汇肺癌LDCT预约记录表
         List<LucAppLdctXh> lucAppLdctXhList = managementObjectService.getLucAppLdctXhListByManageId(manageId);

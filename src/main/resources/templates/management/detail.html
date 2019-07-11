@@ -10,9 +10,119 @@
 <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
 <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
 <div class="content pd-10" style="width:auto; overflow: hidden;">
-    <div class="mini-tabs" activeIndex="1">
+    <div class="mini-tabs" activeIndex="0">
         <div title="基本信息">
-
+            <table class="table_new mt-10" id="baseForm">
+                <tbody>
+                <tr>
+                    <th width="10%">筛查年份</th>
+                    <td width="20%">
+                        <span th:text="${checkYear}"></span>
+                    </td>
+                    <th width="10%">证件类型</th>
+                    <td width="20%">
+                        <span th:text="${#dic.generalName('60022', personInfo.personcardType)}"></span>
+                    </td>
+                    <th width="10%">证件号码</th>
+                    <td>
+                        <span th:text="${personInfo.personcard}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="10%">姓&nbsp;&nbsp;名</th>
+                    <td width="20%">
+                        <span th:text="${personInfo.name}"></span>
+                    </td>
+                    <th width="10%">性&nbsp;&nbsp;别</th>
+                    <td width="20%">
+                        <span th:text="${#dic.generalName('60023', personInfo.gender)}"></span>
+                    </td>
+                    <th width="10%">出生日期</th>
+                    <td>
+                        <span th:text="${#dates.format(personInfo.birth, 'yyyy-MM-dd')}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="10%">移动电话</th>
+                    <td width="20%">
+                        <span th:text="${personInfo.mobile}"></span>
+                    </td>
+                    <th width="10%">固定电话</th>
+                    <td width="20%">
+                        <span th:text="${personInfo.telephone}"></span>
+                    </td>
+                    <td colspan="2" class="bg-white"></td>
+                </tr>
+                <tr>
+                    <th width="10%">民族</th>
+                    <td width="20%">
+                        <span th:text="${#dic.generalName('60021', personInfo.nation)}"></span>
+                    </td>
+                    <th width="10%">其他民族</th>
+                    <td width="20%">
+                        <span th:text="${personInfo.nationOther}"></span>
+                    </td>
+                    <td colspan="2" class="bg-white"></td>
+                </tr>
+                <tr>
+                    <th width="10%">婚姻状况</th>
+                    <td width="20%">
+                        <span th:text="${#dic.generalName('60024', personInfo.marriage)}"></span>
+                    </td>
+                    <th width="10%">文化程度</th>
+                    <td width="20%">
+                        <span th:text="${#dic.generalName('60025', personInfo.education)}"></span>
+                    </td>
+                    <th width="10%">医疗保险类型</th>
+                    <td>
+                        <span th:text="${#dic.generalName('60027', personInfo.paymentSituation)}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="10%">职业</th>
+                    <td width="20%">
+                        <span th:text="${#dic.generalName('60026', personInfo.profession)}"></span>
+                    </td>
+                    <th width="10%">其他职业</th>
+                    <td width="20%">
+                        <span th:text="${personInfo.otherProfession}"></span>
+                    </td>
+                    <td colspan="2" class="bg-white"></td>
+                </tr>
+                <tr>
+                    <th width="10%">医保卡号</th>
+                    <td width="20%">
+                        <span th:text="${personInfo.paymentNo}"></span>
+                    </td>
+                    <td colspan="4" class="bg-white"></td>
+                </tr>
+                <tr>
+                    <th width="10%">户籍地址</th>
+                    <td colspan="5" class="bg-white" style="padding:0px;">
+                        <div th:replace="/common/address :: address('hjd', 'personInfo.paddressProvince',${personInfo.paddressProvince == null ? '310000000000' : personInfo.paddressProvince}, 'personInfo.paddressCity', ${personInfo.paddressCity == null ? '310100000000' : personInfo.paddressCity}, 'personInfo.paddressCounty', ${personInfo.paddressCounty}, 'personInfo.paddressTown', ${personInfo.paddressTown}, 'personInfo.paddressCommittee',${personInfo.paddressCommittee},'personInfo.paddressDetail', ${personInfo.paddressDetail},false)">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="10%">居住地址</th>
+                    <td colspan="5" class="bg-white" style="padding:0px;">
+                        <div th:replace="/common/address :: address('jzd', 'personInfo.addressProvince',${personInfo.addressProvince == null ? '310000000000' : personInfo.addressProvince}, 'personInfo.addressCity', ${personInfo.addressCity == null ? '310100000000' : personInfo.addressCity}, 'personInfo.addressCounty', ${personInfo.addressCounty}, 'personInfo.addressTown', ${personInfo.addressTown}, 'personInfo.addressCommittee',${personInfo.addressCommittee},'personInfo.addressDetail', ${personInfo.addressDetail},true)">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="10%">患者是否死亡</th>
+                    <td width="20%">
+                    </td>
+                    <th width="10%">死亡日期</th>
+                    <td width="20%">
+                    </td>
+                    <th width="10%">根本死因</th>
+                    <td>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div title="管理信息">
             <div class="title_tip mt-30">问卷评估信息</div>
@@ -29,7 +139,7 @@
                 <tr th:each="regcase :${lucRegcaseList}">
                     <td>
                         <a href="javascript:void(0)"
-                           th:onclick = "'javascript:goto( \''+${regcase.manageid}+'\', \''+${#dates.format(regcase.lucRiskAssessment.assessmentDate, 'yyyy')}+'\' , \''+1+'\')'"
+                           th:onclick="'javascript:goto( \''+${regcase.manageid}+'\', \''+${#dates.format(regcase.lucRiskAssessment.assessmentDate, 'yyyy')}+'\' , \''+1+'\')'"
                            th:text="${#dates.format(regcase.lucRiskAssessment.assessmentDate, 'yyyy-MM-dd')}">
                         </a>
                     </td>
@@ -93,7 +203,7 @@
                 <tr th:each="ldctCheck :${lucLDCTCheckXHSList}">
                     <td>
                         <a href="javascript:void(0)"
-                           th:onclick = "'javascript:gotoLDCTCheckDetail( \''+${ldctCheck.lucAppLdctXh.manageid}+'\', \''+${ldctCheck.ldctOrderId}+'\')'"
+                           th:onclick="'javascript:gotoLDCTCheckDetail( \''+${ldctCheck.lucAppLdctXh.manageid}+'\', \''+${ldctCheck.ldctOrderId}+'\')'"
                            th:text="${#dates.format(ldctCheck.ldctCheckDate, 'yyyy-MM-dd')}">
                         </a>
                     </td>
@@ -114,9 +224,27 @@
             </table>
         </div>
     </div>
+
+    <div class="btn-list text-c mt-30">
+        <button class="my-btn my-btn-blue mr-20"
+                th:onclick="'javascript:closeWindow()'">返回
+        </button>
+    </div>
 </div>
 </body>
 <script type="text/javascript" th:inline="javascript">
+
+    $(function () {
+
+        var form = new mini.Form("#baseForm");
+
+        var controls = form.getFields();
+        $(controls).each(function (i, item) {
+            item.setReadOnly(true);
+        });
+    });
+
+
     function goto(id, csnf, operation) {
         if (id == null || id == '' || id == undefined) {
             csnf = $("#csnf").val();
@@ -138,6 +266,10 @@
             html: '加载中...'
         });
         window.location.href = url;
+    }
+
+    function closeWindow() {
+        window.location.href = "../../managementObject/list";
     }
 </script>
 </html>
