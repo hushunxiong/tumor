@@ -1,11 +1,13 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.wonders.health.auth.client.AuthService;
 import com.wonders.health.auth.client.AuthServiceI;
 import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.*;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 新增筛查登记Controller
@@ -141,6 +144,7 @@ public class ScreeningOutController extends BaseController {
                        @RequestParam(value = "yljg", required = true) String yljg,
                        @RequestParam(value = "areaCode", required = true) String areaCode) {
 
+        Gson gson = new Gson();
         User user = authService.findUserByOrgCodeAndJobNo(yljg, ysgh);
 
         if(user == null){
@@ -164,6 +168,16 @@ public class ScreeningOutController extends BaseController {
         model.addAttribute("yljg", yljg);
         model.addAttribute("areaCode", areaCode);
 
+
+        List<CancerDic> cancerDicList = DictUtils.generals("60027");
+        //徐汇区
+        if (StringUtils.equals("310104000000",areaCode)){
+            List<CancerDic> paymentSituationList = cancerDicList.stream().filter(a -> StringUtils.equals("01", a.getCode())
+                    || StringUtils.equals("02", a.getCode())).collect(Collectors.toList());
+            model.addAttribute("paymentSituation", gson.toJson(paymentSituationList));
+        } else {
+            model.addAttribute("paymentSituation", gson.toJson(cancerDicList));
+        }
 
         if(StringUtils.isBlank(checkYear)){
             checkYear= DateUtils.getYear();

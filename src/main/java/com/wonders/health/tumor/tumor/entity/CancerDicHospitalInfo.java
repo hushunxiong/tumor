@@ -42,6 +42,8 @@ public class CancerDicHospitalInfo extends BaseEntity {
 	@Length(max=22)
 	private String hospitalId22;	// 医疗机构代码-22位与医疗机构代码一一对应
 
+	private String town;      //街道
+
 
 	public CancerDicHospitalInfo() {
 		super();
@@ -110,5 +112,12 @@ public class CancerDicHospitalInfo extends BaseEntity {
 		this.hospitalId22 = hospitalId22;
 	}
 
+	@JsonProperty("town")
+	public String getTown() {
+		return town;
+	}
 
+	public void setTown(String town) {
+		this.town = town;
+	}
 }

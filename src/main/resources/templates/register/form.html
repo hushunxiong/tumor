@@ -91,7 +91,7 @@
                 <td width="10%"><span class="red-span">*</span>医疗保险类型</td>
                 <td>
                     <input id="paymentSituation" name="personInfo.paymentSituation" class="mini-combobox" showNullItem="true" width="80%" emptyText="请选择"
-                           th:data="${#dic.generals('60027')}" th:value="${personInfo.paymentSituation}"
+                           th:data="${paymentSituation}" th:value="${personInfo.paymentSituation}"
                            textField="name" valueField="code" allowInput="true" valueFromSelect="true" required="true"/>
                 </td>
             </tr>
@@ -107,6 +107,13 @@
                     <input id="otherProfession" name="personInfo.otherProfession" class="mini-textbox" emptyText="请输入" th:value="${personInfo.otherProfession}" maxLength="100"/>
                 </td>
                 <td colspan="2" class="bg-white"></td>
+            </tr>
+            <tr th:if="${areaCode} eq '310104000000'">
+                <td width="10%"><span class="red-span">*</span>医保卡号</td>
+                <td width="20%">
+                    <input id="paymentNo" name="personInfo.paymentNo" class="mini-textbox" emptyText="请输入" th:value="${personInfo.paymentNo }" maxLength="32" required="true"/>
+                </td>
+                <td colspan="4" class="bg-white"></td>
             </tr>
             <tr>
                 <td width="10%"><span class="red-span">*</span>户籍地址</td>

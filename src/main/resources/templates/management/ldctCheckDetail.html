@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>LDCT检查信息一览</title>
+    <link>
+    <script></script>
+</head>
+<body>
+
+<!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div class="title_tip mt-30">基本信息</div>
+    <table class="table_new mt-10" id="baseForm">
+        <tbody>
+        <tr>
+            <th width="10%">姓&nbsp;&nbsp;名</th>
+            <td width="20%">
+                <span th:text="${personInfo.name}"></span>
+            </td>
+            <th width="10%">性&nbsp;&nbsp;别</th>
+            <td width="20%">
+                <span th:text="${#dic.generalName('60023', personInfo.gender)}"></span>
+            </td>
+            <th width="10%">身份证号码</th>
+            <td>
+                <span th:text="${personInfo.personcard}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="10%">出生日期</th>
+            <td>
+                <span th:text="${#dates.format(personInfo.birth, 'yyyy-MM-dd')}"></span>
+            </td>
+            <th width="10%">固定电话</th>
+            <td width="20%">
+                <span th:text="${personInfo.telephone}"></span>
+            </td>
+            <th width="10%">移动电话</th>
+            <td width="20%">
+                <span th:text="${personInfo.mobile}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="10%">居住地址</th>
+            <td colspan="5" class="bg-white" style="padding:0px;">
+                <span th:text="${personInfo.addressDetail}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="title_tip mt-30">低密度螺旋CT检查信息</div>
+    <table class="table_new mt-10">
+        <tbody>
+        <tr>
+            <th width="10%">检查日期</th>
+            <td width="20%">
+                <span th:text="${#dates.format(ldctCheck.ldctCheckDate, 'yyyy-MM-dd')}"></span>
+            </td>
+            <th width="10%">检查医生</th>
+            <td width="20%">
+                <span th:text="${ldctCheck.ldctCheckDoctor}"></span>
+            </td>
+            <th width="10%">检查医疗机构</th>
+            <td>
+                <span th:text="${ldctApp.appointmentOrg}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="10%">检查结果</th>
+            <td>
+                <span th:text="${#dic.generalName('60001', ldctCheck.ldctResultType)}"></span>
+            </td>
+            <th width="10%">随访建议</th>
+            <td width="20%" colspan="2">
+                <span th:text="${#dic.generalName('60061', ldctCheck.ldctResult)}"></span>
+            </td>
+            <td width="20%" class="bg-white">
+                <button class="my-btn my-btn-blue mr-20" onclick="">查看360影像</button>
+            </td>
+        </tr>
+        <tr>
+            <th width="10%">检查信息描述</th>
+            <td colspan="5" class="bg-white" style="padding:0px;">
+                <span th:text="${ldctCheck.ldctMiaoshu}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="btn-list text-c mt-30">
+        <button class="my-btn my-btn-blue mr-20"
+                th:onclick="'javascript:closeWindow( \''+${personInfo.id}+'\')'">返回
+        </button>
+        <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">预约专病</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    function closeWindow(manageId) {
+        window.location.href = "../../managementObject/detail/?manageId=" + manageId;
+    }
+</script>
+</html>

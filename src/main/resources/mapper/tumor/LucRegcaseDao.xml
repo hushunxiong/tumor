@@ -22,6 +22,14 @@
 		and a.check_year=#{checkyear}
 	</select>
 
+	<select id="getByManageId" resultType="com.wonders.health.tumor.tumor.entity.LucRegcase">
+		SELECT
+		<include refid="LucRegcaseColumns"/>
+		FROM luc_regcase a
+		WHERE a.manageid = #{manageId}
+		and a.del_flag='0'
+	</select>
+
 	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LucRegcase">
 		SELECT 
 			<include refid="LucRegcaseColumns"/>

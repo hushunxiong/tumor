@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonders.health.tumor.tumor.dao.LucLDCTCheckXHDao">
+    
+	<sql id="LucLDCTCheckXHColumns">
+		a.id AS "id",a.ldct_order_id AS "ldctOrderId",a.ldct_check_date AS "ldctCheckDate",a.ldct_result_type AS "ldctResultType",a.ldct_follow AS "ldctFollow",a.ldct_miaoshu AS "ldctMiaoshu",a.ldct_result AS "ldctResult",a.ldct_check_doctor AS "ldctCheckDoctor",a.ldct_link AS "ldctLink",a.del_flag AS "delFlag",a.source_id AS "sourceId",a.create_by AS "createBy",a.create_date AS "createDate",a.update_by AS "updateBy",a.update_date AS "updateDate"
+	</sql>
+
+	<select id="get" resultType="com.wonders.health.tumor.tumor.entity.LucLDCTCheckXH">
+		SELECT 
+			<include refid="LucLDCTCheckXHColumns"/>
+		FROM luc_ldct_check_xh a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByOrderId" resultType="com.wonders.health.tumor.tumor.entity.LucLDCTCheckXH">
+		SELECT
+		<include refid="LucLDCTCheckXHColumns"/>
+		FROM luc_ldct_check_xh a
+		WHERE a.ldct_order_id = #{orderId}
+	</select>
+
+	<select id="findAll" resultType="com.wonders.health.tumor.tumor.entity.LucLDCTCheckXH">
+		SELECT 
+			<include refid="LucLDCTCheckXHColumns"/>
+		FROM luc_ldct_check_xh a
+		<where>
+			a.del_flag = '0'
+		</where>		
+			ORDER BY a.update_date DESC
+	</select>
+	<!-- 分页模块 -->
+	<sql id="pageFromAndWhere">
+      FROM luc_ldct_check_xh a
+      <where>
+		a.del_flag = '0'
+	  </where>
+    </sql>
+
+    <select id="pageCount" resultType="java.lang.Integer"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+        select count(1)
+        <include refid="pageFromAndWhere"/>
+    </select>
+
+
+    <select id="pageList" resultType="com.wonders.health.tumor.tumor.entity.LucLDCTCheckXH"
+            parameterType="com.wonders.health.tumor.common.model.DataGridSearch">
+		<choose>
+			<when test="startRecord == 0">
+		select * from (
+			</when>
+			<otherwise>
+		select * from ( select row_.*, rownum rownum_ from (
+			</otherwise>
+		</choose>
+        select
+			<include refid="LucLDCTCheckXHColumns"/>
+        <include refid="pageFromAndWhere"/>
+		<choose>
+			<when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
+				ORDER BY ${sortField} ${sortOrder}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="startRecord == 0">
+		) row_ where rownum &lt;= #{pageSize}
+			</when>
+			<otherwise>
+		) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
+			</otherwise>
+		</choose>
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO luc_ldct_check_xh(
+		id,ldct_order_id,ldct_check_date,ldct_result_type,ldct_follow,ldct_miaoshu,ldct_result,ldct_check_doctor,ldct_link,del_flag,source_id,create_by,create_date,update_by,update_date
+		) VALUES (
+		#{id},#{ldctOrderId},#{ldctCheckDate},#{ldctResultType},#{ldctFollow},#{ldctMiaoshu},#{ldctResult},#{ldctCheckDoctor},#{ldctLink},#{delFlag},#{sourceId},#{createBy},#{createDate},#{updateBy},#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE luc_ldct_check_xh SET
+		id = #{id},ldct_order_id = #{ldctOrderId},ldct_check_date = #{ldctCheckDate},ldct_result_type = #{ldctResultType},ldct_follow = #{ldctFollow},ldct_miaoshu = #{ldctMiaoshu},ldct_result = #{ldctResult},ldct_check_doctor = #{ldctCheckDoctor},ldct_link = #{ldctLink},del_flag = #{delFlag},source_id = #{sourceId},create_by = #{createBy},create_date = #{createDate},update_by = #{updateBy},update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE luc_ldct_check_xh SET del_flag = '1'
+	    WHERE id = #{id}
+	</update>
+
+	
+</mapper>

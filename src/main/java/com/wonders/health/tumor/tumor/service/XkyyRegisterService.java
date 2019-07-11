@@ -4,23 +4,13 @@ import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.common.utils.StringUtils;
 import com.wonders.health.tumor.gen.utils.XmlUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
-import com.wonders.health.tumor.tumor.vo.XhPatientParamVo;
-import com.wonders.health.tumor.tumor.vo.XhPatientResultVo;
-import com.wonders.health.tumor.tumor.vo.XhPatientReturnVo;
+import com.wonders.health.tumor.tumor.vo.*;
 import com.wonders.health.tumor.tumor.webservice.KWSServiceSoap;
-import org.apache.axis.client.Call;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.xml.namespace.QName;
-import javax.xml.rpc.ParameterMode;
-import javax.xml.rpc.ServiceException;
-import javax.xml.rpc.encoding.XMLType;
-import java.lang.reflect.Method;
-import java.rmi.RemoteException;
 
 /**
  * 徐汇胸科医院接口Service
@@ -30,9 +20,6 @@ import java.rmi.RemoteException;
 @Transactional(readOnly = true)
 public class XkyyRegisterService {
     String url = "http://192.168.14.16:8089/KWSService.asmx?wsdl";
-    String namespace = "http://www.winning.com.cn/KWS";
-    String methodName = "WebBusiness";
-    String soapActionURI = "http://www.winning.com.cn/KWS/WebBusiness";
 
     /**
      * cxf基本参数类型调用
@@ -113,6 +100,7 @@ public class XkyyRegisterService {
         } else {
             vo.setYbdm("");
         }
+        vo.setCardno(info.getPaymentNo());
         vo.setSex(info.getGender());
         vo.setSfzh(info.getPersoncard());
         vo.setBirth(DateUtils.formatDate(info.getBirth(),"yyyyMMdd"));

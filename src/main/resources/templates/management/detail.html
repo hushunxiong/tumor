@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
+    <title>肿瘤早发现记管理对象详情</title>
+    <link>
+    <script></script>
+</head>
+<body>
+
+<!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div class="content pd-10" style="width:auto; overflow: hidden;">
+    <div class="mini-tabs" activeIndex="1">
+        <div title="基本信息">
+
+        </div>
+        <div title="管理信息">
+            <div class="title_tip mt-30">问卷评估信息</div>
+            <table class="table_new mt-10">
+                <thead>
+                <tr>
+                    <th width="20%">评估日期</th>
+                    <th width="20%">评估医生</th>
+                    <th width="40%">评估医疗机构</th>
+                    <th width="20%">评估结果</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="regcase :${lucRegcaseList}">
+                    <td>
+                        <a href="javascript:void(0)"
+                           th:onclick = "'javascript:goto( \''+${regcase.manageid}+'\', \''+${#dates.format(regcase.lucRiskAssessment.assessmentDate, 'yyyy')}+'\' , \''+1+'\')'"
+                           th:text="${#dates.format(regcase.lucRiskAssessment.assessmentDate, 'yyyy-MM-dd')}">
+                        </a>
+                    </td>
+                    <td>
+                        <span th:text="${regcase.lucRiskAssessment.assessmentDocName}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${regcase.regorg}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dic.generalName('60001', regcase.lucRiskAssessment.assessmentResult)}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="title_tip mt-30">低密度螺旋CT检查预约</div>
+            <table class="table_new mt-10">
+                <thead>
+                <tr>
+                    <th width="20%">预约检查号码</th>
+                    <th width="15%">预约检查日期</th>
+                    <th width="15%">预约检查时间</th>
+                    <th width="35%">预约医疗机构</th>
+                    <th width="15%">预约医生</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ldct :${lucAppLdctXhList}">
+                    <td>
+                        <span th:text="${ldct.appCheckCode}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dates.format(ldct.appCheckDate, 'yyyy-MM-dd')}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${ldct.appCheckTime}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${ldct.appointmentOrg}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${ldct.appointmentDoc}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="title_tip mt-30">低密度螺旋CT检查信息</div>
+            <table class="table_new mt-10">
+                <thead>
+                <tr>
+                    <th width="20%">检查日期</th>
+                    <th width="15%">医生</th>
+                    <th width="35%">检查医疗机构</th>
+                    <th width="15%">检查结果</th>
+                    <th width="15%">随访建议</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ldctCheck :${lucLDCTCheckXHSList}">
+                    <td>
+                        <a href="javascript:void(0)"
+                           th:onclick = "'javascript:gotoLDCTCheckDetail( \''+${ldctCheck.lucAppLdctXh.manageid}+'\', \''+${ldctCheck.ldctOrderId}+'\')'"
+                           th:text="${#dates.format(ldctCheck.ldctCheckDate, 'yyyy-MM-dd')}">
+                        </a>
+                    </td>
+                    <td>
+                        <span th:text="${ldctCheck.ldctCheckDoctor}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${ldctCheck.lucAppLdctXh.appointmentOrg}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dic.generalName('60001', ldctCheck.ldctResultType)}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dic.generalName('60061', ldctCheck.ldctResult)}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    function goto(id, csnf, operation) {
+        if (id == null || id == '' || id == undefined) {
+            csnf = $("#csnf").val();
+        }
+        var url = "../../screening/form/?manageId=" + id + "&checkYear=" + csnf + "&operation=" + operation;
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        window.location.href = url;
+    }
+
+    function gotoLDCTCheckDetail(manageId, ldcdOrderId) {
+        var url = "../../managementObject/ldctCheckDetail/?manageId=" + manageId + "&ldcdOrderId=" + ldcdOrderId;
+        mini.mask({
+            el: document.body,
+            cls: 'mini-mask-loading',
+            html: '加载中...'
+        });
+        window.location.href = url;
+    }
+</script>
+</html>

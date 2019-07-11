@@ -86,6 +86,16 @@ public class LucRegcase extends BaseEntity {
 	@Length(max=32)
 	private String sourceId;	// 来源代码
 
+	// 一个初筛登记记录关联一个肺癌危险度评估记录
+	private LucRiskAssessment lucRiskAssessment;
+
+	public LucRiskAssessment getLucRiskAssessment() {
+		return lucRiskAssessment;
+	}
+
+	public void setLucRiskAssessment(LucRiskAssessment lucRiskAssessment) {
+		this.lucRiskAssessment = lucRiskAssessment;
+	}
 
 	public LucRegcase() {
 		super();

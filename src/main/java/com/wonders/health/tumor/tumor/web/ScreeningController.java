@@ -1,9 +1,11 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
 import com.wonders.health.tumor.common.controller.BaseController;
+import com.wonders.health.tumor.common.entity.CancerDic;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataOption;
 import com.wonders.health.tumor.common.utils.*;
@@ -30,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 新增筛查登记Controller
@@ -126,11 +129,14 @@ public class ScreeningController extends BaseController {
     private ScDiagCheckRemindService scDiagCheckRemindService;
     @Autowired
     private LucDiagCheckRemindService lucDiagCheckRemindService;
+    @Autowired
+    private BigDataService bigDataService;
 
 
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
-    public String form(Model model, String manageId, String checkYear,String operation) {
+    public String form(Model model, String manageId, String checkYear,String operation,String pushid) {
+        Gson gson = new Gson();
         User user=getSessionUser();
         if(StringUtils.isBlank(checkYear)){
             checkYear= DateUtils.getYear();
@@ -148,15 +154,43 @@ public class ScreeningController extends BaseController {
         model.addAttribute("checkYear", checkYear);
         model.addAttribute("operation", operation);
 
+        List<CancerDic> cancerDicList = DictUtils.generals("60027");
+        //徐汇区
+        if (StringUtils.equals("310104000000",areaCode)){
+            List<CancerDic> paymentSituationList = cancerDicList.stream().filter(a -> StringUtils.equals("01", a.getCode())
+                    || StringUtils.equals("02", a.getCode())).collect(Collectors.toList());
+            model.addAttribute("paymentSituation", gson.toJson(paymentSituationList));
+        } else {
+            model.addAttribute("paymentSituation", gson.toJson(cancerDicList));
+        }
+
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
             CancerPersonInfo personInfo = new CancerPersonInfo();
-            personInfo.setRegdoc(user.getId());
-            personInfo.setRegorg(user.getOrgCode());
-            personInfo.setRegdate(new Date());
-            personInfo.setPersoncardType("01");
-            personInfo.setAddressCounty(areaCode);
-            personInfo.setPaddressCounty(areaCode);
+
+            if (StringUtils.isNotBlank(pushid)) {
+                LucPushXh push =bigDataService.getPushData(pushid);
+                BeanUtils.copyProperties(push, personInfo);
+                personInfo.setPersoncardType("01");
+                personInfo.setAddressProvince(push.getProvince());
+                personInfo.setAddressCity(push.getCity());
+                personInfo.setAddressCounty(push.getCounty());
+                personInfo.setAddressTown(push.getTown());
+                personInfo.setAddressCommittee(push.getCommittee());
+                personInfo.setAddressDetail(push.getDetail());
+
+                personInfo.setRegdoc(user.getId());
+                personInfo.setRegorg(user.getOrgCode());
+                personInfo.setRegdate(new Date());
+                personInfo.setPaddressCounty(areaCode);
+            } else {
+                personInfo.setRegdoc(user.getId());
+                personInfo.setRegorg(user.getOrgCode());
+                personInfo.setRegdate(new Date());
+                personInfo.setPersoncardType("01");
+                personInfo.setAddressCounty(areaCode);
+                personInfo.setPaddressCounty(areaCode);
+            }
 
             model.addAttribute("personInfo", personInfo);
             model.addAttribute("lucRisk", new LucRiskAssessment(getSessionUser()));

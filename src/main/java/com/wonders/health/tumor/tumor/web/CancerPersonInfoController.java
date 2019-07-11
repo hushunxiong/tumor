@@ -4,11 +4,15 @@
 package com.wonders.health.tumor.tumor.web;
 
 import com.wonders.health.auth.client.AuthServiceI;
+import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 
+import com.wonders.health.tumor.tumor.entity.LucAppLdctXh;
+import com.wonders.health.tumor.tumor.service.XkyyRegisterService;
+import com.wonders.health.tumor.tumor.service.XkyyReserveService;
 import com.wonders.health.tumor.tumor.vo.CancerPersonInfoSearchVo;
 import com.wonders.health.tumor.tumor.service.CancerPersonInfoService;
 
@@ -25,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.wonders.health.tumor.common.model.AjaxReturn;
 import com.wonders.health.tumor.common.model.DataGrid;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +48,10 @@ public class CancerPersonInfoController extends BaseController {
 
     @Autowired
     private CancerPersonInfoService cancerPersonInfoService;
+
+    @Autowired
+    private XkyyReserveService xkyyReserveService;
+
     @Autowired
     private AuthServiceI authServiceI;
 
@@ -75,8 +85,8 @@ public class CancerPersonInfoController extends BaseController {
         model.addAttribute("lucFlag", lucFlag);
         model.addAttribute("licFlag", licFlag);
         model.addAttribute("scFlag", scFlag);
+        model.addAttribute("orgCode", getSessionUser().getOrgCode());
         model.addAttribute("ip", authServiceI.findBaseUrl("肿瘤早发现", getSessionUser().getOrgCode()));
-
         return "/register/cancerPersonInfoList";
     }
 
@@ -157,8 +167,87 @@ public class CancerPersonInfoController extends BaseController {
         } else {
             return new AjaxReturn<String>(false, "传入参数不能为空");
         }
+    }
 
+    /**
+     * 徐汇肺癌LDCT预约记录表新增
+     * @param manageId
+     * @param checkCode
+     * @param checkDate
+     * @param checkTime
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "insertAppCheck", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public AjaxReturn<String> insertAppCheck(String manageId, String checkCode, String checkDate, String checkTime) {
+        try {
+            cancerPersonInfoService.insertAppCheck(manageId, checkCode, checkDate, checkTime, getSessionUser());
+            return new AjaxReturn<String>(true, "预约成功");
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<String>(false, "预约异常");
+        }
+    }
 
+    /**
+     * 徐汇肺癌LDCT预约记录取消
+     * @param patid
+     * @param checkCode
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "cancelReserve", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public AjaxReturn<String> cancelReserve(String ldctid,String patid, String checkCode) {
+        try {
+            //boolean flag = true;
+            boolean flag = xkyyReserveService.cancelReserve(patid, checkCode);
+            if (flag) {
+                cancerPersonInfoService.deleteAppCheck(ldctid, getSessionUser());
+                return new AjaxReturn<String>(true, "取消预约记录成功");
+            } else {
+                return new AjaxReturn<String>(false, "取消预约记录异常");
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+            return new AjaxReturn<String>(false, "取消预约记录异常");
+        }
+    }
+
+    @RequestMapping(value = "printReserve", method = RequestMethod.GET)
+    public ModelAndView printReserve(Model model, String id) {
+        ModelAndView mav = new ModelAndView("/register/printReserve");
+
+        LucAppLdctXh ldct = cancerPersonInfoService.getLdctInfo(id);
+        CancerPersonInfo personInfo = cancerPersonInfoService.findById(id);
+        String checkDate = DateUtils.formatDate(ldct.getAppCheckDate(),"yyyy年MM月dd日");
+        String checkTime = "";
+        String time = ldct.getAppCheckTime();
+        if (StringUtils.isNotBlank(time)) {
+            int hour = Integer.parseInt(time.substring(0,2));
+            if (hour >=12) {
+                checkTime = "下午" + time;
+            } else {
+                checkTime = "上午" + time;
+            }
+        }
+        String orgName = "";
+        String orgCode = getSessionUser().getOrgCode();
+        if (StringUtils.isNotBlank(orgCode)) {
+            Hospital hospital = AuthUtils.getHospitalByCode(orgCode);
+            if (hospital != null) {
+                orgName = hospital.getName();
+            }
+        }
+
+        model.addAttribute("name",personInfo.getName());
+        model.addAttribute("yyPeriod","目前已为您预约好低剂量螺旋CT检查，请您于" + checkDate + checkTime +"至胸科医院（具体地点请胸科医院提供）做检查。检查当天请携带身份证、医保卡与本预约单，需要医保承担低剂量螺旋CT检查的费用。");
+        model.addAttribute("thirdStep","3." + checkDate + "至1号楼取检查报告");
+        model.addAttribute("hospitalName", orgName);
+
+        model.addAttribute("year", LocalDate.now().getYear());
+        model.addAttribute("month",LocalDate.now().getMonthValue());
+        model.addAttribute("day",LocalDate.now().getDayOfMonth());
+        return mav;
     }
 
 }
