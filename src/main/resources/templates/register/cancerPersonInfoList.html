@@ -6,7 +6,7 @@
     <!--<title th:replace="${title}">肿瘤早发现</title>-->
     <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
     <script src="../static/js/common.js" th:src="@{/js/common.js}" type="text/javascript"></script>
-
+    <script src="../static/js/base64.js" th:src="@{/js/base64.js}" type="text/javascript"></script>
 
     <script src="../static/lib/miniui/miniui.js" th:src="@{/lib/miniui/miniui.js}" type="text/javascript"></script>
     <script src="../static/lib/miniui/vtype.js" th:src="@{/lib/miniui/vtype.js}" type="text/javascript"></script>
@@ -263,8 +263,15 @@
     var hideValue="";
 
     $(function () {
+        var kp = [[${kp}]];
+        if(kp){
+            var params = mini.decode(base64decode(kp));
+            form.setData(params);
+            $("#keyword").val(params.keyword);
+            $("#csnf").val(params.csnf);
+        }
         onSearch();
-       getHospitals();
+        getHospitals();
         //获取权限标识 1--删除；2--编辑
         var els = mini.getsByName("hideInput");
         for (var i = 0; i < els.length; i++) {
@@ -330,7 +337,13 @@
         if(id==null||id==''||id==undefined){
             csnf=$("#csnf").val();
         }
-        var url = "../screening/form/?manageId="+id+"&checkYear="+csnf+"&operation="+operation;
+        var kp;
+        var data = form.getData(true);
+        data.keyword=$("#keyword").val();
+        data.csnf= $("#csnf").val();
+        kp = base64encode(mini.encode(data));
+
+        var url = "../screening/form/?manageId="+id+"&checkYear="+csnf+"&operation="+operation+"&kp="+encodeURIComponent(kp);
         mini.mask({
             el: document.body,
             cls: 'mini-mask-loading',

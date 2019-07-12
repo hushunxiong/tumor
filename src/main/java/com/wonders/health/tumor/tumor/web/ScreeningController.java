@@ -135,7 +135,7 @@ public class ScreeningController extends BaseController {
 
 
     @RequestMapping(value = {"", "form"}, method = RequestMethod.GET)
-    public String form(Model model, String manageId, String checkYear,String operation,String pushid) {
+    public String form(Model model, String manageId, String checkYear,String operation,String pushid,String kp) {
         Gson gson = new Gson();
         User user=getSessionUser();
         if(StringUtils.isBlank(checkYear)){
@@ -153,6 +153,7 @@ public class ScreeningController extends BaseController {
         model.addAttribute("years", AuthUtils.toJson(years));
         model.addAttribute("checkYear", checkYear);
         model.addAttribute("operation", operation);
+        model.addAttribute("kp", kp);
 
         List<CancerDic> cancerDicList = DictUtils.generals("60027");
         //徐汇区

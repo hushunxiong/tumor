@@ -77,7 +77,7 @@ public class CancerPersonInfoController extends BaseController {
     private  Integer yearNum;
 
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String list(Model model) {
+    public String list(Model model, String kp) {
         List<String> nds = DateUtils.getYearBefore(Integer.parseInt(DateUtils.getYear()), yearNum);
         Collections.sort(nds,Collections.reverseOrder());
         model.addAttribute("csnf",nds);
@@ -96,6 +96,7 @@ public class CancerPersonInfoController extends BaseController {
         } else {
             model.addAttribute("ip", baseUrl);
         }
+        model.addAttribute("kp", kp);
 
         return "/register/cancerPersonInfoList";
     }
