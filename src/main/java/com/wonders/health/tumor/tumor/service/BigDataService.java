@@ -62,7 +62,7 @@ public class BigDataService {
                 String riskAccount = xh.getRiskAccount();
                 if (StringUtils.isNotBlank(riskAccount)) {
                     List<String> riskList = Arrays.asList(riskAccount.split(","));
-                    List<String> riskNewList =riskList.stream().map(n ->generalForMap.get(n).getName()).collect(Collectors.toList());
+                    List<String> riskNewList =riskList.stream().sorted().map(n ->generalForMap.get(n).getName()).collect(Collectors.toList());
                     xh.setRiskAccount(riskNewList.stream().collect(Collectors.joining(",")));
                 }
             }
