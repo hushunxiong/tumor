@@ -55,6 +55,11 @@
                 </td>
             </tr>
             <tr>
+                <td>初筛编号</td>
+                <td>
+                    <span th:text="${regcase.idNumber}"></span>
+                </td>
+
                 <td>肝癌初筛登记日期</td>
                 <td>
                     <span th:text="${#dates.format(regcase.regdate, 'yyyy-MM-dd')}"></span>
@@ -63,10 +68,13 @@
                 <td>
                     <span th:text="${#dic.generalName('60001',regcase.checkResult)}"></span>
                 </td>
+            </tr>
+            <tr>
                 <td>肝癌诊断状态</td>
                 <td>
                     <span th:text="${diagStatus}"></span>
                 </td>
+                <td colspan="4"></td>
             </tr>
             <tr>
                 <td style="background: #FFFFFF;" colspan="6">

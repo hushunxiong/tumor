@@ -96,6 +96,7 @@ public class LucFollowService {
         //肺癌初筛信息
         LucRegcase lr=lucRegcaseDao.getByManageidAndYear(manageId,checkYear);
         if (null!=lr){
+            vo.setIdNumber(lr.getIdNumber());
             vo.setRegdate(lr.getRegdate());
             vo.setCheckResult(lr.getCheckResult());
             vo.setLucRegcaseId(lr.getId());

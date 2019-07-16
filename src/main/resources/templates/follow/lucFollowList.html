@@ -54,6 +54,10 @@
             </td>
         </tr>
         <tr>
+            <td>初筛编号</td>
+            <td>
+                <span th:text="${info.idNumber}"></span>
+            </td>
             <td>肺癌初筛登记日期</td>
             <td>
                 <span th:text="${info.regdate==null ? '' : #dates.format(info.regdate, 'yyyy-MM-dd')}"></span>
@@ -62,10 +66,14 @@
             <td>
                 <span th:text="${#dic.generalName('60001',info.checkResult)}"></span>
             </td>
+
+        </tr>
+        <tr>
             <td>肺癌诊断状态</td>
             <td>
                 <span th:text="${info.zdzt}"></span>
             </td>
+            <td colspan="4"></td>
         </tr>
         </tbody>
     </table>

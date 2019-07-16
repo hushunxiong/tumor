@@ -19,6 +19,8 @@ public class ScFollowVo extends BaseEntity implements Serializable {
 
     private String manageId; //个人管理编号
 
+    private String idNumber;  //初筛编号
+
     private String checkYear; //初筛年份
 
     private String scRegcaseId; //胃癌初筛id

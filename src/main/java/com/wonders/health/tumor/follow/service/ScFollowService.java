@@ -95,6 +95,7 @@ public class ScFollowService {
         //胃癌初筛信息
         ScRegcase sr=scRegcaseDao.getByManageidAndYear(manageId,checkYear);
         if (null!=sr){
+            vo.setIdNumber(sr.getIdNumber());
             vo.setRegdate(sr.getRegdate());
             vo.setCheckResult(sr.getCheckResult());
             vo.setScRegcaseId(sr.getId());
