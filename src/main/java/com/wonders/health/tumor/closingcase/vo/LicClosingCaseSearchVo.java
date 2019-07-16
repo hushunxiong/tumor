@@ -15,6 +15,7 @@ import lombok.Data;
 public class LicClosingCaseSearchVo extends DataGridSearch {
 
     private String keyword; //可按照姓名或者身份证号模糊查询
+    private String idNumber;   //初筛编号
     private String csnf;  //初筛年份
     private String regarea; //登记机构所属区
     private String regorg; //登记机构
