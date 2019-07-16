@@ -48,6 +48,21 @@ public class FollowService {
 
         if(list!=null&&list.size()>0){
             for(CancerPersonInfo info : list){
+                //初筛ID
+                if(StringUtils.isNotBlank(info.getCrcIdNumber())){
+                    info.setIdNumber(info.getCrcIdNumber());
+                }
+                if(StringUtils.isNotBlank(info.getLicIdNumber())){
+                    info.setIdNumber(info.getLicIdNumber());
+                }
+                if(StringUtils.isNotBlank(info.getLucIdNumber())){
+                    info.setIdNumber(info.getLucIdNumber());
+                }
+                if(StringUtils.isNotBlank(info.getScIdNumber())){
+                    info.setIdNumber(info.getScIdNumber());
+                }
+
+                //初筛年份
                 if(StringUtils.isNotBlank(info.getCrcCheckYear())){
                     info.setCsnf(info.getCrcCheckYear());
                 }
@@ -60,6 +75,7 @@ public class FollowService {
                 if(StringUtils.isNotBlank(info.getScCheckYear())){
                     info.setCsnf(info.getScCheckYear());
                 }
+
                 //居住地址拼接
                 info.setAddressDetail(areaService.getFullAddress(
                         info.getAddressProvince(), info.getAddressCity(), info.getAddressCounty(),

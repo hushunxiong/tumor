@@ -35,14 +35,29 @@
                 </table>
                 <div id="div1" style="display: none;" class="mt-10">
                     <div class="mini-row">
-                        <div class="mini-col-2"><label class="mr-5">初筛年份：</label>
+                        <div class="mini-col-3"><label class="mr-5">初筛ID：</label>
+                            <input id="id" name="id" type="text" class="mini-textbox" width="63%">
+                        </div>
+
+                        <div class="mini-col-3"><label class="mr-5">初筛年份：</label>
                             <select id="csnf" name="csnf" class="select-default radius" style="width:55%">
                                 <option th:each="row,loop : ${csnf}" th:value="${row}" th:text="${row}"  ></option>
                             </select>
                         </div>
+
+                        <div class="mini-col-4">
+                            <label class="mr-5">初筛登记日期：</label>
+                            <input id="beginDate" name="beginDate" class="mini-datepicker"
+                                   value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
+                            -
+                            <input id="endDate" name="endDate" class="mini-datepicker"
+                                   value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
+                        </div>
+                    </div>
+                    <div class="mini-row">
                         <div class="mini-col-3">
                             <label class="mr-5">登记机构所属区：</label>
-                            <input id="regarea" name="regarea" class="mini-combobox" width="40%"
+                            <input id="regarea" name="regarea" class="mini-combobox" width="47%"
                                    th:data="${#auth.getAreas(areaCode)}" emptyText="请选择"
                                    textField="text" valueField="id" onvaluechanged="getHospitals()" th:value="${role =='sjk' ? '':areaCode}"  th:showNullItem="${role =='sjk' ? true:false}"  th:disabled="${role =='sjk' ? false:true}"/>
                         </div>
@@ -50,16 +65,6 @@
                             <label class="mr-5">登记机构：</label>
                             <input id="regorg" name="regorg" class="mini-combobox" width="70%"
                                    textField="text" valueField="id" emptyText="请选择" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
-                        </div>
-
-                        <div class="mini-col-4">
-                            <label class="mr-5">初筛登记日期：</label>
-                            <input id="beginDate" name="beginDate" class="mini-datepicker"
-                                   value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
-
-                            -
-                            <input id="endDate" name="endDate" class="mini-datepicker"
-                                   value="" allowInput="false" style="width: 30%;" errorMode="border" onvalidation="dateValidation">
                         </div>
                     </div>
 
@@ -118,7 +123,8 @@
                     <div field="personcardType" type="comboboxcolumn" width="100px" headerAlign="center" align="center" allowSort="false">证件类型
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60022')}"/></div>
-                    <div field="personcard" renderer="sfzhRenderer" width="200px" headerAlign="center" align="center" allowSort="false">证件号码</div>
+                    <div field="personcard" renderer="sfzhRenderer" width="100px" headerAlign="center" align="center" allowSort="false">证件号码</div>
+                    <div field="idNumber" width="130px" headerAlign="center" align="center" allowSort="false">初筛ID</div>
                     <div field="gender" type="comboboxcolumn" width="50px" headerAlign="center" align="center" allowSort="false">性别
                         <input property="editor" class="mini-combobox" style="width:100%;" textField="name"
                                valueField="code" th:data="${#dic.generals('60023')}"/></div>
@@ -200,6 +206,16 @@
             return flag;
         }
         return true;
+    }
+
+    //身份证
+    function sfzhRenderer(e) {
+        var r = e.record;
+        var personcard = r.personcard;
+        if (personcard.length > 6) {
+            personcard = personcard.substring(personcard.length - 6);
+        }
+        return "*" + personcard;
     }
 
     //操作列

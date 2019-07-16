@@ -145,7 +145,7 @@ public class CancerPersonInfo extends BaseEntity {
 
     private Integer delRecordsFlag;
 
-    private String idNumber;   //大肠癌初筛编号
+    private String idNumber;   //初筛编号
     private String crcAssessmentResult; //大肠癌危险评估结果
     private String firstFobtResult; //第一次便隐血结果
     private String secondFobtResult; //第二次便隐血结果
@@ -161,6 +161,11 @@ public class CancerPersonInfo extends BaseEntity {
     private String licCheckYear;
     private String scCheckYear;
     private String lucCheckYear;
+
+    private String crcIdNumber;   //大肠癌初筛ID
+    private String licIdNumber;   //肝癌初筛ID
+    private String scIdNumber;   //胃癌初筛ID
+    private String lucIdNumber;   //肺癌初筛ID
 
 
     private String isNew;    //检查是否为健康档案及表以外的新增信息
@@ -740,5 +745,37 @@ public class CancerPersonInfo extends BaseEntity {
 
     public void setCheckCode(String checkCode) {
         this.checkCode = checkCode;
+    }
+
+    public String getCrcIdNumber() {
+        return crcIdNumber;
+    }
+
+    public void setCrcIdNumber(String crcIdNumber) {
+        this.crcIdNumber = crcIdNumber;
+    }
+
+    public String getLicIdNumber() {
+        return licIdNumber;
+    }
+
+    public void setLicIdNumber(String licIdNumber) {
+        this.licIdNumber = licIdNumber;
+    }
+
+    public String getScIdNumber() {
+        return scIdNumber;
+    }
+
+    public void setScIdNumber(String scIdNumber) {
+        this.scIdNumber = scIdNumber;
+    }
+
+    public String getLucIdNumber() {
+        return lucIdNumber;
+    }
+
+    public void setLucIdNumber(String lucIdNumber) {
+        this.lucIdNumber = lucIdNumber;
     }
 }

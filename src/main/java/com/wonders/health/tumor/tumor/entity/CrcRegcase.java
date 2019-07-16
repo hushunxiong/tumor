@@ -33,7 +33,7 @@ public class CrcRegcase extends BaseEntity {
 
 	@Length(max=64)
 	@NotNull
-	private String idNumber;	// 大肠癌初筛ID：2位年份+5位机构编码+5位序号
+	private String idNumber;	// 初筛ID：2位年份+5位机构编码+5位序号
 
 	@NotNull
 	private Integer checkYear;	// 初筛年度

@@ -9,6 +9,7 @@ import lombok.Data;
  */
 @Data
 public class FollowPersonInfoSearchVo extends DataGridSearch {
+    private String id;    //初筛ID
     private String keyword; //可按照姓名或者身份证号模糊查询
     private String csnf;  //初筛年份
     private String regarea; //登记机构所属区
