@@ -16,6 +16,8 @@ public class ScreeningVo {
 
     private String checkYear;             //初筛年度
 
+    private String idNumber;             //初筛ID
+
     private CancerPersonInfo personInfo;  //初筛对象信息
 
     private CrcRegcase crcRegcase;     //大肠癌初筛信息登记表

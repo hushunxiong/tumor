@@ -156,7 +156,7 @@ public class ScreeningController extends BaseController {
         model.addAttribute("kp", kp);
 
         List<CancerDic> cancerDicList = DictUtils.generals("60027");
-        //徐汇区
+        //徐汇区两种医疗保险类型
         if (StringUtils.equals("310104000000",areaCode)){
             List<CancerDic> paymentSituationList = cancerDicList.stream().filter(a -> StringUtils.equals("01", a.getCode())
                     || StringUtils.equals("02", a.getCode())).collect(Collectors.toList());
@@ -254,6 +254,21 @@ public class ScreeningController extends BaseController {
                     model.addAttribute("idNumber", screeningVo.getCrcRegcase().getIdNumber());
                 }
             }
+            if(screeningVo.getLicRegcase()!=null && !model.containsAttribute("idNumber")){
+                if(StringUtils.isNotBlank(screeningVo.getLicRegcase().getIdNumber())){
+                    model.addAttribute("idNumber", screeningVo.getLicRegcase().getIdNumber());
+                }
+            }
+            if(screeningVo.getScRegcase()!=null && !model.containsAttribute("idNumber")){
+                if(StringUtils.isNotBlank(screeningVo.getScRegcase().getIdNumber())){
+                    model.addAttribute("idNumber", screeningVo.getScRegcase().getIdNumber());
+                }
+            }
+            if(screeningVo.getLucRegcase()!=null && !model.containsAttribute("idNumber")){
+                if(StringUtils.isNotBlank(screeningVo.getLucRegcase().getIdNumber())){
+                    model.addAttribute("idNumber", screeningVo.getLucRegcase().getIdNumber());
+                }
+            }
         }
 
         //各癌症数据库存在标志
@@ -317,7 +332,7 @@ public class ScreeningController extends BaseController {
     public AjaxReturn checkIdnumber(String manageid, String idnumber)throws Exception{
         AjaxReturn ajaxReturn=new AjaxReturn();
         String msg="";
-        Boolean isChecked=false;
+        Boolean isChecked=true;
 
         String idyear=idnumber.substring(0,2);      //前两位为年份
         String areacode=idnumber.substring(2,7);    //之后3位为107 2位社区代码
@@ -329,12 +344,43 @@ public class ScreeningController extends BaseController {
 
 
         if((!(idyear.equals(year)))||!(areacode.equals(dic.getCode()))){
-            msg="该大肠癌id格式不正确！";
+            msg="该初筛id格式不正确！";
         }else{
-            if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber)==null||(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber).size()==0)){
-                isChecked=true;
-            }else{
-                msg="该id已被占用！";
+            if(isOpen(crcFlag)){
+                if(crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber) == null
+                        || crcRegcaseService.checkIdnumber(crcRegcaseDao,manageid,idnumber).size()==0) {
+                    isChecked = true;
+                } else {
+                    isChecked = false;
+                }
+            }
+            if(isChecked && isOpen(licFlag)){
+                if(licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber) == null
+                        || licRegcaseService.checkIdnumber(licRegcaseDao,manageid,idnumber).size()==0) {
+                    isChecked = true;
+                } else {
+                    isChecked = false;
+                }
+            }
+
+            if(isChecked && isOpen(lucFlag)){
+                if(lucRegcaseService.checkIdnumber(lucRegcaseDao,manageid,idnumber) == null
+                        || lucRegcaseService.checkIdnumber(lucRegcaseDao,manageid,idnumber).size()==0) {
+                    isChecked = true;
+                } else {
+                    isChecked = false;
+                }
+            }
+            if(isChecked && isOpen(scFlag)){
+                if(scRegcaseService.checkIdnumber(scRegcaseDao,manageid,idnumber) == null
+                        || scRegcaseService.checkIdnumber(scRegcaseDao,manageid,idnumber).size()==0) {
+                    isChecked = true;
+                } else {
+                    isChecked = false;
+                }
+            }
+            if (!isChecked) {
+                msg = "该初筛id已被占用！";
             }
         }
         ajaxReturn.setOk(isChecked);
@@ -516,6 +562,7 @@ public class ScreeningController extends BaseController {
 
         if(isOpen(crcFlag)){
             CrcRegcase crcRegcase=screeningVo.getCrcRegcase();
+            crcRegcase.setIdNumber(screeningVo.getIdNumber());
             if(crcRegcase!=null  && !checkObjAllFieldsIsNull(crcRegcase)){
                 crcRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 if(crcRegcase.getCheckResult()=="阴性" || "阴性".equals(crcRegcase.getCheckResult())){
@@ -572,6 +619,7 @@ public class ScreeningController extends BaseController {
         }
         if(isOpen(licFlag)){
             LicRegcase licRegcase=screeningVo.getLicRegcase();
+            licRegcase.setIdNumber(screeningVo.getIdNumber());
             if(licRegcase!=null && !checkObjAllFieldsIsNull(licRegcase)){
                 licRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 if(licRegcase.getCheckResult()=="阴性" || "阴性".equals(licRegcase.getCheckResult())){
@@ -639,6 +687,7 @@ public class ScreeningController extends BaseController {
         }
         if(isOpen(lucFlag)){
             LucRegcase lucRegcase=screeningVo.getLucRegcase();
+            lucRegcase.setIdNumber(screeningVo.getIdNumber());
             lucRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
             if(lucRegcase!=null  && !checkObjAllFieldsIsNull(lucRegcase)){
                 if(lucRegcase.getCheckResult()=="阴性" || "阴性".equals(lucRegcase.getCheckResult())){
@@ -708,6 +757,7 @@ public class ScreeningController extends BaseController {
         }
         if(isOpen(scFlag)){
             ScRegcase scRegcase=screeningVo.getScRegcase();
+            scRegcase.setIdNumber(screeningVo.getIdNumber());
             if(scRegcase!=null && !checkObjAllFieldsIsNull(scRegcase) ){
                 scRegcase.setCheckYear(Integer.valueOf(screeningVo.getCheckYear()));
                 if(scRegcase.getCheckResult()=="阴性" || "阴性".equals(scRegcase.getCheckResult())){

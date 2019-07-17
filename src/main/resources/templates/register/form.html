@@ -132,6 +132,19 @@
             </tbody>
         </table>
         <div class="title_tip mt-30">危险度评估</div>
+
+        <div th:if="${areaCode} ne '310104000000'">
+            <table class="table_new table_new5 mt-10">
+                <tr>
+                    <td width="20%"><span class="red-span">*</span>筛查ID</td>
+                    <td width="80%" class="text-l">
+                        <input id="idNumber" name="idNumber" class="mini-textbox" th:value="${idNumber}"
+                               width="150" maxlength="12" required="required" onvalidation="crcNumerChange"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <div th:if="${lucFlag} eq '1'">
             <table id="yyTable" class="table_new table_new5 mt-10">
                 <tbody>
@@ -605,13 +618,6 @@
                     <input id="crcid" name="crcRegcase.id" th:value="${crcRegcase.id}" class="mini-hidden"/>
                     <input id="crcRiskid" name="crcRisk.id" th:value="${crcRisk.id}" class="mini-hidden"/>
                     <input id="crcCheckId" name="crcRisk.crcCheckId" th:value="${crcRisk.crcCheckId}" class="mini-hidden"/>
-                    <td width="20%"><span class="red-span">*</span>大肠癌：大肠癌筛查ID</td>
-                    <td width="80%" class="text-l">
-                        <input id="idNumber" name="crcRegcase.idNumber" class="mini-textbox" th:value="${crcRegcase.idNumber}"
-                               width="100" maxlength="12" required="required" onvalidation="crcNumerChange"/>
-                    </td>
-                </tr>
-                <tr>
                     <td width="20%">大肠癌：现在的吸烟状况</td>
                     <td width="80%" class="text-l">
                         <div>
@@ -1418,7 +1424,6 @@
                 async:false,
                 success:function(res){
                     if(!res.ok){ //重复
-                        // mini.get("idNumber").set({isValid:false,errorText:res.msg});
                         errorText=res.msg;
                         flag=false;
                     }

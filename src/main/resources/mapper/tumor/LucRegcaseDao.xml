@@ -22,6 +22,18 @@
 		and a.check_year=#{checkyear}
 	</select>
 
+	<select id="checkIdnumber" resultType="java.lang.String">
+		SELECT
+		id_number as id
+		FROM luc_regcase a
+		WHERE
+		a.del_flag='0'
+		<if test="manageid != null and manageid != ''">
+			and a.manageid != #{manageid}
+		</if>
+		and a.Id_number=#{idnumber}
+	</select>
+
 	<select id="getByManageId" resultType="com.wonders.health.tumor.tumor.entity.LucRegcase">
 		SELECT
 		<include refid="LucRegcaseColumns"/>
@@ -85,11 +97,11 @@
 	
 	<insert id="insert">
 		INSERT INTO luc_regcase(
-		id,manageid,check_year,check_result,region_code,regorg,regdoc,regdate,submits_status,submit_date,
+		id,manageid,id_number,check_year,check_result,region_code,regorg,regdoc,regdate,submits_status,submit_date,
 		trans_date,print_date,close_status,close_date,close_result,check_quality_flag,checkresult_quality_flag,upload_time,
 		del_flag,create_by,create_date
 		) VALUES (
-		#{id},#{manageid},#{checkYear},#{checkResult},#{regionCode},#{regorg},#{regdoc},#{regdate},#{submitsStatus},#{submitDate},
+		#{id},#{manageid},#{idNumber},#{checkYear},#{checkResult},#{regionCode},#{regorg},#{regdoc},#{regdate},#{submitsStatus},#{submitDate},
 		#{transDate},#{printDate},#{closeStatus},#{closeDate},#{closeResult},#{checkQualityFlag},#{checkresultQualityFlag},#{uploadTime},
 		'0',#{createBy},SYSDATE
 		)
@@ -97,6 +109,9 @@
 	
 	<update id="update">
 		UPDATE luc_regcase SET
+		<if test="idNumber !=null and idNumber!=''">
+			id_number = #{idNumber},
+		</if>
 		<if test="regorg !=null and regorg!=''">
 			regorg = #{regorg},
 		</if>
