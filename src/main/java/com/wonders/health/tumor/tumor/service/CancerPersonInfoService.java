@@ -6,7 +6,6 @@ package com.wonders.health.tumor.tumor.service;
 
 import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.auth.client.vo.User;
-import com.wonders.health.tumor.common.Constants;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
 import com.wonders.health.tumor.tumor.dao.*;
@@ -105,6 +104,21 @@ public class CancerPersonInfoService {
                     info.setRegorg(hos.getName());
                 }
 
+                //初筛ID
+                if(StringUtils.isNotBlank(info.getCrcIdNumber())){
+                    info.setIdNumber(info.getCrcIdNumber());
+                }
+                if(StringUtils.isNotBlank(info.getLicIdNumber())){
+                    info.setIdNumber(info.getLicIdNumber());
+                }
+                if(StringUtils.isNotBlank(info.getLucIdNumber())){
+                    info.setIdNumber(info.getLucIdNumber());
+                }
+                if(StringUtils.isNotBlank(info.getScIdNumber())){
+                    info.setIdNumber(info.getScIdNumber());
+                }
+
+                //初筛年份
                 Integer delRecordsFlag = 0;
                 if (StringUtils.isNotBlank(info.getCrcCheckYear())) {
                     info.setCsnf(info.getCrcCheckYear());

@@ -7,9 +7,9 @@
 	</sql>
 
 	<sql id="CancerPersonInfoListColumns">
-		P . ID AS id,
-		P . NAME AS "name",
-		P .GENDER AS "gender",
+		P.ID AS id,
+		P.NAME AS "name",
+		P.GENDER AS "gender",
 		P.address_detail AS "addressDetail",
 		P.regorg AS "regorg",
 		ldct.ID AS "ldctId",
@@ -18,7 +18,7 @@
 			crc.id  as  "crcCheckId",
 			crc.check_year as  crcCheckYear,
 			1 as "crc",
-			crc.ID_NUMBER AS "idNumber",
+			crc.ID_NUMBER AS crcIdNumber,
 			crc.CHECK_RESULT AS "crcResult",
 			crcas.ASSESSMENT_RESULT AS "crcAssessmentResult",
 			fobt.FIRST_FOBT_RESULT AS "firstFobtResult",
@@ -29,6 +29,7 @@
 			lic.id  as  "licCheckId",
 			lic.check_year as  licCheckYear,
 			1 as "lic",
+			lic.ID_NUMBER AS licIdNumber,
 			lic.CHECK_RESULT AS "licResult",
 			licas.ASSESSMENT_RESULT AS "licAssessmentResult",
 			licac.LIC_ASSIST_RESULT AS "licAssistResult",
@@ -37,12 +38,14 @@
 			sc.id  as  "scCheckId",
 			sc.check_year as  scCheckYear,
 			1 as "sc",
+			sc.ID_NUMBER AS scIdNumber,
 			sc.CHECK_RESULT AS "scResult",
 		</if>
 		<if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
 			luc.id  as  "lucCheckId",
 			luc.check_year as  lucCheckYear,
 			1 as "luc",
+			luc.ID_NUMBER AS lucIdNumber,
 			luc.CHECK_RESULT AS "lucResult",
 			lucas.assessment_result AS "lucAssessmentResult",
 			ldctchk.ldct_result_type AS "lucLdctResultType",
@@ -53,7 +56,7 @@
 		P.payment_no as paymentNo,
 		P.mobile as mobile,
 		P.telephone as telephone,
-		P .PERSONCARD AS "personCard"
+		P.PERSONCARD AS "personCard"
 	</sql>
 
 	<select id="getById" resultType="com.wonders.health.tumor.tumor.entity.CancerPersonInfo">
@@ -232,9 +235,6 @@
 		LEFT JOIN LUC_DIAG_CHECK_XH lucDiagCheck ON (P.ID = lucDiagCheck.MANAGEID) AND lucDiagCheck.DEL_FLAG='0'
       <where>
 		  P .DEL_FLAG = '0'
-		  <if test=" id !=null and id !='' " >
-			  and p.id=#{id}
-		  </if>
 		  <if test="keyword!=null and keyword!='' ">
 			  AND (
 			  p.name LIKE	CONCAT(CONCAT('%',#{keyword}),'%')
@@ -302,13 +302,30 @@
 		  <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
 				t.licCheckYear is not null or
 		  </if>
-		 <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+		  <if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
 				 t.scCheckYear is not null  or
 		  </if>
 		  <if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
 				 t.lucCheckYear is not null  or
 		  </if>
 		  1=2 )
+		  <if test="id !=null and id !=''" >
+			and (
+			  	<if test=" crcFlag !=null and crcFlag !='' and crcFlag == '1'.toString()" >
+					t.crcIdNumber=#{id} or
+				</if>
+			    <if test=" licFlag !=null and licFlag !='' and licFlag == '1'.toString()" >
+					t.licIdNumber=#{id} or
+			  	</if>
+			  	<if test=" scFlag !=null and scFlag !='' and scFlag == '1'.toString()" >
+					t.scIdNumber=#{id} or
+			  	</if>
+			  	<if test=" lucFlag !=null and lucFlag !='' and lucFlag == '1'.toString()" >
+					t.lucIdNumber=#{id} or
+			  	</if>
+			  1=2
+			)
+		  </if>
     </sql>
 
     <select id="pageCount" resultType="java.lang.Integer"
