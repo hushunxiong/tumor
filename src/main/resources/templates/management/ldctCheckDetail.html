@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:include="/common/common :: head(~{::title},~{::link},~{::script})">
-    <title>LDCT检查信息一览</title>
+    <title>LDCT检查信息</title>
     <link>
-    <script></script>
 </head>
 <body>
 
-<!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
 <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
 <div class="content pd-10" style="width:auto; overflow: hidden;">
     <div class="title_tip mt-30">基本信息</div>
@@ -92,13 +90,94 @@
         <button class="my-btn my-btn-blue mr-20"
                 th:onclick="'javascript:closeWindow( \''+${personInfo.id}+'\')'">返回
         </button>
-        <button class="my-btn my-btn-blue mr-20" onclick="closeWindow()">预约专病</button>
+        <button class="my-btn my-btn-blue mr-20" onclick="reserve()">预约专病</button>
     </div>
+    <input id="manageId" class="mini-hidden"/>
+</div>
+
+<!-- 预约小窗口 -->
+<div id="yy-window" class="mini-window" title="预约" style="width:1000px; height:700px;" showModal="true" allowResize="false" allowDrag="false">
+    <iframe width="980" height="620" id="frame1"></iframe>
 </div>
 </body>
 <script type="text/javascript" th:inline="javascript">
+    mini.parse();
+
+    var messenger = new Messenger('parent', 'tumor');
+    var iframe  = document.getElementById('frame1');
+    messenger.addTarget(iframe.contentWindow, 'addMzyy');
+
+    messenger.listen(function (msg) {
+        var tbs=JSON.parse(msg);
+        console.log(tbs);
+        if(tbs.ok==true){
+
+            var yyxh = tbs.yyxh;
+            var ksdm = tbs.ksdm;
+            var ksmc = tbs.ksmc;
+            var ysdm = tbs.ysdm;
+            var ysmc = tbs.ysmc;
+            var yyrq = tbs.yyrq;
+            var yyhx = tbs.yyhx;
+            var time = tbs.time;
+
+            var manageId = mini.get("manageId").getValue();
+            //alert(yyxh+ "," + ksdm + "," + ksmc+ "," +ysdm+ "," +ysmc+ "," +yyrq+ "," +time+ "," +yyhx);
+            //insertCheckRecord(manageId,yyxh,ksdm,ksmc,ysdm,ysmc,yyrq,time,yyhx);
+
+        }
+        mini.get("yy-window").hide();
+    });
+
     function closeWindow(manageId) {
         window.location.href = "../../managementObject/detail/?manageId=" + manageId;
+    }
+
+    //预约专病
+    function reserve() {
+        var ip = [[${ip}]];
+        var patid = [[${personInfo.patid}]];
+        var id = [[${personInfo.id}]];
+        if (ip == "http://10.1.93.110") {
+            ip = "http://192.168.30.117";
+        } else {
+            ip = ip.substring(0, ip.lastIndexOf(":"));
+        }
+
+        mini.get("manageId").setValue(id);
+
+        var url = ip + ':8071/xkyy/queryZbDoctor.action?patid='+patid;
+        $("#frame1").attr("src", url);
+        mini.get("yy-window").show();
+    }
+
+    //插入预约表
+    function insertCheckRecord(manageId,yyxh,ksdm,ksmc,ysdm,ysmc,yyrq,time,yyhx) {
+        $.ajax({
+            url : "../cancerPersonInfo/insertAppCheck",
+            data:{manageId:manageId, yyxh:yyxh, ksdm:ksdm, ksmc:ksmc, ysdm:ysdm,ysmc:ysmc, yyrq:yyrq,time:time,yyhx:yyhx},
+            dataType: "json",
+            success : function(res) {
+                if (res.ok) {
+                    mini.showTips({
+                        content: res.msg,
+                        state: "success",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+
+                } else {
+                    mini.showTips({
+                        content: res.msg,
+                        state: "warning",
+                        x: "center",
+                        y: "center",
+                        timeout: 2000
+                    });
+                }
+            }
+        });
     }
 </script>
 </html>

@@ -175,6 +175,7 @@ public class ManagementObjectController extends BaseController {
             model.addAttribute("ldctApp", new LucAppLdctXh());
             model.addAttribute("ldctCheck", new LucLDCTCheckXH());
         }
+        model.addAttribute("ip", authServiceI.findBaseUrl("肿瘤早发现", getSessionUser().getOrgCode()));
 
         return "/management/ldctCheckDetail";
     }

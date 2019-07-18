@@ -161,6 +161,12 @@ public class LucRiskAssessment extends BaseEntity {
 	private String tongbuweifeiyan;	// 近期反复同部位的肺炎 cdc_dic_personinfo id=60007 code=1：有；code=2：无
 
 	@Length(max=1)
+	private String feibuCt;  //两年内是否做过肺部CT
+
+	@Length(max=10)
+	private String feibuCtDate;  //两年内肺部CT日期
+
+	@Length(max=1)
 	private String feijiejie;	// 既往放射性检查或诊疗是否发现肺部结节 cdc_dic_personinfo id=60007 code=1：有；code=2：无
 
 	@Length(max=100)
@@ -180,6 +186,12 @@ public class LucRiskAssessment extends BaseEntity {
 
 	@Length(max=1)
 	private String qinshuAizhengshi;	// 一级亲属癌症史 cdc_dic_personinfo id=60007 code=1：有；code=2：无 (若为1时,则在亲属大肠癌史中有对应记录)
+
+	@Length(max=1)
+	private String zhuanzhenxiongke; //是否同意转诊至胸科医院
+
+	@Length(max=1)
+	private String jiankangchufang; //是否已发放健康处方
 
 	@Length(max=1)
 	@NotNull
@@ -233,8 +245,12 @@ public class LucRiskAssessment extends BaseEntity {
 		this.xiongtong="2";
 		this.shengyinsiya="2";
 		this.tongbuweifeiyan="2";
+		this.feibuCt="2";
 		this.feijiejie="2";
 		this.maoboli="2";
+		this.shixingjiejie="2";
+		this.zhuanzhenxiongke="2";
+		this.jiankangchufang="2";
 	}
 
 	@JsonProperty("id")
@@ -642,6 +658,24 @@ public class LucRiskAssessment extends BaseEntity {
 		this.tongbuweifeiyan = tongbuweifeiyan;
 	}
 
+	@JsonProperty("feibuCt")
+	public String getFeibuCt() {
+		return feibuCt;
+	}
+
+	public void setFeibuCt(String feibuCt) {
+		this.feibuCt = feibuCt;
+	}
+
+	@JsonProperty("feibuCtDate")
+	public String getFeibuCtDate() {
+		return feibuCtDate;
+	}
+
+	public void setFeibuCtDate(String feibuCtDate) {
+		this.feibuCtDate = feibuCtDate;
+	}
+
 	@JsonProperty("feijiejie")
 	public String getFeijiejie() {
 		return feijiejie;
@@ -703,6 +737,24 @@ public class LucRiskAssessment extends BaseEntity {
 
 	public void setQinshuAizhengshi(String qinshuAizhengshi) {
 		this.qinshuAizhengshi = qinshuAizhengshi;
+	}
+
+	@JsonProperty("zhuanzhenxiongke")
+	public String getZhuanzhenxiongke() {
+		return zhuanzhenxiongke;
+	}
+
+	public void setZhuanzhenxiongke(String zhuanzhenxiongke) {
+		this.zhuanzhenxiongke = zhuanzhenxiongke;
+	}
+
+	@JsonProperty("jiankangchufang")
+	public String getJiankangchufang() {
+		return jiankangchufang;
+	}
+
+	public void setJiankangchufang(String jiankangchufang) {
+		this.jiankangchufang = jiankangchufang;
 	}
 
 	@JsonProperty("assessmentResult")

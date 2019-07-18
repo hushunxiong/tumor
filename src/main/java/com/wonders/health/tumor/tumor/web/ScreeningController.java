@@ -155,16 +155,6 @@ public class ScreeningController extends BaseController {
         model.addAttribute("operation", operation);
         model.addAttribute("kp", kp);
 
-        List<CancerDic> cancerDicList = DictUtils.generals("60027");
-        //徐汇区两种医疗保险类型
-        if (StringUtils.equals("310104000000",areaCode)){
-            List<CancerDic> paymentSituationList = cancerDicList.stream().filter(a -> StringUtils.equals("01", a.getCode())
-                    || StringUtils.equals("02", a.getCode())).collect(Collectors.toList());
-            model.addAttribute("paymentSituation", gson.toJson(paymentSituationList));
-        } else {
-            model.addAttribute("paymentSituation", gson.toJson(cancerDicList));
-        }
-
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
             CancerPersonInfo personInfo = new CancerPersonInfo();
@@ -218,8 +208,12 @@ public class ScreeningController extends BaseController {
             model.addAttribute("scRegcase", new ScRegcase());
 
             model.addAttribute("historyListFlag", "2");
-
             model.addAttribute("idNumber", "");
+            //各癌症数据库存在标志
+            model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
+            model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
+            model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
+            model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
         } else {
             ScreeningVo screeningVo=getDetail(manageId,checkYear);
             model.addAttribute("personInfo", screeningVo.getPersonInfo());
@@ -281,12 +275,6 @@ public class ScreeningController extends BaseController {
                 }
             }
         }
-
-        //各癌症数据库存在标志
-        model.addAttribute("crcDbflag", "1"); //数据库状态  1：新增 2：修改
-        model.addAttribute("licDbflag", "1"); //数据库状态  1：新增 2：修改
-        model.addAttribute("scDbflag", "1");  //数据库状态  1：新增 2：修改
-        model.addAttribute("lucDbflag", "1"); //数据库状态  1：新增 2：修改
 
         model.addAttribute("crcFlag", crcFlag);
         model.addAttribute("licFlag", licFlag);
