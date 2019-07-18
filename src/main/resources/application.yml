@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: de
+    active: te
   thymeleaf:
     cache: false
     mode: HTML5
@@ -98,7 +98,7 @@ luc_switch_flag: 1
 archieve_add_flag: 1
 
 #区域代码
-area_code: '310104000000'
+area_code: '310107000000'
 
 #最近n年
 yearNum: 10
@@ -168,3 +168,7 @@ yearNum: 10
 
 #健康档案内网地址
 healthArchive: http://xuhui-web:9071/archive
+#外部健康档案接口开关
+external_health_archive=true
+#外部健康档案接口地址
+external_health_archive_url=http://192.168.30.201
