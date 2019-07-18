@@ -19,54 +19,70 @@
     .fl {
         float: left
     }
-    .content {width: 137mm; margin: 0 auto;text-align: center;}
+    .content {width: 200mm; margin: 0;text-align: center;}
     *{line-height: 1.5em; font-family:'宋体';}
     .content h1 { font-size: 22px!important; margin:20px 0px;}
     .content div,.content p{ font-size: 18px;text-align: left!important;text-indent: 2em;line-height: 1.8em;}
     .content p { text-indent: 0em;}
-    .content span{display: inline-block;width:auto;min-width:0px;margin-left:-38px;margin-right:1px; word-break: normal;text-align: center}
+    .content span{display: inline-block;width:auto;min-width:0px;margin-right:1px; word-break: normal;text-align: center}
+    table td {font-size: 18px!important}
 </style>
-<div class="content pd-30">
+<!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
+<div class="content">
     <p><br></p>
-    <h2>社区居民肺癌筛查检查预约单</h2>
-    <p><br></p>
-    <p>尊敬的<span style="margin-left: 0px" th:text="${name}"></span> 感谢您参加徐汇区社区肺癌筛查：</p>
-    <div>
-        收到本预约单说明您的问卷评估结果为高危人群，为了进一步明确诊断，我们强烈建议您前往定点医院接受进一步的检查。
-    </div>
-    <div>
-        根据项目安排，上海市胸科医院为本次筛查项目指定医院，前往指定医院接受检查可以享受绿色通道、优先预约、挂号检查一站式完成等优惠政策。
-    </div>
-    <div th:text="${yyPeriod}">
-    </div>
-    <div>
-        <b>为了您可以顺利地接受检查，请在前往指定医院时务必携带本预约单。再次感谢您的参与！</b>
-    </div>
-    <div class="fr" style="margin-right:25px;">
-        <b>
-            <span style="width:100%;margin-right:20px;float: right" th:text="${hospitalName}"></span>
-        </b>
-    </div>
+    <h2>上海市胸科医院<br>CT预约单</h2>
+    <div style="width:100%;height:1px;background-color:#333"></div>
+    <table width="100%">
+        <tr>
+            <td width="20%" align="left">姓名：<span th:text="${name}"></span></td>
+            <td width="20%">年龄：<span width="50" th:text="${age}"></span>岁</td>
+            <td width="20%">性别：<span width="50" th:text="${#dic.generalName('60023', gender)}"></span></td>
+            <td width="20%">病区：</td>
+            <td width="20%">床号：</td>
+        </tr>
+        <tr>
+            <td width="60%" colspan="3" align="left">检查时间：<span th:text="${checkDate} + '  ' + ${checkTime}"></span></td>
+            <td width="20%">影像号：</td>
+            <td width="20%">科别：</td>
+        </tr>
+        <tr>
+            <td width="40%" colspan="2" align="left">卡号：<span th:text="${paymentNo}"></span></td>
+            <td width="60%" colspan="3">检查项目：胸部CT平扫图像三维重建</td>
+        </tr>
+    </table>
+    <div style="width:100%;height:1px;background-color:#333"></div>
 
-    <div class="fr" style="margin-right:25px;">
-        <b>
-        <span id="year" style="width:30px;margin-left:10px;margin-right:50px" th:text="${year}"></span>年
-        <span id="month" style="width:30px;margin-right:30px" th:text="${month}"></span>月
-        <span id="day" style="width:30px;margin-right:30px" th:text="${day}"></span>日
-        </b>
-    </div>
-    <p><br><br>检查流程：</p>
+    <p><br>注意事项：</p>
     <div>
-        1.居民携带身份证、医保卡、预约单至胸科医院挂号、付费
+        1.凭此单预约时间至门诊三楼放射科登记等候检查，逾期请重新预约。为了保证正常检查秩序，
+        <b>请勿提前到达，谢谢您的配合</b>。
     </div>
     <div>
-        2.至1号楼排队等候低剂量螺旋CT检查
+        2.腹部检查与食道术后胸部检查的病人，请做好空腹准备。
     </div>
-    <div th:text="${thirdStep}">
+    <div>
+        3.怀孕妇女禁止进行X线检查。
     </div>
-    <br><br><br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br>
-    <p>上海市胸科医院地址：淮海西路241号</p>
+    <div>
+        4.增强检查禁忌症：对比剂过敏，甲亢。
+    </div>
+    <p><br>报告领取：</p>
+    <div>
+        1.请于七个工作日后（不包含检查日与双休节假日），前往门诊一楼便民服务中心领取报告。
+    </div>
+    <div>
+        2.门诊患者凭预约单或就诊磁卡领取报告。住院病人凭出院小结领取报告。
+    </div>
+    <div>
+        3.报告领取时间：周一～周五 上午8：00-下午4：00，周六上午8：00-11:00。
+    </div>
+    <div class="fr">
+        申请时间：<span th:text="${appointmentDate}"></span>
+    </div>
+    <div style="width:100%;height:1px;background-color:#333"></div>
+    <div class="fr">
+        <font size="10">门诊三楼   放射科</font>
+    </div>
 </div>
 
 </body>

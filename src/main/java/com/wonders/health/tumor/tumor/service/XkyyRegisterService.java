@@ -97,8 +97,8 @@ public class XkyyRegisterService {
             vo.setYbdm("70");
         } else if (StringUtils.equals("02", info.getPaymentSituation())) {
             vo.setYbdm("72");
-        } else {
-            vo.setYbdm("");
+        } else if (StringUtils.equals("20", info.getPaymentSituation())) {
+            vo.setYbdm("1");
         }
         vo.setCardno(info.getPaymentNo());
         vo.setSex(info.getGender());

@@ -8,6 +8,7 @@ import com.wonders.health.auth.client.vo.Hospital;
 import com.wonders.health.tumor.common.controller.BaseController;
 import com.wonders.health.tumor.common.utils.AuthUtils;
 import com.wonders.health.tumor.common.utils.DateUtils;
+import com.wonders.health.tumor.common.utils.DictUtils;
 import com.wonders.health.tumor.tumor.entity.CancerPersonInfo;
 
 import com.wonders.health.tumor.tumor.entity.LucAppLdctXh;
@@ -230,34 +231,14 @@ public class CancerPersonInfoController extends BaseController {
 
         LucAppLdctXh ldct = cancerPersonInfoService.getLdctInfo(id);
         CancerPersonInfo personInfo = cancerPersonInfoService.findById(id);
-        String checkDate = DateUtils.formatDate(ldct.getAppCheckDate(),"yyyy年MM月dd日");
-        String checkTime = "";
-        String time = ldct.getAppCheckTime();
-        if (StringUtils.isNotBlank(time)) {
-            int hour = Integer.parseInt(time.substring(0,2));
-            if (hour >=12) {
-                checkTime = "下午" + time;
-            } else {
-                checkTime = "上午" + time;
-            }
-        }
-        String orgName = "";
-        String orgCode = getSessionUser().getOrgCode();
-        if (StringUtils.isNotBlank(orgCode)) {
-            Hospital hospital = AuthUtils.getHospitalByCode(orgCode);
-            if (hospital != null) {
-                orgName = hospital.getName();
-            }
-        }
 
         model.addAttribute("name",personInfo.getName());
-        model.addAttribute("yyPeriod","目前已为您预约好低剂量螺旋CT检查，请您于" + checkDate + checkTime +"至胸科医院（具体地点请胸科医院提供）做检查。检查当天请携带身份证、医保卡与本预约单，需要医保承担低剂量螺旋CT检查的费用。");
-        model.addAttribute("thirdStep","3." + checkDate + "至1号楼取检查报告");
-        model.addAttribute("hospitalName", orgName);
-
-        model.addAttribute("year", LocalDate.now().getYear());
-        model.addAttribute("month",LocalDate.now().getMonthValue());
-        model.addAttribute("day",LocalDate.now().getDayOfMonth());
+        model.addAttribute("age",DateUtils.getAge(personInfo.getBirth()));
+        model.addAttribute("gender", personInfo.getGender());
+        model.addAttribute("checkDate", DateUtils.formatDate(ldct.getAppCheckDate(),"yyyy-MM-dd"));
+        model.addAttribute("checkTime", ldct.getAppCheckTime());
+        model.addAttribute("paymentNo", personInfo.getPaymentNo());
+        model.addAttribute("appointmentDate",DateUtils.formatDate(ldct.getAppointmentDate(),"yyyy-MM-dd"));
         return mav;
     }
 
