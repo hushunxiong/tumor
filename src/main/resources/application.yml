@@ -169,6 +169,6 @@ yearNum: 10
 #健康档案内网地址
 healthArchive: http://xuhui-web:9071/archive
 #外部健康档案接口开关
-external_health_archive=true
+external_health_archive: true
 #外部健康档案接口地址
-external_health_archive_url=http://192.168.30.201
+external_health_archive_url: http://192.168.30.201
