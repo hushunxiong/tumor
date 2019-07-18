@@ -169,21 +169,32 @@ public class ScreeningController extends BaseController {
         if (StringUtils.isBlank(manageId)) {
             CancerPersonInfo personInfo = new CancerPersonInfo();
 
+            //大数据推送时
             if (StringUtils.isNotBlank(pushid)) {
                 LucPushXh push =bigDataService.getPushData(pushid);
-                BeanUtils.copyProperties(push, personInfo);
-                personInfo.setPersoncardType("01");
-                personInfo.setAddressProvince(push.getProvince());
-                personInfo.setAddressCity(push.getCity());
-                personInfo.setAddressCounty(push.getCounty());
-                personInfo.setAddressTown(push.getTown());
-                personInfo.setAddressCommittee(push.getCommittee());
-                personInfo.setAddressDetail(push.getDetail());
+                personInfo = screeningService.getBaseInfoByCardnoAndType(push.getPersoncard(), "01");
+                //健康档案空时
+                if (personInfo == null) {
+                    personInfo = new CancerPersonInfo();
+                    BeanUtils.copyProperties(push, personInfo);
+                    personInfo.setPersoncardType("01");
+                    personInfo.setAddressProvince(push.getProvince());
+                    personInfo.setAddressCity(push.getCity());
+                    personInfo.setAddressCounty(push.getCounty());
+                    personInfo.setAddressTown(push.getTown());
+                    personInfo.setAddressCommittee(push.getCommittee());
+                    personInfo.setAddressDetail(push.getDetail());
 
-                personInfo.setRegdoc(user.getId());
-                personInfo.setRegorg(user.getOrgCode());
-                personInfo.setRegdate(new Date());
-                personInfo.setPaddressCounty(areaCode);
+                    personInfo.setRegdoc(user.getId());
+                    personInfo.setRegorg(user.getOrgCode());
+                    personInfo.setRegdate(new Date());
+                    personInfo.setPaddressCounty(areaCode);
+                } else {
+                    personInfo.setRegdoc(user.getId());
+                    personInfo.setRegorg(user.getOrgCode());
+                    personInfo.setRegdate(new Date());
+                }
+
             } else {
                 personInfo.setRegdoc(user.getId());
                 personInfo.setRegorg(user.getOrgCode());
@@ -414,7 +425,7 @@ public class ScreeningController extends BaseController {
 
         if(StringUtils.isBlank(personInfo.getId())){
             CancerPersonInfo personInfoBase=screeningService.getBaseInfoByCardnoAndType(personInfo.getPersoncard(),personInfo.getPersoncardType());
-            if(StringUtils.isNotBlank(personInfoBase.getId())){
+            if(personInfoBase != null && StringUtils.isNotBlank(personInfoBase.getId())){
                 personInfo.setId(personInfoBase.getId());
             }
         }
