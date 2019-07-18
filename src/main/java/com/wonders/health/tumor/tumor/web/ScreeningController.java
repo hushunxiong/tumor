@@ -153,7 +153,7 @@ public class ScreeningController extends BaseController {
         model.addAttribute("years", AuthUtils.toJson(years));
         model.addAttribute("checkYear", checkYear);
         model.addAttribute("operation", operation);
-        model.addAttribute("kp", kp);
+        model.addAttribute("kp", StringUtils.strNotNull(kp));
 
         //个人管理编号
         if (StringUtils.isBlank(manageId)) {
