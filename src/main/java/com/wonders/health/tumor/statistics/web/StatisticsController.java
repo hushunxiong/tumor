@@ -602,4 +602,83 @@ public class StatisticsController {
         }
     }
 
+
+    /**
+     * 社区卫生服务中心肿瘤早发现进度表(社区登录的场合)
+     * @Author: hushunxiong
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("statistics:seSchedule")
+    @RequestMapping(value = "seSchedule", method = RequestMethod.GET)
+    public String seList(Model model) {
+        model.addAttribute("year",2019);
+        model.addAttribute("flag", 1);
+//
+//        model.addAttribute("orgCode", AuthUtils.getUser().get  model.addAttribute("lucFlag", lucFlag);
+//        model.addAttribute("scFlag", scFlag);OrgCode());
+//        System.out.println(count);
+        return "/statistics/seScheduleList";
+    }
+    @ResponseBody
+    @RequestMapping("seData")
+    public DataGrid<SeScheduleListVo> getSchedule(@ModelAttribute SeScheduleSearchVo searchVo) {
+        DataGrid<SeScheduleListVo> seScheduleList=statisticsService.getSeSearch(searchVo);
+        return seScheduleList;
+    }
+
+    /**
+     * 社区卫生服务中心肿瘤早发现进度表(社区登录的场合)导出
+     */
+
+    @ResponseBody
+
+    @RequestMapping("/exportSecheduleData")
+    public void exportSechedule(@RequestParam(required = false) String regarea,
+                                   @RequestParam(required = false) String regorg,
+                                   @RequestParam(required = false) String csrqStart,
+                                   @RequestParam(required = false) String csrqEnd,
+                                   @RequestParam(required = false) int pageIndex,
+                                   @RequestParam(required = false) int pageSize,
+                                   HttpServletResponse response) {
+//        InfomationSearchVo searchVo = new InfomationSearchVo();
+//        searchVo.setCsrqStart(foramt(csrqStart));
+//        searchVo.setCsrqEnd(foramt(csrqEnd));
+//        searchVo.setRegarea(regarea);
+//        searchVo.setRegorg(regorg);
+//        searchVo.setCrcFlag(crcFlag);
+//        searchVo.setLicFlag(licFlag);
+//        searchVo.setLucFlag(lucFlag);
+//        searchVo.setScFlag(scFlag);
+//        searchVo.setPageIndex(pageIndex);
+//        searchVo.setPageSize(pageSize);
+//        DataGrid<InformationCollectionVo> list = statisticsService.getInformation(searchVo);
+//        DictData dic = new DictData();
+//        List<DiagnoseMessage> datas = list.getData().stream().map(vo -> {
+//            DiagnoseMessage diagnoseMessage = new DiagnoseMessage();
+//            diagnoseMessage.setXm(vo.getXm());
+//            diagnoseMessage.setPersoncardType(dic.generalName("60022", vo.getPersoncardType()));//证件类型
+//            diagnoseMessage.setPersoncard(vo.getPersoncard());
+//            diagnoseMessage.setRegorg(vo.getRegorg());
+//            diagnoseMessage.setJcxm(vo.getJcxm());
+//            diagnoseMessage.setBbbw(vo.getBbbw());
+//            diagnoseMessage.setZldx(vo.getZldx());
+//            diagnoseMessage.setSfhj(dic.generalName("60013", vo.getSfhj()));//是否活检
+//            diagnoseMessage.setHjjg(vo.getHjjg());//活检结果
+//            diagnoseMessage.setSfbl(dic.generalName("60013", vo.getSfbl()));//是否病理
+//            diagnoseMessage.setBllx(vo.getBllx());
+//            diagnoseMessage.setTNMfq(vo.getTNMfq().replaceAll("null",""));
+//            diagnoseMessage.setSfrq(vo.getSfrq());
+//            return diagnoseMessage;
+//        }).collect(Collectors.toList());
+//        if (datas == null || datas.size() == 0) {
+//            return;
+//        }
+//        try {
+//            ExcelUtils.exportExcel(response, datas);
+//        } catch (Exception e) {
+//            logger.error("诊断信息收集导出异常", e);
+//        }
+    }
+
 }

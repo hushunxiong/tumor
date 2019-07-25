@@ -42,4 +42,8 @@ public interface StatisticsDao {
     //诊断信息收集
     List<InformationCollectionVo> getInformation(SummarySearchVo searchVo);
     int pageCountInformation(DataGridSearch search);
+
+    //社区卫生服务中心肿瘤早发现进度表(社区登录的场合)
+    List<SeScheduleListVo> getSeSchedule(SeScheduleSearchVo searchVo);
+    int pageCountSeSchedule(SeScheduleSearchVo search);
 }

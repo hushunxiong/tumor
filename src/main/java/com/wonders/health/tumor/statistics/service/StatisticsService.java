@@ -1,5 +1,6 @@
 package com.wonders.health.tumor.statistics.service;
 
+import com.wonders.health.auth.client.vo.System;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.service.AreaService;
 import com.wonders.health.tumor.common.tags.DictData;
@@ -211,5 +212,21 @@ public class StatisticsService {
         }
 
         return new DataGrid<>(count, scVoList);
+    }
+
+    /**
+     * 社区卫生服务中心肿瘤早发现进度表(社区登录的场合)
+     *
+     * @Author:hushunxiong
+     * @param searchVo
+     * @return
+     */
+    public DataGrid<SeScheduleListVo> getSeSearch(SeScheduleSearchVo searchVo){
+        int count = statisticsDao.pageCountSeSchedule(searchVo);
+        List<SeScheduleListVo> seVoList =null;
+        if (count>0) {
+            seVoList = statisticsDao.getSeSchedule(searchVo);
+        }
+        return new DataGrid<>(count, seVoList);
     }
 }
