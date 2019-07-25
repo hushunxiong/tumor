@@ -1,0 +1,178 @@
+spring:
+  profiles:
+    active: te
+  thymeleaf:
+    cache: false
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    prefix: classpath:/templates
+    suffix: .html
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /**
+  messages:
+    basename: il8n/messages
+  datasource:
+      # 使用阿里的Druid连接池
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      druid:
+        # 连接池的配置信息
+        # 初始化大小，最小，最大
+        initial-size: 5
+        min-idle: 5
+        maxActive: 200
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        # 打开PSCache，并且指定每个连接上PSCache的大小
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+#        filters: stat,wall,log4j
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+#        connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+
+server:
+  servlet:
+    context-path: /tumor
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+  configuration:
+    jdbc-type-for-null: 'null'
+
+shiro:
+  expireIn: 1800
+  sessionTimeout: 1800000
+  cookieTimeout: 2592000
+  anonUrl: /css/**,/js/**,/libs/**,/main/**,/monitor,/actuator/health,/authFail,/api/**,/area/**,/lib/**,/hospital/**
+  loginUrl: /login
+  successUrl: /index
+  logoutUrl: /logout
+  unauthorizedUrl: /authFail
+  sessionIdName: session.id
+
+#默认系统路径http://ip:port
+default.sysServerUrl:
+#默认Cas路径http://ip:port
+default.casServerUrl:
+#health_base_url: http://10.1.93.111/health
+
+#health_base_url        health内网访问地址
+#casServerUrlPrefix     cas内网访问地址
+#shiroServerUrlPrefix   tumor应用部署地址
+shiroServerUrlSuffix: /tumor/login
+
+---
+spring:
+  profiles: de
+  datasource:
+      # 填写你数据库的url、登录名、密码和数据库名
+      url: jdbc:oracle:thin:@10.240.21.10:1521:ora11g
+      username: zlzfx
+      password: ZLZFX
+
+health_base_url: http://10.1.93.111/health
+casServerUrlPrefix: http://10.1.93.111/cas
+shiroServerUrlPrefix: http://localhost:8080
+
+#初筛诊断(crc_switch_flag：大肠癌  lic_switch_flag：肝癌 sc_switch_flag：胃癌  luc_switch_flag：肺癌     )
+crc_switch_flag: 1
+lic_switch_flag: 1
+sc_switch_flag: 1
+luc_switch_flag: 1
+
+#是否新增筛查时可以向健康档案插入个人信息
+archieve_add_flag: 1
+
+#区域代码
+area_code: '310107000000'
+
+#最近n年
+yearNum: 10
+
+#健康档案内网地址
+healthArchive: http://10.1.93.110/archive
+
+
+---
+spring:
+  profiles: te
+  datasource:
+      # 填写你数据库的url、登录名、密码和数据库名
+      url: jdbc:oracle:thin:@10.240.21.10:1521:ora11g
+      username: zlzfx_test
+      password: ZLZFX_TEST
+
+health_base_url: http://10.1.93.110/health
+casServerUrlPrefix: http://10.1.93.110/cas
+shiroServerUrlPrefix: http://localhost:8080
+
+#初筛诊断(crc_switch_flag：大肠癌  lic_switch_flag：肝癌 sc_switch_flag：胃癌  luc_switch_flag：肺癌     )
+crc_switch_flag: 1
+lic_switch_flag: 1
+sc_switch_flag: 1
+luc_switch_flag: 1
+
+#是否新增筛查时可以向健康档案插入个人信息
+archieve_add_flag: 1
+
+#区域代码
+area_code: '310107000000'
+
+#最近n年
+yearNum: 10
+
+#健康档案内网地址
+healthArchive: http://10.1.93.110/archive
+#外部健康档案接口开关
+external_health_archive: false
+#外部健康档案接口地址
+external_health_archive_url: http://192.168.30.201
+
+---
+spring:
+  profiles: xuhui
+  datasource:
+    # 填写你数据库的url、登录名、密码和数据库名
+    url: jdbc:oracle:thin:@xuhui-db:1521:orcl
+    username: zlzfx
+    password: zlzfx_XH_04
+
+health_base_url: http://xuhui-web:9071/health
+casServerUrlPrefix: http://192.168.30.169:9071/cas
+shiroServerUrlPrefix: http://192.168.30.169:9071
+
+#初筛诊断(crc_switch_flag：大肠癌  lic_switch_flag：肝癌 sc_switch_flag：胃癌  luc_switch_flag：肺癌 )
+crc_switch_flag: 0
+lic_switch_flag: 0
+sc_switch_flag: 0
+luc_switch_flag: 1
+
+#是否新增筛查时可以向健康档案插入个人信息
+archieve_add_flag: 1
+
+#区域代码（310104000000=徐汇)
+area_code: '310104000000'
+
+#最近n年
+yearNum: 10
+
+#健康档案内网地址
+healthArchive: http://xuhui-web:9071/archive
+#外部健康档案接口开关
+external_health_archive: true
+#外部健康档案接口地址
+external_health_archive_url: http://192.168.30.201
