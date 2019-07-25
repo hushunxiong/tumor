@@ -884,7 +884,7 @@
         </choose>
     </select>
 
-    <!--社区卫生服务中心肿瘤早发现进度表(区疾控登录的场合)-->
+    <!--社区卫生服务中心肿瘤早发现进度表(区疾控登录的场合)
     <sql id="pageFromAndWhereCRC">
         FROM
         crc_regcase cancer
@@ -973,8 +973,8 @@
         <if test="regorg != null and regorg !=''">
             and cancer.regorg=#{regorg}
         </if>
-    </sql>
-    <!--查询页数-->
+    </sql>-->
+    <!--查询页数
     <select id="pageCountSeSchedule" resultType="java.lang.Integer"
             parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo">
         <choose>
@@ -1080,5 +1080,5 @@
                 ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
             </otherwise>
         </choose>
-    </select>
+    </select>-->
 </mapper>
