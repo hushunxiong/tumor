@@ -40,7 +40,7 @@
                     <input id="flag" th:value="${flag}" class="mini-hidden">
                     <div class="mini-col-3">
                         <label class="mr-5">筛查登记机构：</label>
-                        <input  id="num" name="num" value="普陀区" type="text" class="mini-textbox" width="42%" disabled ="disabled ">
+                        <input  id="regarea" name="regarea" value="普陀区" type="text" class="mini-textbox" width="42%" disabled ="disabled ">
                     </div>
                     <div class="mini-col-3">
                         <label class="mr-5">初筛年份：</label>
@@ -68,7 +68,7 @@
                      sizeList="[10,20,50]" pageSize="20" idField="id">
                     <div property="columns" >
                         <div field="month"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">月份</div>
-                        <div field="num" width="150px" headerAlign="center" align="center" allowSort="false">登记人数</div>
+                        <div field="regarea" width="150px" headerAlign="center" align="center" allowSort="false">登记人数</div>
                         <div field="summary" width="150px" headerAlign="center" align="center" allowSort="false">完成筛查人数</div>
                         <div field="regCaseNum"  width="150px" headerAlign="center" align="center" allowSort="false">筛查阳性数</div>
                         <div field="regCaseRate"  width="150px" headerAlign="center" align="center" allowSort="false">筛查阳性率</div>
@@ -127,7 +127,7 @@
 
     function onSearch() {
         var data={};
-        data.num=mini.get("num").getValue();
+        data.regarea=mini.get("regarea").getValue();
         data.year=mini.get("year").getValue()
         if($("#cancer1").is(':checked')){
             data.summary=$("#cancer1").val();
@@ -153,7 +153,7 @@
             grid.hideColumn("crcCheckRate"); grid.hideColumn("crcLesionRate");grid.hideColumn("lucCheckRate");grid.hideColumn("scCheckRate");
             grid.hideColumn("crcCaseNum");grid.hideColumn("lucCaseNum");grid.hideColumn("scCaseNum");grid.showColumn("licCaseNum");
         }
-        if(!data.summary) data.num="1";
+        if(!data.summary) data.summary="1";
         grid.load(data, gridLoadSuccess, gridLoadError);
     }
 

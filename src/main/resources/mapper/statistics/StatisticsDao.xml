@@ -724,7 +724,7 @@
         left join crc_follow fo on cancer.ID=fo.CRC_CHECK_ID and fo.del_flag=0
         WHERE
         cancer.del_flag=0
-        <if test="num != null and num !=''">
+        <if test="regarea != null and regarea !=''">
             and cancer.region_code='310107000000'
         </if>
         <if test="year != null and year !=''">
@@ -738,7 +738,7 @@
         LEFT JOIN sc_FOLLOW fo ON cancer.id = fo.sc_CHECK_ID and fo.del_flag = 0
         WHERE
         cancer.del_flag = 0
-        <if test="num !=null and num !=''">
+        <if test="regarea !=null and regarea !=''">
             and cancer.region_code='310107000000'
         </if>
         <if test="year != null and year !=''">
@@ -754,7 +754,7 @@
         LEFT JOIN lic_assist_check licac on cancer.ID = licac.lic_check_id and licac.del_flag = 0
         WHERE
         cancer.del_flag = 0
-        <if test="num !=null and num !=''">
+        <if test="regarea !=null and regarea !=''">
             and cancer.region_code='310107000000'
         </if>
         <if test="year != null and year !=''">
@@ -769,7 +769,7 @@
         LEFT JOIN LUC_FOLLOW fo ON cancer.id = fo.LUC_CHECK_ID and fo.del_flag = 0
         WHERE
         cancer.del_flag = 0
-        <if test="num !=null and num !=''">
+        <if test="regarea !=null and regarea !=''">
             and cancer.region_code='310107000000'
         </if>
         <if test="year != null and year !=''">
@@ -883,202 +883,4 @@
             </otherwise>
         </choose>
     </select>
-
-    <!--社区卫生服务中心肿瘤早发现进度表(区疾控登录的场合)
-    <sql id="pageFromAndWhereCRC">
-        FROM
-        crc_regcase cancer
-        LEFT JOIN cancer_person_info info ON cancer.manageid =info.id AND info.del_flag =0
-        left join crc_risk_assessment risk on cancer.ID =risk.CRC_CHECK_ID and risk.del_flag=0
-        left join crc_fobt crcfobt on cancer.ID=crcfobt.CRC_CHECK_ID and crcfobt.del_flag=0
-        left join crc_follow fo on cancer.ID=fo.CRC_CHECK_ID and fo.del_flag=0
-        LEFT JOIN cancer_dic_hospital_info info on cancer.REGORG = info.HOSPITAL_ID and info.del_flag = 0
-        WHERE
-        cancer.del_flag=0
-        <if test="csrqStart !=null">
-            and cancer.suifang_date >=#{csrqStart}
-        </if>
-        <if test="csrqEnd !=null">
-            and cancer.suifang_date &lt;#{csrqEnd}+1
-        </if>
-        <if test="regarea !=null and regarea!=''">
-            and cancer.region_code=#{regarea}
-        </if>
-        <if test="regorg != null and regorg !=''">
-            and cancer.regorg=#{regorg}
-        </if>
-    </sql>
-    <sql id="pageFromAndWhereSC">
-        FROM
-        sc_regcase cancer
-        LEFT JOIN sc_risk_assessment risk ON cancer.id = risk.sc_CHECK_ID and risk.del_flag = 0
-        LEFT JOIN sc_FOLLOW fo ON cancer.id = fo.sc_CHECK_ID and fo.del_flag = 0
-        LEFT JOIN cancer_dic_hospital_info info on cancer.REGORG = info.HOSPITAL_ID and info.del_flag = 0
-        WHERE
-        cancer.del_flag = 0
-        <if test="csrqStart !=null">
-            and cancer.suifang_date >=#{csrqStart}
-        </if>
-        <if test="csrqEnd !=null">
-            and cancer.suifang_date &lt;#{csrqEnd}+1
-        </if>
-        <if test="regarea !=null and regarea!=''">
-            and cancer.region_code=#{regarea}
-        </if>
-        <if test="regorg != null and regorg !=''">
-            and cancer.regorg=#{regorg}
-        </if>
-    </sql>
-    <sql id="pageFromAndWhereLIC">
-        FROM
-        lic_regcase cancer
-        LEFT JOIN cancer_person_info info ON info.id = cancer.MANAGEID AND info.del_flag = 0
-        LEFT JOIN lic_risk_assessment risk ON cancer.id = risk.lic_CHECK_ID and risk.del_flag = 0
-        LEFT JOIN lic_FOLLOW fo ON cancer.id = fo.lic_CHECK_ID and fo.del_flag = 0
-        LEFT JOIN lic_assist_check licac on cancer.ID = licac.lic_check_id and licac.del_flag = 0
-        LEFT JOIN cancer_dic_hospital_info info on cancer.REGORG = info.HOSPITAL_ID and info.del_flag = 0
-        WHERE
-        cancer.del_flag = 0
-        <if test="csrqStart !=null">
-            and cancer.suifang_date >=#{csrqStart}
-        </if>
-        <if test="csrqEnd !=null">
-            and cancer.suifang_date &lt;#{csrqEnd}+1
-        </if>
-        <if test="regarea !=null and regarea!=''">
-            and cancer.region_code=#{regarea}
-        </if>
-        <if test="regorg != null and regorg !=''">
-            and cancer.regorg=#{regorg}
-        </if>
-    </sql>
-    <sql id="pageFromAndWhereLUC">
-        FROM
-        luc_regcase cancer
-        LEFT JOIN cancer_person_info info ON info.id = cancer.MANAGEID AND info.del_flag = 0
-        LEFT JOIN luc_risk_assessment risk ON cancer.id = risk.LUC_CHECK_ID and risk.del_flag = 0
-        LEFT JOIN LUC_FOLLOW fo ON cancer.id = fo.LUC_CHECK_ID and fo.del_flag = 0
-        LEFT JOIN cancer_dic_hospital_info info on cancer.REGORG = info.HOSPITAL_ID and info.del_flag = 0
-        WHERE
-        cancer.del_flag = 0
-        <if test="csrqStart !=null">
-            and cancer.suifang_date >=#{csrqStart}
-        </if>
-        <if test="csrqEnd !=null">
-            and cancer.suifang_date &lt;#{csrqEnd}+1
-        </if>
-        <if test="regarea !=null and regarea!=''">
-            and cancer.region_code=#{regarea}
-        </if>
-        <if test="regorg != null and regorg !=''">
-            and cancer.regorg=#{regorg}
-        </if>
-    </sql>-->
-    <!--查询页数
-    <select id="pageCountSeSchedule" resultType="java.lang.Integer"
-            parameterType="com.wonders.health.tumor.statistics.vo.SummarySearchVo">
-        <choose>
-            <when test="summary!=null and  summary!=''">
-                select count(1) from (
-                select count(1)
-            </when>
-        </choose>
-        <choose>
-            <when test="summary==1">
-                <include refid="pageFromAndWhereCRC"/>
-            </when>
-            <when test="summary==2">
-                <include refid="pageFromAndWhereLUC"/>
-            </when>
-            <when test="summary==3">
-                <include refid="pageFromAndWhereSC"/>
-            </when>
-            <when test="summary==4">
-                <include refid="pageFromAndWhereLIC"/>
-            </when>
-        </choose>
-        <choose>
-            <when test="summary!=null and  summary!=''">
-                group by to_char(cancer.REGDATE,'yyyy-mm'),info.HOSPITAL_NAME
-                )
-            </when>
-        </choose>
-    </select>
-
-    <select id="getSeSchedule" parameterType="com.wonders.health.tumor.statistics.vo.SeScheduleSearchVo"
-            resultType="com.wonders.health.tumor.statistics.vo.SeScheduleListVo">
-        <choose>
-            <when test="startRecord == 0">
-                select * from (
-            </when>
-            <otherwise>
-                select * from ( select row_.*, rownum rownum_ from (
-            </otherwise>
-        </choose>
-        <choose>
-            <when test="summary !=null and summary!=''">
-                SELECT
-                to_char(cancer.REGDATE,'yyyy') as year,
-                to_char(cancer.REGDATE,'mm') as month,
-                count(*) as num,
-                sum(case when risk.assessment_result is not null then 1 else 0 end) as summary,
-                sum(case when risk.assessment_result=2 then 1 else 0 end) as regCaseNum,
-                case when count(*)=0 then '0%' else round((sum(case when risk.assessment_result=2 then 1 else 0 end)/count(*)),4)*100||'%' end as regCaseRate,
-                sum(case when fo.zhongliuTNM_T='02'or fo.zhongliuTNM_T='04' or fo.zhongliuTNM_T='05' or fo.zhongliuTNM_N='02' or fo.zhongliuTNM_M='01' then 1 else 0 end) as earlyDiagnosisNum,
-            </when>
-        </choose>
-        <choose>
-            <when test="summary == 3">
-                case when sum(case when shifouquezhen=1 then 1 else 0 end)=0 then '0%' else round((sum(case when fo.zhongliuTNM_T='02'or fo.zhongliuTNM_T='04' or fo.zhongliuTNM_T='05'
-                or fo.zhongliuTNM_N='02' or fo.zhongliuTNM_M='01' then 1 else 0 end)/ sum(case when shifouquezhen=1 then 1 else 0 end)),4)*100||'%' end as earlyDiagnosisRate,
-                sum(case when shifouweijing=1 then 1 else 0 end) as scCheckNum,
-                case when sum(case when risk.assessment_result=2 then 1 else 0 end)=0 then '0%' else round((sum(case when shifouweijing=1 then 1 else 0 end)/sum(case when risk.assessment_result=2 then 1 else 0 end)),4)*100||'%' end as scCheckRate,
-                sum(case when shifouquezhen=1 then 1 else 0 end) as scCaseNum
-                <include refid="pageFromAndWhereSC"/>
-            </when>
-            <when test="summary == 1">
-                case when sum(case when fo.zhongliuleix is not null and fo.huojianjieguo='09' then 1 else 0 end)=0 then '0%' else round((sum(case when fo.zhongliuTNM_T='02'or fo.zhongliuTNM_T='04' or fo.zhongliuTNM_T='05' or fo.zhongliuTNM_N='02' or fo.zhongliuTNM_M='01' then 1 else 0 end)/sum(case when fo.zhongliuleix is not null or fo.huojianjieguo='09' then 1 else 0 end)),4)*100||'%' end as earlyDiagnosisRate,
-                sum(case when changjing=1 then 1 else 0 end) as crcCheckNum,
-                case when sum(case when risk.assessment_result=2 then 1 else 0 end)=0 then '0%' else round((sum(case when changjing=1 then 1 else 0 end)/sum(case when risk.assessment_result=2 then 1 else 0 end)),4)*100||'%' end as crcCheckRate,
-                sum(case when fo.huojianjieguo='04' or fo.huojianjieguo='05' or fo.huojianjieguo='06' or fo.huojianjieguo='07' or fo.huojianjieguo='08' or fo.huojianjieguo='12' or fo.huojianjieguo='13' or fo.huojianjieguo='14' then 1 else 0 end) as crcLesionNum,
-                sum(case when fo.bingbianchuli=1 then 1 else 0 end) as crcLesionRate,
-                sum(case when fo.zhongliuleix is not null or fo.huojianjieguo='09' then 1 else 0 end) as crcCaseNum
-                <include refid="pageFromAndWhereCRC"/>
-            </when>
-            <when test="summary == 2">
-                case when sum(case when fo.shifouquezhen=1 then 1 else 0 end)=0 then '0%' else round((sum(case when fo.zhongliuTNM_T='02'or fo.zhongliuTNM_T='04' or fo.zhongliuTNM_T='05' or fo.zhongliuTNM_N='02' or fo.zhongliuTNM_M='01' then 1 else 0 end)/sum(case when fo.shifouquezhen=1 then 1 else 0 end)),4)*100||'%' end as earlyDiagnosisRate,
-                sum(case when fo.shifouLDCT=1 then 1 else 0 end) as lucCheckNum,
-                case when sum(case when fo.shifouLDCT=1 then 1 else 0 end)=0 then '0%' else round((sum(case when fo.shifouLDCT=1 then 1 else 0 end)/sum(case when risk.assessment_result=2 then 1 else 0 end)),4)*100||'%' end as lucCheckRate,
-                sum(case when fo.shifouquezhen=1 then 1 else 0 end) as lucCaseNum
-                <include refid="pageFromAndWhereLUC"/>
-            </when>
-            <when test="summary == 4">
-                case when sum(case when shifouquezhen=1 then 1 else 0 end)=0 then '0%' else round((sum(case when fo.zhongliuTNM_T='02'or fo.zhongliuTNM_T='04' or fo.zhongliuTNM_T='05' or
-                fo.zhongliuTNM_N='02' or fo.zhongliuTNM_M='01' then 1 else 0 end)/sum(case when shifouquezhen=1 then 1 else 0 end)),4)*100||'%' end as earlyDiagnosisRate,
-                sum(case when shifouquezhen=1 then 1 else 0 end) as licCaseNum
-                <include refid="pageFromAndWhereLIC"/>
-            </when>
-        </choose>
-        <choose>
-            <when test="summary !=null and summary!=''">
-                group by to_char(cancer.REGDATE,'yyyy-mm'),info.HOSPITAL_NAME
-            </when>
-        </choose>
-        <choose>
-            <when test="sortField != null and sortField != '' and sortOrder != '' and sortOrder != ''">
-                ORDER BY ${sortField} ${sortOrder}
-            </when>
-            <otherwise>
-                ORDER BY  month asc
-            </otherwise>
-        </choose>
-        <choose>
-            <when test="startRecord == 0">
-                ) row_ where rownum &lt;= #{pageSize}
-            </when>
-            <otherwise>
-                ) row_ where rownum &lt;= #{endRecord}) where rownum_ &gt; #{startRecord}
-            </otherwise>
-        </choose>
-    </select>-->
 </mapper>

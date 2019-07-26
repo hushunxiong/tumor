@@ -18,7 +18,7 @@ public class SeScheduleSearchVo extends DataGridSearch {
     /**
      *  筛查登记机构
      */
-    private String num;
+    private String regarea;
 
     /**
      * 初筛年份
