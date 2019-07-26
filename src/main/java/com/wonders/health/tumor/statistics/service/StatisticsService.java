@@ -222,6 +222,7 @@ public class StatisticsService {
      * @return
      */
     public DataGrid<SeScheduleListVo> getSeSearch(SeScheduleSearchVo searchVo){
+        searchVo.setRegorg("42485016400");
         int count = statisticsDao.pageCountSeSchedule(searchVo);
         List<SeScheduleListVo> seVoList =null;
         if (count>0) {

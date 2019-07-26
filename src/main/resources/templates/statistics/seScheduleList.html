@@ -40,7 +40,7 @@
                     <input id="flag" th:value="${flag}" class="mini-hidden">
                     <div class="mini-col-3">
                         <label class="mr-5">筛查登记机构：</label>
-                        <input  id="regarea" name="regarea" value="普陀区" type="text" class="mini-textbox" width="42%" disabled ="disabled ">
+                        <input  id="regorg" name="regorg" value="普陀区桃浦镇社区卫生服务中心" type="text" class="mini-textbox" width="42%" disabled ="disabled ">
                     </div>
                     <div class="mini-col-3">
                         <label class="mr-5">初筛年份：</label>
@@ -127,7 +127,7 @@
 
     function onSearch() {
         var data={};
-        data.regarea=mini.get("regarea").getValue();
+        data.regorg=mini.get("regorg").getValue();
         data.year=mini.get("year").getValue()
         if($("#cancer1").is(':checked')){
             data.summary=$("#cancer1").val();

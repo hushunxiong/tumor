@@ -724,8 +724,8 @@
         left join crc_follow fo on cancer.ID=fo.CRC_CHECK_ID and fo.del_flag=0
         WHERE
         cancer.del_flag=0
-        <if test="regarea != null and regarea !=''">
-            and cancer.region_code='310107000000'
+        <if test="regorg != null and regorg !=''">
+            and cancer.regorg=#{regorg}
         </if>
         <if test="year != null and year !=''">
             and to_char(cancer.REGDATE,'yyyy')=#{year}
@@ -738,8 +738,8 @@
         LEFT JOIN sc_FOLLOW fo ON cancer.id = fo.sc_CHECK_ID and fo.del_flag = 0
         WHERE
         cancer.del_flag = 0
-        <if test="regarea !=null and regarea !=''">
-            and cancer.region_code='310107000000'
+        <if test="regorg !=null and regorg !=''">
+            and cancer.regorg=#{regorg}
         </if>
         <if test="year != null and year !=''">
             and to_char(cancer.REGDATE,'yyyy')=#{year}
@@ -754,8 +754,8 @@
         LEFT JOIN lic_assist_check licac on cancer.ID = licac.lic_check_id and licac.del_flag = 0
         WHERE
         cancer.del_flag = 0
-        <if test="regarea !=null and regarea !=''">
-            and cancer.region_code='310107000000'
+        <if test="regorg !=null and regorg !=''">
+            and cancer.regorg=#{regorg}
         </if>
         <if test="year != null and year !=''">
             and to_char(cancer.REGDATE,'yyyy')=#{year}
@@ -769,8 +769,8 @@
         LEFT JOIN LUC_FOLLOW fo ON cancer.id = fo.LUC_CHECK_ID and fo.del_flag = 0
         WHERE
         cancer.del_flag = 0
-        <if test="regarea !=null and regarea !=''">
-            and cancer.region_code='310107000000'
+        <if test="regorg !=null and regorg !=''">
+            and cancer.regorg=#{regorg}
         </if>
         <if test="year != null and year !=''">
             and to_char(cancer.REGDATE,'yyyy')=#{year}
