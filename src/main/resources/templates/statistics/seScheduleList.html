@@ -68,7 +68,7 @@
                      sizeList="[10,20,50]" pageSize="20" idField="id">
                     <div property="columns" >
                         <div field="month"  width="100px" headerAlign="center" style="min-width:100px; width:auto;" align="center">月份</div>
-                        <div field="regorg" width="150px" headerAlign="center" align="center" allowSort="false">登记人数</div>
+                        <div field="num" width="150px" headerAlign="center" align="center" allowSort="false">登记人数</div>
                         <div field="summary" width="150px" headerAlign="center" align="center" allowSort="false">完成筛查人数</div>
                         <div field="regCaseNum"  width="150px" headerAlign="center" align="center" allowSort="false">筛查阳性数</div>
                         <div field="regCaseRate"  width="150px" headerAlign="center" align="center" allowSort="false">筛查阳性率</div>
@@ -208,7 +208,7 @@
             summary = $("#cancer4").val();
         }
         var param ='?';
-        param += '&regorg='+regorg;
+        param += '&num='+regorg;
         param += '&pageIndex='+pageIndex;
         param += '&pageSize='+pageSize;
         param += '&summary='+summary;
