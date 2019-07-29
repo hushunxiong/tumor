@@ -632,53 +632,120 @@ public class StatisticsController {
      */
 
     @ResponseBody
-
     @RequestMapping("/exportSecheduleData")
-    public void exportSechedule(@RequestParam(required = false) String regarea,
-                                   @RequestParam(required = false) String regorg,
-                                   @RequestParam(required = false) String csrqStart,
-                                   @RequestParam(required = false) String csrqEnd,
+    public void exportSechedule(@RequestParam(required = false) String regorg,
+                                   @RequestParam(required = false) String year,
+                                   @RequestParam(required = false) String summary,
                                    @RequestParam(required = false) int pageIndex,
                                    @RequestParam(required = false) int pageSize,
                                    HttpServletResponse response) {
-//        InfomationSearchVo searchVo = new InfomationSearchVo();
-//        searchVo.setCsrqStart(foramt(csrqStart));
-//        searchVo.setCsrqEnd(foramt(csrqEnd));
-//        searchVo.setRegarea(regarea);
-//        searchVo.setRegorg(regorg);
-//        searchVo.setCrcFlag(crcFlag);
-//        searchVo.setLicFlag(licFlag);
-//        searchVo.setLucFlag(lucFlag);
-//        searchVo.setScFlag(scFlag);
-//        searchVo.setPageIndex(pageIndex);
-//        searchVo.setPageSize(pageSize);
-//        DataGrid<InformationCollectionVo> list = statisticsService.getInformation(searchVo);
-//        DictData dic = new DictData();
-//        List<DiagnoseMessage> datas = list.getData().stream().map(vo -> {
-//            DiagnoseMessage diagnoseMessage = new DiagnoseMessage();
-//            diagnoseMessage.setXm(vo.getXm());
-//            diagnoseMessage.setPersoncardType(dic.generalName("60022", vo.getPersoncardType()));//证件类型
-//            diagnoseMessage.setPersoncard(vo.getPersoncard());
-//            diagnoseMessage.setRegorg(vo.getRegorg());
-//            diagnoseMessage.setJcxm(vo.getJcxm());
-//            diagnoseMessage.setBbbw(vo.getBbbw());
-//            diagnoseMessage.setZldx(vo.getZldx());
-//            diagnoseMessage.setSfhj(dic.generalName("60013", vo.getSfhj()));//是否活检
-//            diagnoseMessage.setHjjg(vo.getHjjg());//活检结果
-//            diagnoseMessage.setSfbl(dic.generalName("60013", vo.getSfbl()));//是否病理
-//            diagnoseMessage.setBllx(vo.getBllx());
-//            diagnoseMessage.setTNMfq(vo.getTNMfq().replaceAll("null",""));
-//            diagnoseMessage.setSfrq(vo.getSfrq());
-//            return diagnoseMessage;
-//        }).collect(Collectors.toList());
-//        if (datas == null || datas.size() == 0) {
-//            return;
-//        }
-//        try {
-//            ExcelUtils.exportExcel(response, datas);
-//        } catch (Exception e) {
-//            logger.error("诊断信息收集导出异常", e);
-//        }
+        SeScheduleSearchVo searchVo = new SeScheduleSearchVo();
+        searchVo.setYear(year);
+        searchVo.setRegorg(regorg);
+        searchVo.setSummary(summary);
+        searchVo.setPageIndex(pageIndex);
+        searchVo.setPageSize(pageSize);
+        DataGrid<SeScheduleListVo> list = statisticsService.getSeSearch(searchVo);
+        // 大肠癌
+        if("1".equals(searchVo.getSummary())){
+            List<ExportCrcSchedule> datas = list.getData().stream().map(vo -> {
+                    ExportCrcSchedule exportCrcSchedule = new ExportCrcSchedule();
+                    exportCrcSchedule.setYf(vo.getMonth());
+                    exportCrcSchedule.setDjrs(vo.getNum());
+                    exportCrcSchedule.setWcscrs(vo.getSummary());
+                    exportCrcSchedule.setScyxs(vo.getRegCaseNum());
+                    exportCrcSchedule.setScyxl(vo.getRegCaseRate());
+                    exportCrcSchedule.setCjjcs(vo.getCrcCheckNum());
+                    exportCrcSchedule.setCjjcl(vo.getCrcCheckRate());
+                    exportCrcSchedule.setAqqbbs(vo.getCrcLesionNum());
+                    exportCrcSchedule.setAqqbbl(vo.getCrcLesionRate());
+                    exportCrcSchedule.setDcabls(vo.getCrcCaseNum());
+                    exportCrcSchedule.setQzzqs(vo.getEarlyDiagnosisNum());
+                    exportCrcSchedule.setQzzql(vo.getEarlyDiagnosisRate());
+                    return exportCrcSchedule;
+            }).collect(Collectors.toList());
+            if (datas == null || datas.size() == 0) {
+                return;
+            }
+            try {
+                ExcelUtils.exportExcel(response, datas);
+            } catch (Exception e) {
+                logger.error("社区卫生服务中心肿瘤早发现进度表(社区登录的场合)导出异常", e);
+            }
+        }
+        // 肝癌
+        if("2".equals(searchVo.getSummary())){
+            List<ExportLicSchedule> datas = list.getData().stream().map(vo -> {
+                ExportLicSchedule exportLicSchedule = new ExportLicSchedule();
+                exportLicSchedule.setYf(vo.getMonth());
+                exportLicSchedule.setDjrs(vo.getNum());
+                exportLicSchedule.setWcscrs(vo.getSummary());
+                exportLicSchedule.setScyxs(vo.getRegCaseNum());
+                exportLicSchedule.setScyxl(vo.getRegCaseRate());
+                exportLicSchedule.setCTjcs(vo.getLucCheckNum());
+                exportLicSchedule.setCTjcl(vo.getLucCheckRate());
+                exportLicSchedule.setFabls(vo.getLucCaseNum());
+                exportLicSchedule.setQzzqs(vo.getEarlyDiagnosisNum());
+                exportLicSchedule.setQzzql(vo.getEarlyDiagnosisRate());
+                return exportLicSchedule;
+            }).collect(Collectors.toList());
+            if (datas == null || datas.size() == 0) {
+                return;
+            }
+            try {
+                ExcelUtils.exportExcel(response, datas);
+            } catch (Exception e) {
+                logger.error("社区卫生服务中心肿瘤早发现进度表(社区登录的场合)导出异常", e);
+            }
+        }
+        // 肺癌
+        if("3".equals(searchVo.getSummary())){
+            List<ExportLucSchedule> datas = list.getData().stream().map(vo -> {
+                ExportLucSchedule exportLucSchedule = new ExportLucSchedule();
+                exportLucSchedule.setYf(vo.getMonth());
+                exportLucSchedule.setDjrs(vo.getNum());
+                exportLucSchedule.setWcscrs(vo.getSummary());
+                exportLucSchedule.setScyxs(vo.getRegCaseNum());
+                exportLucSchedule.setScyxl(vo.getRegCaseRate());
+                exportLucSchedule.setWjjcs(vo.getScCheckNum());
+                exportLucSchedule.setWjjcl(vo.getScCheckRate());
+                exportLucSchedule.setWabls(vo.getScCaseNum());
+                exportLucSchedule.setQzzqs(vo.getEarlyDiagnosisNum());
+                exportLucSchedule.setQzzql(vo.getEarlyDiagnosisRate());
+                return exportLucSchedule;
+            }).collect(Collectors.toList());
+            if (datas == null || datas.size() == 0) {
+                return;
+            }
+            try {
+                ExcelUtils.exportExcel(response, datas);
+            } catch (Exception e) {
+                logger.error("社区卫生服务中心肿瘤早发现进度表(社区登录的场合)导出异常", e);
+            }
+        }
+        // 胃癌
+        if("4".equals(searchVo.getSummary())){
+            List<ExportScSchedule> datas = list.getData().stream().map(vo -> {
+                ExportScSchedule exportScSchedule = new ExportScSchedule();
+                exportScSchedule.setYf(vo.getMonth());
+                exportScSchedule.setDjrs(vo.getNum());
+                exportScSchedule.setWcscrs(vo.getSummary());
+                exportScSchedule.setScyxs(vo.getRegCaseNum());
+                exportScSchedule.setScyxl(vo.getRegCaseRate());
+                exportScSchedule.setGabls(vo.getLicCaseNum());
+                exportScSchedule.setQzzqs(vo.getEarlyDiagnosisNum());
+                exportScSchedule.setQzzql(vo.getEarlyDiagnosisRate());
+                return exportScSchedule;
+            }).collect(Collectors.toList());
+            if (datas == null || datas.size() == 0) {
+                return;
+            }
+            try {
+                ExcelUtils.exportExcel(response, datas);
+            } catch (Exception e) {
+                logger.error("社区卫生服务中心肿瘤早发现进度表(社区登录的场合)导出异常", e);
+            }
+        }
     }
 
 }

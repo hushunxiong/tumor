@@ -194,7 +194,8 @@
             showActionMessage('info','没有可以导出的数据');
             return;
         }
-        var  regorg=mini.get("regorg").getValue();
+        var regorg=mini.get("regorg").getValue();
+        var year=mini.get("year").getValue();
         var pageIndex= mini.get("datagrid").getPageIndex();
         var pageSize= mini.get("datagrid").getPageSize();
         var summary;
@@ -208,7 +209,8 @@
             summary = $("#cancer4").val();
         }
         var param ='?';
-        param += '&num='+regorg;
+        param += '&regorg='+regorg;
+        param += '&year='+year;
         param += '&pageIndex='+pageIndex;
         param += '&pageSize='+pageSize;
         param += '&summary='+summary;
