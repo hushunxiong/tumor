@@ -617,10 +617,6 @@ public class StatisticsController {
         model.addAttribute("year",2019);
         model.addAttribute("flag", 1);
         model.addAttribute("role", AuthUtils.judgeRole(AuthUtils.getUser().getOrgCode()));
-//
-//        model.addAttribute("orgCode", AuthUtils.getUser().get  model.addAttribute("lucFlag", lucFlag);
-//        model.addAttribute("scFlag", scFlag);OrgCode());
-//        System.out.println(count);
         return "/statistics/seScheduleList";
     }
     @ResponseBody
