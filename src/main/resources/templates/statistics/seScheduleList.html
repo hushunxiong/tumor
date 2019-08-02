@@ -36,11 +36,11 @@
                 <div id="formsearch" class="row mt-10">
                     <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
                     <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
-                    <!--<input id="role" th:value="" class="mini-hidden"> -->
+                    <input id="role" th:value="#{role}" class="mini-hidden">
                     <input id="flag" th:value="${flag}" class="mini-hidden">
                     <div class="mini-col-3">
                         <label class="mr-5">筛查登记机构：</label>
-                        <input  id="regorg" name="regorg" value="普陀区桃浦镇社区卫生服务中心" type="text" class="mini-textbox" width="42%" disabled ="disabled ">
+                        <input  id="regorg" name="regorg" value="普陀区桃浦镇社区卫生服务中心" type="text" class="mini-textbox" width="42%" disabled ="disabled">
                     </div>
                     <div class="mini-col-3">
                         <label class="mr-5">初筛年份：</label>

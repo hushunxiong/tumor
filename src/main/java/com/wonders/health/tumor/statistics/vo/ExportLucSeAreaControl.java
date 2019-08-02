@@ -5,13 +5,13 @@ import com.wonders.health.tumor.common.utils.excel.annotation.ExcelFile;
 import lombok.Data;
 
 /**
- * 社区卫生服务中心肿瘤早发现进度表(社区登录的场合)导出
+ * 社区卫生服务中心肿瘤早发现进度表(区疾控登录的场合)导出
  */
-@ExcelFile(fileName = "社区卫生服务中心肿瘤早发现进度表（社区登录的场合）")
+@ExcelFile(fileName = "社区卫生服务中心肿瘤早发现进度表（区疾控登录的场合）")
 @Data
-public class ExportLicSchedule {
-    @ExcelField(title = "月份")
-    private String yf; //月份
+public class ExportLucSeAreaControl {
+    @ExcelField(title = "机构名称")
+    private String jgmc; //机构名称
 
     @ExcelField(title = "登记人数")
     private String djrs; //登记人数
@@ -25,8 +25,14 @@ public class ExportLicSchedule {
     @ExcelField(title = "筛查阳性率")
     private String scyxl;  //筛查阳性率
 
-    @ExcelField(title="肝癌病例数")
-    private String gabls; //肝癌病例数
+    @ExcelField(title="CT检查数")
+    private String ctjcs; //CT检查数
+
+    @ExcelField(title="CT检查率")
+    private String ctjcl; //CT检查率
+
+    @ExcelField(title="肺癌病例数")
+    private String fabls; //肺癌病例数
 
     @ExcelField(title="确诊早期数")
     private String qzzqs;  //确诊早期数

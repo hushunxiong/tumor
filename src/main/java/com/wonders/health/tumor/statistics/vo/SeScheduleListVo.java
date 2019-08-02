@@ -19,10 +19,24 @@ public class SeScheduleListVo{
     private String month;
 
     /**
+     *  筛查登记机构(名称)
+     */
+    private String regorg;
+
+    /**
+     *  筛查登记机构(代码)
+     */
+    private String regorgCode;
+
+    /**
      * 登记人数
      */
     private String num;
 
+    /**
+     *合计
+     */
+    private  String total;
     /**
      *完成筛查人数
      */
@@ -97,6 +111,21 @@ public class SeScheduleListVo{
      *肝癌病例数
      */
     private String licCaseNum;
+
+    /**
+     *确诊检查数
+     */
+    private String confirmeNum;
+
+    /**
+     *确诊检查率
+     */
+    private String confirmeRate;
+
+    /**
+     *确诊癌病例数
+     */
+    private String confirmeCancerNum;
 
     /**
      *确诊早期数

@@ -25,8 +25,14 @@ public class ExportScSchedule {
     @ExcelField(title = "筛查阳性率")
     private String scyxl;  //筛查阳性率
 
-    @ExcelField(title="肝癌病例数")
-    private String gabls; //肝癌病例数
+    @ExcelField(title="胃镜检查数")
+    private String wjjcs;  //胃镜检查数
+
+    @ExcelField(title="胃镜检查率")
+    private String wjjcl;  //胃镜检查率
+
+    @ExcelField(title="胃癌病例数")
+    private String wabls;  //胃癌病例数
 
     @ExcelField(title="确诊早期数")
     private String qzzqs;  //确诊早期数

@@ -230,4 +230,29 @@ public class StatisticsService {
         }
         return new DataGrid<>(count, seVoList);
     }
+
+    /**
+     * 社区卫生服务中心肿瘤早发现进度表(区疾控登录的场合)
+     *
+     * @Author:hushunxiong
+     * @param searchVo
+     * @return
+     */
+    public DataGrid<SeScheduleListVo> getSeAreaControl(SeScheduleSearchVo searchVo){
+        int count = statisticsDao.pageCountSeAreaControl(searchVo);
+        List<SeScheduleListVo> seVoList =null;
+        if (count>0) {
+            seVoList = statisticsDao.getSeAreaControl(searchVo);
+            for (SeScheduleListVo list:seVoList) {
+                if (list.getTotal()!=null){
+                    list.setRegorg("合计");
+                }
+            }
+        }
+        return new DataGrid<>(count, seVoList);
+    }
+
+    public List<BoxData> getBoxData(BoxData boxData){
+        return statisticsDao.getBoxData(boxData);
+    }
 }
