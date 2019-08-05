@@ -50,6 +50,5 @@ public interface StatisticsDao {
     //社区卫生服务中心肿瘤早发现进度表(区疾控登录的场合)
     List<SeScheduleListVo> getSeAreaControl(SeScheduleSearchVo searchVo);
     int pageCountSeAreaControl(SeScheduleSearchVo search);
-    //該模塊的下拉信息
-    List<BoxData> getBoxData(BoxData  boxData);
+
 }

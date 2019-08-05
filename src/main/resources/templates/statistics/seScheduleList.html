@@ -36,11 +36,13 @@
                 <div id="formsearch" class="row mt-10">
                     <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
                     <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
-                    <input id="role" th:value="#{role}" class="mini-hidden">
+                    <input id="role" th:value="${role}" class="mini-hidden">
                     <input id="flag" th:value="${flag}" class="mini-hidden">
-                    <div class="mini-col-3">
+                    <input id="regarea" th:value="${areaCode}" class="mini-hidden">
+                    <div class="mini-col-4">
                         <label class="mr-5">筛查登记机构：</label>
-                        <input  id="regorg" name="regorg" value="普陀区桃浦镇社区卫生服务中心" type="text" class="mini-textbox" width="42%" disabled ="disabled">
+                        <input id="regorg" name="regorg"  class="mini-combobox" width="70%" emptyText="请选择"
+                               textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                     </div>
                     <div class="mini-col-3">
                         <label class="mr-5">初筛年份：</label>
@@ -102,7 +104,15 @@
         if($("#flag").val()==1){
             $("#cancer1").prop("checked",true);
         }
+
+        getHospitals();
     });
+
+    function getHospitals(){
+        var regarea= mini.get("regarea").getValue();
+        var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
+        mini.get("regorg").setUrl(url);
+    }
 
     function radios(th){
         $(th).prop("checked",true);
@@ -164,7 +174,7 @@
     });
 
     function reset(){
-        mini.get("year").setValue("");
+        mini.get("year").setValue("2019");
         $("#cancer1").prop("checked",true);
         $("#cancer2").prop("checked",false);
         $("#cancer3").prop("checked",false);

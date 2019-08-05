@@ -252,7 +252,4 @@ public class StatisticsService {
         return new DataGrid<>(count, seVoList);
     }
 
-    public List<BoxData> getBoxData(BoxData boxData){
-        return statisticsDao.getBoxData(boxData);
-    }
 }

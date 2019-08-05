@@ -37,17 +37,19 @@
                     <!--/*@thymesVar id="#dic" type="com.wonders.health.tumor.common.tags.DictData"*/-->
                     <!--/*@thymesVar id="#auth" type="com.wonders.health.tumor.common.tags.AuthData"*/-->
                     <input id="role" th:value="${role}" class="mini-hidden">
+                    <input id="orgCode" th:value="${orgCode}" class="mini-hidden">
                     <input id="flag" th:value="${flag}" class="mini-hidden">
-                    <div class="mini-col-3">
+                    <input id="regarea" th:value="${areaCode}" class="mini-hidden">
+                    <div class="mini-col-4">
                     <label class="mr-5">筛查登记机构：</label>
                         <input id="regorg" name="regorg"  class="mini-combobox" width="70%" emptyText="请选择"
-                               textField="name" valueField="code"  th:value="42485016400"/>
+                               textField="text" valueField="id" th:value="${role =='bsq' ? #auth.currUser().orgCode:''}"  th:showNullItem="${role =='bsq' ? false:true}" th:disabled="${role =='bsq' ? true:false}" />
                     </div>
                     <div class="col-sm-4 col-lg-3">初筛登记年月开始
-                        <input id="csrqStart" name="beginDate" class="mini-datepicker"
+                        <input id="csrqStart" name="beginDate" class="mini-monthpicker"
                                allowInput="true" th:value="${tjRqStart}"  style="width:115px;"  errorMode="border" onvalidation="dateValidation" >
                         -
-                        <input id="csrqEnd" name="endDate" class="mini-datepicker"
+                        <input id="csrqEnd" name="endDate" class="mini-monthpicker"
                                th:value="${#dates.format(#dates.createNow(), 'yyyy-MM')}" allowInput="false" style="width:115px;" errorMode="border" onvalidation="dateValidation">
                         <div id="search" class="my-btn my-btn-blue" onclick="onSearch()">检索</div>
                         <div class="my-btn my-btn-blue" onclick="reset()">重置</div>
@@ -104,6 +106,16 @@
     var grid = mini.get("datagrid");
    // var resultOtrList = JSON.parse('[${role}]')[0] || [];
 
+    $(function () {
+        getHospitals();
+    });
+
+    function getHospitals(){
+        var regarea= mini.get("regarea").getValue();
+        var url="../dicHospitalInfo/getHospitalsByAreaCode?areaCode="+regarea;
+        mini.get("regorg").setUrl(url);
+    }
+
     $(function(){
         if($("#flag").val()==1){
             $("#cancer1").prop("checked",true);
@@ -144,9 +156,9 @@
         var data={};
         data.regorg=mini.get("regorg").getValue();
         data.csrqStart=mini.get("csrqStart").getValue();
-        if(!data.csrqStart) data.csrqStart=stringToDate('1970-01-01');
+        if(!data.csrqStart) data.csrqStart=stringToDate('1970-01');
         data.csrqEnd=mini.get("csrqEnd").getValue();
-        if(!data.csrqEnd) data.csrqEnd=stringToDate(getNow());
+        if(!data.csrqEnd) data.csrqEnd=stringToDate(format(getNow(), 'yyyy-MM'));
         if($("#cancer1").is(':checked')){
             data.summary=$("#cancer1").val();
             grid.showColumn("crcCheckNum");grid.showColumn("crcLesionNum");grid.hideColumn("lucCheckNum"); grid.hideColumn("scCheckNum");
@@ -212,7 +224,6 @@
         }else{
             month = parseInt(dateArr[1]);
         }
-        var day = parseInt(dateArr[2]);
         var date = new Date(year,month);
         return date;
     }
@@ -227,13 +238,20 @@
     function reset(){
         mini.get("regorg").setValue("");
         var time = new Date();
-        var start = time.getFullYear()+"-01"+"-01";
+        var start = time.getFullYear()+"-01";
         mini.get('csrqStart').setValue(start);
         mini.get('csrqEnd').setValue(getResetNow());
         $("#cancer1").prop("checked",true);
         $("#cancer2").prop("checked",false);
         $("#cancer3").prop("checked",false);
         $("#cancer4").prop("checked",false);
+        var role = mini.get("role").getValue();
+        if(role == 'bsq'){
+            var orgCode = mini.get("orgCode").getValue();
+            mini.get('regorg').setValue(orgCode);
+        }else{
+            mini.get('regorg').setValue('');
+        }
         grid.clearRows();
     }
 

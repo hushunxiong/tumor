@@ -1,6 +1,7 @@
 package com.wonders.health.tumor.statistics.web;
 
 import com.alibaba.druid.support.json.JSONUtils;
+import com.google.gson.JsonArray;
 import com.wonders.health.tumor.closingcase.web.CrcClosingCaseController;
 import com.wonders.health.tumor.common.model.DataGrid;
 import com.wonders.health.tumor.common.tags.DictData;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -614,9 +616,11 @@ public class StatisticsController {
     @RequiresPermissions("statistics:seSchedule")
     @RequestMapping(value = "seSchedule", method = RequestMethod.GET)
     public String seList(Model model) {
-        model.addAttribute("year",2019);
+        model.addAttribute("year",DateUtils.getYear());
         model.addAttribute("flag", 1);
         model.addAttribute("role", AuthUtils.judgeRole(AuthUtils.getUser().getOrgCode()));
+        model.addAttribute("areaCode", areaCode);
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
         return "/statistics/seScheduleList";
     }
     @ResponseBody
@@ -756,11 +760,10 @@ public class StatisticsController {
     @RequiresPermissions("statistics:seAreaControl")
     @RequestMapping(value = "seAreaControl", method = RequestMethod.GET)
     public String seAreaControlList(Model model) {
-        BoxData boxData=new BoxData();
-        boxData.setCode(AuthUtils.getUser().getOrgCode());
-        List<BoxData> role=statisticsService.getBoxData(boxData);
+        model.addAttribute("role", AuthUtils.judgeRole(AuthUtils.getUser().getOrgCode()));
+        model.addAttribute("areaCode", areaCode);
+        model.addAttribute("orgCode", AuthUtils.getUser().getOrgCode());
         model.addAttribute("flag", 1);
-        model.addAttribute("role", role);
         model.addAttribute("tjRqStart", DateUtils.getYear() + "01");
         return "/statistics/seAreaControlList";
     }
